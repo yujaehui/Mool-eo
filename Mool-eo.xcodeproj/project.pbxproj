@@ -32,6 +32,7 @@
 		095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678FC2BC6A8910030F0CD /* UITextField+Extension.swift */; };
 		095678FF2BC6A9140030F0CD /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678FE2BC6A9140030F0CD /* LineView.swift */; };
 		095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095679022BC6AB920030F0CD /* WritePostViewModel.swift */; };
+		095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095679042BC6BCFE0030F0CD /* WritePostView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		095678FC2BC6A8910030F0CD /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		095678FE2BC6A9140030F0CD /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
 		095679022BC6AB920030F0CD /* WritePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostViewModel.swift; sourceTree = "<group>"; };
+		095679042BC6BCFE0030F0CD /* WritePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				095679022BC6AB920030F0CD /* WritePostViewModel.swift */,
+				095679042BC6BCFE0030F0CD /* WritePostView.swift */,
 				095678FA2BC6A4120030F0CD /* WritePostViewController.swift */,
 			);
 			path = WritePost;
@@ -255,6 +258,7 @@
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
+				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
