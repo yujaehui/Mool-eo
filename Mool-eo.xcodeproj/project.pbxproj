@@ -27,6 +27,7 @@
 		095678ED2BC67E840030F0CD /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678EC2BC67E840030F0CD /* BaseView.swift */; };
 		095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */; };
 		095678F12BC67F000030F0CD /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678F02BC67F000030F0CD /* CollectionViewCell.swift */; };
+		095678F42BC680100030F0CD /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678F32BC680100030F0CD /* ViewModelType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		095678EC2BC67E840030F0CD /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		095678F02BC67F000030F0CD /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		095678F32BC680100030F0CD /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				095678F22BC67FF60030F0CD /* Protocol */,
 				095678E72BC67E320030F0CD /* Base */,
 				095678E42BC67B600030F0CD /* Custom */,
 				095678B72BC674C10030F0CD /* Extension */,
@@ -133,6 +136,14 @@
 				095678F02BC67F000030F0CD /* CollectionViewCell.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		095678F22BC67FF60030F0CD /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				095678F32BC680100030F0CD /* ViewModelType.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,6 +240,7 @@
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
+				095678F42BC680100030F0CD /* ViewModelType.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
 				095678F12BC67F000030F0CD /* CollectionViewCell.swift in Sources */,
