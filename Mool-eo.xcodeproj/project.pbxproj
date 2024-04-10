@@ -19,6 +19,10 @@
 		094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB7C2BC672D200342DC3 /* Kingfisher */; };
 		094BEB802BC6732700342DC3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB7F2BC6732700342DC3 /* Alamofire */; };
 		095678B02BC673F00030F0CD /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 095678AF2BC673F00030F0CD /* Toast */; };
+		095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B52BC674A50030F0CD /* ColorStyle.swift */; };
+		095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B82BC674CB0030F0CD /* UIColor+Extension.swift */; };
+		095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678E12BC67AC90030F0CD /* FontStyle.swift */; };
+		095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678E52BC67B690030F0CD /* CustomLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,10 @@
 		094BEB682BC670BC00342DC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		094BEB6B2BC670BC00342DC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		094BEB6D2BC670BC00342DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		095678B52BC674A50030F0CD /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
+		095678B82BC674CB0030F0CD /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		095678E12BC67AC90030F0CD /* FontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyle.swift; sourceTree = "<group>"; };
+		095678E52BC67B690030F0CD /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +76,9 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				095678E42BC67B600030F0CD /* Custom */,
+				095678B72BC674C10030F0CD /* Extension */,
+				095678B42BC674990030F0CD /* DesignSystem */,
 				094BEB5F2BC670BA00342DC3 /* AppDelegate.swift */,
 				094BEB612BC670BA00342DC3 /* SceneDelegate.swift */,
 				094BEB632BC670BA00342DC3 /* ViewController.swift */,
@@ -77,6 +88,31 @@
 				094BEB6D2BC670BC00342DC3 /* Info.plist */,
 			);
 			path = "Mool-eo";
+			sourceTree = "<group>";
+		};
+		095678B42BC674990030F0CD /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				095678B52BC674A50030F0CD /* ColorStyle.swift */,
+				095678E12BC67AC90030F0CD /* FontStyle.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		095678B72BC674C10030F0CD /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				095678B82BC674CB0030F0CD /* UIColor+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		095678E42BC67B600030F0CD /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				095678E52BC67B690030F0CD /* CustomLabel.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,7 +203,11 @@
 			files = (
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
+				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
+				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
+				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
+				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
