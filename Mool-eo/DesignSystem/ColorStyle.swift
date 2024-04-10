@@ -15,4 +15,5 @@ enum ColorStyle {
     static let subBackground = UIColor.secondarySystemBackground
     static let caution = UIColor.systemPink
     static let clear = UIColor.clear
+    static let placeholder = UIColor.placeholderText
 }
