@@ -23,6 +23,10 @@
 		095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B82BC674CB0030F0CD /* UIColor+Extension.swift */; };
 		095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678E12BC67AC90030F0CD /* FontStyle.swift */; };
 		095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678E52BC67B690030F0CD /* CustomLabel.swift */; };
+		095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678E82BC67E3A0030F0CD /* BaseViewController.swift */; };
+		095678ED2BC67E840030F0CD /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678EC2BC67E840030F0CD /* BaseView.swift */; };
+		095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */; };
+		095678F12BC67F000030F0CD /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678F02BC67F000030F0CD /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		095678B82BC674CB0030F0CD /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		095678E12BC67AC90030F0CD /* FontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyle.swift; sourceTree = "<group>"; };
 		095678E52BC67B690030F0CD /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
+		095678E82BC67E3A0030F0CD /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		095678EC2BC67E840030F0CD /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		095678F02BC67F000030F0CD /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +84,7 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				095678E72BC67E320030F0CD /* Base */,
 				095678E42BC67B600030F0CD /* Custom */,
 				095678B72BC674C10030F0CD /* Extension */,
 				095678B42BC674990030F0CD /* DesignSystem */,
@@ -113,6 +122,17 @@
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
 			);
 			path = Custom;
+			sourceTree = "<group>";
+		};
+		095678E72BC67E320030F0CD /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				095678EC2BC67E840030F0CD /* BaseView.swift */,
+				095678E82BC67E3A0030F0CD /* BaseViewController.swift */,
+				095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */,
+				095678F02BC67F000030F0CD /* CollectionViewCell.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,8 +226,12 @@
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
+				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
+				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
+				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
+				095678F12BC67F000030F0CD /* CollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
