@@ -16,7 +16,7 @@ class LoginBoxView: BaseView {
         return imageView
     }()
     
-    let emailTextField: UITextField = {
+    let idTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "이메일"
         textField.borderStyle = .roundedRect
@@ -38,7 +38,7 @@ class LoginBoxView: BaseView {
     
     override func configureHierarchy() {
         addSubview(logoImageView)
-        addSubview(emailTextField)
+        addSubview(idTextField)
         addSubview(passwordTextField)
         addSubview(loginButton)
     }
@@ -50,14 +50,14 @@ class LoginBoxView: BaseView {
             make.size.equalTo(100)
         }
         
-        emailTextField.snp.makeConstraints { make in
+        idTextField.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp.bottom).offset(30)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
         }
         
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+            make.top.equalTo(idTextField.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
         }
