@@ -38,6 +38,15 @@
 		0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0956798E2BC94E6A0030F0CD /* LoginBoxView.swift */; };
 		095679912BC9501D0030F0CD /* UIButton.Configuration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095679902BC9501D0030F0CD /* UIButton.Configuration+Extension.swift */; };
 		095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095679922BC960C90030F0CD /* LoginViewModel.swift */; };
+		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
+		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
+		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
+		0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB032BCA97F3004B6D1F /* JoinSecondViewModel.swift */; };
+		0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */; };
+		0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */; };
+		0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */; };
+		0999EB0F2BCA981B004B6D1F /* JoinTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0E2BCA981B004B6D1F /* JoinTextFieldView.swift */; };
+		0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +77,15 @@
 		0956798E2BC94E6A0030F0CD /* LoginBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBoxView.swift; sourceTree = "<group>"; };
 		095679902BC9501D0030F0CD /* UIButton.Configuration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton.Configuration+Extension.swift"; sourceTree = "<group>"; };
 		095679922BC960C90030F0CD /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
+		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
+		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
+		0999EB032BCA97F3004B6D1F /* JoinSecondViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewModel.swift; sourceTree = "<group>"; };
+		0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondView.swift; sourceTree = "<group>"; };
+		0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewModel.swift; sourceTree = "<group>"; };
+		0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		0999EB0E2BCA981B004B6D1F /* JoinTextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinTextFieldView.swift; sourceTree = "<group>"; };
+		0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +124,7 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				0999EAFF2BCA97F3004B6D1F /* Join */,
 				095679892BC931290030F0CD /* Login */,
 				095678F72BC681560030F0CD /* WritePost */,
 				095678F22BC67FF60030F0CD /* Protocol */,
@@ -120,6 +139,7 @@
 				094BEB682BC670BC00342DC3 /* Assets.xcassets */,
 				094BEB6A2BC670BC00342DC3 /* LaunchScreen.storyboard */,
 				094BEB6D2BC670BC00342DC3 /* Info.plist */,
+				0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */,
 			);
 			path = "Mool-eo";
 			sourceTree = "<group>";
@@ -147,6 +167,8 @@
 			isa = PBXGroup;
 			children = (
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
+				0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */,
+				0999EB0E2BCA981B004B6D1F /* JoinTextFieldView.swift */,
 				095678FE2BC6A9140030F0CD /* LineView.swift */,
 			);
 			path = Custom;
@@ -190,6 +212,19 @@
 				095679922BC960C90030F0CD /* LoginViewModel.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		0999EAFF2BCA97F3004B6D1F /* Join */ = {
+			isa = PBXGroup;
+			children = (
+				0999EB002BCA97F3004B6D1F /* JoinViewController.swift */,
+				0999EB012BCA97F3004B6D1F /* JoinView.swift */,
+				0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */,
+				0999EB032BCA97F3004B6D1F /* JoinSecondViewModel.swift */,
+				0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */,
+				0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */,
+			);
+			path = Join;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +317,9 @@
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
+				0999EB0F2BCA981B004B6D1F /* JoinTextFieldView.swift in Sources */,
+				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
+				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				095679912BC9501D0030F0CD /* UIButton.Configuration+Extension.swift in Sources */,
@@ -289,16 +327,22 @@
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
+				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
+				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
+				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
+				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
 				095678F42BC680100030F0CD /* ViewModelType.swift in Sources */,
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
+				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
+				0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */,
 				095678F12BC67F000030F0CD /* CollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
