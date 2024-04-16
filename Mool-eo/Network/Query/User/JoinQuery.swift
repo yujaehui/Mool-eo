@@ -11,5 +11,5 @@ struct JoinQuery: Encodable {
     let email: String
     let password: String
     let nick: String
-    let birthday: String
+    let birthDay: String
 }

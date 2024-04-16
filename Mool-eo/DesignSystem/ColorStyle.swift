@@ -15,6 +15,7 @@ enum ColorStyle {
     static let subText = UIColor.secondaryLabel
     static let mainBackground = UIColor.systemBackground
     static let subBackground = UIColor.secondarySystemBackground
+    static let available = UIColor.systemGreen
     static let caution = UIColor.systemPink
     static let clear = UIColor.clear
     static let placeholder = UIColor.placeholderText

@@ -259,12 +259,12 @@
 		0999EAFF2BCA97F3004B6D1F /* Join */ = {
 			isa = PBXGroup;
 			children = (
-				0999EB002BCA97F3004B6D1F /* JoinViewController.swift */,
 				0999EB012BCA97F3004B6D1F /* JoinView.swift */,
+				0999EB002BCA97F3004B6D1F /* JoinViewController.swift */,
+				0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */,
+				0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */,
 				0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */,
 				0999EB032BCA97F3004B6D1F /* JoinSecondViewModel.swift */,
-				0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */,
-				0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */,
 			);
 			path = Join;
 			sourceTree = "<group>";

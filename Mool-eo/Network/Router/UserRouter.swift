@@ -75,7 +75,7 @@ extension UserRouter: TargetType {
         switch self {
         case .join(query: let query):
             let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
+            encoder.keyEncodingStrategy = .useDefaultKeys
             return try? encoder.encode(query)
         case.email(query: let query):
             let encoder = JSONEncoder()
