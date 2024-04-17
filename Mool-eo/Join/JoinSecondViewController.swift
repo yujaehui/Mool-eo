@@ -36,5 +36,11 @@ class JoinSecondViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         output.date.drive(joinSecondView.birthdayView.customTextField.rx.text).disposed(by: disposeBag)
+        output.joinSuccessTrigger.drive(with: self) { owner, _ in
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+            sceneDelegate?.window?.makeKeyAndVisible()
+        }.disposed(by: disposeBag)
     }
 }

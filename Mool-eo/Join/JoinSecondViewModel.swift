@@ -22,12 +22,14 @@ class JoinSecondViewModel: ViewModelType {
     
     struct Output {
         let date: Driver<String>
+        let joinSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let date = BehaviorSubject<String>(value: DateFormatterManager.shared.convertformatDateToString(date: Date()))
         let joinButtonValidation = BehaviorSubject<Bool>(value: false)
-        
+        let joinSuccessTrigger = PublishSubject<Void>()
+
         input.date
             .debug("date")
             .subscribe(with: self) { owner, value in
@@ -57,9 +59,11 @@ class JoinSecondViewModel: ViewModelType {
             }
             .debug("joinButtonTap")
             .subscribe(with: self) { owner, value in
-                print("회원가입 성공")
+                joinSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 \(error)")
             }.disposed(by: disposeBag)
         
-        return Output(date: date.asDriver(onErrorJustReturn: ""))
+        return Output(date: date.asDriver(onErrorJustReturn: ""), joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

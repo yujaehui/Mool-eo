@@ -31,7 +31,8 @@ class LoginViewController: BaseViewController {
     override func bind() {
         let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
         let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
-        let input = LoginViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide)
+        let joinButtonTap = loginView.joinButton.rx.tap.asObservable()
+        let input = LoginViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, joinButtonTap: joinButtonTap)
         
         let output = viewModel.transform(input: input)
         output.keyboardWillShow.bind(with: self) { owner, notification in
@@ -39,6 +40,9 @@ class LoginViewController: BaseViewController {
         }.disposed(by: disposeBag)
         output.keyboardWillHide.bind(with: self) { owner, notification in
             owner.keyboardWillHide(notification: notification)
+        }.disposed(by: disposeBag)
+        output.joinButtonTap.bind(with: self) { owner, _ in
+            owner.navigationController?.pushViewController(JoinViewController(), animated: true)
         }.disposed(by: disposeBag)
         
     }

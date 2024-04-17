@@ -16,15 +16,17 @@ class LoginViewModel: ViewModelType {
     struct Input {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
+        let joinButtonTap: Observable<Void>
     }
     
     struct Output {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
+        let joinButtonTap: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
-        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide)
+        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, joinButtonTap: input.joinButtonTap)
     }
 }
 
