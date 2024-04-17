@@ -32,7 +32,10 @@ class LoginViewController: BaseViewController {
         let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
         let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
         let joinButtonTap = loginView.joinButton.rx.tap.asObservable()
-        let input = LoginViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, joinButtonTap: joinButtonTap)
+        let id = loginView.loginBoxView.idTextField.rx.text.orEmpty.asObservable()
+        let password = loginView.loginBoxView.passwordTextField.rx.text.orEmpty.asObservable()
+        let loginButtonTap = loginView.loginBoxView.loginButton.rx.tap.asObservable()
+        let input = LoginViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, joinButtonTap: joinButtonTap, id: id, password: password, loginButtonTap: loginButtonTap)
         
         let output = viewModel.transform(input: input)
         output.keyboardWillShow.bind(with: self) { owner, notification in
@@ -43,6 +46,13 @@ class LoginViewController: BaseViewController {
         }.disposed(by: disposeBag)
         output.joinButtonTap.bind(with: self) { owner, _ in
             owner.navigationController?.pushViewController(JoinViewController(), animated: true)
+        }.disposed(by: disposeBag)
+        output.loginValidation.drive(loginView.loginBoxView.loginButton.rx.isEnabled).disposed(by: disposeBag)
+        output.loginSuccessTrigger.drive(with: self) { owner, _ in
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: PostBoardViewController())
+            sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
         
     }
