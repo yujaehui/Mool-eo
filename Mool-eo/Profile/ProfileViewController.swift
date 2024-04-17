@@ -1,0 +1,134 @@
+//
+//  ProfileViewController.swift
+//  Mool-eo
+//
+//  Created by Jaehui Yu on 4/17/24.
+//
+
+import UIKit
+import RxSwift
+import RxCocoa
+import RxDataSources
+
+enum CellType {
+    case info
+    case myPost
+}
+
+struct Info {
+    let name: String
+    let age: Int
+}
+
+struct MyPost {
+    let title: String
+    let content: String
+    let likeCount: Int
+    let commentCount: Int
+}
+
+enum SectionItem {
+    case infoItem(Info)
+    case myPostItem(MyPost)
+}
+
+// 섹션에 대한 데이터 모델
+struct SectionModel {
+    let title: String?
+    var items: [SectionItem]
+}
+
+// SectionModelType 프로토콜 준수
+extension SectionModel: SectionModelType {
+    typealias Item = SectionItem
+    
+    init(original: SectionModel, items: [SectionItem]) {
+        self = original
+        self.items = items
+    }
+}
+
+class ProfileViewController: BaseViewController, UITableViewDelegate {
+    
+    let disposeBag = DisposeBag()
+    let viewModel = ProfileViewModel()
+    let profileView = ProfileView()
+    
+    let dataSource = configureDataSource()
+    
+    override func loadView() {
+        self.view = profileView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func bind() {
+        let sections: [SectionModel] = [
+            SectionModel(title: nil, items: [
+                .infoItem(Info(name: "리치", age: 2))
+            ]),
+            SectionModel(title: "내 게시물", items: [
+                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20))
+            ])
+        ]
+        
+        Observable.just(sections)
+            .bind(to: profileView.tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            let title = dataSource[section].title
+            let headerView = ProfileMyPostHeaderView()
+            headerView.myPostLabel.text = title
+            return headerView
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1: return 50
+        default: return 0
+        }
+    }
+    
+    static func configureDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel>(
+            configureCell: { dataSource, tableView, indexPath, item in
+                switch item {
+                case .infoItem(let info):
+                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.identifier, for: indexPath) as! ProfileInfoTableViewCell
+                    cell.nameLabel.text = info.name
+                    cell.ageLabel.text = "\(info.age)"
+                    return cell
+                case .myPostItem(let myPost):
+                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
+                    cell.postTitleLabel.text = myPost.title
+                    cell.postContentLabel.text = myPost.content
+                    cell.likeCountLabel.text = "\(myPost.likeCount)"
+                    cell.commentCountLabel.text = "\(myPost.commentCount)"
+                    return cell
+                }
+            },
+            titleForHeaderInSection: { dataSource, index in
+                if index == 0 {
+                    return nil
+                } else {
+                    return dataSource.sectionModels[index].title
+                }
+            }
+        )
+        return dataSource
+    }
+}

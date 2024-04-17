@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
+		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
+		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
+		093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */; };
 		094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB5F2BC670BA00342DC3 /* AppDelegate.swift */; };
 		094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB612BC670BA00342DC3 /* SceneDelegate.swift */; };
 		094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB632BC670BA00342DC3 /* ViewController.swift */; };
@@ -18,6 +22,10 @@
 		094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB792BC672C000342DC3 /* SnapKit */; };
 		094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB7C2BC672D200342DC3 /* Kingfisher */; };
 		094BEB802BC6732700342DC3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB7F2BC6732700342DC3 /* Alamofire */; };
+		0952A6D82BCFDD9A00F71C76 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 0952A6D72BCFDD9A00F71C76 /* Differentiator */; };
+		0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 0952A6D92BCFDD9A00F71C76 /* RxDataSources */; };
+		0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */; };
+		0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */; };
 		095678B02BC673F00030F0CD /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 095678AF2BC673F00030F0CD /* Toast */; };
 		095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B52BC674A50030F0CD /* ColorStyle.swift */; };
 		095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B82BC674CB0030F0CD /* UIColor+Extension.swift */; };
@@ -69,6 +77,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostTableViewCell.swift; sourceTree = "<group>"; };
 		094BEB5C2BC670BA00342DC3 /* Mool-eo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mool-eo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		094BEB5F2BC670BA00342DC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		094BEB612BC670BA00342DC3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +89,8 @@
 		094BEB682BC670BC00342DC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		094BEB6B2BC670BC00342DC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		094BEB6D2BC670BC00342DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoTableViewCell.swift; sourceTree = "<group>"; };
+		0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostHeaderView.swift; sourceTree = "<group>"; };
 		095678B52BC674A50030F0CD /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
 		095678B82BC674CB0030F0CD /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		095678E12BC67AC90030F0CD /* FontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyle.swift; sourceTree = "<group>"; };
@@ -131,10 +145,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0952A6D82BCFDD9A00F71C76 /* Differentiator in Frameworks */,
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
+				0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */,
 				094BEB772BC672B000342DC3 /* RxSwift in Frameworks */,
 				094BEB752BC672B000342DC3 /* RxCocoa in Frameworks */,
 			);
@@ -143,6 +159,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		093E60C32BCF765F00970FAC /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				093E60C42BCF766F00970FAC /* ProfileView.swift */,
+				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
+				093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */,
+				0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */,
+				093E60C62BCF767F00970FAC /* ProfileViewController.swift */,
+				093E60C82BCF768800970FAC /* ProfileViewModel.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		094BEB532BC670BA00342DC3 = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +192,7 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				093E60C32BCF765F00970FAC /* Profile */,
 				0999EB292BCBAE4B004B6D1F /* Network */,
 				0999EB152BCA9FA4004B6D1F /* PostBoard */,
 				0999EAFF2BCA97F3004B6D1F /* Join */,
@@ -363,6 +393,8 @@
 				094BEB7C2BC672D200342DC3 /* Kingfisher */,
 				094BEB7F2BC6732700342DC3 /* Alamofire */,
 				095678AF2BC673F00030F0CD /* Toast */,
+				0952A6D72BCFDD9A00F71C76 /* Differentiator */,
+				0952A6D92BCFDD9A00F71C76 /* RxDataSources */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -398,6 +430,7 @@
 				094BEB7B2BC672D200342DC3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				094BEB7E2BC6732700342DC3 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				095678AE2BC673F00030F0CD /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -437,6 +470,7 @@
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
+				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
@@ -451,14 +485,17 @@
 				0999EB362BCBAF35004B6D1F /* LoginQuery.swift in Sources */,
 				0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */,
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
+				093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */,
 				0999EB332BCBAF18004B6D1F /* UserRouter.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
+				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
 				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
+				093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */,
 				099E92882BCD506800311329 /* EmailModel.swift in Sources */,
 				095678F42BC680100030F0CD /* ViewModelType.swift in Sources */,
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
@@ -467,9 +504,11 @@
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
+				0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
 				0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */,
+				0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
 				0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */,
@@ -730,6 +769,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		095678AE2BC673F00030F0CD /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
@@ -765,6 +812,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 094BEB7E2BC6732700342DC3 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		0952A6D72BCFDD9A00F71C76 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		0952A6D92BCFDD9A00F71C76 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 		095678AF2BC673F00030F0CD /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
