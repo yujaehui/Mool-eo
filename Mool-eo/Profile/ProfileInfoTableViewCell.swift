@@ -94,4 +94,11 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
     }
+    
+    func configureCell(_ info: ProfileModel) {
+        nameLabel.text = info.nick
+        ageLabel.text = info.birthDay
+        idLabel.text = info.email
+        followerAndFollowingLabel.text = "팔로워 \(info.followers.count)명 · 팔로잉 \(info.following.count)명"
+    }
 }

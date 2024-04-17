@@ -28,7 +28,7 @@ class PostBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setNav()
     }
     
     override func bind() {
@@ -39,5 +39,14 @@ class PostBoardViewController: BaseViewController {
         output.postBoardList.bind(to: postBoardView.collectionView.rx.items(cellIdentifier: PostBoardCollectionViewCell.identifier, cellType: PostBoardCollectionViewCell.self)) { (row, element, cell) in
             cell.configureCell(element: element)
         }.disposed(by: disposeBag)
+    }
+    
+    func setNav() {
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
+    @objc func rightBarButtonItemClicked() {
+        navigationController?.pushViewController(ProfileViewController(), animated: true)
     }
 }

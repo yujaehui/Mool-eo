@@ -13,14 +13,25 @@ class ProfileViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        
+        let viewDidLoadTrigger: Observable<Void>
     }
     
     struct Output {
-        
+        let profile: PublishSubject<ProfileModel>
     }
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        let profile = PublishSubject<ProfileModel>()
+        
+        input.viewDidLoadTrigger
+            .flatMap { _ in
+                NetworkManager.profileCheck()
+            }
+            .subscribe(with: self) { owner, value in
+                profile.onNext(value)
+            }.disposed(by: disposeBag)
+        
+        return Output(profile: profile)
     }
 }

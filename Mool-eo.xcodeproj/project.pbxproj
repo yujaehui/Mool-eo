@@ -26,6 +26,9 @@
 		0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 0952A6D92BCFDD9A00F71C76 /* RxDataSources */; };
 		0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */; };
 		0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */; };
+		0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E62BD0095500F71C76 /* ProfileModel.swift */; };
+		0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */; };
+		0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */; };
 		095678B02BC673F00030F0CD /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 095678AF2BC673F00030F0CD /* Toast */; };
 		095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B52BC674A50030F0CD /* ColorStyle.swift */; };
 		095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B82BC674CB0030F0CD /* UIColor+Extension.swift */; };
@@ -91,6 +94,9 @@
 		094BEB6D2BC670BC00342DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoTableViewCell.swift; sourceTree = "<group>"; };
 		0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostHeaderView.swift; sourceTree = "<group>"; };
+		0952A6E62BD0095500F71C76 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
+		0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptor.swift; sourceTree = "<group>"; };
 		095678B52BC674A50030F0CD /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
 		095678B82BC674CB0030F0CD /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		095678E12BC67AC90030F0CD /* FontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyle.swift; sourceTree = "<group>"; };
@@ -215,6 +221,14 @@
 			path = "Mool-eo";
 			sourceTree = "<group>";
 		};
+		0952A6E52BD0094A00F71C76 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0952A6E62BD0095500F71C76 /* ProfileModel.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		095678B42BC674990030F0CD /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +332,7 @@
 				0999EB2A2BCBAE56004B6D1F /* APIKey.swift */,
 				0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */,
 				0999EB2E2BCBAED3004B6D1F /* TargetType.swift */,
+				0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */,
 				0999EB432BCBBB53004B6D1F /* Router */,
 				0999EB482BCBC207004B6D1F /* NetworkManager.swift */,
 			);
@@ -346,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				0999EB322BCBAF18004B6D1F /* UserRouter.swift */,
+				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -353,6 +369,7 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0952A6E52BD0094A00F71C76 /* Profile */,
 				0999EB532BCBC2C4004B6D1F /* User */,
 			);
 			path = Model;
@@ -460,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */,
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
@@ -468,6 +486,7 @@
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
 				0999EB0F2BCA981B004B6D1F /* JoinTextFieldView.swift in Sources */,
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
+				0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
@@ -475,6 +494,7 @@
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
+				0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */,
 				095679912BC9501D0030F0CD /* UIButton.Configuration+Extension.swift in Sources */,
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,

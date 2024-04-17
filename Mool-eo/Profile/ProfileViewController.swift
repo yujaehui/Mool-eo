@@ -15,10 +15,10 @@ enum CellType {
     case myPost
 }
 
-struct Info {
-    let name: String
-    let age: Int
-}
+//struct Info {
+//    let name: String
+//    let age: Int
+//}
 
 struct MyPost {
     let title: String
@@ -28,7 +28,7 @@ struct MyPost {
 }
 
 enum SectionItem {
-    case infoItem(Info)
+    case infoItem(ProfileModel)
     case myPostItem(MyPost)
 }
 
@@ -65,23 +65,33 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
     }
     
     override func bind() {
-        let sections: [SectionModel] = [
-            SectionModel(title: nil, items: [
-                .infoItem(Info(name: "리치", age: 2))
-            ]),
-            SectionModel(title: "내 게시물", items: [
-                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20))
-            ])
-        ]
-        
-        Observable.just(sections)
-            .bind(to: profileView.tableView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
+        //        let sections: [SectionModel] = [
+        //            SectionModel(title: nil, items: [
+        //                .infoItem(Info(name: "리치", age: 2))
+        //            ]),
+        //            SectionModel(title: "내 게시물", items: [
+        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
+        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20))
+        //            ])
+        //        ]
+        //
+        //        Observable.just(sections)
+        //            .bind(to: profileView.tableView.rx.items(dataSource: dataSource))
+        //            .disposed(by: disposeBag)
         
         profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        let viewDidLoadTrigger = Observable.just(())
+        let input = ProfileViewModel.Input(viewDidLoadTrigger: viewDidLoadTrigger)
+        
+        let output = viewModel.transform(input: input)
+        output.profile.bind(with: self) { owner, value in
+            let sections: [SectionModel] = [SectionModel(title: nil, items: [.infoItem(value)]),
+                                            SectionModel(title: "내 게시물", items: [])]
+            Observable.just(sections).bind(to: owner.profileView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
+        }.disposed(by: disposeBag)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -109,8 +119,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
                 switch item {
                 case .infoItem(let info):
                     let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.identifier, for: indexPath) as! ProfileInfoTableViewCell
-                    cell.nameLabel.text = info.name
-                    cell.ageLabel.text = "\(info.age)"
+                    cell.configureCell(info)
                     return cell
                 case .myPostItem(let myPost):
                     let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell

@@ -74,4 +74,14 @@ struct NetworkManager {
             return Single.error(error)
         }
     }
+    
+    //MARK: - Profile
+    static func profileCheck() -> Single<ProfileModel> {
+        do {
+            let urlRequest = try ProfileRouter.profileCheck.asURLRequest()
+            return request(route: urlRequest, interceptor: AuthInterceptor()) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
 }
