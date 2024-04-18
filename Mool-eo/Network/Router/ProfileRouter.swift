@@ -10,7 +10,7 @@ import Alamofire
 
 enum ProfileRouter {
     case profileCheck
-    case profileEdit
+    case profileEdit(query: ProfileEditQuery)
 }
 
 extension ProfileRouter: TargetType {
@@ -55,6 +55,10 @@ extension ProfileRouter: TargetType {
     
     var body: Data? {
         switch self {
+        case .profileEdit(query: let query):
+            let encoder = JSONEncoder()
+            encoder.keyEncodingStrategy = .useDefaultKeys
+            return try? encoder.encode(query)
         default: return nil
         }
     }

@@ -85,12 +85,29 @@ struct NetworkManager {
         }
     }
     
-    static func profileEdit() -> Single<ProfileModel> {
-        do {
-            let urlRequest = try ProfileRouter.profileEdit.asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
+    static func profileEdit(query: ProfileEditQuery) -> Single<ProfileModel> {
+        return Single<ProfileModel>.create { single in
+            let url = URL(string: APIKey.baseURL.rawValue + "/users/me/profile")!
+            let headers: HTTPHeaders = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+                                        HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
+                                        HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+            let parameters: [String : Any] = ["nick": query.nick,
+                                              "birthDay": query.birthDay]
+            AF.upload(multipartFormData: { multipartFormData in
+                for (key, value) in parameters {
+                    multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
+                }
+                multipartFormData.append(query.profile, withName: "profile", fileName: "image.png", mimeType: "image/png")
+            }, to: url, method: .put, headers: headers)
+            .responseDecodable(of: ProfileModel.self) { response in
+                switch response.result {
+                case .success(let success):
+                    single(.success(success))
+                case .failure(let failure):
+                    single(.failure(failure))
+                }
+            }
+            return Disposables.create()
         }
     }
 }

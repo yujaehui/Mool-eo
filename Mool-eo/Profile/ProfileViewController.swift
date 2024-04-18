@@ -15,11 +15,6 @@ enum CellType {
     case myPost
 }
 
-//struct Info {
-//    let name: String
-//    let age: Int
-//}
-
 struct MyPost {
     let title: String
     let content: String
@@ -48,13 +43,13 @@ extension SectionModel: SectionModelType {
     }
 }
 
-class ProfileViewController: BaseViewController, UITableViewDelegate {
+class ProfileViewController: BaseViewController {
     
     let disposeBag = DisposeBag()
     let viewModel = ProfileViewModel()
     let profileView = ProfileView()
     
-    let dataSource = configureDataSource()
+    lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = profileView
@@ -64,7 +59,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
         super.viewDidLoad()
     }
     
-    override func bind() {        
+    override func bind() {
         profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         let viewDidLoadTrigger = Observable.just(())
@@ -78,6 +73,39 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
         }.disposed(by: disposeBag)
     }
     
+    func configureDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel>(
+            configureCell: { dataSource, tableView, indexPath, item in
+                switch item {
+                case .infoItem(let info):
+                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.identifier, for: indexPath) as! ProfileInfoTableViewCell
+                    cell.configureCell(info)
+                    cell.profileEditButton.rx.tap.bind(with: self) { owner, _ in
+                        let vc = ProfileEditViewController()
+                        vc.profileImage = info.profileImage
+                        vc.name = info.nick
+                        vc.birthday = info.birthDay
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }.disposed(by: cell.disposeBag)
+                    return cell
+                case .myPostItem(let myPost):
+                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
+                    cell.postTitleLabel.text = myPost.title
+                    cell.postContentLabel.text = myPost.content
+                    cell.likeCountLabel.text = "\(myPost.likeCount)"
+                    cell.commentCountLabel.text = "\(myPost.commentCount)"
+                    return cell
+                }
+            },
+            titleForHeaderInSection: { dataSource, index in
+                return dataSource.sectionModels[index].title
+            }
+        )
+        return dataSource
+    }
+}
+
+extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 1:
@@ -95,33 +123,5 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
         case 1: return 50
         default: return 0
         }
-    }
-    
-    static func configureDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel>(
-            configureCell: { dataSource, tableView, indexPath, item in
-                switch item {
-                case .infoItem(let info):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.identifier, for: indexPath) as! ProfileInfoTableViewCell
-                    cell.configureCell(info)
-                    return cell
-                case .myPostItem(let myPost):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
-                    cell.postTitleLabel.text = myPost.title
-                    cell.postContentLabel.text = myPost.content
-                    cell.likeCountLabel.text = "\(myPost.likeCount)"
-                    cell.commentCountLabel.text = "\(myPost.commentCount)"
-                    return cell
-                }
-            },
-            titleForHeaderInSection: { dataSource, index in
-                if index == 0 {
-                    return nil
-                } else {
-                    return dataSource.sectionModels[index].title
-                }
-            }
-        )
-        return dataSource
     }
 }

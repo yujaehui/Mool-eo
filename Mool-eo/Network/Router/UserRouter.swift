@@ -34,11 +34,11 @@ extension UserRouter: TargetType {
     
     var path: String {
         switch self {
-        case .join: "/users/join"
-        case .email: "/validation/email"
-        case .login: "/users/login"
-        case .refresh: "/auth/refresh"
-        case .withdraw: "/users/withdraw"
+        case .join: "users/join"
+        case .email: "validation/email"
+        case .login: "users/login"
+        case .refresh: "auth/refresh"
+        case .withdraw: "users/withdraw"
         }
     }
     

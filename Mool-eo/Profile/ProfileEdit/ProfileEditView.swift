@@ -13,9 +13,9 @@ class ProfileEditView: BaseView {
         let imageView = UIImageView()
         imageView.tintColor = ColorStyle.point
         imageView.backgroundColor = ColorStyle.subBackground
-        imageView.frame = .init(x: 0, y: 0, width: 100, height: 100)
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 50
+        imageView.layer.cornerRadius = 20
         return imageView
     }()
     

@@ -7,12 +7,15 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import Kingfisher
 
 class ProfileInfoTableViewCell: BaseTableViewCell {
     
+    var disposeBag = DisposeBag()
+    
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "bird")
         imageView.tintColor = ColorStyle.point
         imageView.backgroundColor = ColorStyle.subBackground
         imageView.contentMode = .scaleAspectFill
@@ -51,6 +54,11 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         button.configuration = .check2("프로필 수정")
         return button
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
@@ -96,6 +104,14 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ info: ProfileModel) {
+        let url = URL(string: APIKey.baseURL.rawValue + info.profileImage)
+        let modifier = AnyModifier { request in
+            var urlRequest = request
+            urlRequest.headers = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+                                  HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+            return urlRequest
+        }
+        profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
         nameLabel.text = info.nick
         ageLabel.text = info.birthDay
         idLabel.text = info.email
