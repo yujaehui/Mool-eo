@@ -10,6 +10,7 @@ import Alamofire
 
 enum ProfileRouter {
     case profileCheck
+    case profileEdit
 }
 
 extension ProfileRouter: TargetType {
@@ -21,12 +22,14 @@ extension ProfileRouter: TargetType {
     var method: Alamofire.HTTPMethod {
         switch self {
         case .profileCheck: .get
+        case .profileEdit: .put
         }
     }
     
     var path: String {
         switch self {
         case .profileCheck: "users/me/profile"
+        case .profileEdit: "users/me/profile"
         }
     }
     
@@ -34,6 +37,10 @@ extension ProfileRouter: TargetType {
         switch self {
         case .profileCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+        case .profileEdit:
+            [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
+             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
         }
     }

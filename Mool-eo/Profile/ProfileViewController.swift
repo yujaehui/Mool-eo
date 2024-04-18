@@ -64,23 +64,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate {
         super.viewDidLoad()
     }
     
-    override func bind() {
-        //        let sections: [SectionModel] = [
-        //            SectionModel(title: nil, items: [
-        //                .infoItem(Info(name: "리치", age: 2))
-        //            ]),
-        //            SectionModel(title: "내 게시물", items: [
-        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20)),
-        //                .myPostItem(MyPost(title: "제목입니다", content: "내용입니다", likeCount: 10, commentCount: 20))
-        //            ])
-        //        ]
-        //
-        //        Observable.just(sections)
-        //            .bind(to: profileView.tableView.rx.items(dataSource: dataSource))
-        //            .disposed(by: disposeBag)
-        
+    override func bind() {        
         profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         let viewDidLoadTrigger = Observable.just(())

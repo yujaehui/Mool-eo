@@ -84,4 +84,13 @@ struct NetworkManager {
             return Single.error(error)
         }
     }
+    
+    static func profileEdit() -> Single<ProfileModel> {
+        do {
+            let urlRequest = try ProfileRouter.profileEdit.asURLRequest()
+            return request(route: urlRequest, interceptor: nil) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
 }

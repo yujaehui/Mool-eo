@@ -29,6 +29,10 @@
 		0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E62BD0095500F71C76 /* ProfileModel.swift */; };
 		0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */; };
 		0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */; };
+		0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6F92BD0FD5F00F71C76 /* ProfileEditQuery.swift */; };
+		0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6FB2BD0FE9000F71C76 /* ProfileEditView.swift */; };
+		0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A7002BD100B500F71C76 /* ProfileEditViewController.swift */; };
+		0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A7022BD100CE00F71C76 /* ProfileEditViewModel.swift */; };
 		095678B02BC673F00030F0CD /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 095678AF2BC673F00030F0CD /* Toast */; };
 		095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B52BC674A50030F0CD /* ColorStyle.swift */; };
 		095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095678B82BC674CB0030F0CD /* UIColor+Extension.swift */; };
@@ -97,6 +101,10 @@
 		0952A6E62BD0095500F71C76 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptor.swift; sourceTree = "<group>"; };
+		0952A6F92BD0FD5F00F71C76 /* ProfileEditQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditQuery.swift; sourceTree = "<group>"; };
+		0952A6FB2BD0FE9000F71C76 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
+		0952A7002BD100B500F71C76 /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
+		0952A7022BD100CE00F71C76 /* ProfileEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewModel.swift; sourceTree = "<group>"; };
 		095678B52BC674A50030F0CD /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
 		095678B82BC674CB0030F0CD /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		095678E12BC67AC90030F0CD /* FontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyle.swift; sourceTree = "<group>"; };
@@ -168,6 +176,7 @@
 		093E60C32BCF765F00970FAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
 				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
 				093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */,
@@ -227,6 +236,24 @@
 				0952A6E62BD0095500F71C76 /* ProfileModel.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		0952A6F82BD0FD4F00F71C76 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0952A6F92BD0FD5F00F71C76 /* ProfileEditQuery.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		0952A6FF2BD100A600F71C76 /* ProfileEdit */ = {
+			isa = PBXGroup;
+			children = (
+				0952A6FB2BD0FE9000F71C76 /* ProfileEditView.swift */,
+				0952A7002BD100B500F71C76 /* ProfileEditViewController.swift */,
+				0952A7022BD100CE00F71C76 /* ProfileEditViewModel.swift */,
+			);
+			path = ProfileEdit;
 			sourceTree = "<group>";
 		};
 		095678B42BC674990030F0CD /* DesignSystem */ = {
@@ -342,6 +369,7 @@
 		0999EB342BCBAF2D004B6D1F /* Query */ = {
 			isa = PBXGroup;
 			children = (
+				0952A6F82BD0FD4F00F71C76 /* Profile */,
 				0999EB3D2BCBBAE7004B6D1F /* User */,
 			);
 			path = Query;
@@ -485,6 +513,7 @@
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
 				0999EB0F2BCA981B004B6D1F /* JoinTextFieldView.swift in Sources */,
+				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
 				0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
@@ -499,6 +528,7 @@
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
+				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
 				0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */,
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
@@ -521,9 +551,11 @@
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
 				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
+				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
+				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
 				0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
