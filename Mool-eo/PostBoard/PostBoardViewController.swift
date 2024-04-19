@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 enum PostBoardType: String, CaseIterable {
     case free = "자유게시판"
@@ -17,6 +18,7 @@ enum PostBoardType: String, CaseIterable {
 }
 
 class PostBoardViewController: BaseViewController {
+    var showProfileUpdateAlert: Bool = false
     
     let disposeBag = DisposeBag()
     let viewModel = PostBoardViewModel()
@@ -28,7 +30,15 @@ class PostBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(#function)
         setNav()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if showProfileUpdateAlert {
+            postBoardView.makeToast("프로필 수정 성공", duration: 2, position: .top)
+            showProfileUpdateAlert = false
+        }
     }
     
     override func bind() {

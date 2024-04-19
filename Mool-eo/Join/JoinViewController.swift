@@ -25,15 +25,9 @@ class JoinViewController: BaseViewController {
     
     override func bind() {
         let id = joinView.idView.customTextField.rx.text.orEmpty.asObservable()
-        let idEditingChanged = joinView.idView.customTextField.rx.controlEvent(.editingChanged).asObservable()
         let idCheckButtonTap = joinView.idCheckButton.rx.tap.asObservable()
-        let password = joinView.passwordView.customTextField.rx.text.orEmpty.asObservable()
-        let passwordEditingChanged = joinView.passwordView.customTextField.rx.controlEvent(.editingChanged).asObservable()
         let nextButtonTap = joinView.nextButton.rx.tap.asObservable()
-        let input = JoinViewModel.Input(id: id, idEditingChanged: idEditingChanged, 
-                                        idCheckButtonTap: idCheckButtonTap,
-                                        password: password, passwordEditingChanged: passwordEditingChanged,
-                                        nextButtonTap: nextButtonTap)
+        let input = JoinViewModel.Input(id: id, idCheckButtonTap: idCheckButtonTap, nextButtonTap: nextButtonTap)
         
         let output = viewModel.transform(input: input)
         
@@ -52,19 +46,11 @@ class JoinViewController: BaseViewController {
             owner.joinView.idView.descriptionLabel.text = value
         }.disposed(by: disposeBag)
         
-        output.passwordValidation.drive(with: self) { owner, value in
-            owner.joinView.passwordView.descriptionLabel.text = value ? nil : TextFieldType.id.description
-            owner.joinView.passwordView.descriptionLabel.textColor = value ? nil : ColorStyle.caution
-        }.disposed(by: disposeBag)
-        
-        output.nextButtonValidation.drive(with: self) { owner, value in
-            owner.joinView.nextButton.isEnabled = value
-        }.disposed(by: disposeBag)
+        output.nextButtonValidation.drive(joinView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.nextButtonTap.bind(with: self) { owner, _ in
             let vc = JoinSecondViewController()
             vc.id = owner.joinView.idView.customTextField.text ?? ""
-            vc.password = owner.joinView.passwordView.customTextField.text ?? ""
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }

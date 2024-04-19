@@ -84,10 +84,11 @@ class ProfileEditViewController: BaseViewController {
             }
             .debug("ProfileEdit")
             .subscribe(with: self) { owner, value in
-                print("프로필 수정 성공")
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
-                sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: PostBoardViewController())
+                let vc = PostBoardViewController()
+                vc.showProfileUpdateAlert = true
+                sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: vc)
                 sceneDelegate?.window?.makeKeyAndVisible()
             } onError: { owner, error in
                 print("오류 발생")

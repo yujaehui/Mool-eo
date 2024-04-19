@@ -12,7 +12,7 @@ class JoinView: BaseView {
     
     let titleLabel: CustomLabel = {
         let label = CustomLabel(type: .colorTitleBold)
-        label.text = "STEP 1\n사용하실 이메일과 비밀번호를 입력해주세요."
+        label.text = "STEP 1\n아이디를 입력해주세요."
         label.numberOfLines = 2
         return label
     }()
@@ -24,23 +24,13 @@ class JoinView: BaseView {
     
     let idCheckButton: UIButton = {
         let button = UIButton()
-        button.configuration = .check2("중복확인")
+        button.configuration = .check("중복확인")
         return button
-    }()
-    
-    let passwordView: JoinTextFieldView = {
-        let view = JoinTextFieldView(frame: .zero, textFieldType: .password)
-        return view
     }()
     
     let nextButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "arrow.right"), for: .normal)
-        button.tintColor = ColorStyle.point
-        button.backgroundColor = ColorStyle.subBackground
-        button.frame = .init(x: 0, y: 0, width: 40, height: 40)
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 20
+        button.configuration = .check("다음")
         return button
     }()
 
@@ -48,7 +38,6 @@ class JoinView: BaseView {
         addSubview(titleLabel)
         addSubview(idView)
         addSubview(idCheckButton)
-        addSubview(passwordView)
         addSubview(nextButton)
     }
     
@@ -59,7 +48,7 @@ class JoinView: BaseView {
         }
         
         idView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.leading.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
@@ -71,15 +60,10 @@ class JoinView: BaseView {
             make.width.equalTo(80)
         }
         
-        passwordView.snp.makeConstraints { make in
+        nextButton.snp.makeConstraints { make in
             make.top.equalTo(idView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
-        }
-        
-        nextButton.snp.makeConstraints { make in
-            make.top.equalTo(passwordView.snp.bottom).offset(20)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            make.size.equalTo(40)
+            make.height.equalTo(40)
         }
     }
 }

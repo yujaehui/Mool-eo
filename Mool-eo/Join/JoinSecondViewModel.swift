@@ -13,57 +13,38 @@ class JoinSecondViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let id: Observable<String>
         let password: Observable<String>
-        let name: Observable<String>
-        let date: Observable<Date>
-        let joinButtonTap: Observable<Void>
+        let nextButtonTap: Observable<Void>
     }
     
     struct Output {
-        let date: Driver<String>
-        let joinSuccessTrigger: Driver<Void>
+        let passwordValidation: Driver<Bool>
+        let nextButtonValidation: Driver<Bool>
+        let nextButtonTap: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
-        let date = BehaviorSubject<String>(value: DateFormatterManager.shared.convertformatDateToString(date: Date()))
-        let joinButtonValidation = BehaviorSubject<Bool>(value: false)
-        let joinSuccessTrigger = PublishSubject<Void>()
-
-        input.date
-            .debug("date")
-            .subscribe(with: self) { owner, value in
-            date.onNext(DateFormatterManager.shared.convertformatDateToString(date: value))
-        }.disposed(by: disposeBag)
+        let passwordValidation = BehaviorSubject<Bool>(value: false)
+        let nextButtonValidation = BehaviorSubject<Bool>(value: false)
         
-        
-        let joinObservable = Observable.combineLatest(input.id, input.password, input.name, date.asObservable())
-            .map { (id, password, name, birthday) in
-                return JoinQuery(email: id, password: password, nick: name, birthDay: birthday)
+        input.password
+            .map { value in
+                let idRegex = "^(?!\\s)(?=.*[a-z])[a-z0-9]{4,12}$"
+                let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
+                return idPredicate.evaluate(with: value)
             }
-        
-        joinObservable
-            .debug("joinObservable")
+            .debug("password")
             .bind(with: self) { owner, value in
-                if value.nick.count > 0 && value.birthDay.count > 0 {
-                    joinButtonValidation.onNext(true)
-                } else {
-                    joinButtonValidation.onNext(false)
-                }
+                passwordValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        input.joinButtonTap
-            .withLatestFrom(joinObservable)
-            .flatMap { query in
-                NetworkManager.join(query: query)
-            }
-            .debug("joinButtonTap")
-            .subscribe(with: self) { owner, value in
-                joinSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 \(error)")
+        passwordValidation
+            .bind(with: self) { owner, value in
+                nextButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(date: date.asDriver(onErrorJustReturn: ""), joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(passwordValidation: passwordValidation.asDriver(onErrorJustReturn: false),
+                      nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
+                      nextButtonTap: input.nextButtonTap)
     }
 }

@@ -14,10 +14,7 @@ class JoinViewModel: ViewModelType {
     
     struct Input {
         let id: Observable<String>
-        let idEditingChanged: Observable<Void>
         let idCheckButtonTap: Observable<Void>
-        let password: Observable<String>
-        let passwordEditingChanged: Observable<Void>
         let nextButtonTap: Observable<Void>
     }
     
@@ -25,25 +22,19 @@ class JoinViewModel: ViewModelType {
         let idValidation: Driver<Bool>
         let idCheckValidation: Driver<Bool?>
         let idCheckMessage: Driver<String>
-        let passwordValidation: Driver<Bool>
         let nextButtonValidation: Driver<Bool>
         let nextButtonTap: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
         let idValidation = BehaviorSubject<Bool>(value: false)
-        
         let idCheckValidation = BehaviorSubject<Bool?>(value: false)
         let idCheckMessage = PublishSubject<String>()
-        
-        let passwordValidation = BehaviorSubject<Bool>(value: false)
-        
         let nextButtonValidation = BehaviorSubject<Bool>(value: false)
         
-        input.idEditingChanged
-            .withLatestFrom(input.id)
+        input.id
             .map { id in
-                let idRegex = "^(?=.*[a-z])[a-z0-9]{4,12}$"
+                let idRegex = "^(?!\\s)(?=.*[a-z])[a-z0-9]{4,12}$"
                 let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
                 return idPredicate.evaluate(with: id)
             }
@@ -72,21 +63,10 @@ class JoinViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        input.passwordEditingChanged
-            .withLatestFrom(input.password)
-            .map { password in
-                let passwordRegex = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{6,20}$"
-                let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
-                return passwordPredicate.evaluate(with: password)
-            }
-            .debug("password")
-            .bind(to: passwordValidation)
-            .disposed(by: disposeBag)
-        
-        Observable.combineLatest(idCheckValidation, passwordValidation)
-            .map { (idCheck, password) in
-                guard let idCheck = idCheck else { return false } // idCheck가 nil, 중복 확인이 되지 않은 경우 false를 반환
-                return idCheck && password
+        idCheckValidation
+            .map { value in
+                guard let value = value else { return false }
+                return value
             }
             .bind(with: self) { owner, value in
                 nextButtonValidation.onNext(value)
@@ -96,7 +76,6 @@ class JoinViewModel: ViewModelType {
         return Output(idValidation: idValidation.asDriver(onErrorJustReturn: false),
                       idCheckValidation: idCheckValidation.asDriver(onErrorJustReturn: nil),
                       idCheckMessage: idCheckMessage.asDriver(onErrorJustReturn: ""),
-                      passwordValidation: passwordValidation.asDriver(onErrorJustReturn: false),
                       nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
                       nextButtonTap: input.nextButtonTap)
     }

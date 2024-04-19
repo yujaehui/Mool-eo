@@ -81,6 +81,9 @@
 		0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB4F2BCBC27C004B6D1F /* WithdrawModel.swift */; };
 		0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB512BCBC284004B6D1F /* RefreshModel.swift */; };
 		099E92882BCD506800311329 /* EmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E92872BCD506800311329 /* EmailModel.swift */; };
+		09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */; };
+		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
+		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -152,6 +155,9 @@
 		0999EB4F2BCBC27C004B6D1F /* WithdrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawModel.swift; sourceTree = "<group>"; };
 		0999EB512BCBC284004B6D1F /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		099E92872BCD506800311329 /* EmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailModel.swift; sourceTree = "<group>"; };
+		09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdView.swift; sourceTree = "<group>"; };
+		09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewController.swift; sourceTree = "<group>"; };
+		09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +342,9 @@
 				0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */,
 				0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */,
 				0999EB032BCA97F3004B6D1F /* JoinSecondViewModel.swift */,
+				09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */,
+				09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */,
+				09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */,
 			);
 			path = Join;
 			sourceTree = "<group>";
@@ -506,7 +515,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */,
+				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
+				09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */,
 				0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */,
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				0999EB492BCBC207004B6D1F /* NetworkManager.swift in Sources */,
@@ -567,6 +578,7 @@
 				095678F12BC67F000030F0CD /* BaseCollectionViewCell.swift in Sources */,
 				0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
+				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,7 +16,6 @@ class JoinSecondViewController: BaseViewController {
     let joinSecondView = JoinSecondView()
     
     var id: String = ""
-    var password: String = ""
     
     override func loadView() {
         self.view = joinSecondView
@@ -27,20 +26,24 @@ class JoinSecondViewController: BaseViewController {
     }
     
     override func bind() {
-        let id = Observable.just(id)
-        let password = Observable.just(password)
-        let name = joinSecondView.nicknameView.customTextField.rx.text.orEmpty.asObservable()
-        let date = joinSecondView.datePicker.rx.date.asObservable()
-        let joinButtonTap = joinSecondView.joinButton.rx.tap.asObservable()
-        let input = JoinSecondViewModel.Input(id: id, password: password, name: name, date: date, joinButtonTap: joinButtonTap)
+        let password = joinSecondView.passwordView.customTextField.rx.text.orEmpty.asObservable()
+        let nextButtonTap = joinSecondView.nextButton.rx.tap.asObservable()
+        let input = JoinSecondViewModel.Input(password: password, nextButtonTap: nextButtonTap)
         
         let output = viewModel.transform(input: input)
-        output.date.drive(joinSecondView.birthdayView.customTextField.rx.text).disposed(by: disposeBag)
-        output.joinSuccessTrigger.drive(with: self) { owner, _ in
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            let sceneDelegate = windowScene?.delegate as? SceneDelegate
-            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
-            sceneDelegate?.window?.makeKeyAndVisible()
+        output.passwordValidation.drive(with: self) { owner, value in
+            owner.joinSecondView.passwordView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
+            owner.joinSecondView.passwordView.descriptionLabel.text = value ? nil : TextFieldType.password.description
         }.disposed(by: disposeBag)
+        
+        output.nextButtonValidation.drive(joinSecondView.nextButton.rx.isEnabled).disposed(by: disposeBag)
+        
+        output.nextButtonTap.bind(with: self) { owner, _ in
+            let vc = JoinThirdViewController()
+            vc.id = owner.id
+            vc.password = owner.joinSecondView.passwordView.customTextField.text ?? ""
+            owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
+
     }
 }
