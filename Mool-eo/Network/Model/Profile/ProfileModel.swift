@@ -11,17 +11,17 @@ struct ProfileModel: Decodable {
     let user_id: String
     let email: String
     let nick: String
-    let birthDay: String
+    let description: String
     let profileImage: String
     let followers: [Follow]
     let following: [Follow]
     let posts: [String]
     
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case user_id
         case email
         case nick
-        case birthDay
+        case description = "birthDay"
         case profileImage
         case followers
         case following
@@ -33,7 +33,7 @@ struct ProfileModel: Decodable {
         self.user_id = try container.decode(String.self, forKey: .user_id)
         self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.birthDay = try container.decodeIfPresent(String.self, forKey: .birthDay) ?? ""
+        self.description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
         self.followers = try container.decodeIfPresent([Follow].self, forKey: .followers) ?? []
         self.following = try container.decodeIfPresent([Follow].self, forKey: .following) ?? []

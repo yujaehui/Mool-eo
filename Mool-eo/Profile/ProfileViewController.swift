@@ -20,6 +20,7 @@ struct MyPost {
     let content: String
     let likeCount: Int
     let commentCount: Int
+    let image: String?
 }
 
 enum SectionItem {
@@ -67,8 +68,13 @@ class ProfileViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         output.profile.bind(with: self) { owner, value in
-            let sections: [SectionModel] = [SectionModel(title: nil, items: [.infoItem(value)]),
-                                            SectionModel(title: "내 게시물", items: [])]
+            let sections: [SectionModel] = [SectionModel(title: nil, 
+                                                         items: [.infoItem(value)]),
+                                            SectionModel(title: "내 게시물", 
+                                                         items: [.myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "star")),
+                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil)),
+                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "heart")),
+                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil))])]
             Observable.just(sections).bind(to: owner.profileView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
     }
@@ -84,17 +90,26 @@ class ProfileViewController: BaseViewController {
                         let vc = ProfileEditViewController()
                         vc.profileImage = info.profileImage
                         vc.name = info.nick
-                        vc.birthday = info.birthDay
+                        vc.birthday = info.description
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }.disposed(by: cell.disposeBag)
                     return cell
                 case .myPostItem(let myPost):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
-                    cell.postTitleLabel.text = myPost.title
-                    cell.postContentLabel.text = myPost.content
-                    cell.likeCountLabel.text = "\(myPost.likeCount)"
-                    cell.commentCountLabel.text = "\(myPost.commentCount)"
-                    return cell
+                    if myPost.image == nil {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier, for: indexPath) as! ProfileMyPostWithoutImageTableViewCell
+                        cell.postTitleLabel.text = myPost.title
+                        cell.postContentLabel.text = myPost.content
+                        cell.likeCountLabel.text = "\(myPost.likeCount)"
+                        cell.commentCountLabel.text = "\(myPost.commentCount)"
+                        return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
+                        cell.postTitleLabel.text = myPost.title
+                        cell.postContentLabel.text = myPost.content
+                        cell.likeCountLabel.text = "\(myPost.likeCount)"
+                        cell.commentCountLabel.text = "\(myPost.commentCount)"
+                        return cell
+                    }
                 }
             },
             titleForHeaderInSection: { dataSource, index in
@@ -120,7 +135,7 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
-        case 1: return 50
+        case 1: return UITableView.automaticDimension
         default: return 0
         }
     }

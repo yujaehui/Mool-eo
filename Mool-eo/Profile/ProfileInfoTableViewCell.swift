@@ -24,28 +24,40 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let nameLabel: CustomLabel = {
+    let countStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        stackView.spacing = 20
+        return stackView
+    }()
+    
+    let followerCountView: ProfileCountView = {
+        let view = ProfileCountView()
+        view.contentLabel.text = "팔로워"
+        return view
+    }()
+    
+    let followingCountView: ProfileCountView = {
+        let view = ProfileCountView()
+        view.contentLabel.text = "팔로잉"
+        return view
+    }()
+    
+    let postCountView: ProfileCountView = {
+        let view = ProfileCountView()
+        view.contentLabel.text = "게시물"
+        return view
+    }()
+    
+    let nicknameLabel: CustomLabel = {
         let label = CustomLabel(type: .titleBold)
-        label.text = "리치"
         return label
     }()
     
-    let ageLabel: CustomLabel = {
+    let descriptionLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
-        label.text = "2021년 6월 15일에 태어났어요 ☺️"
-        return label
-    }()
-    
-    
-    let idLabel: CustomLabel = {
-        let label = CustomLabel(type: .subContent)
-        label.text = "chchri"
-        return label
-    }()
-    
-    let followerAndFollowingLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        label.text = "팔로워 23,341명 · 팔로잉 323명"
         return label
     }()
     
@@ -62,43 +74,42 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(ageLabel)
-        contentView.addSubview(idLabel)
-        contentView.addSubview(followerAndFollowingLabel)
+        contentView.addSubview(countStackView)
+        countStackView.addArrangedSubview(followerCountView)
+        countStackView.addArrangedSubview(followingCountView)
+        countStackView.addArrangedSubview(postCountView)
+        contentView.addSubview(nicknameLabel)
+        contentView.addSubview(descriptionLabel)
         contentView.addSubview(profileEditButton)
     }
     
     override func configureConstraints() {
         profileImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
-            make.centerX.equalTo(contentView)
+            make.leading.equalTo(contentView).inset(20)
             make.size.equalTo(100)
         }
         
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
-            make.centerX.equalTo(contentView)
+        countStackView.snp.makeConstraints { make in
+            make.centerY.equalTo(profileImageView.snp.centerY)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(20)
+            make.trailing.equalTo(contentView).inset(20)
         }
         
-        ageLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(10)
-            make.centerX.equalTo(contentView)
+        nicknameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        idLabel.snp.makeConstraints { make in
-            make.top.equalTo(ageLabel.snp.bottom).offset(10)
-            make.centerX.equalTo(contentView)
-        }
-        
-        followerAndFollowingLabel.snp.makeConstraints { make in
-            make.top.equalTo(idLabel.snp.bottom).offset(10)
-            make.centerX.equalTo(contentView)
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
         profileEditButton.snp.makeConstraints { make in
-            make.top.equalTo(followerAndFollowingLabel.snp.bottom).offset(10)
-            make.centerX.equalTo(contentView)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(40)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
     }
@@ -112,9 +123,10 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
             return urlRequest
         }
         profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
-        nameLabel.text = info.nick
-        ageLabel.text = info.birthDay
-        idLabel.text = info.email
-        followerAndFollowingLabel.text = "팔로워 \(info.followers.count)명 · 팔로잉 \(info.following.count)명"
+        followerCountView.countLabel.text = "\(info.followers.count)"
+        followingCountView.countLabel.text = "\(info.following.count)"
+        postCountView.countLabel.text = "\(info.posts.count)"
+        nicknameLabel.text = info.nick
+        descriptionLabel.text = info.birthDay
     }
 }

@@ -21,13 +21,13 @@ class ProfileViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        
         let profile = PublishSubject<ProfileModel>()
         
         input.viewDidLoadTrigger
             .flatMap { _ in
                 NetworkManager.profileCheck()
             }
+            .debug("profileCheck")
             .subscribe(with: self) { owner, value in
                 profile.onNext(value)
             }.disposed(by: disposeBag)

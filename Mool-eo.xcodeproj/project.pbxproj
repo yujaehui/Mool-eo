@@ -84,6 +84,8 @@
 		09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */; };
 		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
 		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
+		09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */; };
+		09A7E0D82BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -158,6 +160,8 @@
 		09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdView.swift; sourceTree = "<group>"; };
 		09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewController.swift; sourceTree = "<group>"; };
 		09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewModel.swift; sourceTree = "<group>"; };
+		09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCountView.swift; sourceTree = "<group>"; };
+		09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +190,7 @@
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
 				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
 				093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */,
+				09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */,
 				0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */,
 				093E60C62BCF767F00970FAC /* ProfileViewController.swift */,
 				093E60C82BCF768800970FAC /* ProfileViewModel.swift */,
@@ -288,6 +293,7 @@
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
 				0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */,
 				0999EB0E2BCA981B004B6D1F /* JoinTextFieldView.swift */,
+				09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */,
 				095678FE2BC6A9140030F0CD /* LineView.swift */,
 			);
 			path = Custom;
@@ -540,6 +546,7 @@
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
+				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */,
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
@@ -566,6 +573,7 @@
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
+				09A7E0D82BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift in Sources */,
 				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
 				0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,

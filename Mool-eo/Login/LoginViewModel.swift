@@ -31,7 +31,6 @@ class LoginViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        
         let loginValidation = BehaviorSubject<Bool>(value: false)
         let loginSuccessTrigger = PublishSubject<Void>()
         
@@ -52,7 +51,7 @@ class LoginViewModel: ViewModelType {
             .flatMap { loginQuery in
                 return NetworkManager.login(query: loginQuery)
             }
-            .debug()
+            .debug("login")
             .subscribe(with: self) { owner, value in
                 loginSuccessTrigger.onNext(())
             } onError: { owner, error in
@@ -60,7 +59,11 @@ class LoginViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         
-        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, joinButtonTap: input.joinButtonTap, loginValidation: loginValidation.asDriver(onErrorJustReturn: false), loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(keyboardWillShow: input.keyboardWillShow,
+                      keyboardWillHide: input.keyboardWillHide,
+                      joinButtonTap: input.joinButtonTap,
+                      loginValidation: loginValidation.asDriver(onErrorJustReturn: false),
+                      loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }
 
