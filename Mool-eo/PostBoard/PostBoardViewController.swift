@@ -34,11 +34,19 @@ class PostBoardViewController: BaseViewController {
     
     override func bind() {
         let postBoardList = Observable.just(PostBoardType.allCases)
-        let input = PostBoardViewModel.Input(postBoardList: postBoardList)
+        let modelSelected = postBoardView.collectionView.rx.modelSelected(PostBoardType.self).asObservable()
+        let itemSelected = postBoardView.collectionView.rx.itemSelected.asObservable()
+        let input = PostBoardViewModel.Input(postBoardList: postBoardList, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         output.postBoardList.bind(to: postBoardView.collectionView.rx.items(cellIdentifier: PostBoardCollectionViewCell.identifier, cellType: PostBoardCollectionViewCell.self)) { (row, element, cell) in
             cell.configureCell(element: element)
+        }.disposed(by: disposeBag)
+        
+        output.postBoard.drive(with: self) { owner, value in
+            let vc = PostListViewController()
+            vc.postBoard = value
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     

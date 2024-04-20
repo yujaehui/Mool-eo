@@ -21,7 +21,18 @@ protocol TargetType {
 extension TargetType {
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
-        var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        var urlComponents = URLComponents(url: url.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+        
+        // Add query items if available
+        if let queryItems = queryItems {
+            urlComponents?.queryItems = queryItems
+        }
+        
+        guard let urlWithQuery = urlComponents?.url else {
+            throw AFError.invalidURL(url: url.appendingPathComponent(path))
+        }
+        
+        var urlRequest = try URLRequest(url: urlWithQuery, method: method)
         urlRequest.allHTTPHeaderFields = header
         urlRequest.httpBody = parameters?.data(using: .utf8)
         urlRequest.httpBody = body

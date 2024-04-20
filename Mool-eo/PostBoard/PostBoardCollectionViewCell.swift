@@ -9,6 +9,14 @@ import UIKit
 import SnapKit
 
 class PostBoardCollectionViewCell: BaseCollectionViewCell {
+    let backgrounView: UIView = {
+        let view = UIView()
+        view.backgroundColor = ColorStyle.subBackground
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
     let titleLabel: CustomLabel = {
         let label = CustomLabel(type: .titleBold)
         return label
@@ -20,28 +28,23 @@ class PostBoardCollectionViewCell: BaseCollectionViewCell {
         return imageView
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        clipsToBounds = true
-        layer.cornerRadius = 20
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func configureHierarchy() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(pointImageView)
+        contentView.addSubview(backgrounView)
+        backgrounView.addSubview(titleLabel)
+        backgrounView.addSubview(pointImageView)
     }
     
     override func configureConstraints() {
+        backgrounView.snp.makeConstraints { make in
+            make.edges.equalTo(contentView)
+        }
+        
         titleLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView).inset(20)
+            make.top.leading.equalTo(backgrounView).inset(20)
         }
         
         pointImageView.snp.makeConstraints { make in
-            make.bottom.trailing.equalTo(contentView).inset(20)
+            make.bottom.trailing.equalTo(backgrounView).inset(20)
             make.size.equalTo(50)
         }
     }

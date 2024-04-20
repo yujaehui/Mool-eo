@@ -10,11 +10,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-enum CellType {
-    case info
-    case myPost
-}
-
 struct MyPost {
     let title: String
     let content: String
@@ -23,22 +18,22 @@ struct MyPost {
     let image: String?
 }
 
-enum SectionItem {
+enum ProfileSectionItem {
     case infoItem(ProfileModel)
     case myPostItem(MyPost)
 }
 
 // 섹션에 대한 데이터 모델
-struct SectionModel {
+struct ProfileSectionModel {
     let title: String?
-    var items: [SectionItem]
+    var items: [ProfileSectionItem]
 }
 
 // SectionModelType 프로토콜 준수
-extension SectionModel: SectionModelType {
-    typealias Item = SectionItem
+extension ProfileSectionModel: SectionModelType {
+    typealias Item = ProfileSectionItem
     
-    init(original: SectionModel, items: [SectionItem]) {
+    init(original: ProfileSectionModel, items: [ProfileSectionItem]) {
         self = original
         self.items = items
     }
@@ -77,9 +72,9 @@ class ProfileViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         output.profile.bind(with: self) { owner, value in
-            let sections: [SectionModel] = [SectionModel(title: nil, 
+            let sections: [ProfileSectionModel] = [ProfileSectionModel(title: nil, 
                                                          items: [.infoItem(value)]),
-                                            SectionModel(title: "내 게시물", 
+                                                   ProfileSectionModel(title: "내 게시물", 
                                                          items: [.myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "star")),
                                                                  .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil)),
                                                                  .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "heart")),
@@ -88,8 +83,8 @@ class ProfileViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel>(
+    func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProfileSectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<ProfileSectionModel>(
             configureCell: { dataSource, tableView, indexPath, item in
                 switch item {
                 case .infoItem(let info):
