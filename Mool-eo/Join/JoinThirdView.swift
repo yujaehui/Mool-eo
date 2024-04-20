@@ -16,8 +16,8 @@ class JoinThirdView: BaseView {
         return label
     }()
     
-    let nicknameView: JoinTextFieldView = {
-        let view = JoinTextFieldView(frame: .zero, textFieldType: .nickname)
+    let nicknameView: CustomTextFieldView = {
+        let view = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
         return view
     }()
     

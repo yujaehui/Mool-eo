@@ -17,8 +17,8 @@ class JoinView: BaseView {
         return label
     }()
     
-    let idView: JoinTextFieldView = {
-        let view = JoinTextFieldView(frame: .zero, textFieldType: .id)
+    let idView: CustomTextFieldView = {
+        let view = CustomTextFieldView(frame: .zero, textFieldType: .id)
         return view
     }()
     

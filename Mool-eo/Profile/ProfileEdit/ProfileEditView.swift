@@ -20,40 +20,28 @@ class ProfileEditView: BaseView {
     }()
     
     let profileImageEditButton: UIButton = {
-       let button = UIButton()
-        button.configuration = .capsule("수정")
+        let button = UIButton()
+        button.configuration = .text("프로필 이미지 수정")
         return button
     }()
     
-    let nameLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        label.text = TextFieldType.nickname.rawValue
-        return label
+    let nicknameView: CustomTextFieldView = {
+        let view = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
+        return view
     }()
     
-    let nameTextField: CustomTextField = {
-        let textField = CustomTextField(type: .nickname)
-        return textField
+    
+    let introductionView: CustomTextFieldView = {
+        let view = CustomTextFieldView(frame: .zero, textFieldType: .introduction)
+        return view
     }()
     
-    let birthdayLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        label.text = TextFieldType.birthday.rawValue
-        return label
-    }()
-    
-    let birthdayTextField: CustomTextField = {
-        let textField = CustomTextField(type: .birthday)
-        return textField
-    }()
     
     override func configureHierarchy() {
         addSubview(profileImageView)
         addSubview(profileImageEditButton)
-        addSubview(nameLabel)
-        addSubview(nameTextField)
-        addSubview(birthdayLabel)
-        addSubview(birthdayTextField)
+        addSubview(nicknameView)
+        addSubview(introductionView)
     }
     
     override func configureConstraints() {
@@ -68,23 +56,13 @@ class ProfileEditView: BaseView {
             make.centerX.equalTo(safeAreaLayoutGuide)
         }
         
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageEditButton.snp.bottom).offset(40)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
-        }
-        
-        nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
+        nicknameView.snp.makeConstraints { make in
+            make.top.equalTo(profileImageEditButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
-        birthdayLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(20)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
-        }
-        
-        birthdayTextField.snp.makeConstraints { make in
-            make.top.equalTo(birthdayLabel.snp.bottom).offset(5)
+        introductionView.snp.makeConstraints { make in
+            make.top.equalTo(nicknameView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
     }

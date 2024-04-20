@@ -17,8 +17,8 @@ class JoinSecondView: BaseView {
         return label
     }()
 
-    let passwordView: JoinTextFieldView = {
-        let view = JoinTextFieldView(frame: .zero, textFieldType: .password)
+    let passwordView: CustomTextFieldView = {
+        let view = CustomTextFieldView(frame: .zero, textFieldType: .password)
         return view
     }()
     

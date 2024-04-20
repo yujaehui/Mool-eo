@@ -1,5 +1,5 @@
 //
-//  JoinTextFieldView.swift
+//  CustomTextFieldView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 4/13/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class JoinTextFieldView: BaseView {
+class CustomTextFieldView: BaseView {
     let customLabel: CustomLabel
     let customTextField: CustomTextField
     let textFieldType: TextFieldType

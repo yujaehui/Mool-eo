@@ -11,14 +11,14 @@ enum TextFieldType: String {
     case id = "아이디"
     case password = "비밀번호"
     case nickname = "닉네임"
-    case birthday = ""
+    case introduction = "한줄소개"
     
     var description: String {
         switch self {
-        case .id: "4~12자/공백 없이 영문 소문자, 숫자 조합"
-        case .password: "6~20자/공백 없이 영문 소문자, 숫자 조합"
-        case .nickname: "2~10자/공백 없이 입력"
-        case .birthday: ""
+        case .id: "4~12자/공백 X, 영문 소문자, 숫자"
+        case .password: "4~12자/공백 X, 영문 소문자, 숫자"
+        case .nickname: "2~10자/공백 없이 입력해주세요."
+        case .introduction: "15자 이내로 자신을 표현해보세요."
         }
     }
 }

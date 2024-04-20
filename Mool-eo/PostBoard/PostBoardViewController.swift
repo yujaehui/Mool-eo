@@ -18,8 +18,6 @@ enum PostBoardType: String, CaseIterable {
 }
 
 class PostBoardViewController: BaseViewController {
-    var showProfileUpdateAlert: Bool = false
-    
     let disposeBag = DisposeBag()
     let viewModel = PostBoardViewModel()
     let postBoardView = PostBoardView()
@@ -32,13 +30,6 @@ class PostBoardViewController: BaseViewController {
         super.viewDidLoad()
         print(#function)
         setNav()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if showProfileUpdateAlert {
-            postBoardView.makeToast("프로필 수정 성공", duration: 2, position: .top)
-            showProfileUpdateAlert = false
-        }
     }
     
     override func bind() {

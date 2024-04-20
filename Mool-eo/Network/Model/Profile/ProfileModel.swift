@@ -11,7 +11,7 @@ struct ProfileModel: Decodable {
     let user_id: String
     let email: String
     let nick: String
-    let description: String
+    let introduction: String
     let profileImage: String
     let followers: [Follow]
     let following: [Follow]
@@ -21,7 +21,7 @@ struct ProfileModel: Decodable {
         case user_id
         case email
         case nick
-        case description = "birthDay"
+        case introduction = "birthDay"
         case profileImage
         case followers
         case following
@@ -33,7 +33,7 @@ struct ProfileModel: Decodable {
         self.user_id = try container.decode(String.self, forKey: .user_id)
         self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        self.introduction = try container.decodeIfPresent(String.self, forKey: .introduction) ?? ""
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
         self.followers = try container.decodeIfPresent([Follow].self, forKey: .followers) ?? []
         self.following = try container.decodeIfPresent([Follow].self, forKey: .following) ?? []

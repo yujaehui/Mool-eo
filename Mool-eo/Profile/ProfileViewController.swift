@@ -52,12 +52,21 @@ class ProfileViewController: BaseViewController {
     
     lazy var dataSource = configureDataSource()
     
+    var showProfileUpdateAlert: Bool = false
+    
     override func loadView() {
         self.view = profileView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if showProfileUpdateAlert {
+            profileView.makeToast("프로필 수정 성공", duration: 2, position: .top)
+            showProfileUpdateAlert = false
+        }
     }
     
     override func bind() {
@@ -88,9 +97,10 @@ class ProfileViewController: BaseViewController {
                     cell.configureCell(info)
                     cell.profileEditButton.rx.tap.bind(with: self) { owner, _ in
                         let vc = ProfileEditViewController()
+                        vc.profileImageData = cell.profileImageView.image?.pngData()
                         vc.profileImage = info.profileImage
-                        vc.name = info.nick
-                        vc.birthday = info.description
+                        vc.nickname = info.nick
+                        vc.introduction = info.introduction
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }.disposed(by: cell.disposeBag)
                     return cell
