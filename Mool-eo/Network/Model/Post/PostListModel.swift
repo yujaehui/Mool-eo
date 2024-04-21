@@ -8,7 +8,7 @@
 import Foundation
 
 struct PostListModel: Decodable {
-    let data: [postData]
+    let data: [PostModel]
     let nextCursor: String
 
     enum CodingKeys: String, CodingKey {
@@ -17,7 +17,7 @@ struct PostListModel: Decodable {
     }
 }
 
-struct postData: Decodable {
+struct PostModel: Decodable {
     let postID: String
     let productID: String
     let title: String

@@ -23,6 +23,10 @@ extension TargetType {
         let url = try baseURL.asURL()
         var urlComponents = URLComponents(url: url.appendingPathComponent(path), resolvingAgainstBaseURL: true)
         
+        if let parameters = parameters {
+            urlComponents?.path += parameters
+        }
+        
         // Add query items if available
         if let queryItems = queryItems {
             urlComponents?.queryItems = queryItems
@@ -34,8 +38,8 @@ extension TargetType {
         
         var urlRequest = try URLRequest(url: urlWithQuery, method: method)
         urlRequest.allHTTPHeaderFields = header
-        urlRequest.httpBody = parameters?.data(using: .utf8)
         urlRequest.httpBody = body
+
         return urlRequest
     }
 }

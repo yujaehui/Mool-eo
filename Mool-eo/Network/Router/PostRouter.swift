@@ -85,10 +85,10 @@ extension PostRouter: TargetType {
     
     var parameters: String? {
         switch self {
-        case .postEdit(query: _, postId: let postId): postId
-        case .postDelete(postId: let postId): postId
-        case .postCheckSpecific(postId: let postId): postId
-        case .postCheckUser(userId: let userId, productId: _): userId
+        case .postEdit(query: _, postId: let postId): "/\(postId)"
+        case .postDelete(postId: let postId): "/\(postId)"
+        case .postCheckSpecific(postId: let postId): "/\(postId)"
+        case .postCheckUser(userId: let userId, productId: _): "/\(userId)"
         default: nil
         }
     }

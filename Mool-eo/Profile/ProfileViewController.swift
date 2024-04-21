@@ -65,8 +65,6 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
-        
         let viewDidLoadTrigger = Observable.just(())
         let input = ProfileViewModel.Input(viewDidLoadTrigger: viewDidLoadTrigger)
         
@@ -81,6 +79,8 @@ class ProfileViewController: BaseViewController {
                                                                  .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil))])]
             Observable.just(sections).bind(to: owner.profileView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
+        
+        profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProfileSectionModel> {

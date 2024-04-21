@@ -1,5 +1,5 @@
 //
-//  PostListWithoutImageTableViewCell.swift
+//  PostDetailWithoutImageTableViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 4/20/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PostListWithoutImageTableViewCell: BaseTableViewCell {
+class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = ColorStyle.point
@@ -59,7 +59,19 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         let label = CustomLabel(type: .description)
         return label
     }()
-        
+    
+    let likeButton: UIButton = {
+        let button = UIButton()
+        button.configuration = .capsule("좋아요")
+        return button
+    }()
+    
+    let scrapButton: UIButton = {
+        let button = UIButton()
+        button.configuration = .capsule("스크랩")
+        return button
+    }()
+    
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nickNameLabel)
@@ -69,6 +81,8 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
         contentView.addSubview(commentCountLabel)
+        contentView.addSubview(likeButton)
+        contentView.addSubview(scrapButton)
     }
     
     override func configureConstraints() {
@@ -90,14 +104,13 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         
         postContentLabel.snp.makeConstraints { make in
             make.top.equalTo(postTitleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
         likeIconImageView.snp.makeConstraints { make in
             make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
             make.size.equalTo(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -110,7 +123,6 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
             make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
             make.size.equalTo(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         commentCountLabel.snp.makeConstraints { make in
@@ -118,6 +130,17 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
             make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
+        
+        likeButton.snp.makeConstraints { make in
+            make.top.equalTo(likeIconImageView.snp.bottom).offset(10)
+            make.leading.equalTo(contentView).inset(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+        }
+        
+        scrapButton.snp.makeConstraints { make in
+            make.top.equalTo(likeIconImageView.snp.bottom).offset(10)
+            make.leading.equalTo(likeButton.snp.trailing).offset(10)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+        }
     }
-
 }

@@ -14,14 +14,14 @@ import RxDataSources
 // 섹션에 대한 데이터 모델
 struct PostListSectionModel {
     let title: String?
-    var items: [postData]
+    var items: [PostModel]
 }
 
 // SectionModelType 프로토콜 준수
 extension PostListSectionModel: SectionModelType {
-    typealias Item = postData
+    typealias Item = PostModel
     
-    init(original: PostListSectionModel, items: [postData]) {
+    init(original: PostListSectionModel, items: [PostModel]) {
         self = original
         self.items = items
     }
@@ -48,7 +48,9 @@ class PostListViewController: BaseViewController {
     override func bind() {
         let viewDidLoadTrigger = Observable.just(postBoard)
         let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
-        let input = PostListViewModel.Input(viewDidLoadTrigger: viewDidLoadTrigger, postWriteButtonTap: postWriteButtonTap)
+        let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
+        let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
+        let input = PostListViewModel.Input(viewDidLoadTrigger: viewDidLoadTrigger, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         output.postList
@@ -64,6 +66,12 @@ class PostListViewController: BaseViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.post.bind(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postID = value
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     
@@ -82,7 +90,6 @@ class PostListViewController: BaseViewController {
                     }
                     cell.profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
                     cell.nickNameLabel.text = item.creator.nick
-                    cell.postBoardLabel.text = item.productID
                     cell.postTitleLabel.text = item.title
                     cell.postContentLabel.text = item.content
                     cell.likeCountLabel.text = "\(item.likes.count)"
@@ -99,7 +106,6 @@ class PostListViewController: BaseViewController {
                     }
                     cell.profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
                     cell.nickNameLabel.text = item.creator.nick
-                    cell.postBoardLabel.text = item.productID
                     cell.postTitleLabel.text = item.title
                     cell.postContentLabel.text = item.content
                     let postUrl = URL(string: APIKey.baseURL.rawValue + item.files.first!)

@@ -129,7 +129,6 @@ struct NetworkManager {
                 case .success(let success):
                     single(.success(success))
                 case .failure(let failure):
-                    print("...", response.response?.statusCode)
                     single(.failure(failure))
                 }
             }
@@ -149,6 +148,15 @@ struct NetworkManager {
     static func postCheck(productId: String) -> Single<PostListModel> {
         do {
             let urlRequest = try PostRouter.postCheck(productId: productId).asURLRequest()
+            return request(route: urlRequest, interceptor: nil) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
+    
+    static func postCheckSpecific(postId: String) -> Single<PostModel> {
+        do {
+            let urlRequest = try PostRouter.postCheckSpecific(postId: postId).asURLRequest()
             return request(route: urlRequest, interceptor: nil) { _ in }
         } catch {
             return Single.error(error)

@@ -15,15 +15,19 @@ class PostListViewModel: ViewModelType {
     struct Input {
         let viewDidLoadTrigger: Observable<PostBoardType>
         let postWriteButtonTap: Observable<Void>
+        let modelSelected: Observable<PostModel>
+        let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
-        let postList: PublishSubject<[postData]>
+        let postList: PublishSubject<[PostModel]>
         let postWriteButtonTap: Observable<Void>
+        let post: PublishSubject<String>
     }
     
     func transform(input: Input) -> Output {
-        let postList = PublishSubject<[postData]>()
+        let postList = PublishSubject<[PostModel]>()
+        let post = PublishSubject<String>()
         
         input.viewDidLoadTrigger.flatMap { value in
             NetworkManager.postCheck(productId: value.rawValue)
@@ -34,6 +38,13 @@ class PostListViewModel: ViewModelType {
         }.disposed(by: disposeBag)
         
         
-        return Output(postList: postList, postWriteButtonTap: input.postWriteButtonTap)
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .map { $0.0.postID }
+            .bind(with: self) { owner, value in
+                post.onNext(value)
+            }.disposed(by: disposeBag)
+        
+        
+        return Output(postList: postList, postWriteButtonTap: input.postWriteButtonTap, post: post)
     }
 }

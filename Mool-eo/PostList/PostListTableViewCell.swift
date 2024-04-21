@@ -24,13 +24,6 @@ class PostListTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    
-    let postBoardLabel: CustomLabel = {
-        let label = CustomLabel(type: .colorContentBold)
-        label.text = "게시판 테스트"
-        return label
-    }()
-    
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
         label.numberOfLines = 1
@@ -79,7 +72,6 @@ class PostListTableViewCell: BaseTableViewCell {
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nickNameLabel)
-        contentView.addSubview(postBoardLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(postImageView)
@@ -101,13 +93,8 @@ class PostListTableViewCell: BaseTableViewCell {
             make.leading.equalTo(profileImageView.snp.trailing).offset(10)
         }
         
-        postBoardLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-        }
-        
         postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(postBoardLabel.snp.bottom).offset(10)
+            make.top.equalTo(profileImageView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
