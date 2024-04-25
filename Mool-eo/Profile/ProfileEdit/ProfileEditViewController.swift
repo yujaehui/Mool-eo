@@ -14,18 +14,6 @@ import PhotosUI
 
 class ProfileEditViewController: BaseViewController {
     
-    let completeButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.title = "완료"
-        return button
-    }()
-    
-    let cancelButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.image = UIImage(systemName: "xmark")
-        return button
-    }()
-    
     let disposeBag = DisposeBag()
     let viewModel = ProfileEditViewModel()
     let profileEditView = ProfileEditView()
@@ -61,8 +49,8 @@ class ProfileEditViewController: BaseViewController {
     
     override func bind() {
         let profileImageEditButtonTap = profileEditView.profileImageEditButton.rx.tap.asObservable()
-        let cancelButtonTap = cancelButton.rx.tap.asObservable()
-        let completeButtonTap = completeButton.rx.tap.asObservable()
+        let cancelButtonTap = profileEditView.cancelButton.rx.tap.asObservable()
+        let completeButtonTap = profileEditView.completeButton.rx.tap.asObservable()
         let beforeNickname = nickname
         let afterNickname = profileEditView.nicknameView.customTextField.rx.text.orEmpty.asObservable()
         let changeNickname = profileEditView.nicknameView.customTextField.rx.controlEvent(.editingChanged).asObservable()
@@ -99,7 +87,7 @@ class ProfileEditViewController: BaseViewController {
             owner.profileEditView.introductionView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
         }.disposed(by: disposeBag)
         
-        output.completeButtonValidation.drive(completeButton.rx.isEnabled).disposed(by: disposeBag)
+        output.completeButtonValidation.drive(profileEditView.completeButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.profileEditSuccessTrigger.bind(with: self) { owner, _ in
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
@@ -117,8 +105,8 @@ class ProfileEditViewController: BaseViewController {
     
     func setNav() {
         navigationItem.title = "프로필 수정하기"
-        navigationItem.rightBarButtonItem = completeButton
-        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = profileEditView.completeButton
+        navigationItem.leftBarButtonItem = profileEditView.cancelButton
     }
 }
 

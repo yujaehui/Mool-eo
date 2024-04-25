@@ -9,6 +9,18 @@ import UIKit
 import SnapKit
 
 class ProfileEditView: BaseView {
+    let completeButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.title = "완료"
+        return button
+    }()
+    
+    let cancelButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.image = UIImage(systemName: "xmark")
+        return button
+    }()
+    
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = ColorStyle.point

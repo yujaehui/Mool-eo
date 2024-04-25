@@ -72,6 +72,8 @@
 		09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */; };
 		09602B702BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */; };
 		09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */; };
+		09602BAF2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */; };
+		09602BBC2BD76FF800A6AFEA /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BBB2BD76FF800A6AFEA /* CommentTextFieldView.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -167,6 +169,8 @@
 		09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailTableViewCell.swift; sourceTree = "<group>"; };
 		09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailCommentTableViewCell.swift; sourceTree = "<group>"; };
 		09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
+		09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailNoCommentTableViewCell.swift; sourceTree = "<group>"; };
+		09602BBB2BD76FF800A6AFEA /* CommentTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextFieldView.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -415,10 +419,12 @@
 		09602B652BD3E26100A6AFEA /* PostDetail */ = {
 			isa = PBXGroup;
 			children = (
+				09602BBB2BD76FF800A6AFEA /* CommentTextFieldView.swift */,
 				09602B662BD3E27700A6AFEA /* PostDetailView.swift */,
 				09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */,
 				09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */,
 				09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */,
+				09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */,
 				09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */,
 				09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */,
 			);
@@ -640,6 +646,7 @@
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
+				09602BAF2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */,
@@ -660,6 +667,7 @@
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
+				09602BBC2BD76FF800A6AFEA /* CommentTextFieldView.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
 				09602B5A2BD3AC2300A6AFEA /* PostModel.swift in Sources */,
 				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,

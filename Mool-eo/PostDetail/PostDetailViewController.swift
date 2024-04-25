@@ -15,13 +15,11 @@ enum PostDetailSectionItem {
     case comment([Comment])
 }
 
-// 섹션에 대한 데이터 모델
 struct PostDetailSectionModel {
     let title: String?
     var items: [PostDetailSectionItem]
 }
 
-// SectionModelType 프로토콜 준수
 extension PostDetailSectionModel: SectionModelType {
     typealias Item = PostDetailSectionItem
     
@@ -47,19 +45,57 @@ class PostDetailViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
     
     override func bind() {
+        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+        let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
         let viewDidLoadTrigger = Observable.just(postID)
-        let input = PostDetailViewModel.Input(viewDidLoadTrigger: viewDidLoadTrigger)
+        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, viewDidLoadTrigger: viewDidLoadTrigger)
         
         let output = viewModel.transform(input: input)
         output.postDetail.bind(with: self) { owner, value in
             let sections: [PostDetailSectionModel] = [PostDetailSectionModel(title: nil, items: [.post(value)]),
-                                                      PostDetailSectionModel(title: "내 게시물", items: [.comment(value.comments)])]
+                                                      PostDetailSectionModel(title: nil, items: [.comment(value.comments)])]
                                                       
             Observable.just(sections).bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
+        
+        output.keyboardWillShow.bind(with: self) { owner, notification in
+            owner.keyboardWillShow(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        output.keyboardWillHide.bind(with: self) { owner, notification in
+            owner.keyboardWillHide(notification: notification)
+        }.disposed(by: disposeBag)
+    }
+    
+    private func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+        
+        UIView.animate(withDuration: 0.3) {
+            self.postDetailView.tableView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.postDetailView).inset(keyboardHeight + 60)
+            }
+            self.postDetailView.commentTextFieldView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.postDetailView).inset(keyboardHeight)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func keyboardWillHide(notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.postDetailView.tableView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.postDetailView).inset(90)
+            }
+            self.postDetailView.commentTextFieldView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.postDetailView).inset(30)
+            }
+            self.view.layoutIfNeeded()
+        }
     }
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostDetailSectionModel> {
@@ -85,15 +121,13 @@ class PostDetailViewController: BaseViewController {
                         return cell
                     }
                 case .comment(let comment):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailCommentTableViewCell.identifier, for: indexPath) as! PostDetailCommentTableViewCell
-                    if indexPath.row < comment.count {
-                            // 배열의 인덱스가 유효하면 해당 인덱스의 댓글을 가져와서 표시합니다.
-                            cell.nicknameLabel.text = comment[indexPath.row].creator.nick
-                        } else {
-                            // 인덱스가 유효하지 않으면 빈 문자열을 설정합니다.
-                            cell.nicknameLabel.text = ""
-                        }
-                    return cell
+                    if comment.isEmpty {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailNoCommentTableViewCell.identifier, for: indexPath) as! PostDetailNoCommentTableViewCell
+                        return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailCommentTableViewCell.identifier, for: indexPath) as! PostDetailCommentTableViewCell
+                        return cell
+                    }
                 }
             }
         )

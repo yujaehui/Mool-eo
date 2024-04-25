@@ -13,10 +13,14 @@ class PostDetailViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let viewDidLoadTrigger: Observable<String>
     }
     
     struct Output {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let postDetail: PublishSubject<PostModel>
     }
     
@@ -32,6 +36,6 @@ class PostDetailViewModel: ViewModelType {
                 postDetail.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(postDetail: postDetail)
+        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, postDetail: postDetail)
     }
 }
