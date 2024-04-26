@@ -42,23 +42,25 @@ class PostDetailViewController: BaseViewController {
     override func loadView() {
         self.view = postDetailView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func bind() {
         let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
         let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+        let comment = postDetailView.commentTextView.textView.rx.text.orEmpty.asObservable()
+        let textViewBegin = postDetailView.commentTextView.textView.rx.didBeginEditing.asObservable()
+        let textViewEnd = postDetailView.commentTextView.textView.rx.didEndEditing.asObservable()
         let viewDidLoadTrigger = Observable.just(postID)
-        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, viewDidLoadTrigger: viewDidLoadTrigger)
+        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, comment: comment, textViewBegin: textViewBegin, textViewEnd: textViewEnd, viewDidLoadTrigger: viewDidLoadTrigger)
         
         let output = viewModel.transform(input: input)
         output.postDetail.bind(with: self) { owner, value in
             let sections: [PostDetailSectionModel] = [PostDetailSectionModel(title: nil, items: [.post(value)]),
                                                       PostDetailSectionModel(title: nil, items: [.comment(value.comments)])]
-                                                      
+            
             Observable.just(sections).bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
@@ -69,6 +71,11 @@ class PostDetailViewController: BaseViewController {
         output.keyboardWillHide.bind(with: self) { owner, notification in
             owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
+        
+        output.text.drive(postDetailView.commentTextView.textView.rx.text).disposed(by: disposeBag)
+        output.textColorType.drive(with: self) { owner, value in
+            owner.postDetailView.commentTextView.textView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+        }.disposed(by: disposeBag)
     }
     
     private func keyboardWillShow(notification: Notification) {
@@ -77,9 +84,9 @@ class PostDetailViewController: BaseViewController {
         
         UIView.animate(withDuration: 0.3) {
             self.postDetailView.tableView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView).inset(keyboardHeight + 60)
+                make.bottom.equalTo(self.postDetailView.commentTextView.snp.top).offset(-10)
             }
-            self.postDetailView.commentTextFieldView.snp.updateConstraints { make in
+            self.postDetailView.commentTextView.snp.updateConstraints { make in
                 make.bottom.equalTo(self.postDetailView).inset(keyboardHeight)
             }
             self.view.layoutIfNeeded()
@@ -89,9 +96,9 @@ class PostDetailViewController: BaseViewController {
     private func keyboardWillHide(notification: Notification) {
         UIView.animate(withDuration: 0.3) {
             self.postDetailView.tableView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView).inset(90)
+                make.bottom.equalTo(self.postDetailView.commentTextView.snp.top).offset(-10)
             }
-            self.postDetailView.commentTextFieldView.snp.updateConstraints { make in
+            self.postDetailView.commentTextView.snp.updateConstraints { make in
                 make.bottom.equalTo(self.postDetailView).inset(30)
             }
             self.view.layoutIfNeeded()

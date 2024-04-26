@@ -20,23 +20,22 @@ class PostDetailView: BaseView {
         return tableView
     }()
     
-    let commentTextFieldView = CommentTextFieldView()
+    let commentTextView = CommentTextView()
     
     override func configureHierarchy() {
         addSubview(tableView)
-        addSubview(commentTextFieldView)
+        addSubview(commentTextView)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(self).inset(90)
+            make.bottom.equalTo(commentTextView.snp.top).offset(-10)
         }
         
-        commentTextFieldView.snp.makeConstraints { make in
+        commentTextView.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(30)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(60)
         }
     }
 }
