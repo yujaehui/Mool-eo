@@ -14,7 +14,6 @@ class PostDetailView: BaseView {
         tableView.register(PostDetailTableViewCell.self, forCellReuseIdentifier: PostDetailTableViewCell.identifier)
         tableView.register(PostDetailWithoutImageTableViewCell.self, forCellReuseIdentifier: PostDetailWithoutImageTableViewCell.identifier)
         tableView.register(PostDetailCommentTableViewCell.self, forCellReuseIdentifier: PostDetailCommentTableViewCell.identifier)
-        tableView.register(PostDetailNoCommentTableViewCell.self, forCellReuseIdentifier: PostDetailNoCommentTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

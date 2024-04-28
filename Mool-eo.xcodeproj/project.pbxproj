@@ -72,8 +72,10 @@
 		09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */; };
 		09602B702BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */; };
 		09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */; };
-		09602BAF2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */; };
 		09602BBC2BD76FF800A6AFEA /* CommentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BBB2BD76FF800A6AFEA /* CommentTextView.swift */; };
+		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
+		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
+		09602BCD2BDCE01F00A6AFEA /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -169,8 +171,10 @@
 		09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailTableViewCell.swift; sourceTree = "<group>"; };
 		09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailCommentTableViewCell.swift; sourceTree = "<group>"; };
 		09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
-		09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailNoCommentTableViewCell.swift; sourceTree = "<group>"; };
 		09602BBB2BD76FF800A6AFEA /* CommentTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextView.swift; sourceTree = "<group>"; };
+		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
+		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
+		09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -424,11 +428,26 @@
 				09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */,
 				09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */,
 				09602B6F2BD3F22D00A6AFEA /* PostDetailCommentTableViewCell.swift */,
-				09602BAE2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift */,
 				09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */,
 				09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */,
 			);
 			path = PostDetail;
+			sourceTree = "<group>";
+		};
+		09602BC62BDBD2DC00A6AFEA /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */,
+			);
+			path = Comment;
+			sourceTree = "<group>";
+		};
+		09602BC92BDBD32100A6AFEA /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */,
+			);
+			path = Comment;
 			sourceTree = "<group>";
 		};
 		0999EAFF2BCA97F3004B6D1F /* Join */ = {
@@ -476,6 +495,7 @@
 		0999EB342BCBAF2D004B6D1F /* Query */ = {
 			isa = PBXGroup;
 			children = (
+				09602BC62BDBD2DC00A6AFEA /* Comment */,
 				09602B512BD3ABA800A6AFEA /* Post */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
 				0999EB3D2BCBBAE7004B6D1F /* User */,
@@ -499,6 +519,7 @@
 				0999EB322BCBAF18004B6D1F /* UserRouter.swift */,
 				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
 				09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */,
+				09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -506,6 +527,7 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				09602BC92BDBD32100A6AFEA /* Comment */,
 				09602B562BD3AC0800A6AFEA /* Post */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
 				0999EB532BCBC2C4004B6D1F /* User */,
@@ -622,6 +644,7 @@
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */,
+				09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */,
 				0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */,
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				0999EB492BCBC207004B6D1F /* NetworkManager.swift in Sources */,
@@ -638,6 +661,7 @@
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
+				09602BCD2BDCE01F00A6AFEA /* CommentRouter.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
@@ -646,7 +670,6 @@
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
-				09602BAF2BD6969700A6AFEA /* PostDetailNoCommentTableViewCell.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */,
@@ -662,6 +685,7 @@
 				0999EB332BCBAF18004B6D1F /* UserRouter.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
+				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
 				09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */,
 				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,

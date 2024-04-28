@@ -12,11 +12,10 @@ import RxDataSources
 
 enum PostDetailSectionItem {
     case post(PostModel)
-    case comment([Comment])
+    case comment(Comment)
 }
 
 struct PostDetailSectionModel {
-    let title: String?
     var items: [PostDetailSectionItem]
 }
 
@@ -37,7 +36,7 @@ class PostDetailViewController: BaseViewController {
     
     var postID: String = ""
     
-    lazy var dataSource = configureDataSource()
+    var reload = BehaviorSubject(value: ())
     
     override func loadView() {
         self.view = postDetailView
@@ -53,16 +52,20 @@ class PostDetailViewController: BaseViewController {
         let comment = postDetailView.commentTextView.textView.rx.text.orEmpty.asObservable()
         let textViewBegin = postDetailView.commentTextView.textView.rx.didBeginEditing.asObservable()
         let textViewEnd = postDetailView.commentTextView.textView.rx.didEndEditing.asObservable()
-        let viewDidLoadTrigger = Observable.just(postID)
-        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, comment: comment, textViewBegin: textViewBegin, textViewEnd: textViewEnd, viewDidLoadTrigger: viewDidLoadTrigger)
+        let postID = Observable.just(postID)
+        let uploadButtonClicked = postDetailView.commentTextView.uploadButton.rx.tap.asObservable()
+        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, comment: comment, textViewBegin: textViewBegin, textViewEnd: textViewEnd, postID: postID, uploadButtonClicked: uploadButtonClicked, reload: reload)
         
         let output = viewModel.transform(input: input)
         output.postDetail.bind(with: self) { owner, value in
-            let sections: [PostDetailSectionModel] = [PostDetailSectionModel(title: nil, items: [.post(value)]),
-                                                      PostDetailSectionModel(title: nil, items: [.comment(value.comments)])]
-            
-            Observable.just(sections).bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
+            let sections: [PostDetailSectionModel] = [
+                PostDetailSectionModel(items: [.post(value)]),
+            ] + value.comments.map { comment in
+                PostDetailSectionModel(items: [.comment(comment)])
+            }
+            Observable.just(sections).bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.configureDataSource())).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
+        
         
         output.keyboardWillShow.bind(with: self) { owner, notification in
             owner.keyboardWillShow(notification: notification)
@@ -75,6 +78,12 @@ class PostDetailViewController: BaseViewController {
         output.text.drive(postDetailView.commentTextView.textView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
             owner.postDetailView.commentTextView.textView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+        }.disposed(by: disposeBag)
+        
+        output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
+            print("댓글 업로드 완료")
+            owner.postDetailView.tableView.dataSource = nil
+            owner.reload.onNext(())
         }.disposed(by: disposeBag)
     }
     
@@ -128,13 +137,8 @@ class PostDetailViewController: BaseViewController {
                         return cell
                     }
                 case .comment(let comment):
-                    if comment.isEmpty {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailNoCommentTableViewCell.identifier, for: indexPath) as! PostDetailNoCommentTableViewCell
-                        return cell
-                    } else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailCommentTableViewCell.identifier, for: indexPath) as! PostDetailCommentTableViewCell
-                        return cell
-                    }
+                    let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailCommentTableViewCell.identifier, for: indexPath) as! PostDetailCommentTableViewCell
+                    return cell
                 }
             }
         )

@@ -162,4 +162,13 @@ struct NetworkManager {
             return Single.error(error)
         }
     }
+    // MARK: - Comment
+    static func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
+        do {
+            let urlRequest = try CommentRouter.commentUpload(query: query, postId: postId).asURLRequest()
+            return request(route: urlRequest, interceptor: nil) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
 }

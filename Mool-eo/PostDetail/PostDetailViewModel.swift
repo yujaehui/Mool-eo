@@ -18,7 +18,9 @@ class PostDetailViewModel: ViewModelType {
         let comment: Observable<String>
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
-        let viewDidLoadTrigger: Observable<String>
+        let postID: Observable<String>
+        let uploadButtonClicked: Observable<Void>
+        let reload: BehaviorSubject<Void>
     }
     
     struct Output {
@@ -27,6 +29,7 @@ class PostDetailViewModel: ViewModelType {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
         let postDetail: PublishSubject<PostModel>
+        let commentUploadSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -34,6 +37,7 @@ class PostDetailViewModel: ViewModelType {
         let text = BehaviorRelay<String?>(value: placeholderText)
         let textColorType = BehaviorRelay<Bool>(value: false)
         let postDetail = PublishSubject<PostModel>()
+        let commentUploadSuccessTrigger = PublishSubject<Void>()
         
         input.textViewBegin
             .withLatestFrom(input.comment)
@@ -54,7 +58,8 @@ class PostDetailViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         
-        input.viewDidLoadTrigger
+        input.reload
+            .withLatestFrom(input.postID)
             .flatMap { value in
                 NetworkManager.postCheckSpecific(postId: value)
             }
@@ -63,6 +68,24 @@ class PostDetailViewModel: ViewModelType {
                 postDetail.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, text: text.asDriver(), textColorType: textColorType.asDriver(), postDetail: postDetail)
+        let comment = input.comment.map { content in
+                return CommentQuery(content: content)
+            }
+        
+        let ObservableComment = Observable.combineLatest(comment, input.postID)
+        
+        input.uploadButtonClicked
+            .withLatestFrom(ObservableComment)
+            .flatMap { commentQuery, postID in
+                NetworkManager.commentUpload(query: commentQuery, postId: postID)
+            }.debug("commnet")
+            .subscribe(with: self) { owner, value in
+                commentUploadSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
+        
+        
+        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, text: text.asDriver(), textColorType: textColorType.asDriver(), postDetail: postDetail, commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }
