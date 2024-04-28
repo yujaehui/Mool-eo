@@ -60,7 +60,6 @@
 		09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B522BD3ABBA00A6AFEA /* FilesQuery.swift */; };
 		09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B542BD3ABC200A6AFEA /* PostQuery.swift */; };
 		09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B572BD3AC1C00A6AFEA /* FilesModel.swift */; };
-		09602B5A2BD3AC2300A6AFEA /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B592BD3AC2300A6AFEA /* PostModel.swift */; };
 		09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5B2BD3AC3300A6AFEA /* PostListModel.swift */; };
 		09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */; };
 		09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */; };
@@ -76,6 +75,9 @@
 		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
 		09602BCD2BDCE01F00A6AFEA /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */; };
+		09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikeQuery.swift */; };
+		09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikeModel.swift */; };
+		09602BD62BDE568900A6AFEA /* LikeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD52BDE568900A6AFEA /* LikeRouter.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -159,7 +161,6 @@
 		09602B522BD3ABBA00A6AFEA /* FilesQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesQuery.swift; sourceTree = "<group>"; };
 		09602B542BD3ABC200A6AFEA /* PostQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostQuery.swift; sourceTree = "<group>"; };
 		09602B572BD3AC1C00A6AFEA /* FilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesModel.swift; sourceTree = "<group>"; };
-		09602B592BD3AC2300A6AFEA /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		09602B5B2BD3AC3300A6AFEA /* PostListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListModel.swift; sourceTree = "<group>"; };
 		09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListTableViewCell.swift; sourceTree = "<group>"; };
 		09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -175,6 +176,9 @@
 		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
+		09602BD02BDE562D00A6AFEA /* LikeQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeQuery.swift; sourceTree = "<group>"; };
+		09602BD32BDE565F00A6AFEA /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
+		09602BD52BDE568900A6AFEA /* LikeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRouter.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -414,7 +418,6 @@
 			isa = PBXGroup;
 			children = (
 				09602B572BD3AC1C00A6AFEA /* FilesModel.swift */,
-				09602B592BD3AC2300A6AFEA /* PostModel.swift */,
 				09602B5B2BD3AC3300A6AFEA /* PostListModel.swift */,
 			);
 			path = Post;
@@ -448,6 +451,22 @@
 				09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */,
 			);
 			path = Comment;
+			sourceTree = "<group>";
+		};
+		09602BCF2BDE562300A6AFEA /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				09602BD02BDE562D00A6AFEA /* LikeQuery.swift */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
+		09602BD22BDE565A00A6AFEA /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				09602BD32BDE565F00A6AFEA /* LikeModel.swift */,
+			);
+			path = Like;
 			sourceTree = "<group>";
 		};
 		0999EAFF2BCA97F3004B6D1F /* Join */ = {
@@ -495,6 +514,7 @@
 		0999EB342BCBAF2D004B6D1F /* Query */ = {
 			isa = PBXGroup;
 			children = (
+				09602BCF2BDE562300A6AFEA /* Like */,
 				09602BC62BDBD2DC00A6AFEA /* Comment */,
 				09602B512BD3ABA800A6AFEA /* Post */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
@@ -520,6 +540,7 @@
 				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
 				09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */,
 				09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */,
+				09602BD52BDE568900A6AFEA /* LikeRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -527,6 +548,7 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				09602BD22BDE565A00A6AFEA /* Like */,
 				09602BC92BDBD32100A6AFEA /* Comment */,
 				09602B562BD3AC0800A6AFEA /* Post */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
@@ -640,6 +662,7 @@
 				0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */,
 				09602B4A2BD3A5DB00A6AFEA /* PostListViewController.swift in Sources */,
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
+				09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
@@ -693,7 +716,6 @@
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
 				09602BBC2BD76FF800A6AFEA /* CommentTextView.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
-				09602B5A2BD3AC2300A6AFEA /* PostModel.swift in Sources */,
 				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
@@ -705,6 +727,7 @@
 				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
+				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
@@ -725,6 +748,7 @@
 				095678F12BC67F000030F0CD /* BaseCollectionViewCell.swift in Sources */,
 				0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
+				09602BD62BDE568900A6AFEA /* LikeRouter.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,
 			);

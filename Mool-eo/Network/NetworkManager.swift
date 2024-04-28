@@ -171,4 +171,14 @@ struct NetworkManager {
             return Single.error(error)
         }
     }
+    
+    //MARK: - Like
+    static func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
+        do {
+            let urlRequest = try LikeRouter.likeUpload(query: query, postId: postId).asURLRequest()
+            return request(route: urlRequest, interceptor: nil) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
 }

@@ -1,18 +1,18 @@
 //
-//  CommentRouter.swift
+//  LikeRouter.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/27/24.
+//  Created by Jaehui Yu on 4/28/24.
 //
 
 import Foundation
 import Alamofire
 
-enum CommentRouter {
-    case commentUpload(query: CommentQuery, postId: String)
+enum LikeRouter {
+    case likeUpload(query: LikeQuery, postId: String)
 }
 
-extension CommentRouter: TargetType {
+extension LikeRouter: TargetType {
     
     var baseURL: String {
         APIKey.baseURL.rawValue
@@ -20,21 +20,20 @@ extension CommentRouter: TargetType {
     
     var method: Alamofire.HTTPMethod {
         switch self {
-        case .commentUpload(query: _, postId: _): .post
+        case .likeUpload(query: _, postId: _): .post
         }
     }
     
     var path: String {
         switch self {
-        case .commentUpload(query: _, postId: let postId): "posts/\(postId)/comments"
+        case .likeUpload(query: _, postId: let postId): "posts/\(postId)/like"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .commentUpload(query: _, postId: _):
-            [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
-             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+        case .likeUpload(query: _, postId: _):
+            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
         }
     }
@@ -49,7 +48,7 @@ extension CommentRouter: TargetType {
     
     var body: Data? {
         switch self {
-        case .commentUpload(query: let query, postId: _):
+        case .likeUpload(query: let query, postId: _):
             let encoder = JSONEncoder()
             encoder.keyEncodingStrategy = .useDefaultKeys
             return try? encoder.encode(query)
