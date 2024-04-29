@@ -7,8 +7,6 @@
 
 import UIKit
 
-/// 사용방법
-/// UIColor(hexCode: "#000000")
 extension UIColor {
     convenience init(hexCode: String, alpha: CGFloat = 1.0) {
         var hexFormatted: String = hexCode.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()

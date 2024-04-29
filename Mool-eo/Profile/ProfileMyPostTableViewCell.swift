@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// 이미지가 있는 게시글일 경우 사용할 Cell
 class ProfileMyPostTableViewCell: BaseTableViewCell {
     let postBoardLabel: CustomLabel = {
         let label = CustomLabel(type: .colorContentBold)
@@ -27,14 +28,7 @@ class ProfileMyPostTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let postImageView = CustomImageView(frame: .zero)
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -43,10 +37,7 @@ class ProfileMyPostTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let likeCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let likeCountLabel = CustomLabel(type: .description)
     
     let commentIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -55,10 +46,7 @@ class ProfileMyPostTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let commentCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let commentCountLabel = CustomLabel(type: .description)
     
     let lineView = LineView()
     

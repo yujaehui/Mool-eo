@@ -20,7 +20,7 @@ class JoinSecondViewModel: ViewModelType {
     struct Output {
         let passwordValidation: Driver<Bool>
         let nextButtonValidation: Driver<Bool>
-        let nextButtonTap: Observable<Void>
+        let nextButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -29,11 +29,11 @@ class JoinSecondViewModel: ViewModelType {
         
         input.password
             .map { value in
-                let idRegex = "^(?!\\s)(?=.*[a-z])[a-z0-9]{4,12}$"
-                let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
-                return idPredicate.evaluate(with: value)
+                let passwordRegex = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{4,12}$"
+                let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+                return passwordPredicate.evaluate(with: value)
             }
-            .debug("password")
+            .debug("비밀번호")
             .bind(with: self) { owner, value in
                 passwordValidation.onNext(value)
             }.disposed(by: disposeBag)
@@ -45,6 +45,6 @@ class JoinSecondViewModel: ViewModelType {
         
         return Output(passwordValidation: passwordValidation.asDriver(onErrorJustReturn: false),
                       nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
-                      nextButtonTap: input.nextButtonTap)
+                      nextButtonTap: input.nextButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }

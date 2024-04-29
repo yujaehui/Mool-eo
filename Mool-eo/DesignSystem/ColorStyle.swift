@@ -7,8 +7,6 @@
 
 import UIKit
 
-/// 사용방법
-/// testLabel.textColor = ColorStyle.point
 enum ColorStyle {
     static let point = UIColor.systemBrown
     static let mainText = UIColor.label

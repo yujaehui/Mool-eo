@@ -6,20 +6,24 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class BaseViewController: UIViewController {
+    
+    let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ColorStyle.mainBackground
-        configureHierarchy()
         configureView()
-        configureConstraints()
         bind()
+        setNav()
+        setToolBar()
     }
     
-    func configureHierarchy() {}
     func configureView() {}
-    func configureConstraints() {}
     func bind() {}
+    func setNav() {}
+    func setToolBar() {}
 }

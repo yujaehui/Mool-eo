@@ -15,11 +15,11 @@ class PostDetailViewModel: ViewModelType {
     struct Input {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
-        let comment: Observable<String>
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
-        let postID: Observable<String>
-        let uploadButtonClicked: Observable<Void>
+        let postId: Observable<String>
+        let comment: Observable<String>
+        let commentUploadButtonTap: Observable<Void>
         let reload: BehaviorSubject<Void>
     }
     
@@ -39,6 +39,7 @@ class PostDetailViewModel: ViewModelType {
         let postDetail = PublishSubject<PostModel>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         
+        // 텍스트뷰 입력이 시작되는 시점
         input.textViewBegin
             .withLatestFrom(input.comment)
             .bind(with: self) { owner, value in
@@ -48,6 +49,7 @@ class PostDetailViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
+        // 텍스트뷰 입력이 종료되는 시점
         input.textViewEnd
             .withLatestFrom(input.comment)
             .bind(with: self) { owner, value in
@@ -57,28 +59,31 @@ class PostDetailViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        
+        // 특정 게시글 조회 네트워크 통신 진행
         input.reload
-            .withLatestFrom(input.postID)
+            .withLatestFrom(input.postId)
             .flatMap { value in
                 NetworkManager.postCheckSpecific(postId: value)
             }
-            .debug("postDetail")
+            .debug("특정 게시글 조회")
             .subscribe(with: self) { owner, value in
                 postDetail.onNext(value)
+            } onError: { owner, error in
+                print("오류 발생")
             }.disposed(by: disposeBag)
         
-        let comment = input.comment.map { content in
-                return CommentQuery(content: content)
-            }
+        let commentQuery = input.comment.map { content in
+            return CommentQuery(content: content)
+        }
+
+        let commentObservable = Observable.combineLatest(commentQuery, input.postId)
         
-        let ObservableComment = Observable.combineLatest(comment, input.postID)
-        
-        input.uploadButtonClicked
-            .withLatestFrom(ObservableComment)
-            .flatMap { commentQuery, postID in
-                NetworkManager.commentUpload(query: commentQuery, postId: postID)
-            }.debug("commnet")
+        // 댓글 업로드 네트워크 통신 진행
+        input.commentUploadButtonTap
+            .withLatestFrom(commentObservable)
+            .flatMap { commentQuery, postId in
+                NetworkManager.commentUpload(query: commentQuery, postId: postId)
+            }.debug("댓글")
             .subscribe(with: self) { owner, value in
                 commentUploadSuccessTrigger.onNext(())
             } onError: { owner, error in
@@ -86,6 +91,11 @@ class PostDetailViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         
-        return Output(keyboardWillShow: input.keyboardWillShow, keyboardWillHide: input.keyboardWillHide, text: text.asDriver(), textColorType: textColorType.asDriver(), postDetail: postDetail, commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(keyboardWillShow: input.keyboardWillShow,
+                      keyboardWillHide: input.keyboardWillHide,
+                      text: text.asDriver(),
+                      textColorType: textColorType.asDriver(),
+                      postDetail: postDetail,
+                      commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

@@ -7,22 +7,13 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
+// 이미지가 있는 게시글일 경우 사용할 Cell
 class PostListTableViewCell: BaseTableViewCell {
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let profileImageView = CustomImageView(frame: .zero)
     
-    let nickNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .descriptionBold)
-        label.text = "닉네임 테스트"
-        return label
-    }()
+    let nickNameLabel = CustomLabel(type: .descriptionBold)
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -36,14 +27,7 @@ class PostListTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let postImageView = CustomImageView(frame: .zero)
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -52,10 +36,7 @@ class PostListTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let likeCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let likeCountLabel = CustomLabel(type: .description)
     
     let commentIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -64,10 +45,7 @@ class PostListTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let commentCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let commentCountLabel = CustomLabel(type: .description)
         
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
@@ -91,6 +69,7 @@ class PostListTableViewCell: BaseTableViewCell {
         nickNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView).inset(20)
         }
         
         postTitleLabel.snp.makeConstraints { make in
@@ -113,8 +92,8 @@ class PostListTableViewCell: BaseTableViewCell {
         likeIconImageView.snp.makeConstraints { make in
             make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
-            make.size.equalTo(20)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.size.equalTo(20)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -126,8 +105,8 @@ class PostListTableViewCell: BaseTableViewCell {
         commentIconImageView.snp.makeConstraints { make in
             make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
-            make.size.equalTo(20)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.size.equalTo(20)
         }
         
         commentCountLabel.snp.makeConstraints { make in
@@ -135,5 +114,15 @@ class PostListTableViewCell: BaseTableViewCell {
             make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
+    }
+    
+    func configureCell(item: PostListSectionModel.Item) {
+        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: item.files.first!)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: item.creator.profileImage)
+        nickNameLabel.text = item.creator.nick
+        postTitleLabel.text = item.title
+        postContentLabel.text = item.content
+        likeCountLabel.text = "\(item.likes.count)"
+        commentCountLabel.text = "\(item.comments.count)"
     }
 }

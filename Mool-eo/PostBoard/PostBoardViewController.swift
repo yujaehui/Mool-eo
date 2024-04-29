@@ -18,7 +18,7 @@ enum PostBoardType: String, CaseIterable {
 }
 
 class PostBoardViewController: BaseViewController {
-    let disposeBag = DisposeBag()
+    
     let viewModel = PostBoardViewModel()
     let postBoardView = PostBoardView()
     
@@ -28,34 +28,29 @@ class PostBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function)
-        setNav()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func bind() {
-        let postBoardList = Observable.just(PostBoardType.allCases)
-        let modelSelected = postBoardView.collectionView.rx.modelSelected(PostBoardType.self).asObservable()
-        let itemSelected = postBoardView.collectionView.rx.itemSelected.asObservable()
-        let input = PostBoardViewModel.Input(postBoardList: postBoardList, modelSelected: modelSelected, itemSelected: itemSelected)
-        
-        let output = viewModel.transform(input: input)
-        output.postBoardList.bind(to: postBoardView.collectionView.rx.items(cellIdentifier: PostBoardCollectionViewCell.identifier, cellType: PostBoardCollectionViewCell.self)) { (row, element, cell) in
+        Observable.just(PostBoardType.allCases).bind(to: postBoardView.collectionView.rx.items(cellIdentifier: PostBoardCollectionViewCell.identifier, cellType: PostBoardCollectionViewCell.self)) { (row, element, cell) in
             cell.configureCell(element: element)
         }.disposed(by: disposeBag)
         
-        output.postBoard.drive(with: self) { owner, value in
+        let modelSelected = postBoardView.collectionView.rx.modelSelected(PostBoardType.self).asObservable()
+        let itemSelected = postBoardView.collectionView.rx.itemSelected.asObservable()
+        let input = PostBoardViewModel.Input(modelSelected: modelSelected, itemSelected: itemSelected)
+        
+        let output = viewModel.transform(input: input)
+        
+        // 특정 게시판 셀을 선택하면, 해당 게시판으로 이동
+        output.selectPostBoard.drive(with: self) { owner, value in
             let vc = PostListViewController()
             vc.postBoard = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
-    }
-    
-    func setNav() {
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
-    }
-    
-    @objc func rightBarButtonItemClicked() {
-        navigationController?.pushViewController(ProfileViewController(), animated: true)
     }
 }

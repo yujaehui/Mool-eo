@@ -14,15 +14,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let profileImageView = CustomImageView(frame: .zero)
     
     let countStackView: UIStackView = {
         let stackView = UIStackView()
@@ -33,33 +25,15 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    let followerCountView: ProfileCountView = {
-        let view = ProfileCountView()
-        view.contentLabel.text = "팔로워"
-        return view
-    }()
+    let followerCountView = ProfileCountView(frame: .zero, profileCountType: .follower)
+
+    let followingCountView = ProfileCountView(frame: .zero, profileCountType: .following)
     
-    let followingCountView: ProfileCountView = {
-        let view = ProfileCountView()
-        view.contentLabel.text = "팔로잉"
-        return view
-    }()
+    let postCountView = ProfileCountView(frame: .zero, profileCountType: .post)
     
-    let postCountView: ProfileCountView = {
-        let view = ProfileCountView()
-        view.contentLabel.text = "게시물"
-        return view
-    }()
+    let nicknameLabel = CustomLabel(type: .titleBold)
     
-    let nicknameLabel: CustomLabel = {
-        let label = CustomLabel(type: .titleBold)
-        return label
-    }()
-    
-    let introductionLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        return label
-    }()
+    let introductionLabel = CustomLabel(type: .content)
     
     let profileEditButton: UIButton = {
         let button = UIButton()
@@ -69,7 +43,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag()
+        disposeBag = DisposeBag() // 프로필 수정 버튼이 구독 될 것 -> disposeBag 초기화
     }
     
     override func configureHierarchy() {
@@ -115,14 +89,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ info: ProfileModel) {
-        let url = URL(string: APIKey.baseURL.rawValue + info.profileImage)
-        let modifier = AnyModifier { request in
-            var urlRequest = request
-            urlRequest.headers = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-                                  HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
-            return urlRequest
-        }
-        profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage)
         followerCountView.countLabel.text = "\(info.followers.count)"
         followingCountView.countLabel.text = "\(info.following.count)"
         postCountView.countLabel.text = "\(info.posts.count)"

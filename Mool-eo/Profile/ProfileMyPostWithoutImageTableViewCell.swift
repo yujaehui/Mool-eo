@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// 이미지가 없는 게시글일 경우 사용할 Cell
 class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
     let postBoardLabel: CustomLabel = {
         let label = CustomLabel(type: .colorContentBold)
@@ -34,10 +35,7 @@ class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let likeCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let likeCountLabel = CustomLabel(type: .description)
     
     let commentIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -46,10 +44,7 @@ class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let commentCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let commentCountLabel = CustomLabel(type: .description)
     
     let lineView = LineView()
     

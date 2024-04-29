@@ -16,29 +16,29 @@ class LoginViewModel: ViewModelType {
     struct Input {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
-        let joinButtonTap: Observable<Void>
         let id: Observable<String>
         let password: Observable<String>
         let loginButtonTap: Observable<Void>
+        let joinButtonTap: Observable<Void>
     }
     
     struct Output {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
-        let joinButtonTap: Observable<Void>
         let loginValidation: Driver<Bool>
         let loginSuccessTrigger: Driver<Void>
+        let joinButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let loginValidation = BehaviorSubject<Bool>(value: false)
         let loginSuccessTrigger = PublishSubject<Void>()
         
-        let loginObservable = Observable.combineLatest(input.id, input.password).map { (id, password) in
+        let loginQuery = Observable.combineLatest(input.id, input.password).map { (id, password) in
             return LoginQuery(email: id, password: password)
         }
         
-        loginObservable.bind(with: self) { owner, value in
+        loginQuery.bind(with: self) { owner, value in
             if value.email.count > 0 && value.password.count > 0 {
                 loginValidation.onNext(true)
             } else {
@@ -46,12 +46,13 @@ class LoginViewModel: ViewModelType {
             }
         }.disposed(by: disposeBag)
         
+        // 로그인 네트워크 통신 진행
         input.loginButtonTap
-            .withLatestFrom(loginObservable)
+            .withLatestFrom(loginQuery)
             .flatMap { loginQuery in
                 return NetworkManager.login(query: loginQuery)
             }
-            .debug("login")
+            .debug("로그인")
             .subscribe(with: self) { owner, value in
                 loginSuccessTrigger.onNext(())
             } onError: { owner, error in
@@ -61,9 +62,9 @@ class LoginViewModel: ViewModelType {
         
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
-                      joinButtonTap: input.joinButtonTap,
                       loginValidation: loginValidation.asDriver(onErrorJustReturn: false),
-                      loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()))
+                      loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      joinButtonTap: input.joinButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }
 

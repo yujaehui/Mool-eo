@@ -33,18 +33,11 @@ class WritePostBoxView: BaseView {
         return collectionView
     }()
     
-    let imageAddButton: UIButton = {
-        let button = UIButton()
-        button.configuration = .capsule("이미지 추가")
-        return button
-    }()
-    
     override func configureHierarchy() {
         addSubview(titleTextField)
         addSubview(lineView)
         addSubview(contentTextView)
         addSubview(collectionView)
-        addSubview(imageAddButton)
     }
     
     override func configureConstraints() {
@@ -70,13 +63,6 @@ class WritePostBoxView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(100)
         }
-        
-        imageAddButton.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(10)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(40)
-        }
     }
     
     private static func configureCollectionViewLayout() -> UICollectionViewLayout {
@@ -89,5 +75,4 @@ class WritePostBoxView: BaseView {
         layout.minimumInteritemSpacing = spacing
         return layout
     }
-
 }

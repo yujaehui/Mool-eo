@@ -7,11 +7,10 @@
 
 import UIKit
 import RxSwift
-import Toast
 
+// 회원가입 첫번째 로직 : 아이디 입력 & 중복 확인
 class JoinViewController: BaseViewController {
     
-    let disposeBag = DisposeBag()
     let viewModel = JoinViewModel()
     let joinView = JoinView()
     
@@ -31,24 +30,24 @@ class JoinViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         
+        // 아이디 기본 조건
         output.idValidation.drive(with: self) { owner, value in
             owner.joinView.idCheckButton.isEnabled = value
             owner.joinView.idView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
-            owner.joinView.idView.descriptionLabel.text = value ? nil : TextFieldType.id.description
+            owner.joinView.idView.descriptionLabel.text = value ? "중복 확인을 진행해주세요." : TextFieldType.id.description
         }.disposed(by: disposeBag)
         
-        output.idCheckValidation.drive(with: self) { owner, value in
-            guard let value = value else { return }
+        // 아이디 중복 확인 조건
+        output.idCheckSuccessValidation.drive(with: self) { owner, value in
+            guard let value = value else { return } // nil일 경우 종료
             owner.joinView.idView.descriptionLabel.textColor = value ? ColorStyle.available : ColorStyle.caution
-        }.disposed(by: disposeBag)
-        
-        output.idCheckMessage.drive(with: self) { owner, value in
-            owner.joinView.idView.descriptionLabel.text = value
+            owner.joinView.idView.descriptionLabel.text = value ? "사용 가능한 아이디입니다." : "사용할 수 없는 아이디입니다."
         }.disposed(by: disposeBag)
         
         output.nextButtonValidation.drive(joinView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
-        output.nextButtonTap.bind(with: self) { owner, _ in
+        // 다음 버튼을 클릭했을 경우, 회원가입 두번째 로직으로 이동
+        output.nextButtonTap.drive(with: self) { owner, _ in
             let vc = JoinSecondViewController()
             vc.id = owner.joinView.idView.customTextField.text ?? ""
             owner.navigationController?.pushViewController(vc, animated: true)

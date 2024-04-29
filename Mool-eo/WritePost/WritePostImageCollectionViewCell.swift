@@ -9,13 +9,7 @@ import UIKit
 import SnapKit
 
 class WritePostImageCollectionViewCell: BaseCollectionViewCell {
-    let selectImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let selectImageView = CustomImageView(frame: .zero)
     
     override func configureHierarchy() {
         contentView.addSubview(selectImageView)

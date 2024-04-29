@@ -8,21 +8,11 @@
 import UIKit
 import SnapKit
 
+// 이미지가 있는 게시글일 경우 사용할 Cell
 class PostDetailTableViewCell: BaseTableViewCell {
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let profileImageView = CustomImageView(frame: .zero)
     
-    let nickNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .descriptionBold)
-        label.text = "닉네임 테스트"
-        return label
-    }()
+    let nickNameLabel = CustomLabel(type: .descriptionBold)
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -32,18 +22,11 @@ class PostDetailTableViewCell: BaseTableViewCell {
     
     let postContentLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
-        label.numberOfLines = 4
+        label.numberOfLines = 0
         return label
     }()
     
-    let postImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let postImageView = CustomImageView(frame: .zero)
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -52,10 +35,7 @@ class PostDetailTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let likeCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let likeCountLabel = CustomLabel(type: .description)
     
     let commentIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -64,11 +44,9 @@ class PostDetailTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let commentCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let commentCountLabel = CustomLabel(type: .description)
     
+    // TODO: 버튼 디자인 수정 필요
     let likeButton: UIButton = {
         let button = UIButton()
         button.configuration = .capsule("좋아요")
@@ -105,6 +83,7 @@ class PostDetailTableViewCell: BaseTableViewCell {
         nickNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView).inset(20)
         }
         
         postTitleLabel.snp.makeConstraints { make in
@@ -160,4 +139,13 @@ class PostDetailTableViewCell: BaseTableViewCell {
         }
     }
     
+    func configureCell(post: PostModel) {
+        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: post.files.first!)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
+        postTitleLabel.text = post.title
+        postContentLabel.text = post.content
+        likeCountLabel.text = "\(post.likes.count)"
+        commentCountLabel.text = "\(post.comments.count)"
+        nickNameLabel.text = post.creator.nick
+    }
 }

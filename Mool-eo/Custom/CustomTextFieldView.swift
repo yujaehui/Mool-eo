@@ -36,7 +36,7 @@ class CustomTextFieldView: BaseView {
     
     override func configureConstraints() {
         customLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(safeAreaLayoutGuide)
+            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(20)
         }
         

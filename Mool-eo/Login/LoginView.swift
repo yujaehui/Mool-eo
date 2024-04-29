@@ -10,10 +10,7 @@ import SnapKit
 
 class LoginView: BaseView {
     
-    let loginBoxView: LoginBoxView = {
-        let view = LoginBoxView()
-        return view
-    }()
+    let loginBoxView = LoginBoxView()
     
     let joinLabel: CustomLabel = {
         let label = CustomLabel(type: .subDescription)

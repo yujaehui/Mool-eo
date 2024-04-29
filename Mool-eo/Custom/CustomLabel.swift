@@ -7,8 +7,6 @@
 
 import UIKit
 
-/// 사용방법
-/// let testLabel = CustomLabel(type: .title)
 class CustomLabel: UILabel {
     enum labelType {
         case title

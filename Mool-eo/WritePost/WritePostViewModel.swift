@@ -14,21 +14,23 @@ class WritePostViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let postBoard: PostBoardType
-        let content: Observable<String>
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
-        let imageAddButtonTap: Observable<Void>
-        let selectedImageDataSubject: PublishSubject<[Data]>
+        let postBoard: PostBoardType
         let title: Observable<String>
+        let content: Observable<String>
+        let selectedImageDataSubject: PublishSubject<[Data]>
+        let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
+        let cancelButtonTap: Observable<Void>
     }
     
     struct Output {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
-        let imageAddButtonTap: Observable<Void>
-        let uploadSuccessTrigger: PublishSubject<Void>
+        let imageAddButtonTap: Driver<Void>
+        let uploadSuccessTrigger: Driver<Void>
+        let cancelButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -55,20 +57,22 @@ class WritePostViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        let filesObservable = input.selectedImageDataSubject.map { files in
+        
+        let filesQuery = input.selectedImageDataSubject.map { files in
             return FilesQuery(files: files)
         }
         
-        let postObservable = Observable.combineLatest(input.title, input.content).map { (title, content) in
+        let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
             return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
         }
         
+        // 게시글 업로드 네트워크 통신 진행
         input.completeButtonTap
-            .withLatestFrom(filesObservable)
+            .withLatestFrom(filesQuery)
             .flatMap { filesQuery in
                 return NetworkManager.imageUpload(query: filesQuery)
             }
-            .withLatestFrom(postObservable) { filesModel, postObservable in
+            .withLatestFrom(postQuery) { filesModel, postObservable in
                 return (filesModel, postObservable)
             }
             .map { filesModel, postObservable in
@@ -77,13 +81,17 @@ class WritePostViewModel: ViewModelType {
             .flatMap { postQuery in
                 return NetworkManager.postUpload(query: postQuery)
             }
-            .debug("upload")
+            .debug("게시글 업로드")
             .subscribe(with: self) { owner, _ in
                 uploadSuccessTrigger.onNext(())
             } onError: { owner, error in
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
-        return Output(text: text.asDriver(), textColorType: textColorType.asDriver(), imageAddButtonTap: input.imageAddButtonTap, uploadSuccessTrigger: uploadSuccessTrigger)
+        return Output(text: text.asDriver(), 
+                      textColorType: textColorType.asDriver(),
+                      imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
+                      uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }

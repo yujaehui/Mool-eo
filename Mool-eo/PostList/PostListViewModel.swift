@@ -13,7 +13,7 @@ class PostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let viewDidLoadTrigger: Observable<PostBoardType>
+        let postBoardType: Observable<PostBoardType>
         let postWriteButtonTap: Observable<Void>
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
@@ -21,22 +21,24 @@ class PostListViewModel: ViewModelType {
     
     struct Output {
         let postList: PublishSubject<[PostModel]>
-        let postWriteButtonTap: Observable<Void>
-        let post: PublishSubject<String>
+        let postWriteButtonTap: Driver<Void>
+        let post: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let postList = PublishSubject<[PostModel]>()
         let post = PublishSubject<String>()
         
-        input.viewDidLoadTrigger.flatMap { value in
+        // 게시글 조회 네트워크 통신 진행
+        input.postBoardType.flatMap { value in
             NetworkManager.postCheck(productId: value.rawValue)
         }
-        .debug()
+        .debug("게시글 조회")
         .subscribe(with: self) { owner, value in
             postList.onNext(value.data)
+        } onError: { owner, error in
+            print("오류 발생")
         }.disposed(by: disposeBag)
-        
         
         Observable.zip(input.modelSelected, input.itemSelected)
             .map { $0.0.postID }
@@ -44,7 +46,8 @@ class PostListViewModel: ViewModelType {
                 post.onNext(value)
             }.disposed(by: disposeBag)
         
-        
-        return Output(postList: postList, postWriteButtonTap: input.postWriteButtonTap, post: post)
+        return Output(postList: postList,
+                      postWriteButtonTap: input.postWriteButtonTap.asDriver(onErrorJustReturn: ()),
+                      post: post.asDriver(onErrorJustReturn: ""))
     }
 }

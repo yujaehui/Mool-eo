@@ -23,13 +23,11 @@ enum ProfileSectionItem {
     case myPostItem(MyPost)
 }
 
-// 섹션에 대한 데이터 모델
 struct ProfileSectionModel {
     let title: String?
     var items: [ProfileSectionItem]
 }
 
-// SectionModelType 프로토콜 준수
 extension ProfileSectionModel: SectionModelType {
     typealias Item = ProfileSectionItem
     
@@ -41,7 +39,6 @@ extension ProfileSectionModel: SectionModelType {
 
 class ProfileViewController: BaseViewController {
     
-    let disposeBag = DisposeBag()
     let viewModel = ProfileViewModel()
     let profileView = ProfileView()
     
@@ -73,10 +70,8 @@ class ProfileViewController: BaseViewController {
             let sections: [ProfileSectionModel] = [ProfileSectionModel(title: nil, 
                                                          items: [.infoItem(value)]),
                                                    ProfileSectionModel(title: "내 게시물", 
-                                                         items: [.myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "star")),
-                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil)),
-                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: "heart")),
-                                                                 .myPostItem(MyPost(title: "제목 테스트", content: "내용 테스트", likeCount: 10, commentCount: 10, image: nil))])]
+                                                         items: [.myPostItem(MyPost(title: "제목", content: "내용", likeCount: 10, commentCount: 10, image: "star")),
+                                                                 .myPostItem(MyPost(title: "제목", content: "내용", likeCount: 10, commentCount: 10, image: nil))])]
             Observable.just(sections).bind(to: owner.profileView.tableView.rx.items(dataSource: owner.dataSource)).disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         

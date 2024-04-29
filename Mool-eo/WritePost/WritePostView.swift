@@ -9,12 +9,31 @@ import UIKit
 
 class WritePostView: BaseView {
     
-    let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    let scrollView = UIScrollView()
     
     let writePostBoxView = WritePostBoxView()
+    
+    // Navigation
+    let completeButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.title = "완료"
+        return button
+    }()
+    
+    // Navigation
+    let cancelButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.image = UIImage(systemName: "xmark")
+        return button
+    }()
+    
+    // ToolBar
+    let imageAddButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.image = UIImage(systemName: "camera")
+        button.tintColor = ColorStyle.point
+        return button
+    }()
     
     override func configureHierarchy() {
         addSubview(scrollView)
@@ -27,8 +46,8 @@ class WritePostView: BaseView {
         }
         
         writePostBoxView.snp.makeConstraints { make in
-             make.edges.equalTo(scrollView.contentLayoutGuide)
-             make.width.equalTo(scrollView.frameLayoutGuide)
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
         }
     }
 }

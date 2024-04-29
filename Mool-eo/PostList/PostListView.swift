@@ -35,8 +35,8 @@ class PostListView: BaseView {
         }
         
         postWriteButton.snp.makeConstraints { make in
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.centerX.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
     }
 }

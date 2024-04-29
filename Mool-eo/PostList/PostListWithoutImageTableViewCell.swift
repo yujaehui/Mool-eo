@@ -7,22 +7,13 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
+// 이미지가 없는 게시글일 경우 사용할 Cell
 class PostListWithoutImageTableViewCell: BaseTableViewCell {
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let profileImageView = CustomImageView(frame: .zero)
     
-    let nickNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .descriptionBold)
-        label.text = "닉네임 테스트"
-        return label
-    }()
+    let nickNameLabel = CustomLabel(type: .descriptionBold)
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -43,10 +34,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let likeCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let likeCountLabel = CustomLabel(type: .description)
     
     let commentIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -55,10 +43,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
-    let commentCountLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let commentCountLabel = CustomLabel(type: .description)
         
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
@@ -81,6 +66,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         nickNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
         postTitleLabel.snp.makeConstraints { make in
@@ -90,14 +76,14 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         
         postContentLabel.snp.makeConstraints { make in
             make.top.equalTo(postTitleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
         likeIconImageView.snp.makeConstraints { make in
             make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
-            make.size.equalTo(20)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.size.equalTo(20)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -109,8 +95,8 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         commentIconImageView.snp.makeConstraints { make in
             make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
-            make.size.equalTo(20)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.size.equalTo(20)
         }
         
         commentCountLabel.snp.makeConstraints { make in
@@ -120,4 +106,12 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         }
     }
 
+    func configureCell(item: PostListSectionModel.Item) {
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: item.creator.profileImage)
+        nickNameLabel.text = item.creator.nick
+        postTitleLabel.text = item.title
+        postContentLabel.text = item.content
+        likeCountLabel.text = "\(item.likes.count)"
+        commentCountLabel.text = "\(item.comments.count)"
+    }
 }

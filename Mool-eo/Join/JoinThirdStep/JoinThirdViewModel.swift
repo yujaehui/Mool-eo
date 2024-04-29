@@ -22,7 +22,7 @@ class JoinThirdViewModel: ViewModelType {
     struct Output {
         let nicknameValidation: Driver<Bool>
         let joinButtonValidation: Driver<Bool>
-        let joinSuccessTrigger: PublishSubject<Void>
+        let joinSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -36,7 +36,7 @@ class JoinThirdViewModel: ViewModelType {
                 let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
                 return idPredicate.evaluate(with: value)
             }
-            .debug("nickname")
+            .debug("닉네임")
             .bind(with: self) { owner, value in
                 nicknameValidation.onNext(value)
             }.disposed(by: disposeBag)
@@ -46,17 +46,18 @@ class JoinThirdViewModel: ViewModelType {
                 joinButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        let joinObservable = Observable.combineLatest(input.id, input.password, input.nickname)
+        let joinQuery = Observable.combineLatest(input.id, input.password, input.nickname)
             .map { (id, password, nickname) in
                 return JoinQuery(email: id, password: password, nick: nickname)
             }
         
+        // 회원가입 네트워크 통신 진행
         input.joinButtonTap
-            .withLatestFrom(joinObservable)
+            .withLatestFrom(joinQuery)
             .flatMap { query in
                 NetworkManager.join(query: query)
             }
-            .debug("join")
+            .debug("회원가입")
             .subscribe(with: self) { owner, value in
                 joinSuccessTrigger.onNext(())
             } onError: { owner, error in
@@ -65,6 +66,6 @@ class JoinThirdViewModel: ViewModelType {
         
         return Output(nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
                       joinButtonValidation: joinButtonValidation.asDriver(onErrorJustReturn: false),
-                      joinSuccessTrigger: joinSuccessTrigger)
+                      joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

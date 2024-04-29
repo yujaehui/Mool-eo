@@ -37,7 +37,7 @@ class JoinSecondView: BaseView {
     override func configureConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(20)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
         passwordView.snp.makeConstraints { make in

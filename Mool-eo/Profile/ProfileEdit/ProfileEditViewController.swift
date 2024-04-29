@@ -14,7 +14,6 @@ import PhotosUI
 
 class ProfileEditViewController: BaseViewController {
     
-    let disposeBag = DisposeBag()
     let viewModel = ProfileEditViewModel()
     let profileEditView = ProfileEditView()
     
@@ -31,7 +30,6 @@ class ProfileEditViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNav()
     }
     
     override func configureView() {
@@ -103,7 +101,7 @@ class ProfileEditViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func setNav() {
+    override func setNav() {
         navigationItem.title = "프로필 수정하기"
         navigationItem.rightBarButtonItem = profileEditView.completeButton
         navigationItem.leftBarButtonItem = profileEditView.cancelButton

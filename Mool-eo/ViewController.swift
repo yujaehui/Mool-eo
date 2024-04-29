@@ -7,13 +7,23 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = ColorStyle.mainBackground
+        tabBar.tintColor = ColorStyle.point
+        addVC()
     }
-
-
+    
+    private func addVC() {
+        let postBoardVC = UINavigationController(rootViewController: PostBoardViewController())
+        postBoardVC.tabBarItem = UITabBarItem(title: "게시판", image: UIImage(systemName: "list.clipboard"), selectedImage: UIImage(systemName: "list.clipboard"))
+        
+        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person"))
+        
+        self.viewControllers = [postBoardVC, profileVC]
+    }
 }
 

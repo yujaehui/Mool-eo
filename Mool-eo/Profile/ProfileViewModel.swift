@@ -27,9 +27,11 @@ class ProfileViewModel: ViewModelType {
             .flatMap { _ in
                 NetworkManager.profileCheck()
             }
-            .debug("profileCheck")
+            .debug("프로필 조회")
             .subscribe(with: self) { owner, value in
                 profile.onNext(value)
+            } onError: { owner, error in
+                print("오류 발생")
             }.disposed(by: disposeBag)
         
         return Output(profile: profile)

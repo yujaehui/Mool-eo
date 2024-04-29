@@ -43,4 +43,3 @@ class CustomTextField: UITextField {
         self.borderStyle = .roundedRect
     }
 }
-

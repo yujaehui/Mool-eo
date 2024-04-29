@@ -7,8 +7,6 @@
 
 import UIKit
 
-/// 사용방법
-/// testLabel.font = FontStyle.titleBold
 enum FontStyle {
     static let titleBold: UIFont = .boldSystemFont(ofSize: 18)
     static let title: UIFont = .systemFont(ofSize: 18)

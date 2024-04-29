@@ -14,26 +14,23 @@ class PostBoardViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let postBoardList: Observable<[PostBoardType]>
         let modelSelected: Observable<PostBoardType>
         let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
-        let postBoardList: Observable<[PostBoardType]>
-        let postBoard: Driver<PostBoardType>
+        let selectPostBoard: Driver<PostBoardType>
     }
     
     func transform(input: Input) -> Output {
-        let postBoard = PublishSubject<PostBoardType>()
+        let selectPostBoard = PublishSubject<PostBoardType>()
         
         Observable.zip(input.modelSelected, input.itemSelected)
             .map { $0.0 }
             .bind(with: self) { owner, value in
-                postBoard.onNext(value)
+                selectPostBoard.onNext(value)
             }.disposed(by: disposeBag)
         
-        
-        return Output(postBoardList: input.postBoardList, postBoard: postBoard.asDriver(onErrorJustReturn: .free))
+        return Output(selectPostBoard: selectPostBoard.asDriver(onErrorJustReturn: .free))
     }
 }

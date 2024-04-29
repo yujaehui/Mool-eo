@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+// 회원가입 두번째 로직 : 비밀번호 입력
 class JoinSecondViewController: BaseViewController {
     
-    let disposeBag = DisposeBag()
     let viewModel = JoinSecondViewModel()
     let joinSecondView = JoinSecondView()
     
@@ -31,14 +31,17 @@ class JoinSecondViewController: BaseViewController {
         let input = JoinSecondViewModel.Input(password: password, nextButtonTap: nextButtonTap)
         
         let output = viewModel.transform(input: input)
+        
+        // 비밀번호 기본 조건
         output.passwordValidation.drive(with: self) { owner, value in
-            owner.joinSecondView.passwordView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
-            owner.joinSecondView.passwordView.descriptionLabel.text = value ? nil : TextFieldType.password.description
+            owner.joinSecondView.passwordView.descriptionLabel.textColor = value ? ColorStyle.available : ColorStyle.caution
+            owner.joinSecondView.passwordView.descriptionLabel.text = value ? "사용 가능한 비밀번호입니다." : TextFieldType.password.description
         }.disposed(by: disposeBag)
         
         output.nextButtonValidation.drive(joinSecondView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
-        output.nextButtonTap.bind(with: self) { owner, _ in
+        // 다음 버튼을 클릭했을 경우, 회원가입 세번째 로직으로 이동
+        output.nextButtonTap.drive(with: self) { owner, _ in
             let vc = JoinThirdViewController()
             vc.id = owner.id
             vc.password = owner.joinSecondView.passwordView.customTextField.text ?? ""

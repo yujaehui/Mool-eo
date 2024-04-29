@@ -20,28 +20,27 @@ class JoinViewModel: ViewModelType {
     
     struct Output {
         let idValidation: Driver<Bool>
-        let idCheckValidation: Driver<Bool?>
-        let idCheckMessage: Driver<String>
+        let idCheckSuccessValidation: Driver<Bool?>
         let nextButtonValidation: Driver<Bool>
-        let nextButtonTap: Observable<Void>
+        let nextButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
+        // 아이디의 기본 조건 충족 -> 아이디 중복 확인 조건 충족 -> 다음 버튼 활성화
         let idValidation = BehaviorSubject<Bool>(value: false)
-        let idCheckValidation = BehaviorSubject<Bool?>(value: false)
-        let idCheckMessage = PublishSubject<String>()
+        let idCheckSuccessValidation = BehaviorSubject<Bool?>(value: false)
         let nextButtonValidation = BehaviorSubject<Bool>(value: false)
         
         input.id
             .map { id in
-                let idRegex = "^(?!\\s)(?=.*[a-z])[a-z0-9]{4,12}$"
+                let idRegex = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{4,12}$"
                 let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
                 return idPredicate.evaluate(with: id)
             }
-            .debug("id")
+            .debug("아이디")
             .bind(with: self) { owner, value in
                 idValidation.onNext(value)
-                idCheckValidation.onNext(nil) // 값이 변경되면 중복 확인을 진행하지 않은 상태로 돌려놔야 하기 때문에
+                idCheckSuccessValidation.onNext(nil) // 값이 변경되면 중복 확인을 진행하지 않은 상태로!
             }.disposed(by: disposeBag)
         
         input.idCheckButtonTap
@@ -52,18 +51,16 @@ class JoinViewModel: ViewModelType {
             .flatMap { query in
                 NetworkManager.emailCheck(query: query)
             }
-            .debug("idCheck")
+            .debug("아이디 중복 확인")
             .bind(with: self) { owner, value in
                 if value.message == "사용 가능한 이메일입니다." {
-                    idCheckMessage.onNext("사용 가능한 아이디입니다.")
-                    idCheckValidation.onNext(true)
+                    idCheckSuccessValidation.onNext(true)
                 } else {
-                    idCheckMessage.onNext("사용할 수 없는 아이디입니다.")
-                    idCheckValidation.onNext(false)
+                    idCheckSuccessValidation.onNext(false)
                 }
             }.disposed(by: disposeBag)
         
-        idCheckValidation
+        idCheckSuccessValidation
             .map { value in
                 guard let value = value else { return false }
                 return value
@@ -74,9 +71,8 @@ class JoinViewModel: ViewModelType {
         
         
         return Output(idValidation: idValidation.asDriver(onErrorJustReturn: false),
-                      idCheckValidation: idCheckValidation.asDriver(onErrorJustReturn: nil),
-                      idCheckMessage: idCheckMessage.asDriver(onErrorJustReturn: ""),
+                      idCheckSuccessValidation: idCheckSuccessValidation.asDriver(onErrorJustReturn: nil),
                       nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
-                      nextButtonTap: input.nextButtonTap)
+                      nextButtonTap: input.nextButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }
