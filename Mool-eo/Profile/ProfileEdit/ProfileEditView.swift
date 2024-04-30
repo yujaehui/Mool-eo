@@ -9,27 +9,21 @@ import UIKit
 import SnapKit
 
 class ProfileEditView: BaseView {
+    // Navigation
     let completeButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.title = "완료"
         return button
     }()
     
+    // Navigation
     let cancelButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.image = UIImage(systemName: "xmark")
         return button
     }()
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = ColorStyle.point
-        imageView.backgroundColor = ColorStyle.subBackground
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    let profileImageView = CustomImageView(frame: .zero)
     
     let profileImageEditButton: UIButton = {
         let button = UIButton()
@@ -37,16 +31,9 @@ class ProfileEditView: BaseView {
         return button
     }()
     
-    let nicknameView: CustomTextFieldView = {
-        let view = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
-        return view
-    }()
+    let nicknameView = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
     
-    
-    let introductionView: CustomTextFieldView = {
-        let view = CustomTextFieldView(frame: .zero, textFieldType: .introduction)
-        return view
-    }()
+    let introductionView = CustomTextFieldView(frame: .zero, textFieldType: .introduction)
     
     
     override func configureHierarchy() {

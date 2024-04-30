@@ -61,7 +61,9 @@ class PostDetailViewController: BaseViewController {
             + value.comments.map { comment in
                 PostDetailSectionModel(items: [.comment(comment)])
             }
-            Observable.just(sections).bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.configureDataSource())).disposed(by: owner.disposeBag)
+            Observable.just(sections)
+                .bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.configureDataSource()))
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.keyboardWillShow.bind(with: self) { owner, notification in

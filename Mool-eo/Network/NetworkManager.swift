@@ -50,6 +50,7 @@ struct NetworkManager {
         do {
             let urlRequest = try UserRouter.login(query: query).asURLRequest()
             return request(route: urlRequest, interceptor: nil) { value in
+                UserDefaults.standard.set(value.user_id, forKey: "userId")
                 UserDefaults.standard.set(value.accessToken, forKey: "accessToken")
                 UserDefaults.standard.set(value.refreshToken, forKey: "refreshToken")
             }
@@ -162,6 +163,17 @@ struct NetworkManager {
             return Single.error(error)
         }
     }
+    
+    static func postCheckUser() -> Single<PostListModel> {
+        do {
+            let userId = UserDefaults.standard.string(forKey: "userId")!
+            let urlRequest = try PostRouter.postCheckUser(userId: userId).asURLRequest()
+            return request(route: urlRequest, interceptor: nil) { _ in }
+        } catch {
+            return Single.error(error)
+        }
+    }
+    
     // MARK: - Comment
     static func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
         do {

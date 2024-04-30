@@ -18,10 +18,8 @@ class ProfileEditViewModel: ViewModelType {
         let cancelButtonTap: Observable<Void>
         let beforeNickname: String
         let afterNickname: Observable<String>
-        let changeNickname: Observable<Void>
         let beforeIntroduction: String
         let afterIntroduction: Observable<String>
-        let changeIntroduction: Observable<Void>
         let beforeProfileImageData: Data?
         let afterProfileImageData: BehaviorSubject<Data?>
     }
@@ -31,36 +29,31 @@ class ProfileEditViewModel: ViewModelType {
         let nicknameValidation: Driver<Bool>
         let introductionValidation: Driver<Bool>
         let completeButtonValidation: Driver<Bool>
-        let profileEditSuccessTrigger: PublishSubject<Void>
-        let cancelButtonTap: Observable<Void>
+        let profileEditSuccessTrigger: Driver<Void>
+        let cancelButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        
-        let nicknameValidation = BehaviorSubject(value: true)
-        let introductionValidation = BehaviorSubject(value: true)
-        let changeValidation = BehaviorSubject(value: true)
-        let completeButtonValidation = BehaviorSubject(value: true)
+        let nicknameValidation = BehaviorSubject(value: false)
+        let introductionValidation = BehaviorSubject(value: false)
+        let changeValidation = BehaviorSubject(value: false)
+        let completeButtonValidation = BehaviorSubject(value: false)
         let profileSuccessTrigger = PublishSubject<Void>()
         
-        input.changeNickname
-            .withLatestFrom(input.afterNickname)
+        input.afterNickname
             .map { value in
-                let idRegex = "^[^\\s]{2,10}$"
-                let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
-                return idPredicate.evaluate(with: value)
+                let nicknameRegex = "^[^\\s]{2,10}$"
+                let nicknamePredicate = NSPredicate(format: "SELF MATCHES %@", nicknameRegex)
+                return nicknamePredicate.evaluate(with: value)
             }
-            .debug("nickname")
             .bind(with: self) { owner, value in
                 nicknameValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        input.changeIntroduction
-            .withLatestFrom(input.afterIntroduction)
+        input.afterIntroduction
             .map { value in
                 return value.count < 15
             }
-            .debug("introduction")
             .bind(with: self) { owner, value in
                 introductionValidation.onNext(value)
             }.disposed(by: disposeBag)
@@ -81,19 +74,18 @@ class ProfileEditViewModel: ViewModelType {
                 completeButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        
-        
         let profileEditObservable = Observable.combineLatest(input.afterNickname, input.afterIntroduction, input.afterProfileImageData)
             .map { (nick, intro, image) in
                 return ProfileEditQuery(nick: nick, birthDay: intro, profile: image ?? Data())
             }
         
+        // 프로필 수정 네트워크 통신
         input.completeButtonTap
             .withLatestFrom(profileEditObservable)
             .flatMap { query in
                 NetworkManager.profileEdit(query: query)
             }
-            .debug()
+            .debug("프로필 수정")
             .subscribe(with: self) { owenr, value in
                 profileSuccessTrigger.onNext(())
             } onError: { owner, error in
@@ -104,7 +96,7 @@ class ProfileEditViewModel: ViewModelType {
                       nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
                       introductionValidation: introductionValidation.asDriver(onErrorJustReturn: false),
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
-                      profileEditSuccessTrigger: profileSuccessTrigger,
-                      cancelButtonTap: input.cancelButtonTap)
+                      profileEditSuccessTrigger: profileSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }

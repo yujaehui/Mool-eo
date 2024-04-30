@@ -532,14 +532,14 @@
 		0999EB292BCBAE4B004B6D1F /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				0999EB342BCBAF2D004B6D1F /* Query */,
-				0999EB4A2BCBC262004B6D1F /* Model */,
 				0999EB2A2BCBAE56004B6D1F /* APIKey.swift */,
 				0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */,
 				0999EB2E2BCBAED3004B6D1F /* TargetType.swift */,
 				0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */,
-				0999EB432BCBBB53004B6D1F /* Router */,
 				0999EB482BCBC207004B6D1F /* NetworkManager.swift */,
+				0999EB342BCBAF2D004B6D1F /* Query */,
+				0999EB4A2BCBC262004B6D1F /* Model */,
+				0999EB432BCBBB53004B6D1F /* Router */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -547,11 +547,11 @@
 		0999EB342BCBAF2D004B6D1F /* Query */ = {
 			isa = PBXGroup;
 			children = (
-				09602BCF2BDE562300A6AFEA /* Like */,
-				09602BC62BDBD2DC00A6AFEA /* Comment */,
-				09602B512BD3ABA800A6AFEA /* Post */,
-				0952A6F82BD0FD4F00F71C76 /* Profile */,
 				0999EB3D2BCBBAE7004B6D1F /* User */,
+				09602B512BD3ABA800A6AFEA /* Post */,
+				09602BC62BDBD2DC00A6AFEA /* Comment */,
+				09602BCF2BDE562300A6AFEA /* Like */,
+				0952A6F82BD0FD4F00F71C76 /* Profile */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -570,10 +570,10 @@
 			isa = PBXGroup;
 			children = (
 				0999EB322BCBAF18004B6D1F /* UserRouter.swift */,
-				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
 				09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */,
 				09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */,
 				09602BD52BDE568900A6AFEA /* LikeRouter.swift */,
+				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -581,11 +581,11 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				09602BD22BDE565A00A6AFEA /* Like */,
-				09602BC92BDBD32100A6AFEA /* Comment */,
-				09602B562BD3AC0800A6AFEA /* Post */,
-				0952A6E52BD0094A00F71C76 /* Profile */,
 				0999EB532BCBC2C4004B6D1F /* User */,
+				09602B562BD3AC0800A6AFEA /* Post */,
+				09602BC92BDBD32100A6AFEA /* Comment */,
+				09602BD22BDE565A00A6AFEA /* Like */,
+				0952A6E52BD0094A00F71C76 /* Profile */,
 			);
 			path = Model;
 			sourceTree = "<group>";

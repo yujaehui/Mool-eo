@@ -116,4 +116,13 @@ class ProfileMyPostTableViewCell: BaseTableViewCell {
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
     }
+    
+    func configureCell(myPost: PostModel) {
+        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: myPost.files.first!)
+        postBoardLabel.text = myPost.productID
+        postTitleLabel.text = myPost.title
+        postContentLabel.text = myPost.content
+        likeCountLabel.text = "\(myPost.likes.count)"
+        commentCountLabel.text = "\(myPost.comments.count)"
+    }
 }

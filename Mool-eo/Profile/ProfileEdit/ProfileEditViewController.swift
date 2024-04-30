@@ -19,8 +19,8 @@ class ProfileEditViewController: BaseViewController {
     
     var nickname: String = ""
     var introduction: String = ""
-    var profileImage: String = ""
     var profileImageData: Data?
+    var profileImage: String = ""
     
     private lazy var selectedImageSubject = BehaviorSubject<Data?>(value: profileImageData)
     
@@ -35,36 +35,17 @@ class ProfileEditViewController: BaseViewController {
     override func configureView() {
         profileEditView.nicknameView.customTextField.text = nickname
         profileEditView.introductionView.customTextField.text = introduction
-        let url = URL(string: APIKey.baseURL.rawValue + profileImage)
-        let modifier = AnyModifier { request in
-            var urlRequest = request
-            urlRequest.headers = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-                                  HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
-            return urlRequest
-        }
-        profileEditView.profileImageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
+        URLImageSettingManager.shared.setImageWithUrl(profileEditView.profileImageView, urlString: profileImage)
     }
     
     override func bind() {
         let profileImageEditButtonTap = profileEditView.profileImageEditButton.rx.tap.asObservable()
-        let cancelButtonTap = profileEditView.cancelButton.rx.tap.asObservable()
         let completeButtonTap = profileEditView.completeButton.rx.tap.asObservable()
-        let beforeNickname = nickname
+        let cancelButtonTap = profileEditView.cancelButton.rx.tap.asObservable()
         let afterNickname = profileEditView.nicknameView.customTextField.rx.text.orEmpty.asObservable()
-        let changeNickname = profileEditView.nicknameView.customTextField.rx.controlEvent(.editingChanged).asObservable()
-        let beforeIntroduction = introduction
         let afterIntroduction = profileEditView.introductionView.customTextField.rx.text.orEmpty.asObservable()
-        let changeIntroduction = profileEditView.introductionView.customTextField.rx.controlEvent(.editingChanged).asObservable()
-        let beforeProfileImageData = profileImageData
         let afterProfileImageData = selectedImageSubject
-        
-        let input = ProfileEditViewModel.Input(profileImageEditButtonTap: profileImageEditButtonTap,
-                                               completeButtonTap: completeButtonTap,
-                                               cancelButtonTap: cancelButtonTap,
-                                               beforeNickname: beforeNickname, afterNickname: afterNickname, changeNickname: changeNickname,
-                                               beforeIntroduction: beforeIntroduction, afterIntroduction: afterIntroduction, changeIntroduction: changeIntroduction,
-                                               beforeProfileImageData: beforeProfileImageData, afterProfileImageData: afterProfileImageData)
-        
+        let input = ProfileEditViewModel.Input(profileImageEditButtonTap: profileImageEditButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, beforeNickname: nickname, afterNickname: afterNickname, beforeIntroduction: introduction, afterIntroduction: afterIntroduction, beforeProfileImageData: profileImageData, afterProfileImageData: afterProfileImageData)
         
         let output = viewModel.transform(input: input)
         
@@ -87,7 +68,7 @@ class ProfileEditViewController: BaseViewController {
         
         output.completeButtonValidation.drive(profileEditView.completeButton.rx.isEnabled).disposed(by: disposeBag)
         
-        output.profileEditSuccessTrigger.bind(with: self) { owner, _ in
+        output.profileEditSuccessTrigger.drive(with: self) { owner, _ in
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             let sceneDelegate = windowScene?.delegate as? SceneDelegate
             let vc = ProfileViewController()
@@ -96,7 +77,7 @@ class ProfileEditViewController: BaseViewController {
             sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
         
-        output.cancelButtonTap.bind(with: self) { owner, _ in
+        output.cancelButtonTap.drive(with: self) { owner, _ in
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
     }

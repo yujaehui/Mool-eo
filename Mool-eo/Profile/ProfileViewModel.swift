@@ -13,27 +13,29 @@ class ProfileViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let viewDidLoadTrigger: Observable<Void>
+        let viewDidLoad: Observable<Void>
     }
     
     struct Output {
-        let profile: PublishSubject<ProfileModel>
+        let result: PublishSubject<(ProfileModel, PostListModel)>
+        
     }
     
     func transform(input: Input) -> Output {
-        let profile = PublishSubject<ProfileModel>()
+        let result = PublishSubject<(ProfileModel, PostListModel)>()
         
-        input.viewDidLoadTrigger
+        input.viewDidLoad
             .flatMap { _ in
-                NetworkManager.profileCheck()
+                Observable.zip(NetworkManager.profileCheck().asObservable(), NetworkManager.postCheckUser().asObservable())
             }
-            .debug("프로필 조회")
+            .debug("프로필 및 유저 포스트 조회")
             .subscribe(with: self) { owner, value in
-                profile.onNext(value)
+                result.onNext(value)
             } onError: { owner, error in
                 print("오류 발생")
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)        
         
-        return Output(profile: profile)
+        return Output(result: result)
     }
 }

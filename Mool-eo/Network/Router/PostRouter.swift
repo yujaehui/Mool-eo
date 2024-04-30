@@ -15,7 +15,7 @@ enum PostRouter {
     case postDelete(postId: String)
     case postCheck(productId: String)
     case postCheckSpecific(postId: String)
-    case postCheckUser(userId: String, productId: String)
+    case postCheckUser(userId: String)
 }
 
 extension PostRouter: TargetType {
@@ -88,7 +88,7 @@ extension PostRouter: TargetType {
         case .postEdit(query: _, postId: let postId): "/\(postId)"
         case .postDelete(postId: let postId): "/\(postId)"
         case .postCheckSpecific(postId: let postId): "/\(postId)"
-        case .postCheckUser(userId: let userId, productId: _): "/\(userId)"
+        case .postCheckUser(userId: let userId): "/\(userId)"
         default: nil
         }
     }
@@ -99,10 +99,9 @@ extension PostRouter: TargetType {
             [URLQueryItem(name: "next", value: ""),
              URLQueryItem(name: "limit", value: "10"),
              URLQueryItem(name: "product_id", value: productId)]
-        case .postCheckUser(userId: _, productId: let productId):
+        case .postCheckUser:
             [URLQueryItem(name: "next", value: ""),
-             URLQueryItem(name: "limit", value: "10"),
-             URLQueryItem(name: "product_id", value: productId)]
+             URLQueryItem(name: "limit", value: "10")]
         default: nil
         }
     }
