@@ -66,7 +66,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         nickNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.trailing.equalTo(contentView).inset(20)
         }
         
         postTitleLabel.snp.makeConstraints { make in
@@ -88,7 +88,6 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         
         likeCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(likeIconImageView.snp.centerY)
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(likeIconImageView.snp.trailing).offset(5)
         }
         
@@ -101,7 +100,6 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
     }

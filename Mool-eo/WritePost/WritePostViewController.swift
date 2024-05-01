@@ -12,12 +12,14 @@ import RxCocoa
 import PhotosUI
 
 final class WritePostViewController: BaseViewController {
-
+    
     let viewModel = WritePostViewModel()
     let writePostView = WritePostView()
     
     var postBoard: PostBoardType = .free
     
+    private var selectedImage: [UIImage] = []
+    private var selectedImageData: [Data] = []
     private var selectedImageSubject = PublishSubject<[UIImage]>()
     private var selectedImageDataSubject = PublishSubject<[Data]>()
     private var imageSelected = false
@@ -33,6 +35,22 @@ final class WritePostViewController: BaseViewController {
     override func bind() {
         selectedImageSubject.bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
             cell.selectImageView.image = element
+            cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
+                // 이미지 삭제
+                guard row < owner.selectedImage.count else { return }
+                owner.selectedImage.remove(at: row)
+                owner.selectedImageSubject.onNext(owner.selectedImage)
+                
+                // 이미지 데이터 삭제
+                guard row < owner.selectedImageData.count else { return }
+                owner.selectedImageData.remove(at: row)
+                owner.selectedImageDataSubject.onNext(owner.selectedImageData)
+                
+                // 이미지 선택 여부 확인
+                if owner.selectedImage.isEmpty {
+                    owner.imageSelected = false
+                }
+            }.disposed(by: cell.disposeBag)
         }.disposed(by: disposeBag)
         
         let textViewBegin = writePostView.writePostBoxView.contentTextView.rx.didBeginEditing.asObservable()
@@ -87,8 +105,10 @@ final class WritePostViewController: BaseViewController {
 
 extension WritePostViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        var selectedImage: [UIImage] = []
-        var selectedImagesData: [Data] = []
+        // 기존 선택 초기화
+        self.selectedImage.removeAll()
+        self.selectedImageData.removeAll()
+        self.imageSelected = false
         
         for result in results {
             let itemProvider = result.itemProvider
@@ -96,13 +116,13 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
                 itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                     if let image = image as? UIImage {
                         DispatchQueue.main.async {
-                            selectedImage.append(image)
-                            self.selectedImageSubject.onNext(selectedImage)
+                            self.selectedImage.append(image)
+                            self.selectedImageSubject.onNext(self.selectedImage)
                             self.imageSelected = true
                         }
                         if let imageData = image.pngData() {
-                            selectedImagesData.append(imageData)
-                            self.selectedImageDataSubject.onNext(selectedImagesData)
+                            self.selectedImageData.append(imageData)
+                            self.selectedImageDataSubject.onNext(self.selectedImageData)
                         }
                     }
                 }
