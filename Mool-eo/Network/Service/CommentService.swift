@@ -11,6 +11,7 @@ import Moya
 
 enum CommentService {
     case uploadComment(query: CommentQuery, postId: String)
+    case commentDelete(postId: String, commentId: String)
 }
 
 extension CommentService: Moya.TargetType {
@@ -21,15 +22,15 @@ extension CommentService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .uploadComment(_, let postId):
-            return "/posts/\(postId)/comments"
+        case .uploadComment(_, let postId): "/posts/\(postId)/comments"
+        case .commentDelete(let postId, let commentId): "posts/\(postId)/comments/\(commentId)"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .uploadComment:
-            return .post
+        case .uploadComment: .post
+        case .commentDelete: .delete
         }
     }
     
@@ -37,12 +38,20 @@ extension CommentService: Moya.TargetType {
         switch self {
         case .uploadComment(let query, _):
             return .requestJSONEncodable(query)
+        case .commentDelete:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
-                HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken") ?? ""]
+        switch self {
+        case .uploadComment:
+            [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
+             HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken") ?? ""]
+        case .commentDelete:
+            [HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken") ?? ""]
+        }
     }
 }

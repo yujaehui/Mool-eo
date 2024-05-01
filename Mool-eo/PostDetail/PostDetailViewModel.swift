@@ -19,12 +19,13 @@ class PostDetailViewModel: ViewModelType {
         let textViewEnd: Observable<Void>
         let postId: Observable<String>
         let userId: String
+        let reload: BehaviorSubject<Void>
         let comment: Observable<String>
         let commentUploadButtonTap: Observable<Void>
-        let reload: BehaviorSubject<Void>
         let likeStatus: PublishSubject<Bool>
         let scrapStauts: PublishSubject<Bool>
         let postDeleteButtonTap: Observable<Void>
+        let itemDeletedWithCommentId: Observable<(IndexPath, String)>
     }
     
     struct Output {
@@ -38,6 +39,7 @@ class PostDetailViewModel: ViewModelType {
         let likeUploadSuccessTrigger: Driver<Void>
         let scrapUploadSuccessTrigger: Driver<Void>
         let postDeleteSuccessTrigger: Driver<Void>
+        let commentDeleteSuccessTrigger: Driver<IndexPath>
     }
     
     func transform(input: Input) -> Output {
@@ -50,6 +52,7 @@ class PostDetailViewModel: ViewModelType {
         let likeUploadSuccessTrigger = PublishSubject<Void>()
         let scrapUploadSuccessTrigger = PublishSubject<Void>()
         let postDeleteSuccessTrigger = PublishSubject<Void>()
+        let commentDeleteSuccessTrigger = PublishSubject<IndexPath>()
         
         // 텍스트뷰 입력이 시작되는 시점
         input.textViewBegin
@@ -160,6 +163,23 @@ class PostDetailViewModel: ViewModelType {
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
+        //MARK: - 댓글 삭제 네트워크 통신 진행
+        input.itemDeletedWithCommentId
+            .flatMap { indexPath, commentId in
+                input.postId
+                    .take(1)
+                    .flatMap { postId in
+                        NetworkManager.shared.commentDelete(postId: postId, commentId: commentId)
+                            .map { _ in (indexPath, ()) } // 성공적으로 삭제되면 IndexPath와 Void를 방출합니다
+                    }
+            }
+            .debug("댓글 삭제")
+            .subscribe(with: self) { owner, value in
+                commentDeleteSuccessTrigger.onNext(value.0)
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
+        
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
                       text: text.asDriver(),
@@ -169,6 +189,7 @@ class PostDetailViewModel: ViewModelType {
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       scrapUploadSuccessTrigger: scrapUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      postDeleteSuccessTrigger: postDeleteSuccessTrigger.asDriver(onErrorJustReturn: ()))
+                      postDeleteSuccessTrigger: postDeleteSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      commentDeleteSuccessTrigger: commentDeleteSuccessTrigger.asDriver(onErrorJustReturn: IndexPath()))
     }
 }

@@ -167,6 +167,7 @@ class PostDetailTableViewCell: BaseTableViewCell {
     func configureCell(post: PostModel) {
         Observable.just(post.files).bind(to: postImageCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.postImageView, urlString: element)
+            cell.postImageCountLabel.text = "\(row+1)/\(post.files.count)"
         }.disposed(by: disposeBag)
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
         postTitleLabel.text = post.title

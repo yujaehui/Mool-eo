@@ -80,6 +80,10 @@ struct NetworkManager {
         return commentProvider.rx.request(.uploadComment(query: query, postId: postId)).map(CommentModel.self)
     }
     
+    func commentDelete(postId: String, commentId: String) -> Single<Response> {
+        return commentProvider.rx.request(.commentDelete(postId: postId, commentId: commentId))
+    }
+    
     //MARK: - Profile
     private let profileProvider = MoyaProvider<ProfileService>(plugins: [NetworkLoggerPlugin()])
     

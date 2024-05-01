@@ -41,14 +41,11 @@ class PostDetailViewController: BaseViewController {
     var postId: String = ""
     var userId: String = ""
     
-    var reload = BehaviorSubject(value: ()) // 댓글, 좋아요가 달릴 때마다 포스트 조회를 새롭게 해야 하기 때문에 관찰자 필요
+    var reload = BehaviorSubject(value: ())
     var likeStatus = PublishSubject<Bool>()
     var scrapStatus = PublishSubject<Bool>()
     
-    var postBoard: PostBoardType = .free
-    var postTitle: String = ""
-    var postContent: String = ""
-    var postImageData: [String] = []
+    private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
     
     override func loadView() {
         self.view = postDetailView
@@ -63,22 +60,26 @@ class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
-        let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
-        let textViewBegin = postDetailView.writeCommentView.commentTextView.rx.didBeginEditing.asObservable() // 텍스트뷰 입력이 시작하는 시점
-        let textViewEnd = postDetailView.writeCommentView.commentTextView.rx.didEndEditing.asObservable() // 텍스트뷰 입력이 끝나는 시점
-        let postId = Observable.just(postId)
-        let comment = postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable()
-        let commentUploadButtonTap = postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable()
-        let postDeleteButtonTap = postDetailView.postDeleteButton.rx.tap.asObservable()
-        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide,
-                                              textViewBegin: textViewBegin, textViewEnd: textViewEnd,
-                                              postId: postId, userId: userId,
-                                              comment: comment,
-                                              commentUploadButtonTap: commentUploadButtonTap,
-                                              reload: reload,
-                                              likeStatus: likeStatus, scrapStauts: scrapStatus,
-                                              postDeleteButtonTap: postDeleteButtonTap)
+        sections.bind(to: postDetailView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        
+        let input = PostDetailViewModel.Input(
+            keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
+            keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
+            textViewBegin: postDetailView.writeCommentView.commentTextView.rx.didBeginEditing.asObservable(),
+            textViewEnd: postDetailView.writeCommentView.commentTextView.rx.didEndEditing.asObservable(),
+            postId: Observable.just(postId),
+            userId: userId,
+            reload: reload,
+            comment: postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable(),
+            commentUploadButtonTap: postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable(),
+            likeStatus: likeStatus,
+            scrapStauts: scrapStatus,
+            postDeleteButtonTap: postDetailView.postDeleteButton.rx.tap.asObservable(),
+            itemDeletedWithCommentId: postDetailView.tableView.rx.itemDeleted.flatMap { [weak self] indexPath -> Observable<(IndexPath, String)> in
+                guard let sections = try? self?.sections.value(),
+                      case let .comment(comment) = sections[indexPath.section].items[indexPath.row] else { return Observable.empty() }
+                return Observable.just((indexPath, comment.commentID))
+            })
         
         let output = viewModel.transform(input: input)
         
@@ -100,16 +101,9 @@ class PostDetailViewController: BaseViewController {
         
         // 특정 게시글 조회가 성공할 경우
         output.postDetail.bind(with: self) { owner, value in
-            owner.postTitle = value.title
-            owner.postContent = value.content
-            owner.postImageData = value.files
-            let sections: [PostDetailSectionModel] = [PostDetailSectionModel(items: [.post(value)])]
-            + value.comments.map { comment in
+            owner.sections.onNext([PostDetailSectionModel(items: [.post(value)])] + value.comments.map { comment in
                 PostDetailSectionModel(items: [.comment(comment)])
-            }
-            Observable.just(sections)
-                .bind(to: owner.postDetailView.tableView.rx.items(dataSource: owner.configureDataSource()))
-                .disposed(by: owner.disposeBag)
+            })
         }.disposed(by: disposeBag)
         
         // 자신의 게시물인지 확인
@@ -122,13 +116,13 @@ class PostDetailViewController: BaseViewController {
         
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.postDetailView.tableView.dataSource = nil // 기존 테이블뷰 데이터소스 초기화
+            owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         // 좋아요 업로드가 성공할 경우
         output.likeUploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.postDetailView.tableView.dataSource = nil // 기존 테이블뷰 데이터소스 초기화
+            owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
@@ -140,6 +134,17 @@ class PostDetailViewController: BaseViewController {
         // 자신의 게시물 -> 삭제
         output.postDeleteSuccessTrigger.drive(with: self) { owner, _ in
             owner.navigationController?.popViewController(animated: true)
+        }.disposed(by: disposeBag)
+        
+        // 댓글 삭제가 성공할 경우
+        output.commentDeleteSuccessTrigger.drive(with: self) { owner, indexPath in
+            guard var sections = try? owner.sections.value() else { return }
+            var items = sections[indexPath.section].items
+            items.remove(at: indexPath.row)
+            sections[indexPath.section] = PostDetailSectionModel(original: sections[indexPath.section], items: items)
+            owner.sections.onNext(sections)
+            owner.postDetailView.tableView.reloadData()
+            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
     }
     
@@ -173,7 +178,7 @@ class PostDetailViewController: BaseViewController {
     }
     
     private func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostDetailSectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<PostDetailSectionModel> { dataSource, tableView, indexPath, item in
+        let dataSource = RxTableViewSectionedReloadDataSource<PostDetailSectionModel> (configureCell : { dataSource, tableView, indexPath, item in
             switch item {
             case .post(let post): // 게시글
                 if post.files.isEmpty { // 이미지가 없는 게시글일 경우
@@ -210,7 +215,11 @@ class PostDetailViewController: BaseViewController {
                 cell.configureCell(comment: comment)
                 return cell
             }
-        }
+        },canEditRowAtIndexPath: { dataSource, indexPath in
+            guard case .comment(let comment) = dataSource[indexPath],
+                  comment.creator.userID == UserDefaults.standard.string(forKey: "userId") else { return false }
+            return true
+        })
         return dataSource
     }
 }
