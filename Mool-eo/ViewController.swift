@@ -20,10 +20,13 @@ class ViewController: UITabBarController {
         let postBoardVC = UINavigationController(rootViewController: PostBoardViewController())
         postBoardVC.tabBarItem = UITabBarItem(title: "게시판", image: UIImage(systemName: "list.clipboard"), selectedImage: UIImage(systemName: "list.clipboard"))
         
+        let scrapPostListVC = UINavigationController(rootViewController: ScrapPostListViewController())
+        scrapPostListVC.tabBarItem = UITabBarItem(title: "스크랩", image: UIImage(systemName: "bookmark"), selectedImage: UIImage(systemName: "bookmark"))
+        
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person"))
         
-        self.viewControllers = [postBoardVC, profileVC]
+        self.viewControllers = [postBoardVC, scrapPostListVC, profileVC]
     }
 }
 

@@ -143,7 +143,7 @@ class PostDetailViewController: BaseViewController {
                     }.disposed(by: cell.disposeBag)
                     cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaults.standard.string(forKey: "userId")!
-                        let status = !post.likes.contains(userId)
+                        let status = !post.scraps.contains(userId)
                         owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell
@@ -157,7 +157,7 @@ class PostDetailViewController: BaseViewController {
                     }.disposed(by: cell.disposeBag)
                     cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaults.standard.string(forKey: "userId")!
-                        let status = !post.likes.contains(userId)
+                        let status = !post.scraps.contains(userId)
                         owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell

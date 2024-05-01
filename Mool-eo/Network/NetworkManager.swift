@@ -100,4 +100,8 @@ struct NetworkManager {
     func scrapUpload(query: ScrapQuery, postId: String) -> Single<ScrapModel> {
         return scrapProvider.rx.request(.scrapUpload(query: query, postId: postId)).map(ScrapModel.self)
     }
+    
+    func scrapPostCheck() -> Single<PostListModel> {
+        return scrapProvider.rx.request(.scrapPostCheck).map(PostListModel.self)
+    }
 }
