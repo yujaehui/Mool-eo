@@ -25,6 +25,7 @@
 		09279A632BE2171600E4A65D /* ScrapPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A622BE2171600E4A65D /* ScrapPostListView.swift */; };
 		09279A652BE2171F00E4A65D /* ScrapPostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A642BE2171F00E4A65D /* ScrapPostListViewController.swift */; };
 		09279A672BE2172700E4A65D /* ScrapPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A662BE2172700E4A65D /* ScrapPostListViewModel.swift */; };
+		09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
@@ -140,6 +141,7 @@
 		09279A622BE2171600E4A65D /* ScrapPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListView.swift; sourceTree = "<group>"; };
 		09279A642BE2171F00E4A65D /* ScrapPostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListViewController.swift; sourceTree = "<group>"; };
 		09279A662BE2172700E4A65D /* ScrapPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListViewModel.swift; sourceTree = "<group>"; };
+		09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 			children = (
 				09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */,
 				09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */,
+				09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */,
 				09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */,
 				09602B6F2BD3F22D00A6AFEA /* CommentTableViewCell.swift */,
 				09602B662BD3E27700A6AFEA /* PostDetailView.swift */,
@@ -798,6 +801,7 @@
 				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
+				09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */,
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
 				09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */,
 				09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */,

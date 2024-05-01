@@ -31,7 +31,12 @@ class PostDetailTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageView = CustomImageView(frame: .zero)
+    let postImageCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
+        collectionView.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
+        collectionView.isPagingEnabled = true
+        return collectionView
+    }()
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -74,7 +79,7 @@ class PostDetailTableViewCell: BaseTableViewCell {
         contentView.addSubview(nickNameLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
-        contentView.addSubview(postImageView)
+        contentView.addSubview(postImageCollectionView)
         contentView.addSubview(likeIconImageView)
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
@@ -106,33 +111,33 @@ class PostDetailTableViewCell: BaseTableViewCell {
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        postImageView.snp.makeConstraints { make in
+        postImageCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postContentLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(postImageView.snp.width)
+            make.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(postImageCollectionView.snp.width)
         }
         
         likeIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
             make.size.equalTo(20)
         }
         
         likeCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(likeIconImageView.snp.centerY)
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(likeIconImageView.snp.trailing).offset(5)
         }
         
         commentIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
             make.size.equalTo(20)
         }
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
         
@@ -149,8 +154,20 @@ class PostDetailTableViewCell: BaseTableViewCell {
         }
     }
     
+    private static func configureCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.scrollDirection = .horizontal
+        return layout
+    }
+    
     func configureCell(post: PostModel) {
-        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: post.files.first!)
+        Observable.just(post.files).bind(to: postImageCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
+            URLImageSettingManager.shared.setImageWithUrl(cell.postImageView, urlString: element)
+        }.disposed(by: disposeBag)
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
         postTitleLabel.text = post.title
         postContentLabel.text = post.content
