@@ -8,189 +8,91 @@
 import Foundation
 import Alamofire
 import RxSwift
+import Moya
+import RxMoya
 
 struct NetworkManager {
-    static func request<T: Decodable>(route: URLRequestConvertible, interceptor: RequestInterceptor?, onSuccess: @escaping (T) -> Void) -> Single<T> {
-        return Single<T>.create { single in
-            AF.request(route, interceptor: interceptor)
-                .responseDecodable(of: T.self) { response in
-                    switch response.result {
-                    case .success(let success):
-                        onSuccess(success)
-                        single(.success(success))
-                    case .failure(let failure):
-                        print(response.response?.statusCode)
-                        single(.failure(failure))
-                    }
-                }
-            return Disposables.create()
-        }
-    }
+    static let shared = NetworkManager()
+    private init() {}
     
     //MARK: - User
-    static func join(query: JoinQuery) -> Single<JoinModel> {
-        do {
-            let urlRequest = try UserRouter.join(query: query).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    private let userProvider = MoyaProvider<UserService>(plugins: [NetworkLoggerPlugin()])
+    
+    func join(query: JoinQuery) -> Single<JoinModel> {
+        return userProvider.rx.request(.join(query: query)).map(JoinModel.self)
     }
     
-    static func emailCheck(query: EmailQuery) -> Single<EmailModel> {
-        do {
-            let urlRequest = try UserRouter.email(query: query).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func emailCheck(query: EmailQuery) -> Single<EmailModel> {
+        return userProvider.rx.request(.email(query: query)).map(EmailModel.self)
     }
     
-    static func login(query: LoginQuery) -> Single<LoginModel> {
-        do {
-            let urlRequest = try UserRouter.login(query: query).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { value in
-                UserDefaults.standard.set(value.user_id, forKey: "userId")
-                UserDefaults.standard.set(value.accessToken, forKey: "accessToken")
-                UserDefaults.standard.set(value.refreshToken, forKey: "refreshToken")
-            }
-        } catch {
-            return Single.error(error)
-        }
+    func login(query: LoginQuery) -> Single<LoginModel> {
+        return userProvider.rx.request(.login(query: query))
+            .map(LoginModel.self)
+            .do(onSuccess: { response in
+                UserDefaults.standard.set(response.user_id, forKey: "userId")
+                UserDefaults.standard.set(response.accessToken, forKey: "accessToken")
+                UserDefaults.standard.set(response.refreshToken, forKey: "refreshToken")
+            })
     }
     
-    static func withdraw() -> Single<WithdrawModel> {
-        do {
-            let urlRequest = try UserRouter.withdraw.asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func withdraw() -> Single<WithdrawModel> {
+        return userProvider.rx.request(.withdraw).map(WithdrawModel.self)
     }
     
-    static func refresh() -> Single<TokenModel> {
-        do {
-            let urlRequest = try UserRouter.refresh.asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
-    }
-    
-    //MARK: - Profile
-    static func profileCheck() -> Single<ProfileModel> {
-        do {
-            let urlRequest = try ProfileRouter.profileCheck.asURLRequest()
-            return request(route: urlRequest, interceptor: AuthInterceptor()) { _ in }
-        } catch {
-            return Single.error(error)
-        }
-    }
-    
-    static func profileEdit(query: ProfileEditQuery) -> Single<ProfileModel> {
-        return Single<ProfileModel>.create { single in
-            let url = URL(string: APIKey.baseURL.rawValue + "/users/me/profile")!
-            let headers: HTTPHeaders = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-                                        HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
-                                        HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
-            let parameters: [String : Any] = ["nick": query.nick,
-                                              "birthDay": query.birthDay]
-            AF.upload(multipartFormData: { multipartFormData in
-                for (key, value) in parameters {
-                    multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
-                }
-                multipartFormData.append(query.profile, withName: "profile", fileName: "image.png", mimeType: "image/png")
-            }, to: url, method: .put, headers: headers)
-            .responseDecodable(of: ProfileModel.self) { response in
-                switch response.result {
-                case .success(let success):
-                    single(.success(success))
-                case .failure(let failure):
-                    single(.failure(failure))
-                }
-            }
-            return Disposables.create()
-        }
+    func refresh() -> Single<TokenModel> {
+        return userProvider.rx.request(.refresh).map(TokenModel.self)
     }
     
     // MARK: - Post
-    static func imageUpload(query: FilesQuery) -> Single<FilesModel> {
-        return Single<FilesModel>.create { single in
-            let url = URL(string: APIKey.baseURL.rawValue + "posts/files")!
-            let headers: HTTPHeaders = [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-                                        HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
-                                        HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
-            AF.upload(multipartFormData: { multipartFormData in
-                for (index, fileData) in query.files.enumerated() {
-                    multipartFormData.append(fileData, withName: "files", fileName: "image\(index).png", mimeType: "image/png")
-                }
-            }, to: url, headers: headers)
-            .responseDecodable(of: FilesModel.self) { response in
-                switch response.result {
-                case .success(let success):
-                    single(.success(success))
-                case .failure(let failure):
-                    single(.failure(failure))
-                }
-            }
-            return Disposables.create()
-        }
+    private let postProvider = MoyaProvider<PostService>(plugins: [NetworkLoggerPlugin()])
+    
+    func imageUpload(query: FilesQuery) -> Single<FilesModel> {
+        return postProvider.rx.request(.imageUpload(query: query)).map(FilesModel.self)
     }
     
-    static func postUpload(query: PostQuery) -> Single<PostModel> {
-        do {
-            let urlRequest = try PostRouter.postUpload(query: query).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func postUpload(query: PostQuery) -> Single<PostModel> {
+        return postProvider.rx.request(.postUpload(query: query)).map(PostModel.self)
     }
     
-    static func postCheck(productId: String) -> Single<PostListModel> {
-        do {
-            let urlRequest = try PostRouter.postCheck(productId: productId).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func postCheck(productId: String) -> Single<PostListModel> {
+        return postProvider.rx.request(.postCheck(productId: productId)).map(PostListModel.self)
     }
     
-    static func postCheckSpecific(postId: String) -> Single<PostModel> {
-        do {
-            let urlRequest = try PostRouter.postCheckSpecific(postId: postId).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func postCheckSpecific(postId: String) -> Single<PostModel> {
+        return postProvider.rx.request(.postCheckSpecific(postId: postId)).map(PostModel.self)
     }
     
-    static func postCheckUser() -> Single<PostListModel> {
-        do {
-            let userId = UserDefaults.standard.string(forKey: "userId")!
-            let urlRequest = try PostRouter.postCheckUser(userId: userId).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    func postCheckUser() -> Single<PostListModel> {
+        let userId = UserDefaults.standard.string(forKey: "userId")!
+        return postProvider.rx.request(.postCheckUser(userId: userId)).map(PostListModel.self)
     }
     
     // MARK: - Comment
-    static func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
-        do {
-            let urlRequest = try CommentRouter.commentUpload(query: query, postId: postId).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+
+    private let commentProvider = MoyaProvider<CommentService>(plugins: [NetworkLoggerPlugin()])
+    
+    func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
+        return commentProvider.rx.request(.uploadComment(query: query, postId: postId)).map(CommentModel.self)
+    }
+    
+    //MARK: - Profile
+    private let profileProvider = MoyaProvider<ProfileService>(plugins: [NetworkLoggerPlugin()])
+    
+    func profileCheck() -> Single<ProfileModel> {
+        return profileProvider.rx.request(.profileCheck).map(ProfileModel.self)
+    }
+    
+    func profileEdit(query: ProfileEditQuery) -> Single<ProfileModel> {
+        return profileProvider.rx.request(.profileEdit(query: query)).map(ProfileModel.self)
+        
     }
     
     //MARK: - Like
-    static func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
-        do {
-            let urlRequest = try LikeRouter.likeUpload(query: query, postId: postId).asURLRequest()
-            return request(route: urlRequest, interceptor: nil) { _ in }
-        } catch {
-            return Single.error(error)
-        }
+    
+    private let likeProvider = MoyaProvider<LikeService>(plugins: [NetworkLoggerPlugin()])
+    
+    func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
+        return likeProvider.rx.request(.likeUpload(query: query, postId: postId)).map(LikeModel.self)
     }
 }

@@ -30,7 +30,7 @@ class AuthInterceptor: RequestInterceptor {
             return
         }
         
-        NetworkManager.refresh()
+        NetworkManager.shared.refresh()
             .debug("Refresh")
             .subscribe { event in
                 switch event {

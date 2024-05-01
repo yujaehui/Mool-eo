@@ -55,7 +55,7 @@ class JoinThirdViewModel: ViewModelType {
         input.joinButtonTap
             .withLatestFrom(joinQuery)
             .flatMap { query in
-                NetworkManager.join(query: query)
+                NetworkManager.shared.join(query: query)
             }
             .debug("회원가입")
             .subscribe(with: self) { owner, value in

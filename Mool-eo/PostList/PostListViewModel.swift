@@ -31,7 +31,7 @@ class PostListViewModel: ViewModelType {
         
         // 게시글 조회 네트워크 통신 진행
         input.postBoardType.flatMap { value in
-            NetworkManager.postCheck(productId: value.rawValue)
+            NetworkManager.shared.postCheck(productId: value.rawValue)
         }
         .debug("게시글 조회")
         .subscribe(with: self) { owner, value in

@@ -50,7 +50,7 @@ class LoginViewModel: ViewModelType {
         input.loginButtonTap
             .withLatestFrom(loginQuery)
             .flatMap { loginQuery in
-                return NetworkManager.login(query: loginQuery)
+                NetworkManager.shared.login(query: loginQuery)
             }
             .debug("로그인")
             .subscribe(with: self) { owner, value in

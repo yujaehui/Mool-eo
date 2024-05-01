@@ -60,6 +60,7 @@ class LoginViewController: BaseViewController {
         
         // 회원가입 버튼을 클릭했을 경우, 회원가입 화면으로 이동
         output.joinButtonTap.drive(with: self) { owner, _ in
+            print("...")
             owner.navigationController?.pushViewController(JoinViewController(), animated: true)
         }.disposed(by: disposeBag)
     }

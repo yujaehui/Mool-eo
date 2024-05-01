@@ -7,9 +7,14 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 // 이미지가 없는 게시글일 경우 사용할 Cell
 class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
+    
+    var disposeBag = DisposeBag()
+    
     let profileImageView = CustomImageView(frame: .zero)
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
@@ -56,6 +61,11 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         button.configuration = .capsule("스크랩")
         return button
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)

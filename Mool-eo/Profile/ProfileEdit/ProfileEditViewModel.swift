@@ -83,7 +83,7 @@ class ProfileEditViewModel: ViewModelType {
         input.completeButtonTap
             .withLatestFrom(profileEditObservable)
             .flatMap { query in
-                NetworkManager.profileEdit(query: query)
+                NetworkManager.shared.profileEdit(query: query)
             }
             .debug("프로필 수정")
             .subscribe(with: self) { owenr, value in

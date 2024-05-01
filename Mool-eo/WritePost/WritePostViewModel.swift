@@ -70,16 +70,16 @@ class WritePostViewModel: ViewModelType {
         input.completeButtonTap
             .withLatestFrom(filesQuery)
             .flatMap { filesQuery in
-                return NetworkManager.imageUpload(query: filesQuery)
+                NetworkManager.shared.imageUpload(query: filesQuery)
             }
             .withLatestFrom(postQuery) { filesModel, postObservable in
-                return (filesModel, postObservable)
+                (filesModel, postObservable)
             }
             .map { filesModel, postObservable in
-                return PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
             }
             .flatMap { postQuery in
-                return NetworkManager.postUpload(query: postQuery)
+                NetworkManager.shared.postUpload(query: postQuery)
             }
             .debug("게시글 업로드")
             .subscribe(with: self) { owner, _ in

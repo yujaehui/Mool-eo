@@ -49,7 +49,7 @@ class JoinViewModel: ViewModelType {
                 return EmailQuery(email: id)
             }
             .flatMap { query in
-                NetworkManager.emailCheck(query: query)
+                NetworkManager.shared.emailCheck(query: query)
             }
             .debug("아이디 중복 확인")
             .bind(with: self) { owner, value in

@@ -10,6 +10,15 @@
 		09279A302BDF98C900E4A65D /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* CustomImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
 		09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */; };
+		09279A452BE1201800E4A65D /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 09279A442BE1201800E4A65D /* CombineMoya */; };
+		09279A472BE1201800E4A65D /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 09279A462BE1201800E4A65D /* Moya */; };
+		09279A492BE1201800E4A65D /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 09279A482BE1201800E4A65D /* ReactiveMoya */; };
+		09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 09279A4A2BE1201800E4A65D /* RxMoya */; };
+		09279A502BE1426E00E4A65D /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A4F2BE1426E00E4A65D /* CommentService.swift */; };
+		09279A522BE1447100E4A65D /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A512BE1447100E4A65D /* ProfileService.swift */; };
+		09279A542BE1472800E4A65D /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A532BE1472800E4A65D /* UserService.swift */; };
+		09279A562BE14B2800E4A65D /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A552BE14B2800E4A65D /* LikeService.swift */; };
+		09279A582BE14E9300E4A65D /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A572BE14E9300E4A65D /* PostService.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
@@ -30,7 +39,6 @@
 		0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */; };
 		0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */; };
 		0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E62BD0095500F71C76 /* ProfileModel.swift */; };
-		0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */; };
 		0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */; };
 		0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6F92BD0FD5F00F71C76 /* ProfileEditQuery.swift */; };
 		0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6FB2BD0FE9000F71C76 /* ProfileEditView.swift */; };
@@ -59,7 +67,6 @@
 		09602B482BD3A5D300A6AFEA /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B472BD3A5D300A6AFEA /* PostListView.swift */; };
 		09602B4A2BD3A5DB00A6AFEA /* PostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B492BD3A5DB00A6AFEA /* PostListViewController.swift */; };
 		09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B4B2BD3A5E500A6AFEA /* PostListViewModel.swift */; };
-		09602B502BD3AB8200A6AFEA /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */; };
 		09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B522BD3ABBA00A6AFEA /* FilesQuery.swift */; };
 		09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B542BD3ABC200A6AFEA /* PostQuery.swift */; };
 		09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B572BD3AC1C00A6AFEA /* FilesModel.swift */; };
@@ -77,10 +84,8 @@
 		09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */; };
 		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
-		09602BCD2BDCE01F00A6AFEA /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */; };
 		09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikeQuery.swift */; };
 		09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikeModel.swift */; };
-		09602BD62BDE568900A6AFEA /* LikeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD52BDE568900A6AFEA /* LikeRouter.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -98,8 +103,6 @@
 		0999EB282BCBAE2A004B6D1F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0999EB272BCBAE2A004B6D1F /* .gitignore */; };
 		0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB2A2BCBAE56004B6D1F /* APIKey.swift */; };
 		0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */; };
-		0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB2E2BCBAED3004B6D1F /* TargetType.swift */; };
-		0999EB332BCBAF18004B6D1F /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB322BCBAF18004B6D1F /* UserRouter.swift */; };
 		0999EB362BCBAF35004B6D1F /* LoginQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB352BCBAF35004B6D1F /* LoginQuery.swift */; };
 		0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB372BCBAF3E004B6D1F /* JoinQuery.swift */; };
 		0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB392BCBB004004B6D1F /* EmailQuery.swift */; };
@@ -120,6 +123,11 @@
 		09279A2F2BDF98C900E4A65D /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
 		09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoResizableTextView.swift; sourceTree = "<group>"; };
+		09279A4F2BE1426E00E4A65D /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
+		09279A512BE1447100E4A65D /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
+		09279A532BE1472800E4A65D /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		09279A552BE14B2800E4A65D /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
+		09279A572BE14E9300E4A65D /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -135,7 +143,6 @@
 		0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoTableViewCell.swift; sourceTree = "<group>"; };
 		0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostHeaderView.swift; sourceTree = "<group>"; };
 		0952A6E62BD0095500F71C76 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
-		0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptor.swift; sourceTree = "<group>"; };
 		0952A6F92BD0FD5F00F71C76 /* ProfileEditQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditQuery.swift; sourceTree = "<group>"; };
 		0952A6FB2BD0FE9000F71C76 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
@@ -163,7 +170,6 @@
 		09602B472BD3A5D300A6AFEA /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
 		09602B492BD3A5DB00A6AFEA /* PostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewController.swift; sourceTree = "<group>"; };
 		09602B4B2BD3A5E500A6AFEA /* PostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewModel.swift; sourceTree = "<group>"; };
-		09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		09602B522BD3ABBA00A6AFEA /* FilesQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesQuery.swift; sourceTree = "<group>"; };
 		09602B542BD3ABC200A6AFEA /* PostQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostQuery.swift; sourceTree = "<group>"; };
 		09602B572BD3AC1C00A6AFEA /* FilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesModel.swift; sourceTree = "<group>"; };
@@ -181,10 +187,8 @@
 		09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentView.swift; sourceTree = "<group>"; };
 		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
-		09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		09602BD02BDE562D00A6AFEA /* LikeQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeQuery.swift; sourceTree = "<group>"; };
 		09602BD32BDE565F00A6AFEA /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
-		09602BD52BDE568900A6AFEA /* LikeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRouter.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -202,8 +206,6 @@
 		0999EB272BCBAE2A004B6D1F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0999EB2A2BCBAE56004B6D1F /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
-		0999EB2E2BCBAED3004B6D1F /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
-		0999EB322BCBAF18004B6D1F /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		0999EB352BCBAF35004B6D1F /* LoginQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginQuery.swift; sourceTree = "<group>"; };
 		0999EB372BCBAF3E004B6D1F /* JoinQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinQuery.swift; sourceTree = "<group>"; };
 		0999EB392BCBB004004B6D1F /* EmailQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailQuery.swift; sourceTree = "<group>"; };
@@ -227,12 +229,16 @@
 			files = (
 				0952A6D82BCFDD9A00F71C76 /* Differentiator in Frameworks */,
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
+				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
+				09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */,
 				0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */,
 				094BEB772BC672B000342DC3 /* RxSwift in Frameworks */,
+				09279A472BE1201800E4A65D /* Moya in Frameworks */,
 				094BEB752BC672B000342DC3 /* RxCocoa in Frameworks */,
+				09279A492BE1201800E4A65D /* ReactiveMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +273,18 @@
 				09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */,
 			);
 			path = JoinThirdStep;
+			sourceTree = "<group>";
+		};
+		09279A4E2BE1425200E4A65D /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				09279A532BE1472800E4A65D /* UserService.swift */,
+				09279A572BE14E9300E4A65D /* PostService.swift */,
+				09279A4F2BE1426E00E4A65D /* CommentService.swift */,
+				09279A552BE14B2800E4A65D /* LikeService.swift */,
+				09279A512BE1447100E4A65D /* ProfileService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		093E60C32BCF765F00970FAC /* Profile */ = {
@@ -534,12 +552,11 @@
 			children = (
 				0999EB2A2BCBAE56004B6D1F /* APIKey.swift */,
 				0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */,
-				0999EB2E2BCBAED3004B6D1F /* TargetType.swift */,
 				0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */,
 				0999EB482BCBC207004B6D1F /* NetworkManager.swift */,
 				0999EB342BCBAF2D004B6D1F /* Query */,
 				0999EB4A2BCBC262004B6D1F /* Model */,
-				0999EB432BCBBB53004B6D1F /* Router */,
+				09279A4E2BE1425200E4A65D /* Service */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -564,18 +581,6 @@
 				0999EB352BCBAF35004B6D1F /* LoginQuery.swift */,
 			);
 			path = User;
-			sourceTree = "<group>";
-		};
-		0999EB432BCBBB53004B6D1F /* Router */ = {
-			isa = PBXGroup;
-			children = (
-				0999EB322BCBAF18004B6D1F /* UserRouter.swift */,
-				09602B4F2BD3AB8200A6AFEA /* PostRouter.swift */,
-				09602BCC2BDCE01F00A6AFEA /* CommentRouter.swift */,
-				09602BD52BDE568900A6AFEA /* LikeRouter.swift */,
-				0952A6E82BD0098F00F71C76 /* ProfileRouter.swift */,
-			);
-			path = Router;
 			sourceTree = "<group>";
 		};
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
@@ -627,6 +632,10 @@
 				095678AF2BC673F00030F0CD /* Toast */,
 				0952A6D72BCFDD9A00F71C76 /* Differentiator */,
 				0952A6D92BCFDD9A00F71C76 /* RxDataSources */,
+				09279A442BE1201800E4A65D /* CombineMoya */,
+				09279A462BE1201800E4A65D /* Moya */,
+				09279A482BE1201800E4A65D /* ReactiveMoya */,
+				09279A4A2BE1201800E4A65D /* RxMoya */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -663,6 +672,7 @@
 				094BEB7E2BC6732700342DC3 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				095678AE2BC673F00030F0CD /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -692,7 +702,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0952A6E92BD0098F00F71C76 /* ProfileRouter.swift in Sources */,
 				09602B4A2BD3A5DB00A6AFEA /* PostListViewController.swift in Sources */,
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
 				09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */,
@@ -704,6 +713,8 @@
 				0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */,
 				094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */,
 				0999EB492BCBC207004B6D1F /* NetworkManager.swift in Sources */,
+				09279A522BE1447100E4A65D /* ProfileService.swift in Sources */,
+				09279A562BE14B2800E4A65D /* LikeService.swift in Sources */,
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
@@ -711,13 +722,13 @@
 				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
 				09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */,
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
+				09279A502BE1426E00E4A65D /* CommentService.swift in Sources */,
 				0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */,
 				09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
-				09602BCD2BDCE01F00A6AFEA /* CommentRouter.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
@@ -728,17 +739,14 @@
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
-				0999EB2F2BCBAED3004B6D1F /* TargetType.swift in Sources */,
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
 				09602B482BD3A5D300A6AFEA /* PostListView.swift in Sources */,
 				0999EB362BCBAF35004B6D1F /* LoginQuery.swift in Sources */,
 				0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */,
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
-				09602B502BD3AB8200A6AFEA /* PostRouter.swift in Sources */,
 				093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */,
 				09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */,
-				0999EB332BCBAF18004B6D1F /* UserRouter.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
@@ -764,6 +772,7 @@
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
 				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
+				09279A582BE14E9300E4A65D /* PostService.swift in Sources */,
 				09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
@@ -774,6 +783,7 @@
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
 				0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */,
+				09279A542BE1472800E4A65D /* UserService.swift in Sources */,
 				09602B642BD3CD7800A6AFEA /* WritePostBoxView.swift in Sources */,
 				09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */,
 				0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */,
@@ -784,7 +794,6 @@
 				095678F12BC67F000030F0CD /* BaseCollectionViewCell.swift in Sources */,
 				0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
-				09602BD62BDE568900A6AFEA /* LikeRouter.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,
 			);
@@ -1009,6 +1018,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 		094BEB732BC672B000342DC3 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -1060,6 +1077,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		09279A442BE1201800E4A65D /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		09279A462BE1201800E4A65D /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		09279A482BE1201800E4A65D /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = ReactiveMoya;
+		};
+		09279A4A2BE1201800E4A65D /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
+		};
 		094BEB742BC672B000342DC3 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 094BEB732BC672B000342DC3 /* XCRemoteSwiftPackageReference "RxSwift" */;

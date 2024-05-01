@@ -26,7 +26,7 @@ class ProfileViewModel: ViewModelType {
         
         input.viewDidLoad
             .flatMap { _ in
-                Observable.zip(NetworkManager.profileCheck().asObservable(), NetworkManager.postCheckUser().asObservable())
+                Observable.zip(NetworkManager.shared.profileCheck().asObservable(), NetworkManager.shared.postCheckUser().asObservable())
             }
             .debug("프로필 및 유저 포스트 조회")
             .subscribe(with: self) { owner, value in

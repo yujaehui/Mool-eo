@@ -36,6 +36,7 @@ class PostDetailViewController: BaseViewController {
     var postId: String = ""
     
     var reload = BehaviorSubject(value: ()) // 댓글이 달릴 때마다 특정 포스트 조회를 해줘야 하기 때문에
+    var likeStatus = PublishSubject<Bool>()
     
     override func loadView() {
         self.view = postDetailView
@@ -53,7 +54,8 @@ class PostDetailViewController: BaseViewController {
         let postId = Observable.just(postId)
         let comment = postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable()
         let commentUploadButtonTap = postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable()
-        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, textViewBegin: textViewBegin, textViewEnd: textViewEnd, postId: postId, comment: comment, commentUploadButtonTap: commentUploadButtonTap, reload: reload)
+        let likeStatus = likeStatus
+        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, textViewBegin: textViewBegin, textViewEnd: textViewEnd, postId: postId, comment: comment, commentUploadButtonTap: commentUploadButtonTap, reload: reload, likeStatus: likeStatus)
         
         let output = viewModel.transform(input: input)
         output.postDetail.bind(with: self) { owner, value in
@@ -82,6 +84,12 @@ class PostDetailViewController: BaseViewController {
         
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
+            owner.postDetailView.tableView.dataSource = nil // 기존 테이블뷰 데이터소스 초기화
+            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+        }.disposed(by: disposeBag)
+        
+        // 좋아요 업로드가 성공할 경우
+        output.likeUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.postDetailView.tableView.dataSource = nil // 기존 테이블뷰 데이터소스 초기화
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
@@ -123,10 +131,20 @@ class PostDetailViewController: BaseViewController {
                 if post.files.isEmpty { // 이미지가 없는 게시글일 경우
                     let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailWithoutImageTableViewCell.identifier, for: indexPath) as! PostDetailWithoutImageTableViewCell
                     cell.configureCell(post: post)
+                    cell.likeButton.rx.tap.bind(with: self) { owner, value in
+                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let status = !post.likes.contains(userId)
+                        owner.likeStatus.onNext(status)
+                    }.disposed(by: cell.disposeBag)
                     return cell
                 } else { // 이미지가 있는 게시글일 경우
                     let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailTableViewCell.identifier, for: indexPath) as! PostDetailTableViewCell
                     cell.configureCell(post: post)
+                    cell.likeButton.rx.tap.bind(with: self) { owner, value in
+                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let status = !post.likes.contains(userId)
+                        owner.likeStatus.onNext(status)
+                    }.disposed(by: cell.disposeBag)
                     return cell
                 }
             case .comment(let comment): // 댓글

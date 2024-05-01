@@ -21,6 +21,7 @@ class PostDetailViewModel: ViewModelType {
         let comment: Observable<String>
         let commentUploadButtonTap: Observable<Void>
         let reload: BehaviorSubject<Void>
+        let likeStatus: PublishSubject<Bool>
     }
     
     struct Output {
@@ -30,6 +31,7 @@ class PostDetailViewModel: ViewModelType {
         let textColorType: Driver<Bool>
         let postDetail: PublishSubject<PostModel>
         let commentUploadSuccessTrigger: Driver<Void>
+        let likeUploadSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -38,6 +40,7 @@ class PostDetailViewModel: ViewModelType {
         let textColorType = BehaviorRelay<Bool>(value: false)
         let postDetail = PublishSubject<PostModel>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
+        let likeUploadSuccessTrigger = PublishSubject<Void>()
         
         // 텍스트뷰 입력이 시작되는 시점
         input.textViewBegin
@@ -63,7 +66,7 @@ class PostDetailViewModel: ViewModelType {
         input.reload
             .withLatestFrom(input.postId)
             .flatMap { value in
-                NetworkManager.postCheckSpecific(postId: value)
+                NetworkManager.shared.postCheckSpecific(postId: value)
             }
             .debug("특정 게시글 조회")
             .subscribe(with: self) { owner, value in
@@ -82,7 +85,7 @@ class PostDetailViewModel: ViewModelType {
         input.commentUploadButtonTap
             .withLatestFrom(commentObservable)
             .flatMap { commentQuery, postId in
-                NetworkManager.commentUpload(query: commentQuery, postId: postId)
+                NetworkManager.shared.commentUpload(query: commentQuery, postId: postId)
             }.debug("댓글")
             .subscribe(with: self) { owner, value in
                 commentUploadSuccessTrigger.onNext(())
@@ -90,12 +93,31 @@ class PostDetailViewModel: ViewModelType {
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
+        let likeQuery = input.likeStatus.map { status in
+            return LikeQuery(like_status: status)
+        }
+        
+        let likeObservable = Observable.combineLatest(likeQuery, input.postId)
+        
+        // 좋아요 업로드 네트워크 통신 진행
+        input.likeStatus
+            .withLatestFrom(likeObservable)
+            .flatMap { likeQuery, postId in
+                NetworkManager.shared.likeUpload(query: likeQuery, postId: postId)
+            }
+            .debug("좋아요 업로드")
+            .subscribe(with: self) { owner, value in
+                likeUploadSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
         
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
                       text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       postDetail: postDetail,
-                      commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
+                      commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

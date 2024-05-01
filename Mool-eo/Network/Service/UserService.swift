@@ -1,14 +1,15 @@
 //
-//  UserRouter.swift
+//  UserService.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/14/24.
+//  Created by Jaehui Yu on 5/1/24.
 //
 
 import Foundation
-import Alamofire
+import RxSwift
+import Moya
 
-enum UserRouter {
+enum UserService {
     case join(query: JoinQuery)
     case email(query: EmailQuery)
     case login(query: LoginQuery)
@@ -16,20 +17,10 @@ enum UserRouter {
     case withdraw
 }
 
-extension UserRouter: TargetType {
+extension UserService: Moya.TargetType {
     
-    var baseURL: String {
-        APIKey.baseURL.rawValue
-    }
-    
-    var method: Alamofire.HTTPMethod {
-        switch self {
-        case .join: .post
-        case .email: .post
-        case .login: .post
-        case .refresh: .get
-        case .withdraw: .get
-        }
+    var baseURL: URL {
+        return URL(string: APIKey.baseURL.rawValue)!
     }
     
     var path: String {
@@ -42,7 +33,27 @@ extension UserRouter: TargetType {
         }
     }
     
-    var header: [String : String] {
+    var method: Moya.Method {
+        switch self {
+        case .join: .post
+        case .email: .post
+        case .login: .post
+        case .refresh: .get
+        case .withdraw: .get
+        }
+    }
+    
+    var task: Task {
+        switch self {
+        case .join(let query): return .requestJSONEncodable(query)
+        case .email(let query): return .requestJSONEncodable(query)
+        case .login(let query): return .requestJSONEncodable(query)
+        case .refresh: return .requestPlain
+        case .withdraw: return .requestPlain
+        }
+    }
+    
+    var headers: [String : String]? {
         switch self {
         case .join:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
@@ -60,32 +71,6 @@ extension UserRouter: TargetType {
         case .withdraw:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
-        }
-    }
-    
-    var parameters: String? {
-        nil
-    }
-    
-    var queryItems: [URLQueryItem]? {
-        nil
-    }
-    
-    var body: Data? {
-        switch self {
-        case .join(query: let query):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .useDefaultKeys
-            return try? encoder.encode(query)
-        case.email(query: let query):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            return try? encoder.encode(query)
-        case .login(let query):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            return try? encoder.encode(query)
-        default: return nil
         }
     }
 }
