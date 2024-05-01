@@ -28,16 +28,27 @@ extension PostDetailSectionModel: SectionModelType {
     }
 }
 
+enum postDetailAccessType {
+    case me
+    case other
+}
+
 class PostDetailViewController: BaseViewController {
     
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
     var postId: String = ""
+    var userId: String = ""
     
-    var reload = BehaviorSubject(value: ()) // 댓글이 달릴 때마다 특정 포스트 조회를 해줘야 하기 때문에
+    var reload = BehaviorSubject(value: ()) // 댓글, 좋아요가 달릴 때마다 포스트 조회를 새롭게 해야 하기 때문에 관찰자 필요
     var likeStatus = PublishSubject<Bool>()
     var scrapStatus = PublishSubject<Bool>()
+    
+    var postBoard: PostBoardType = .free
+    var postTitle: String = ""
+    var postContent: String = ""
+    var postImageData: [String] = []
     
     override func loadView() {
         self.view = postDetailView
@@ -45,6 +56,10 @@ class PostDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func setNav() {
+        navigationItem.rightBarButtonItem = postDetailView.postDeleteButton
     }
     
     override func bind() {
@@ -55,10 +70,39 @@ class PostDetailViewController: BaseViewController {
         let postId = Observable.just(postId)
         let comment = postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable()
         let commentUploadButtonTap = postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable()
-        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, textViewBegin: textViewBegin, textViewEnd: textViewEnd, postId: postId, comment: comment, commentUploadButtonTap: commentUploadButtonTap, reload: reload, likeStatus: likeStatus, scrapStauts: scrapStatus)
+        let postDeleteButtonTap = postDetailView.postDeleteButton.rx.tap.asObservable()
+        let input = PostDetailViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide,
+                                              textViewBegin: textViewBegin, textViewEnd: textViewEnd,
+                                              postId: postId, userId: userId,
+                                              comment: comment,
+                                              commentUploadButtonTap: commentUploadButtonTap,
+                                              reload: reload,
+                                              likeStatus: likeStatus, scrapStauts: scrapStatus,
+                                              postDeleteButtonTap: postDeleteButtonTap)
         
         let output = viewModel.transform(input: input)
+        
+        // 키보드가 나타나는 경우
+        output.keyboardWillShow.bind(with: self) { owner, notification in
+            owner.keyboardWillShow(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        // 키보드가 사라지는 경우
+        output.keyboardWillHide.bind(with: self) { owner, notification in
+            owner.keyboardWillHide(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        // 텍스트뷰 placeholder 작업
+        output.text.drive(postDetailView.writeCommentView.commentTextView.rx.text).disposed(by: disposeBag)
+        output.textColorType.drive(with: self) { owner, value in
+            owner.postDetailView.writeCommentView.commentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+        }.disposed(by: disposeBag)
+        
+        // 특정 게시글 조회가 성공할 경우
         output.postDetail.bind(with: self) { owner, value in
+            owner.postTitle = value.title
+            owner.postContent = value.content
+            owner.postImageData = value.files
             let sections: [PostDetailSectionModel] = [PostDetailSectionModel(items: [.post(value)])]
             + value.comments.map { comment in
                 PostDetailSectionModel(items: [.comment(comment)])
@@ -68,18 +112,12 @@ class PostDetailViewController: BaseViewController {
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
-        output.keyboardWillShow.bind(with: self) { owner, notification in
-            owner.keyboardWillShow(notification: notification)
-        }.disposed(by: disposeBag)
-        
-        output.keyboardWillHide.bind(with: self) { owner, notification in
-            owner.keyboardWillHide(notification: notification)
-        }.disposed(by: disposeBag)
-        
-        // 텍스트뷰 placeholder 작업
-        output.text.drive(postDetailView.writeCommentView.commentTextView.rx.text).disposed(by: disposeBag)
-        output.textColorType.drive(with: self) { owner, value in
-            owner.postDetailView.writeCommentView.commentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+        // 자신의 게시물인지 확인
+        output.accessType.drive(with: self) { owner, value in
+            switch value {
+            case .me: owner.navigationItem.rightBarButtonItem?.isHidden = false
+            case .other: owner.navigationItem.rightBarButtonItem?.isHidden = true
+            }
         }.disposed(by: disposeBag)
         
         // 댓글 업로드가 성공할 경우
@@ -97,6 +135,11 @@ class PostDetailViewController: BaseViewController {
         // 스크랩 업로드가 성공할 경우
         output.scrapUploadSuccessTrigger.drive(with: self) { owner, _ in
             print("스크랩 성공")
+        }.disposed(by: disposeBag)
+        
+        // 자신의 게시물 -> 삭제
+        output.postDeleteSuccessTrigger.drive(with: self) { owner, _ in
+            owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
     }
     
@@ -129,7 +172,7 @@ class PostDetailViewController: BaseViewController {
         }
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostDetailSectionModel> {
+    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostDetailSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<PostDetailSectionModel> { dataSource, tableView, indexPath, item in
             switch item {
             case .post(let post): // 게시글

@@ -15,6 +15,7 @@ enum PostService {
     case postCheck(productId: String)
     case postCheckSpecific(postId: String)
     case postCheckUser(userId: String)
+    case postDelete(postID: String)
 }
 
 extension PostService: Moya.TargetType {
@@ -30,6 +31,7 @@ extension PostService: Moya.TargetType {
         case .postCheck: "posts"
         case .postCheckSpecific(let postId): "posts/\(postId)"
         case .postCheckUser(let userId): "posts/users/\(userId)"
+        case .postDelete(let postId): "posts/\(postId)"
         }
     }
     
@@ -40,6 +42,7 @@ extension PostService: Moya.TargetType {
         case .postCheck: .get
         case .postCheckSpecific: .get
         case .postCheckUser: .get
+        case .postDelete: .delete
         }
     }
     
@@ -59,6 +62,8 @@ extension PostService: Moya.TargetType {
         case .postCheckSpecific(_):
             return .requestPlain
         case .postCheckUser(_):
+            return .requestPlain
+        case .postDelete(_):
             return .requestPlain
         }
     }
@@ -80,6 +85,9 @@ extension PostService: Moya.TargetType {
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
         case .postCheckUser:
+            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+        case .postDelete:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
         }

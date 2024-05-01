@@ -68,6 +68,10 @@ struct NetworkManager {
         return postProvider.rx.request(.postCheckUser(userId: userId)).map(PostListModel.self)
     }
     
+    func postDelete(postId: String) -> Single<Response> {
+        return postProvider.rx.request(.postDelete(postID: postId))
+    }
+    
     // MARK: - Comment
 
     private let commentProvider = MoyaProvider<CommentService>(plugins: [NetworkLoggerPlugin()])

@@ -329,7 +329,6 @@
 		093E60C32BCF765F00970FAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
 				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
 				093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */,
@@ -369,6 +368,7 @@
 				095678F72BC681560030F0CD /* WritePost */,
 				09279A612BE216FC00E4A65D /* ScrapPost */,
 				093E60C32BCF765F00970FAC /* Profile */,
+				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				0999EB292BCBAE4B004B6D1F /* Network */,
 				095678E72BC67E320030F0CD /* Base */,
 				095678F22BC67FF60030F0CD /* Protocol */,

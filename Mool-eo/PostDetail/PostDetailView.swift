@@ -9,6 +9,14 @@ import UIKit
 import SnapKit
 
 class PostDetailView: BaseView {
+    
+    // Navigation
+    let postDeleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.title = "삭제"
+        return button
+    }()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PostDetailTableViewCell.self, forCellReuseIdentifier: PostDetailTableViewCell.identifier)
