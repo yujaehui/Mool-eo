@@ -53,7 +53,9 @@ class ProfileViewController: BaseViewController {
     
     override func bind() {
         let viewDidLoad = Observable.just(())
-        let input = ProfileViewModel.Input(viewDidLoad: viewDidLoad)
+        let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
+        let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
+        let input = ProfileViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
@@ -65,6 +67,12 @@ class ProfileViewController: BaseViewController {
             Observable.just(sections)
                 .bind(to: owner.profileView.tableView.rx.items(dataSource: owner.configureDataSource()))
                 .disposed(by: owner.disposeBag)
+        }.disposed(by: disposeBag)
+        
+        output.post.drive(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postId = value
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     

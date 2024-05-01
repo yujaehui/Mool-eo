@@ -14,14 +14,18 @@ class ScrapPostListViewModel: ViewModelType {
     
     struct Input {
         let viewDidLoad: Observable<Void>
+        let modelSelected: Observable<PostModel>
+        let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
         let scrapPostList: PublishSubject<[PostModel]>
+        let post: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let scrapPostList = PublishSubject<[PostModel]>()
+        let post = PublishSubject<String>()
         
         input.viewDidLoad
             .flatMap { _ in
@@ -34,6 +38,12 @@ class ScrapPostListViewModel: ViewModelType {
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
-        return Output(scrapPostList: scrapPostList)
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .map { $0.0.postID }
+            .bind(with: self) { owner, value in
+                post.onNext(value)
+            }.disposed(by: disposeBag)
+        
+        return Output(scrapPostList: scrapPostList, post: post.asDriver(onErrorJustReturn: ""))
     }
 }

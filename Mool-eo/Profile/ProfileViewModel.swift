@@ -14,15 +14,18 @@ class ProfileViewModel: ViewModelType {
     
     struct Input {
         let viewDidLoad: Observable<Void>
+        let modelSelected: Observable<ProfileSectionItem>
+        let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
         let result: PublishSubject<(ProfileModel, PostListModel)>
-        
+        let post: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(ProfileModel, PostListModel)>()
+        let post = PublishSubject<String>()
         
         input.viewDidLoad
             .flatMap { _ in
@@ -34,8 +37,16 @@ class ProfileViewModel: ViewModelType {
             } onError: { owner, error in
                 print("오류 발생")
             }
-            .disposed(by: disposeBag)        
+            .disposed(by: disposeBag)   
         
-        return Output(result: result)
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .bind(with: self) { owner, value in
+                switch value.0 {
+                case .myPostItem(let myPost): post.onNext(myPost.postID)
+                case .infoItem( _): break
+                }
+            }.disposed(by: disposeBag)
+        
+        return Output(result: result, post: post.asDriver(onErrorJustReturn: ""))
     }
 }

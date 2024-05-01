@@ -38,13 +38,21 @@ class ScrapPostListViewController: BaseViewController {
     
     override func bind() {
         let viewDidLoad = Observable.just(())
-        let input = ScrapPostListViewModel.Input(viewDidLoad: viewDidLoad)
+        let modelSelected = scrapPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
+        let itemSelected = scrapPostListView.tableView.rx.itemSelected.asObservable()
+        let input = ScrapPostListViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         
         output.scrapPostList.bind(with: self) { owner, value in
             let sections: [ScrapPostListSectionModel] = [ScrapPostListSectionModel(items: value)]
             Observable.just(sections).bind(to: owner.scrapPostListView.tableView.rx.items(dataSource: owner.configureDataSource())).disposed(by: owner.disposeBag)
+        }.disposed(by: disposeBag)
+        
+        output.post.drive(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postId = value
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     
