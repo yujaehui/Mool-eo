@@ -51,11 +51,16 @@ class ProfileViewController: BaseViewController {
         }
     }
     
+    override func setNav() {
+        navigationItem.rightBarButtonItem = profileView.withdrawButton
+    }
+    
     override func bind() {
         let viewDidLoad = Observable.just(())
         let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
         let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
-        let input = ProfileViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected)
+        let withdrawButtonTap = profileView.withdrawButton.rx.tap.asObservable()
+        let input = ProfileViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected, withdrawButtonTap: withdrawButtonTap)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
@@ -73,6 +78,13 @@ class ProfileViewController: BaseViewController {
             let vc = PostDetailViewController()
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.withdrawSuccessTrigger.drive(with: self) { owner, _ in
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+            sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
     }
     

@@ -16,16 +16,19 @@ class ProfileViewModel: ViewModelType {
         let viewDidLoad: Observable<Void>
         let modelSelected: Observable<ProfileSectionItem>
         let itemSelected: Observable<IndexPath>
+        let withdrawButtonTap: Observable<Void>
     }
     
     struct Output {
         let result: PublishSubject<(ProfileModel, PostListModel)>
         let post: Driver<String>
+        let withdrawSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(ProfileModel, PostListModel)>()
         let post = PublishSubject<String>()
+        let withdrawSuccessTrigger = PublishSubject<Void>()
         
         input.viewDidLoad
             .flatMap { _ in
@@ -47,6 +50,19 @@ class ProfileViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(result: result, post: post.asDriver(onErrorJustReturn: ""))
+        input.withdrawButtonTap
+            .flatMap { _ in
+                NetworkManager.shared.withdraw()
+            }
+            .debug("탈퇴")
+            .subscribe(with: self) { owner, value in
+                withdrawSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 발생")
+            } .disposed(by: disposeBag)
+        
+        return Output(result: result,
+                      post: post.asDriver(onErrorJustReturn: ""),
+                      withdrawSuccessTrigger: withdrawSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }
