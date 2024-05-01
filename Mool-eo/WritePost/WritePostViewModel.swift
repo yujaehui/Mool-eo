@@ -20,6 +20,7 @@ class WritePostViewModel: ViewModelType {
         let title: Observable<String>
         let content: Observable<String>
         let selectedImageDataSubject: PublishSubject<[Data]>
+        let imageSelected: Bool
         let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
         let cancelButtonTap: Observable<Void>
@@ -67,28 +68,42 @@ class WritePostViewModel: ViewModelType {
         }
         
         // 게시글 업로드 네트워크 통신 진행
-        input.completeButtonTap
-            .withLatestFrom(filesQuery)
-            .flatMap { filesQuery in
-                NetworkManager.shared.imageUpload(query: filesQuery)
-            }
-            .withLatestFrom(postQuery) { filesModel, postObservable in
-                (filesModel, postObservable)
-            }
-            .map { filesModel, postObservable in
-                PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
-            }
-            .flatMap { postQuery in
-                NetworkManager.shared.postUpload(query: postQuery)
-            }
-            .debug("게시글 업로드")
-            .subscribe(with: self) { owner, _ in
-                uploadSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
-            }.disposed(by: disposeBag)
+        if input.imageSelected {
+            input.completeButtonTap
+                .withLatestFrom(filesQuery)
+                .flatMap { filesQuery in
+                    NetworkManager.shared.imageUpload(query: filesQuery)
+                }
+                .withLatestFrom(postQuery) { filesModel, postObservable in
+                    (filesModel, postObservable)
+                }
+                .map { filesModel, postObservable in
+                    PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                }
+                .flatMap { postQuery in
+                    NetworkManager.shared.postUpload(query: postQuery)
+                }
+                .debug("게시글 업로드")
+                .subscribe(with: self) { owner, _ in
+                    uploadSuccessTrigger.onNext(())
+                } onError: { owner, error in
+                    print("오류 발생")
+                }.disposed(by: disposeBag)
+        } else {
+            input.completeButtonTap
+                .withLatestFrom(postQuery)
+                .flatMap { postQuery in
+                    NetworkManager.shared.postUpload(query: postQuery)
+                }
+                .debug("게시글 업로드")
+                .subscribe(with: self) { owner, _ in
+                    uploadSuccessTrigger.onNext(())
+                } onError: { owner, error in
+                    print("오류 발생")
+                }.disposed(by: disposeBag)
+        }
         
-        return Output(text: text.asDriver(), 
+        return Output(text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),

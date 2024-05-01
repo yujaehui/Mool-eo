@@ -20,6 +20,7 @@ final class WritePostViewController: BaseViewController {
     
     private var selectedImageSubject = PublishSubject<[UIImage]>()
     private var selectedImageDataSubject = PublishSubject<[Data]>()
+    private var imageSelected = false
     
     override func loadView() {
         self.view = writePostView
@@ -43,7 +44,7 @@ final class WritePostViewController: BaseViewController {
         let imageAddButtonTap = writePostView.imageAddButton.rx.tap.asObservable()
         let completeButtonTap = writePostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writePostView.cancelButton.rx.tap.asObservable()
-        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
+        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelected: imageSelected, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
         
         let output = viewModel.transform(input: input)
         
@@ -97,6 +98,7 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
                         DispatchQueue.main.async {
                             selectedImage.append(image)
                             self.selectedImageSubject.onNext(selectedImage)
+                            self.imageSelected = true
                         }
                         if let imageData = image.pngData() {
                             selectedImagesData.append(imageData)

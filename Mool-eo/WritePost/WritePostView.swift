@@ -37,7 +37,7 @@ class WritePostView: BaseView {
     
     override func configureHierarchy() {
         addSubview(scrollView)
-        scrollView.addSubview(writePostBoxView)
+        addSubview(writePostBoxView)
     }
     
     override func configureConstraints() {
@@ -46,7 +46,7 @@ class WritePostView: BaseView {
         }
         
         writePostBoxView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.edges.equalTo(scrollView.snp.edges)
             make.width.equalTo(scrollView.frameLayoutGuide)
         }
     }

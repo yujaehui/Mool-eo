@@ -85,14 +85,19 @@ struct NetworkManager {
     
     func profileEdit(query: ProfileEditQuery) -> Single<ProfileModel> {
         return profileProvider.rx.request(.profileEdit(query: query)).map(ProfileModel.self)
-        
     }
     
     //MARK: - Like
-    
     private let likeProvider = MoyaProvider<LikeService>(plugins: [NetworkLoggerPlugin()])
     
     func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
         return likeProvider.rx.request(.likeUpload(query: query, postId: postId)).map(LikeModel.self)
+    }
+    
+    //MARK: - Scrap
+    private let scrapProvider = MoyaProvider<ScrapService>(plugins: [NetworkLoggerPlugin()])
+    
+    func scrapUpload(query: ScrapQuery, postId: String) -> Single<ScrapModel> {
+        return scrapProvider.rx.request(.scrapUpload(query: query, postId: postId)).map(ScrapModel.self)
     }
 }

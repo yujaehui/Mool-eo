@@ -22,6 +22,7 @@ class PostDetailViewModel: ViewModelType {
         let commentUploadButtonTap: Observable<Void>
         let reload: BehaviorSubject<Void>
         let likeStatus: PublishSubject<Bool>
+        let scrapStauts: PublishSubject<Bool>
     }
     
     struct Output {
@@ -32,6 +33,7 @@ class PostDetailViewModel: ViewModelType {
         let postDetail: PublishSubject<PostModel>
         let commentUploadSuccessTrigger: Driver<Void>
         let likeUploadSuccessTrigger: Driver<Void>
+        let scrapUploadSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -41,6 +43,7 @@ class PostDetailViewModel: ViewModelType {
         let postDetail = PublishSubject<PostModel>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         let likeUploadSuccessTrigger = PublishSubject<Void>()
+        let scrapUploadSuccessTrigger = PublishSubject<Void>()
         
         // 텍스트뷰 입력이 시작되는 시점
         input.textViewBegin
@@ -112,12 +115,31 @@ class PostDetailViewModel: ViewModelType {
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
+        let scrapQuery = input.scrapStauts.map { status in
+            return ScrapQuery(like_status: status)
+        }
+        
+        let scrapObservable = Observable.combineLatest(scrapQuery, input.postId)
+        
+        input.scrapStauts
+            .withLatestFrom(scrapObservable)
+            .flatMap { scrapQuery, postId in
+                NetworkManager.shared.scrapUpload(query: scrapQuery, postId: postId)
+            }
+            .debug("스크랩 업로드")
+            .subscribe(with: self) { owner, value in
+                scrapUploadSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
+        
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
                       text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       postDetail: postDetail,
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
+                      likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      scrapUploadSuccessTrigger: scrapUploadSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

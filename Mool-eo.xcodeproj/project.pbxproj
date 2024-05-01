@@ -19,6 +19,9 @@
 		09279A542BE1472800E4A65D /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A532BE1472800E4A65D /* UserService.swift */; };
 		09279A562BE14B2800E4A65D /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A552BE14B2800E4A65D /* LikeService.swift */; };
 		09279A582BE14E9300E4A65D /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A572BE14E9300E4A65D /* PostService.swift */; };
+		09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5A2BE202B200E4A65D /* ScrapQuery.swift */; };
+		09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5D2BE202DE00E4A65D /* ScrapModel.swift */; };
+		09279A602BE202F300E4A65D /* ScrapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5F2BE202F300E4A65D /* ScrapService.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
@@ -128,6 +131,9 @@
 		09279A532BE1472800E4A65D /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		09279A552BE14B2800E4A65D /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
 		09279A572BE14E9300E4A65D /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
+		09279A5A2BE202B200E4A65D /* ScrapQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapQuery.swift; sourceTree = "<group>"; };
+		09279A5D2BE202DE00E4A65D /* ScrapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapModel.swift; sourceTree = "<group>"; };
+		09279A5F2BE202F300E4A65D /* ScrapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapService.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -282,9 +288,26 @@
 				09279A572BE14E9300E4A65D /* PostService.swift */,
 				09279A4F2BE1426E00E4A65D /* CommentService.swift */,
 				09279A552BE14B2800E4A65D /* LikeService.swift */,
+				09279A5F2BE202F300E4A65D /* ScrapService.swift */,
 				09279A512BE1447100E4A65D /* ProfileService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		09279A592BE2029B00E4A65D /* Scrap */ = {
+			isa = PBXGroup;
+			children = (
+				09279A5A2BE202B200E4A65D /* ScrapQuery.swift */,
+			);
+			path = Scrap;
+			sourceTree = "<group>";
+		};
+		09279A5C2BE202D200E4A65D /* Scrap */ = {
+			isa = PBXGroup;
+			children = (
+				09279A5D2BE202DE00E4A65D /* ScrapModel.swift */,
+			);
+			path = Scrap;
 			sourceTree = "<group>";
 		};
 		093E60C32BCF765F00970FAC /* Profile */ = {
@@ -568,6 +591,7 @@
 				09602B512BD3ABA800A6AFEA /* Post */,
 				09602BC62BDBD2DC00A6AFEA /* Comment */,
 				09602BCF2BDE562300A6AFEA /* Like */,
+				09279A592BE2029B00E4A65D /* Scrap */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
 			);
 			path = Query;
@@ -590,6 +614,7 @@
 				09602B562BD3AC0800A6AFEA /* Post */,
 				09602BC92BDBD32100A6AFEA /* Comment */,
 				09602BD22BDE565A00A6AFEA /* Like */,
+				09279A5C2BE202D200E4A65D /* Scrap */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
 			);
 			path = Model;
@@ -738,6 +763,7 @@
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
+				09279A602BE202F300E4A65D /* ScrapService.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
@@ -755,6 +781,8 @@
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
+				09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */,
+				09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */,
 				09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
 				09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */,
