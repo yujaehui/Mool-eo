@@ -9,7 +9,7 @@ import UIKit
 
 class AutoResizableTextView: UITextView {
     
-    let maxHeight: CGFloat = 120
+    var maxHeight: CGFloat?
     
     override var contentSize: CGSize {
         didSet {
@@ -20,8 +20,16 @@ class AutoResizableTextView: UITextView {
     override var intrinsicContentSize: CGSize {
         let size = CGSize(width: self.contentSize.width, height: CGFloat.greatestFiniteMagnitude)
         let newSize = self.sizeThatFits(size)
-        let height = min(newSize.height, maxHeight)
-        isScrollEnabled = newSize.height > maxHeight
+        var height = newSize.height
+        if let maxHeight = maxHeight {
+            height = min(height, maxHeight)
+            isScrollEnabled = newSize.height > maxHeight
+        }
         return CGSize(width: newSize.width, height: height)
+    }
+    
+    convenience init(maxHeight: CGFloat?) {
+        self.init(frame: .zero, textContainer: nil)
+        self.maxHeight = maxHeight
     }
 }

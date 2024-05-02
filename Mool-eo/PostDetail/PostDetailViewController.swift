@@ -39,12 +39,15 @@ class PostDetailViewController: BaseViewController {
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
+    var postBoard: PostBoardType = .free
     var postId: String = ""
     var userId: String = ""
     
     var reload = BehaviorSubject(value: ())
     var likeStatus = PublishSubject<Bool>()
     var scrapStatus = PublishSubject<Bool>()
+    var editButtonTap = PublishSubject<Void>()
+    var deleteButtonTap = PublishSubject<Void>()
     
     private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
     
@@ -57,7 +60,19 @@ class PostDetailViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.rightBarButtonItem = postDetailView.postDeleteButton
+        var items: [UIAction] {
+            let edit = UIAction(title: "수정", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
+                self.editButtonTap.onNext(())
+            })
+            let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
+                self.deleteButtonTap.onNext(())
+            })
+            let Items = [edit, delete]
+            return Items
+        }
+        
+        let menu = UIMenu(title: "", children: items)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
     }
     
     override func bind() {
@@ -75,7 +90,8 @@ class PostDetailViewController: BaseViewController {
             commentUploadButtonTap: postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable(),
             likeStatus: likeStatus,
             scrapStauts: scrapStatus,
-            postDeleteButtonTap: postDetailView.postDeleteButton.rx.tap.asObservable(),
+            postEditButtonTap: editButtonTap,
+            postDeleteButtonTap: deleteButtonTap,
             itemDeletedWithCommentId: postDetailView.tableView.rx.itemDeleted.flatMap { [weak self] indexPath -> Observable<(IndexPath, String)> in
                 guard let sections = try? self?.sections.value(),
                       case let .comment(comment) = sections[indexPath.section].items[indexPath.row] else { return Observable.empty() }
@@ -145,6 +161,19 @@ class PostDetailViewController: BaseViewController {
             owner.sections.onNext(sections)
             owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+        }.disposed(by: disposeBag)
+        
+        output.editPostDetail.bind(with: self) { owner, value in
+            let vc = WritePostViewController()
+            vc.type = .edit
+            vc.postBoard = owner.postBoard
+            vc.postTitle = value.title
+            vc.postContent = value.content
+            vc.postFiles = value.files
+            vc.postId = value.postID
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            owner.present(nav, animated: true)
         }.disposed(by: disposeBag)
     }
     

@@ -24,6 +24,7 @@ class PostDetailViewModel: ViewModelType {
         let commentUploadButtonTap: Observable<Void>
         let likeStatus: PublishSubject<Bool>
         let scrapStauts: PublishSubject<Bool>
+        let postEditButtonTap: Observable<Void>
         let postDeleteButtonTap: Observable<Void>
         let itemDeletedWithCommentId: Observable<(IndexPath, String)>
     }
@@ -34,6 +35,7 @@ class PostDetailViewModel: ViewModelType {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
         let postDetail: PublishSubject<PostModel>
+        let editPostDetail: PublishSubject<PostModel>
         let accessType: Driver<postDetailAccessType>
         let commentUploadSuccessTrigger: Driver<Void>
         let likeUploadSuccessTrigger: Driver<Void>
@@ -47,6 +49,7 @@ class PostDetailViewModel: ViewModelType {
         let text = BehaviorRelay<String?>(value: placeholderText)
         let textColorType = BehaviorRelay<Bool>(value: false)
         let postDetail = PublishSubject<PostModel>()
+        let editPostDetail = PublishSubject<PostModel>()
         let accessType = PublishSubject<postDetailAccessType>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         let likeUploadSuccessTrigger = PublishSubject<Void>()
@@ -180,11 +183,24 @@ class PostDetailViewModel: ViewModelType {
                 print("오류 발생")
             }.disposed(by: disposeBag)
         
+        input.postEditButtonTap
+            .withLatestFrom(input.postId)
+            .flatMap { value in
+                NetworkManager.shared.postCheckSpecific(postId: value)
+            }
+            .debug("특정 게시글 조회")
+            .subscribe(with: self) { owner, value in
+                editPostDetail.onNext(value)
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
+        
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
                       text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       postDetail: postDetail,
+                      editPostDetail: editPostDetail,
                       accessType: accessType.asDriver(onErrorJustReturn: .other),
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),

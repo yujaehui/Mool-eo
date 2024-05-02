@@ -16,7 +16,6 @@ class WritePostView: BaseView {
     // Navigation
     let completeButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
-        button.title = "완료"
         return button
     }()
     
@@ -37,7 +36,7 @@ class WritePostView: BaseView {
     
     override func configureHierarchy() {
         addSubview(scrollView)
-        addSubview(writePostBoxView)
+        scrollView.addSubview(writePostBoxView)
     }
     
     override func configureConstraints() {
@@ -46,8 +45,12 @@ class WritePostView: BaseView {
         }
         
         writePostBoxView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.snp.edges)
-            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.edges.width.equalToSuperview()
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        scrollView.contentSize = writePostBoxView.bounds.size
     }
 }

@@ -10,7 +10,7 @@ import SnapKit
 
 class WriteCommentView: BaseView {
     let commentTextView: AutoResizableTextView = {
-        let textView = AutoResizableTextView()
+        let textView = AutoResizableTextView(maxHeight: 120)
         textView.font = FontStyle.content
         textView.backgroundColor = ColorStyle.subBackground
         textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30)

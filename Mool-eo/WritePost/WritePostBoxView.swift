@@ -19,8 +19,8 @@ class WritePostBoxView: BaseView {
     
     let lineView = LineView()
     
-    let contentTextView: UITextView = {
-        let textView = UITextView()
+    let contentTextView: AutoResizableTextView = {
+        let textView = AutoResizableTextView(maxHeight: nil)
         textView.font = FontStyle.content
         textView.isScrollEnabled = false
         return textView
@@ -61,6 +61,7 @@ class WritePostBoxView: BaseView {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(100)
         }
     }

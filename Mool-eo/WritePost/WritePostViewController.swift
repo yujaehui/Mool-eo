@@ -11,12 +11,22 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 
+enum PostInteractionType: String {
+    case upload
+    case edit
+}
+
 final class WritePostViewController: BaseViewController {
     
     let viewModel = WritePostViewModel()
     let writePostView = WritePostView()
     
+    var type: PostInteractionType = .upload
     var postBoard: PostBoardType = .free
+    var postTitle: String = ""
+    var postContent: String = ""
+    var postFiles: [String] = []
+    var postId: String = ""
     
     private var selectedImage: [UIImage] = []
     private var selectedImageData: [Data] = []
@@ -33,30 +43,39 @@ final class WritePostViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func configureView() {
+        switch type {
+        case .upload:
+            selectedImageSubject.bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
+                cell.selectImageView.image = element
+                cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
+                    // 이미지 삭제
+                    guard row < owner.selectedImage.count else { return }
+                    owner.selectedImage.remove(at: row)
+                    owner.selectedImageSubject.onNext(owner.selectedImage)
+                    
+                    // 이미지 데이터 삭제
+                    guard row < owner.selectedImageData.count else { return }
+                    owner.selectedImageData.remove(at: row)
+                    owner.selectedImageDataSubject.onNext(owner.selectedImageData)
+                    
+                    // 이미지 선택 여부 확인
+                    if owner.selectedImage.isEmpty {
+                        owner.imageSelected = false
+                        owner.imageSelectedSubject.onNext(owner.imageSelected)
+                    }
+                }.disposed(by: cell.disposeBag)
+            }.disposed(by: disposeBag)
+        case .edit:
+            Observable.just(postFiles).bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
+                URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element)
+            }.disposed(by: disposeBag)
+            writePostView.writePostBoxView.titleTextField.text = postTitle
+            writePostView.writePostBoxView.contentTextView.text = postContent
+        }
+    }
+    
     override func bind() {
-        selectedImageSubject.bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
-            cell.selectImageView.image = element
-            cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
-                // 이미지 삭제
-                guard row < owner.selectedImage.count else { return }
-                owner.selectedImage.remove(at: row)
-                owner.selectedImageSubject.onNext(owner.selectedImage)
-                
-                // 이미지 데이터 삭제
-                guard row < owner.selectedImageData.count else { return }
-                owner.selectedImageData.remove(at: row)
-                owner.selectedImageDataSubject.onNext(owner.selectedImageData)
-                
-                // 이미지 선택 여부 확인
-                if owner.selectedImage.isEmpty {
-                    owner.imageSelected = false
-                    owner.imageSelectedSubject.onNext(owner.imageSelected)
-                }
-                owner.writePostView.writePostBoxView.collectionView.reloadData()
-
-            }.disposed(by: cell.disposeBag)
-        }.disposed(by: disposeBag)
-        
         let textViewBegin = writePostView.writePostBoxView.contentTextView.rx.didBeginEditing.asObservable()
         let textViewEnd = writePostView.writePostBoxView.contentTextView.rx.didEndEditing.asObservable()
         let postBoard = postBoard
@@ -66,7 +85,7 @@ final class WritePostViewController: BaseViewController {
         let imageAddButtonTap = writePostView.imageAddButton.rx.tap.asObservable()
         let completeButtonTap = writePostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writePostView.cancelButton.rx.tap.asObservable()
-        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelectedSubject: imageSelectedSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
+        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelectedSubject: imageSelectedSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, type: type, postId: Observable.just(postId))
         
         let output = viewModel.transform(input: input)
         
@@ -89,6 +108,10 @@ final class WritePostViewController: BaseViewController {
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         
+        output.editSuccessTrigger.drive(with: self) { owner, _ in
+            owner.dismiss(animated: true)
+        }.disposed(by: disposeBag)
+        
         output.cancelButtonTap.drive(with: self) { owner, _ in
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
@@ -96,12 +119,13 @@ final class WritePostViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "글 쓰기"
+        writePostView.completeButton.title = type == .upload ? "완료" : "수정"
         navigationItem.rightBarButtonItem = writePostView.completeButton
         navigationItem.leftBarButtonItem = writePostView.cancelButton
     }
     
     override func setToolBar() {
-        navigationController?.isToolbarHidden = false
+        navigationController?.isToolbarHidden = type == .upload ? false : true
         let barItems = [writePostView.imageAddButton]
         self.toolbarItems = barItems
     }
