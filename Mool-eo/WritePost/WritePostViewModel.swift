@@ -20,7 +20,7 @@ class WritePostViewModel: ViewModelType {
         let title: Observable<String>
         let content: Observable<String>
         let selectedImageDataSubject: PublishSubject<[Data]>
-        let imageSelected: Bool
+        let imageSelectedSubject: BehaviorSubject<Bool>
         let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
         let cancelButtonTap: Observable<Void>
@@ -67,42 +67,37 @@ class WritePostViewModel: ViewModelType {
             return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
         }
         
-        // 게시글 업로드 네트워크 통신 진행
-        if input.imageSelected {
-            input.completeButtonTap
-                .withLatestFrom(filesQuery)
-                .flatMap { filesQuery in
-                    NetworkManager.shared.imageUpload(query: filesQuery)
+        input.completeButtonTap
+            .withLatestFrom(input.imageSelectedSubject)
+            .map { imageSelected -> Observable<PostQuery> in
+                if imageSelected {
+                    return filesQuery
+                        .flatMap { filesQuery in
+                            NetworkManager.shared.imageUpload(query: filesQuery)
+                        }
+                        .withLatestFrom(postQuery) { filesModel, postObservable in
+                            (filesModel, postObservable)
+                        }
+                        .map { filesModel, postObservable in
+                            PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                        }
+                } else {
+                    return postQuery
                 }
-                .withLatestFrom(postQuery) { filesModel, postObservable in
-                    (filesModel, postObservable)
-                }
-                .map { filesModel, postObservable in
-                    PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
-                }
-                .flatMap { postQuery in
-                    NetworkManager.shared.postUpload(query: postQuery)
-                }
-                .debug("게시글 업로드")
-                .subscribe(with: self) { owner, _ in
-                    uploadSuccessTrigger.onNext(())
-                } onError: { owner, error in
-                    print("오류 발생")
-                }.disposed(by: disposeBag)
-        } else {
-            input.completeButtonTap
-                .withLatestFrom(postQuery)
-                .flatMap { postQuery in
-                    NetworkManager.shared.postUpload(query: postQuery)
-                }
-                .debug("게시글 업로드")
-                .subscribe(with: self) { owner, _ in
-                    uploadSuccessTrigger.onNext(())
-                } onError: { owner, error in
-                    print("오류 발생")
-                }.disposed(by: disposeBag)
-        }
-        
+            }
+            .flatMap { query in
+                query
+            }
+            .flatMap { query in
+                NetworkManager.shared.postUpload(query: query)
+            }
+            .debug("게시글 업로드")
+            .subscribe(with: self) { owner, _ in
+                uploadSuccessTrigger.onNext(())
+            } onError: { owner, error in
+                print("오류 발생")
+            }.disposed(by: disposeBag)
+    
         return Output(text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),

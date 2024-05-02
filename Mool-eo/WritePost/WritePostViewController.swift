@@ -23,6 +23,7 @@ final class WritePostViewController: BaseViewController {
     private var selectedImageSubject = PublishSubject<[UIImage]>()
     private var selectedImageDataSubject = PublishSubject<[Data]>()
     private var imageSelected = false
+    private var imageSelectedSubject = BehaviorSubject<Bool>(value: false)
     
     override func loadView() {
         self.view = writePostView
@@ -49,7 +50,10 @@ final class WritePostViewController: BaseViewController {
                 // 이미지 선택 여부 확인
                 if owner.selectedImage.isEmpty {
                     owner.imageSelected = false
+                    owner.imageSelectedSubject.onNext(owner.imageSelected)
                 }
+                owner.writePostView.writePostBoxView.collectionView.reloadData()
+
             }.disposed(by: cell.disposeBag)
         }.disposed(by: disposeBag)
         
@@ -62,7 +66,7 @@ final class WritePostViewController: BaseViewController {
         let imageAddButtonTap = writePostView.imageAddButton.rx.tap.asObservable()
         let completeButtonTap = writePostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writePostView.cancelButton.rx.tap.asObservable()
-        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelected: imageSelected, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
+        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelectedSubject: imageSelectedSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
         
         let output = viewModel.transform(input: input)
         
@@ -116,9 +120,10 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
                 itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                     if let image = image as? UIImage {
                         DispatchQueue.main.async {
+                            self.imageSelected = true
+                            self.imageSelectedSubject.onNext(self.imageSelected)
                             self.selectedImage.append(image)
                             self.selectedImageSubject.onNext(self.selectedImage)
-                            self.imageSelected = true
                         }
                         if let imageData = image.pngData() {
                             self.selectedImageData.append(imageData)
