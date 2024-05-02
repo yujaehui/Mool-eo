@@ -12,6 +12,7 @@ import Moya
 enum ProfileService {
     case profileCheck
     case profileEdit(query: ProfileEditQuery)
+    case otherUserProfileCheck(userId: String)
 }
 
 extension ProfileService: Moya.TargetType {
@@ -24,6 +25,7 @@ extension ProfileService: Moya.TargetType {
         switch self {
         case .profileCheck: "users/me/profile"
         case .profileEdit: "users/me/profile"
+        case .otherUserProfileCheck(let userId): "users/\(userId)/profile"
         }
     }
     
@@ -31,6 +33,7 @@ extension ProfileService: Moya.TargetType {
         switch self {
         case .profileCheck: .get
         case .profileEdit: .put
+        case .otherUserProfileCheck: .get
         }
     }
     
@@ -43,6 +46,7 @@ extension ProfileService: Moya.TargetType {
             formData.append(MultipartFormData(provider: .data("\(query.birthDay)".data(using: .utf8)!), name: "birthDay"))
             formData.append(MultipartFormData(provider: .data(query.profile), name: "profile", fileName: "image.png", mimeType: "image/png"))
             return .uploadMultipart(formData)
+        case .otherUserProfileCheck: return .requestPlain
         }
     }
     
@@ -54,6 +58,9 @@ extension ProfileService: Moya.TargetType {
         case .profileEdit:
             [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+        case .otherUserProfileCheck:
+            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
         }
     }

@@ -63,8 +63,7 @@ struct NetworkManager {
         return postProvider.rx.request(.postCheckSpecific(postId: postId)).map(PostModel.self)
     }
     
-    func postCheckUser() -> Single<PostListModel> {
-        let userId = UserDefaults.standard.string(forKey: "userId")!
+    func postCheckUser(userId: String) -> Single<PostListModel> {
         return postProvider.rx.request(.postCheckUser(userId: userId)).map(PostListModel.self)
     }
     
@@ -95,6 +94,10 @@ struct NetworkManager {
         return profileProvider.rx.request(.profileEdit(query: query)).map(ProfileModel.self)
     }
     
+    func otherUserProfileCheck(userId: String) -> Single<OtherUserProfileModel> {
+        return profileProvider.rx.request(.otherUserProfileCheck(userId: userId)).map(OtherUserProfileModel.self)
+    }
+    
     //MARK: - Like
     private let likeProvider = MoyaProvider<LikeService>(plugins: [NetworkLoggerPlugin()])
     
@@ -111,5 +114,16 @@ struct NetworkManager {
     
     func scrapPostCheck() -> Single<PostListModel> {
         return scrapProvider.rx.request(.scrapPostCheck).map(PostListModel.self)
+    }
+    
+    //MARK: - Follow
+    private let followProvider = MoyaProvider<FollowService>(plugins: [NetworkLoggerPlugin()])
+    
+    func follow(userId: String) -> Single<FollowModel> {
+        return followProvider.rx.request(.follow(userId: userId)).map(FollowModel.self)
+    }
+    
+    func unfollow(userId: String) -> Single<FollowModel> {
+        return followProvider.rx.request(.unfollow(userId: userId)).map(FollowModel.self)
     }
 }

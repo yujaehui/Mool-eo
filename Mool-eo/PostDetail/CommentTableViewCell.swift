@@ -7,11 +7,25 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class CommentTableViewCell: BaseTableViewCell {
+    
+    var disposeBag = DisposeBag()
+    
+    let profileStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .leading
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     let profileImageView = CustomImageView(frame: .zero)
     
-    let nicknameLabel = CustomLabel(type: .description)
+    let nicknameLabel = CustomLabel(type: .descriptionBold)
     
     let commentLabel: CustomLabel = {
         let label = CustomLabel(type: .description)
@@ -19,27 +33,35 @@ class CommentTableViewCell: BaseTableViewCell {
         return label
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
+    
     override func configureHierarchy() {
-        contentView.addSubview(profileImageView)
-        contentView.addSubview(nicknameLabel)
+        contentView.addSubview(profileStackView)
+        profileStackView.addArrangedSubview(profileImageView)
+        profileStackView.addArrangedSubview(nicknameLabel)
         contentView.addSubview(commentLabel)
     }
     
     override func configureConstraints() {
-        profileImageView.snp.makeConstraints { make in
+        profileStackView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(30)
+        }
+        
+        profileImageView.snp.makeConstraints { make in
             make.size.equalTo(30)
         }
         
         nicknameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.top)
-            make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView).inset(20)
+            make.centerY.equalTo(profileImageView.snp.centerY)
         }
         
         commentLabel.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(10)
+            make.top.equalTo(profileStackView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(nicknameLabel.snp.horizontalEdges)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }

@@ -36,6 +36,8 @@ class ProfileViewController: BaseViewController {
     
     var showProfileUpdateAlert: Bool = false
     
+    private var sections = BehaviorSubject<[ProfileSectionModel]>(value: [])
+    
     override func loadView() {
         self.view = profileView
     }
@@ -56,6 +58,8 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
+        sections.bind(to: profileView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        
         let viewDidLoad = Observable.just(())
         let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
         let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
@@ -64,14 +68,8 @@ class ProfileViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
-            let sections: [ProfileSectionModel] = [ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-            + value.1.data.map { myPost in
-                ProfileSectionModel(title: "내 게시물", items: [.myPostItem(myPost)])
-            }
-            
-            Observable.just(sections)
-                .bind(to: owner.profileView.tableView.rx.items(dataSource: owner.configureDataSource()))
-                .disposed(by: owner.disposeBag)
+            owner.sections.onNext([ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
+                                  + [ProfileSectionModel(title: "내 게시물", items: value.1.data.map { .myPostItem($0) })])
         }.disposed(by: disposeBag)
         
         output.post.drive(with: self) { owner, value in

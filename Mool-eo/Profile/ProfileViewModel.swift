@@ -31,8 +31,11 @@ class ProfileViewModel: ViewModelType {
         let withdrawSuccessTrigger = PublishSubject<Void>()
         
         input.viewDidLoad
-            .flatMap { _ in
-                Observable.zip(NetworkManager.shared.profileCheck().asObservable(), NetworkManager.shared.postCheckUser().asObservable())
+            .map {
+                return UserDefaults.standard.string(forKey: "userId")!
+            }
+            .flatMap { userId in
+                Observable.zip(NetworkManager.shared.profileCheck().asObservable(), NetworkManager.shared.postCheckUser(userId: userId).asObservable())
             }
             .debug("프로필 및 유저 포스트 조회")
             .subscribe(with: self) { owner, value in

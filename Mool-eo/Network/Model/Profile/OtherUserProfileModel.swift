@@ -1,17 +1,15 @@
 //
-//  ProfileModel.swift
+//  OtherUserProfileModel.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/17/24.
+//  Created by Jaehui Yu on 5/2/24.
 //
 
 import Foundation
 
-struct ProfileModel: Decodable {
+struct OtherUserProfileModel: Decodable {
     let user_id: String
-    let email: String
     let nick: String
-    let introduction: String
     let profileImage: String
     let followers: [Follow]
     let following: [Follow]
@@ -19,9 +17,7 @@ struct ProfileModel: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case user_id
-        case email
         case nick
-        case introduction = "birthDay"
         case profileImage
         case followers
         case following
@@ -31,31 +27,10 @@ struct ProfileModel: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.user_id = try container.decode(String.self, forKey: .user_id)
-        self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.introduction = try container.decodeIfPresent(String.self, forKey: .introduction) ?? ""
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
         self.followers = try container.decodeIfPresent([Follow].self, forKey: .followers) ?? []
         self.following = try container.decodeIfPresent([Follow].self, forKey: .following) ?? []
         self.posts = try container.decodeIfPresent([String].self, forKey: .posts) ?? []
-    }
-}
-
-struct Follow: Decodable {
-    let user_id: String
-    let nick: String
-    let profileImage: String
-    
-    enum CodingKeys: CodingKey {
-        case user_id
-        case nick
-        case profileImage
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user_id = try container.decode(String.self, forKey: .user_id)
-        self.nick = try container.decode(String.self, forKey: .nick)
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
     }
 }

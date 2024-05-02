@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxGesture
 
 enum PostDetailSectionItem {
     case post(PostModel)
@@ -101,9 +102,8 @@ class PostDetailViewController: BaseViewController {
         
         // 특정 게시글 조회가 성공할 경우
         output.postDetail.bind(with: self) { owner, value in
-            owner.sections.onNext([PostDetailSectionModel(items: [.post(value)])] + value.comments.map { comment in
-                PostDetailSectionModel(items: [.comment(comment)])
-            })
+            owner.sections.onNext([PostDetailSectionModel(items: [.post(value)])] 
+                                  + [PostDetailSectionModel(items: value.comments.map { .comment($0) })])
         }.disposed(by: disposeBag)
         
         // 자신의 게시물인지 확인
@@ -184,6 +184,18 @@ class PostDetailViewController: BaseViewController {
                 if post.files.isEmpty { // 이미지가 없는 게시글일 경우
                     let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailWithoutImageTableViewCell.identifier, for: indexPath) as! PostDetailWithoutImageTableViewCell
                     cell.configureCell(post: post)
+                    cell.profileStackView.rx.tapGesture()
+                        .when(.recognized)
+                        .bind(with: self) { owner, value in
+                            if post.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                                let vc = OtherUserProfileViewController()
+                                vc.userId = post.creator.userID
+                                owner.navigationController?.pushViewController(vc, animated: true)
+                            } else {
+                                let vc = ProfileViewController()
+                                owner.navigationController?.pushViewController(vc, animated: true)
+                            }
+                        }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaults.standard.string(forKey: "userId")!
                         let status = !post.likes.contains(userId)
@@ -198,6 +210,18 @@ class PostDetailViewController: BaseViewController {
                 } else { // 이미지가 있는 게시글일 경우
                     let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailTableViewCell.identifier, for: indexPath) as! PostDetailTableViewCell
                     cell.configureCell(post: post)
+                    cell.profileStackView.rx.tapGesture()
+                        .when(.recognized)
+                        .bind(with: self) { owner, value in
+                            if post.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                                let vc = OtherUserProfileViewController()
+                                vc.userId = post.creator.userID
+                                owner.navigationController?.pushViewController(vc, animated: true)
+                            } else {
+                                let vc = ProfileViewController()
+                                owner.navigationController?.pushViewController(vc, animated: true)
+                            }
+                        }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaults.standard.string(forKey: "userId")!
                         let status = !post.likes.contains(userId)
@@ -213,6 +237,18 @@ class PostDetailViewController: BaseViewController {
             case .comment(let comment): // 댓글
                 let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
                 cell.configureCell(comment: comment)
+                cell.profileStackView.rx.tapGesture()
+                    .when(.recognized)
+                    .bind(with: self) { owner, value in
+                        if comment.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                            let vc = OtherUserProfileViewController()
+                            vc.userId = comment.creator.userID
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        } else {
+                            let vc = ProfileViewController()
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        }
+                    }.disposed(by: cell.disposeBag)
                 return cell
             }
         },canEditRowAtIndexPath: { dataSource, indexPath in

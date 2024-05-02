@@ -15,6 +15,15 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
+    let profileStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .leading
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     let profileImageView = CustomImageView(frame: .zero)
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
@@ -68,8 +77,9 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
     }
     
     override func configureHierarchy() {
-        contentView.addSubview(profileImageView)
-        contentView.addSubview(nickNameLabel)
+        contentView.addSubview(profileStackView)
+        profileStackView.addArrangedSubview(profileImageView)
+        profileStackView.addArrangedSubview(nickNameLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(likeIconImageView)
@@ -81,20 +91,22 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
     }
     
     override func configureConstraints() {
-        profileImageView.snp.makeConstraints { make in
+        profileStackView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(50)
+        }
+        
+        profileImageView.snp.makeConstraints { make in
             make.size.equalTo(50)
         }
         
         nickNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
-            make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView).inset(20)
         }
         
         postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
+            make.top.equalTo(profileStackView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
