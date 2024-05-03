@@ -41,8 +41,12 @@ extension LikeService: Moya.TargetType {
         switch self {
         case .likeUpload(query: _, postId: _):
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }
 

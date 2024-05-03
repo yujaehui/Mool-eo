@@ -101,6 +101,8 @@
 		0987A7962BE36AD40045D361 /* OtherUserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7952BE36AD40045D361 /* OtherUserProfileModel.swift */; };
 		0987A7992BE378080045D361 /* FollowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7982BE378080045D361 /* FollowModel.swift */; };
 		0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79A2BE3783E0045D361 /* FollowService.swift */; };
+		0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */; };
+		0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -218,6 +220,8 @@
 		0987A7952BE36AD40045D361 /* OtherUserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileModel.swift; sourceTree = "<group>"; };
 		0987A7982BE378080045D361 /* FollowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowModel.swift; sourceTree = "<group>"; };
 		0987A79A2BE3783E0045D361 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowService.swift; sourceTree = "<group>"; };
+		0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostImageEditCollectionViewCell.swift; sourceTree = "<group>"; };
+		0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -404,6 +408,7 @@
 				094BEB6D2BC670BC00342DC3 /* Info.plist */,
 				0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */,
 				09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */,
+				0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */,
 			);
 			path = "Mool-eo";
 			sourceTree = "<group>";
@@ -493,6 +498,7 @@
 			children = (
 				09602B632BD3CD7800A6AFEA /* WritePostBoxView.swift */,
 				09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */,
+				0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */,
 				095679042BC6BCFE0030F0CD /* WritePostView.swift */,
 				095678FA2BC6A4120030F0CD /* WritePostViewController.swift */,
 				095679022BC6AB920030F0CD /* WritePostViewModel.swift */,
@@ -814,6 +820,7 @@
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */,
 				09279A652BE2171F00E4A65D /* ScrapPostListViewController.swift in Sources */,
+				0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
@@ -840,6 +847,7 @@
 				09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
+				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
 				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
 				09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */,
 				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,

@@ -19,7 +19,7 @@ class URLImageSettingManager {
             var urlRequest = request
             urlRequest.headers = [
                 HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken")!
+                HTTPHeader.authorization.rawValue: UserDefaultsManager.accessToken!
             ]
             return urlRequest
         }

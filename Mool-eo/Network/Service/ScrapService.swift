@@ -45,10 +45,14 @@ extension ScrapService: Moya.TargetType {
         switch self {
         case .scrapUpload(query: _, postId: _):
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .scrapPostCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

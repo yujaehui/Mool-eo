@@ -66,11 +66,15 @@ extension UserService: Moya.TargetType {
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue]
         case .refresh:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!,
-             HTTPHeader.refresh.rawValue : UserDefaults.standard.string(forKey: "refreshToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!,
+             HTTPHeader.refresh.rawValue : UserDefaultsManager.refreshToken!]
         case .withdraw:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

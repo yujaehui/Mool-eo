@@ -48,10 +48,14 @@ extension CommentService: Moya.TargetType {
         case .uploadComment:
             [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken") ?? ""]
+             HTTPHeader.authorization.rawValue: UserDefaultsManager.accessToken!]
         case .commentDelete:
             [HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue: UserDefaults.standard.string(forKey: "accessToken") ?? ""]
+             HTTPHeader.authorization.rawValue: UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

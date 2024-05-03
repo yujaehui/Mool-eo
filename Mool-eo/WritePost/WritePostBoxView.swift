@@ -29,6 +29,7 @@ class WritePostBoxView: BaseView {
     let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(WritePostImageCollectionViewCell.self, forCellWithReuseIdentifier: WritePostImageCollectionViewCell.identifier)
+        collectionView.register(WritePostImageEditCollectionViewCell.self, forCellWithReuseIdentifier: WritePostImageEditCollectionViewCell.identifier)
         collectionView.isScrollEnabled = false
         return collectionView
     }()

@@ -72,7 +72,7 @@ class PostListViewController: BaseViewController {
             let vc = PostDetailViewController()
             vc.postBoard = owner.postBoard
             vc.postId = value
-            vc.userId = UserDefaults.standard.string(forKey: "userId")!
+            vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
@@ -85,7 +85,7 @@ class PostListViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if item.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                        if item.creator.userID != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
                             vc.userId = item.creator.userID
                             owner.navigationController?.pushViewController(vc, animated: true)
@@ -101,7 +101,7 @@ class PostListViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if item.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                        if item.creator.userID != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
                             vc.userId = item.creator.userID
                             owner.navigationController?.pushViewController(vc, animated: true)

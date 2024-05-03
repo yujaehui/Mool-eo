@@ -14,6 +14,7 @@ import RxMoya
 struct NetworkManager {
     static let shared = NetworkManager()
     private init() {}
+
     
     //MARK: - User
     private let userProvider = MoyaProvider<UserService>(plugins: [NetworkLoggerPlugin()])
@@ -30,9 +31,9 @@ struct NetworkManager {
         return userProvider.rx.request(.login(query: query))
             .map(LoginModel.self)
             .do(onSuccess: { response in
-                UserDefaults.standard.set(response.user_id, forKey: "userId")
-                UserDefaults.standard.set(response.accessToken, forKey: "accessToken")
-                UserDefaults.standard.set(response.refreshToken, forKey: "refreshToken")
+                UserDefaultsManager.userId = response.user_id
+                UserDefaultsManager.accessToken = response.accessToken
+                UserDefaultsManager.refreshToken = response.refreshToken
             })
     }
     
@@ -45,7 +46,7 @@ struct NetworkManager {
     }
     
     // MARK: - Post
-    private let postProvider = MoyaProvider<PostService>(plugins: [NetworkLoggerPlugin()])
+    private let postProvider = MoyaProvider<PostService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func imageUpload(query: FilesQuery) -> Single<FilesModel> {
         return postProvider.rx.request(.imageUpload(query: query)).map(FilesModel.self)
@@ -77,7 +78,7 @@ struct NetworkManager {
     
     // MARK: - Comment
 
-    private let commentProvider = MoyaProvider<CommentService>(plugins: [NetworkLoggerPlugin()])
+    private let commentProvider = MoyaProvider<CommentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
         return commentProvider.rx.request(.uploadComment(query: query, postId: postId)).map(CommentModel.self)
@@ -88,7 +89,7 @@ struct NetworkManager {
     }
     
     //MARK: - Profile
-    private let profileProvider = MoyaProvider<ProfileService>(plugins: [NetworkLoggerPlugin()])
+    private let profileProvider = MoyaProvider<ProfileService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func profileCheck() -> Single<ProfileModel> {
         return profileProvider.rx.request(.profileCheck).map(ProfileModel.self)
@@ -103,14 +104,14 @@ struct NetworkManager {
     }
     
     //MARK: - Like
-    private let likeProvider = MoyaProvider<LikeService>(plugins: [NetworkLoggerPlugin()])
+    private let likeProvider = MoyaProvider<LikeService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
         return likeProvider.rx.request(.likeUpload(query: query, postId: postId)).map(LikeModel.self)
     }
     
     //MARK: - Scrap
-    private let scrapProvider = MoyaProvider<ScrapService>(plugins: [NetworkLoggerPlugin()])
+    private let scrapProvider = MoyaProvider<ScrapService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func scrapUpload(query: ScrapQuery, postId: String) -> Single<ScrapModel> {
         return scrapProvider.rx.request(.scrapUpload(query: query, postId: postId)).map(ScrapModel.self)
@@ -121,7 +122,7 @@ struct NetworkManager {
     }
     
     //MARK: - Follow
-    private let followProvider = MoyaProvider<FollowService>(plugins: [NetworkLoggerPlugin()])
+    private let followProvider = MoyaProvider<FollowService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
     
     func follow(userId: String) -> Single<FollowModel> {
         return followProvider.rx.request(.follow(userId: userId)).map(FollowModel.self)

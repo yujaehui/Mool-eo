@@ -78,27 +78,31 @@ extension PostService: Moya.TargetType {
         case .imageUpload:
             [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postUpload:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postCheckSpecific:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postCheckUser:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postDelete:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postEdit:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

@@ -8,37 +8,52 @@
 import Foundation
 import Alamofire
 import RxSwift
+import UIKit
 
 class AuthInterceptor: RequestInterceptor {
     
     let disposeBag = DisposeBag()
     
+    static let shared = AuthInterceptor()
+    private init() {}
+    
     func adapt(_ urlRequest: URLRequest, for session: Alamofire.Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        var urlRequest = urlRequest
-        if let accessToken = UserDefaults.standard.string(forKey: "accessToken") {
-            urlRequest.setValue(accessToken, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
+        guard urlRequest.url?.absoluteString.hasPrefix(APIKey.baseURL.rawValue) == true,
+              let accessToken = UserDefaultsManager.accessToken,
+              let refreshToken = UserDefaultsManager.refreshToken
+        else {
+            completion(.success(urlRequest))
+            return
         }
+        
+        var urlRequest = urlRequest
+        urlRequest.setValue(accessToken, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
+        urlRequest.setValue(refreshToken, forHTTPHeaderField: HTTPHeader.refresh.rawValue)
         completion(.success(urlRequest))
     }
-
+    
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        print(#function)
         guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419 else {
-            print("재시도 X")
-            completion(.doNotRetry)
+            completion(.doNotRetryWithError(error))
             return
         }
         
         NetworkManager.shared.refresh()
-            .debug("Refresh")
+            .debug("토큰 갱신")
             .subscribe { event in
                 switch event {
                 case .success(let success):
-                    UserDefaults.standard.set(success.accessToken, forKey: "accessToken")
+                    UserDefaultsManager.accessToken = success.accessToken
                     completion(.retry)
                 case .failure(let error):
                     completion(.doNotRetryWithError(error))
+                    // 로그인 화면으로 이동
+                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
+                    sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+                    sceneDelegate?.window?.makeKeyAndVisible()
+                    
                 }
             }
             .disposed(by: disposeBag)

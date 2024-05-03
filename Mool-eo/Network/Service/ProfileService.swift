@@ -54,14 +54,18 @@ extension ProfileService: Moya.TargetType {
         switch self {
         case .profileCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .profileEdit:
             [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .otherUserProfileCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaults.standard.string(forKey: "accessToken")!]
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

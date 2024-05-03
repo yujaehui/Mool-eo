@@ -216,7 +216,7 @@ class PostDetailViewController: BaseViewController {
                     cell.profileStackView.rx.tapGesture()
                         .when(.recognized)
                         .bind(with: self) { owner, value in
-                            if post.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                            if post.creator.userID != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
                                 vc.userId = post.creator.userID
                                 owner.navigationController?.pushViewController(vc, animated: true)
@@ -226,12 +226,12 @@ class PostDetailViewController: BaseViewController {
                             }
                         }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let userId = UserDefaultsManager.userId!
                         let status = !post.likes.contains(userId)
                         owner.likeStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let userId = UserDefaultsManager.userId!
                         let status = !post.scraps.contains(userId)
                         owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
@@ -242,7 +242,7 @@ class PostDetailViewController: BaseViewController {
                     cell.profileStackView.rx.tapGesture()
                         .when(.recognized)
                         .bind(with: self) { owner, value in
-                            if post.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                            if post.creator.userID != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
                                 vc.userId = post.creator.userID
                                 owner.navigationController?.pushViewController(vc, animated: true)
@@ -252,12 +252,12 @@ class PostDetailViewController: BaseViewController {
                             }
                         }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let userId = UserDefaultsManager.userId!
                         let status = !post.likes.contains(userId)
                         owner.likeStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaults.standard.string(forKey: "userId")!
+                        let userId = UserDefaultsManager.userId!
                         let status = !post.scraps.contains(userId)
                         owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
@@ -269,7 +269,7 @@ class PostDetailViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if comment.creator.userID != UserDefaults.standard.string(forKey: "userId") {
+                        if comment.creator.userID != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
                             vc.userId = comment.creator.userID
                             owner.navigationController?.pushViewController(vc, animated: true)
@@ -282,7 +282,7 @@ class PostDetailViewController: BaseViewController {
             }
         },canEditRowAtIndexPath: { dataSource, indexPath in
             guard case .comment(let comment) = dataSource[indexPath],
-                  comment.creator.userID == UserDefaults.standard.string(forKey: "userId") else { return false }
+                  comment.creator.userID == UserDefaultsManager.userId else { return false }
             return true
         })
         return dataSource

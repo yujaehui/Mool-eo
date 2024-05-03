@@ -32,7 +32,7 @@ class ProfileViewModel: ViewModelType {
         
         input.viewDidLoad
             .map {
-                return UserDefaults.standard.string(forKey: "userId")!
+                return UserDefaultsManager.userId!
             }
             .flatMap { userId in
                 Observable.zip(NetworkManager.shared.profileCheck().asObservable(), NetworkManager.shared.postCheckUser(userId: userId).asObservable())

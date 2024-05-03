@@ -72,7 +72,7 @@ class OtherUserProfileViewController: BaseViewController {
             case .infoItem(let info):
                 let cell = tableView.dequeueReusableCell(withIdentifier: OtherUserProfileInfoTableViewCell.identifier, for: indexPath) as! OtherUserProfileInfoTableViewCell
                 cell.configureCell(info)
-                if info.followers.contains(where: { $0.user_id == UserDefaults.standard.string(forKey: "userId") }) {
+                if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {
                     cell.followButton.configuration = .check("팔로잉")
                     cell.followButton.rx.tap.bind(with: self) { owner, _ in
                         owner.followStatus.onNext(true)

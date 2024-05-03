@@ -67,7 +67,7 @@ final class WritePostViewController: BaseViewController {
                 }.disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
         case .edit:
-            Observable.just(postFiles).bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
+            Observable.just(postFiles).bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageEditCollectionViewCell.identifier, cellType: WritePostImageEditCollectionViewCell.self)) { (row, element, cell) in
                 URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element)
             }.disposed(by: disposeBag)
             writePostView.writePostBoxView.titleTextField.text = postTitle
