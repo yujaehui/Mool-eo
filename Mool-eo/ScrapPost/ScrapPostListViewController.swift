@@ -28,6 +28,10 @@ class ScrapPostListViewController: BaseViewController {
     let viewModel = ScrapPostListViewModel()
     let scrapPostListView = ScrapPostListView()
     
+    var reload = BehaviorSubject(value: ())
+    
+    private var sections = BehaviorSubject<[ScrapPostListSectionModel]>(value: [])
+    
     override func loadView() {
         self.view = scrapPostListView
     }
@@ -37,20 +41,22 @@ class ScrapPostListViewController: BaseViewController {
     }
     
     override func bind() {
-        let viewDidLoad = Observable.just(())
+        sections.bind(to: scrapPostListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        
+        let reload = reload
         let modelSelected = scrapPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = scrapPostListView.tableView.rx.itemSelected.asObservable()
-        let input = ScrapPostListViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected)
+        let input = ScrapPostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         
         output.scrapPostList.bind(with: self) { owner, value in
-            let sections: [ScrapPostListSectionModel] = [ScrapPostListSectionModel(items: value)]
-            Observable.just(sections).bind(to: owner.scrapPostListView.tableView.rx.items(dataSource: owner.configureDataSource())).disposed(by: owner.disposeBag)
+            owner.sections.onNext([ScrapPostListSectionModel(items: value)])
         }.disposed(by: disposeBag)
         
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
+            vc.delegate = owner
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
@@ -69,5 +75,12 @@ class ScrapPostListViewController: BaseViewController {
             }
         }
         return dataSource
+    }
+}
+
+extension ScrapPostListViewController: PostDetailDelegate {
+    func changePost(_ postBoard: PostBoardType) {
+        scrapPostListView.tableView.reloadData()
+        reload.onNext(())
     }
 }

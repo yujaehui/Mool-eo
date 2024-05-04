@@ -87,7 +87,10 @@ class ProfileEditViewModel: ViewModelType {
             }
             .debug("프로필 수정")
             .subscribe(with: self) { owenr, value in
-                profileSuccessTrigger.onNext(())
+                switch value {
+                case .success(_): profileSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             } onError: { owner, error in
                 print("오류 발생")
             }.disposed(by: disposeBag)

@@ -19,7 +19,7 @@ class WritePostViewModel: ViewModelType {
         let postBoard: PostBoardType
         let title: Observable<String>
         let content: Observable<String>
-        let selectedImageDataSubject: PublishSubject<[Data]>
+        let selectedImageDataSubject: BehaviorSubject<[Data]>
         let imageSelectedSubject: BehaviorSubject<Bool>
         let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
@@ -79,34 +79,48 @@ class WritePostViewModel: ViewModelType {
         case .upload:
             input.completeButtonTap
                 .withLatestFrom(input.imageSelectedSubject)
-                .map { imageSelected -> Observable<PostQuery> in
+                .flatMap { imageSelected -> Observable<PostQuery> in
                     if imageSelected {
                         return filesQuery
-                            .flatMap { filesQuery in
+                            .flatMapLatest { filesQuery in
                                 NetworkManager.shared.imageUpload(query: filesQuery)
                             }
-                            .withLatestFrom(postQuery) { filesModel, postObservable in
-                                (filesModel, postObservable)
-                            }
-                            .map { filesModel, postObservable in
-                                PostQuery(title: postObservable.title, content: postObservable.content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                            .flatMapLatest { result -> Observable<PostQuery> in
+                                switch result {
+                                case .success(let filesModel):
+                                    let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
+                                        return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                                    }
+                                    return postQuery
+                                case .error(_):
+                                    let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
+                                        return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
+                                    }
+                                    return postQuery
+                                }
                             }
                     } else {
+                        let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
+                            return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
+                        }
                         return postQuery
                     }
-                }
-                .flatMap { query in
-                    query
                 }
                 .flatMap { query in
                     NetworkManager.shared.postUpload(query: query)
                 }
                 .debug("게시글 업로드")
-                .subscribe(with: self) { owner, _ in
-                    uploadSuccessTrigger.onNext(())
-                } onError: { owner, error in
-                    print("오류 발생")
+                .subscribe(with: self) { owner, value in
+                    switch value {
+                    case .success(_): uploadSuccessTrigger.onNext(())
+                    case .error(let error):
+                        switch error {
+                        case .gone: print("DB 서버 장애")
+                        default: print("other error")
+                        }
+                    }
                 }.disposed(by: disposeBag)
+            
         case .edit:
             input.completeButtonTap
                 .withLatestFrom(editPostObservable)
@@ -115,12 +129,14 @@ class WritePostViewModel: ViewModelType {
                 }
                 .debug("게시글 수정")
                 .subscribe(with: self) { owner, value in
-                    editSuccessTrigger.onNext(())
-                } onError: { owner, error in
-                    print("오류 발생")
+                    switch value {
+                    case .success(_): editSuccessTrigger.onNext(())
+                    case .error(let error): print("error")
+                    }
+                    
                 }.disposed(by: disposeBag)
         }
-    
+        
         return Output(text: text.asDriver(onErrorJustReturn: ""),
                       textColorType: textColorType.asDriver(onErrorJustReturn: false),
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),

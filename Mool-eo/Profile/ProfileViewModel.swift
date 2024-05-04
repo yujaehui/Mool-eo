@@ -35,15 +35,22 @@ class ProfileViewModel: ViewModelType {
                 return UserDefaultsManager.userId!
             }
             .flatMap { userId in
-                Observable.zip(NetworkManager.shared.profileCheck().asObservable(), NetworkManager.shared.postCheckUser(userId: userId).asObservable())
+                Observable.zip(
+                    NetworkManager.shared.profileCheck().asObservable(),
+                    NetworkManager.shared.postCheckUser(userId: userId).asObservable()
+                ).map { profileResult, postResult -> (NetworkResult<ProfileModel>, NetworkResult<PostListModel>) in
+                    return (profileResult, postResult)
+                }
             }
             .debug("프로필 및 유저 포스트 조회")
             .subscribe(with: self) { owner, value in
-                result.onNext(value)
-            } onError: { owner, error in
-                print("오류 발생")
-            }
-            .disposed(by: disposeBag)   
+                switch (value.0, value.1) {
+                case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
+                case (.error(let profileError), _): print(profileError)
+                case (_, .error(let postError)): print(postError)
+                }
+            }.disposed(by: disposeBag)
+        
         
         Observable.zip(input.modelSelected, input.itemSelected)
             .bind(with: self) { owner, value in
@@ -59,10 +66,14 @@ class ProfileViewModel: ViewModelType {
             }
             .debug("탈퇴")
             .subscribe(with: self) { owner, value in
-                withdrawSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
-            } .disposed(by: disposeBag)
+                switch value {
+                case .success(_): withdrawSuccessTrigger.onNext(())
+                case .error(let error):
+                    switch error {
+                    default: print("error")
+                    }
+                }
+            }.disposed(by: disposeBag)
         
         return Output(result: result,
                       post: post.asDriver(onErrorJustReturn: ""),

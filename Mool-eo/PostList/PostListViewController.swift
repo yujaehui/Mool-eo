@@ -30,6 +30,9 @@ class PostListViewController: BaseViewController {
     let postListView = PostListView()
     
     var postBoard: PostBoardType = .free
+    lazy var reload = BehaviorSubject<PostBoardType>(value: postBoard)
+    
+    private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
     
     override func loadView() {
         self.view = postListView
@@ -45,21 +48,23 @@ class PostListViewController: BaseViewController {
     }
     
     override func bind() {
-        let postBoardType = Observable.just(postBoard)
+        sections.bind(to: postListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        
+        let reload = reload
         let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
         let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
-        let input = PostListViewModel.Input(postBoardType: postBoardType, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected)
+        let input = PostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         
         output.postList.bind(with: self) { owner, value in
-            let sections: [PostListSectionModel] = [PostListSectionModel(items: value)]
-            Observable.just(sections).bind(to: owner.postListView.tableView.rx.items(dataSource: owner.configureDataSource())).disposed(by: owner.disposeBag)
+            owner.sections.onNext([PostListSectionModel(items: value)])
         }.disposed(by: disposeBag)
         
         output.postWriteButtonTap.drive(with: self) { owner, _ in
             let vc = WritePostViewController()
+            vc.delegate = owner
             vc.type = .upload
             vc.postBoard = owner.postBoard
             let nav = UINavigationController(rootViewController: vc)
@@ -70,6 +75,7 @@ class PostListViewController: BaseViewController {
         // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
+            vc.delegate = owner
             vc.postBoard = owner.postBoard
             vc.postId = value
             vc.userId = UserDefaultsManager.userId!
@@ -116,3 +122,17 @@ class PostListViewController: BaseViewController {
         return dataSource
     }
 }
+
+extension PostListViewController: WritePostDelegate, PostDetailDelegate {
+    func didUploadPost(_ postBoard: PostBoardType) { // 포스트를 새로 업로드한 경우
+        postListView.tableView.reloadData()
+        reload.onNext(postBoard)
+    }
+    
+    func changePost(_ postBoard: PostBoardType) { // 기존 포스트의 수정, 댓글, 좋아요, 스크랩의 변화가 있을 경우
+        postListView.tableView.reloadData()
+        reload.onNext(postBoard)
+    }
+}
+
+

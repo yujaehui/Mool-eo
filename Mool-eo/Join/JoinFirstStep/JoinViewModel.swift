@@ -52,11 +52,14 @@ class JoinViewModel: ViewModelType {
                 NetworkManager.shared.emailCheck(query: query)
             }
             .debug("아이디 중복 확인")
-            .bind(with: self) { owner, value in
-                if value.message == "사용 가능한 이메일입니다." {
-                    idCheckSuccessValidation.onNext(true)
-                } else {
-                    idCheckSuccessValidation.onNext(false)
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(_): idCheckSuccessValidation.onNext(true)
+                case .error(let error):
+                    switch error {
+                    case .conflict: idCheckSuccessValidation.onNext(false)
+                    default: print("other error")
+                    }
                 }
             }.disposed(by: disposeBag)
         

@@ -59,9 +59,14 @@ class JoinThirdViewModel: ViewModelType {
             }
             .debug("회원가입")
             .subscribe(with: self) { owner, value in
-                joinSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): joinSuccessTrigger.onNext(())
+                case .error(let error):
+                    switch error {
+                    case .conflict: print("이미 가입된 유저입니다.")
+                    default: print("other error")
+                    }
+                }
             }.disposed(by: disposeBag)
         
         return Output(nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),

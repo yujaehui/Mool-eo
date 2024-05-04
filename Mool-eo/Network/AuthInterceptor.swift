@@ -43,17 +43,20 @@ class AuthInterceptor: RequestInterceptor {
             .debug("토큰 갱신")
             .subscribe { event in
                 switch event {
-                case .success(let success):
-                    UserDefaultsManager.accessToken = success.accessToken
-                    completion(.retry)
+                case .success(let result):
+                    switch result {
+                    case .success(let tokenModel):
+                        UserDefaultsManager.accessToken = tokenModel.accessToken
+                        completion(.retry)
+                    case .error(let networkError):
+                        completion(.doNotRetryWithError(networkError))
+                    }
                 case .failure(let error):
                     completion(.doNotRetryWithError(error))
-                    // 로그인 화면으로 이동
                     let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                     let sceneDelegate = windowScene?.delegate as? SceneDelegate
                     sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
                     sceneDelegate?.window?.makeKeyAndVisible()
-                    
                 }
             }
             .disposed(by: disposeBag)

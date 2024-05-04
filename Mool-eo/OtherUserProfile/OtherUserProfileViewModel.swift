@@ -32,15 +32,18 @@ class OtherUserProfileViewModel: ViewModelType {
                 Observable.zip(
                     NetworkManager.shared.otherUserProfileCheck(userId: input.userId).asObservable(),
                     NetworkManager.shared.postCheckUser(userId: input.userId).asObservable()
-                )
+                ).map { profileResult, postResult -> (NetworkResult<OtherUserProfileModel>, NetworkResult<PostListModel>) in
+                    return (profileResult, postResult)
+                }
             }
             .debug("다른 유저 프로필 및 포스트 조회")
             .subscribe(with: self) { owner, value in
-                result.onNext(value)
-            } onError: { owner, error in
-                print("오류 발생")
-            }
-            .disposed(by: disposeBag)
+                switch (value.0, value.1) {
+                case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
+                case (.error(let profileError), _): print(profileError)
+                case (_, .error(let postError)): print(postError)
+                }
+            }.disposed(by: disposeBag)
         
         input.followStatus
             .flatMap { status in
@@ -48,9 +51,10 @@ class OtherUserProfileViewModel: ViewModelType {
             }
             .debug("팔로우 및 언팔로우")
             .subscribe(with: self) { owner, value in
-                followOrUnfollowSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): followOrUnfollowSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         return Output(result: result, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))

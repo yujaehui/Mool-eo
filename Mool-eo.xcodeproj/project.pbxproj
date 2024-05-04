@@ -103,6 +103,7 @@
 		0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79A2BE3783E0045D361 /* FollowService.swift */; };
 		0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */; };
 		0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */; };
+		0987A7C22BE663A80045D361 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7C12BE663A80045D361 /* Empty.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -222,6 +223,7 @@
 		0987A79A2BE3783E0045D361 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowService.swift; sourceTree = "<group>"; };
 		0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostImageEditCollectionViewCell.swift; sourceTree = "<group>"; };
 		0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		0987A7C12BE663A80045D361 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0987A7C12BE663A80045D361 /* Empty.swift */,
 				0999EB532BCBC2C4004B6D1F /* User */,
 				09602B562BD3AC0800A6AFEA /* Post */,
 				09602BC92BDBD32100A6AFEA /* Comment */,
@@ -799,6 +802,7 @@
 				09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
+				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */,
 				09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */,

@@ -11,12 +11,17 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 
+protocol WritePostDelegate: AnyObject {
+    func didUploadPost(_ postBoard: PostBoardType)
+}
+
 enum PostInteractionType: String {
     case upload
     case edit
 }
 
 final class WritePostViewController: BaseViewController {
+    weak var delegate: WritePostDelegate?
     
     let viewModel = WritePostViewModel()
     let writePostView = WritePostView()
@@ -30,8 +35,8 @@ final class WritePostViewController: BaseViewController {
     
     private var selectedImage: [UIImage] = []
     private var selectedImageData: [Data] = []
-    private var selectedImageSubject = PublishSubject<[UIImage]>()
-    private var selectedImageDataSubject = PublishSubject<[Data]>()
+    private var selectedImageSubject = BehaviorSubject<[UIImage]>(value: [])
+    private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
     private var imageSelected = false
     private var imageSelectedSubject = BehaviorSubject<Bool>(value: false)
     
@@ -105,10 +110,12 @@ final class WritePostViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.uploadSuccessTrigger.drive(with: self) { owner, _ in
+            owner.delegate?.didUploadPost(postBoard)
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         
         output.editSuccessTrigger.drive(with: self) { owner, _ in
+            owner.delegate?.didUploadPost(postBoard)
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         

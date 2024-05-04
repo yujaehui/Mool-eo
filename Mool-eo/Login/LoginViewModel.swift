@@ -54,9 +54,18 @@ class LoginViewModel: ViewModelType {
             }
             .debug("로그인")
             .subscribe(with: self) { owner, value in
-                loginSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(let loginModel):
+                    UserDefaultsManager.userId = loginModel.user_id
+                    UserDefaultsManager.accessToken = loginModel.accessToken
+                    UserDefaultsManager.refreshToken = loginModel.refreshToken
+                    loginSuccessTrigger.onNext(())
+                case .error(let error):
+                    switch error {
+                    case .AuthenticationErr: print("아이디 또는 비밀번호가 일치하지 않습니다.") // TODO: Toast 처리
+                    default: print("other error")
+                    }
+                }
             }.disposed(by: disposeBag)
         
         

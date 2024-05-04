@@ -10,7 +10,7 @@ import RxSwift
 import Moya
 
 enum CommentService {
-    case uploadComment(query: CommentQuery, postId: String)
+    case commentUpload(query: CommentQuery, postId: String)
     case commentDelete(postId: String, commentId: String)
 }
 
@@ -22,21 +22,21 @@ extension CommentService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .uploadComment(_, let postId): "/posts/\(postId)/comments"
+        case .commentUpload(_, let postId): "/posts/\(postId)/comments"
         case .commentDelete(let postId, let commentId): "posts/\(postId)/comments/\(commentId)"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .uploadComment: .post
+        case .commentUpload: .post
         case .commentDelete: .delete
         }
     }
     
     var task: Task {
         switch self {
-        case .uploadComment(let query, _):
+        case .commentUpload(let query, _):
             return .requestJSONEncodable(query)
         case .commentDelete:
             return .requestPlain
@@ -45,7 +45,7 @@ extension CommentService: Moya.TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .uploadComment:
+        case .commentUpload:
             [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue: APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue: UserDefaultsManager.accessToken!]

@@ -11,124 +11,149 @@ import RxSwift
 import Moya
 import RxMoya
 
+enum NetworkResult<T: Decodable> {
+    case success(T)
+    case error(NetworkError)
+}
+
+enum NetworkError: Int, Error {
+    case AuthenticationErr = 401
+    case missingKey = 420
+    case overRequestLimit = 429
+    case invalidURL = 444
+    case serverError = 500
+    case badRequest = 400
+    case conflict = 409
+    case forbidden = 403
+    case gone = 410
+    case Unauthorized = 445
+}
+
 struct NetworkManager {
     static let shared = NetworkManager()
     private init() {}
-
+    
+    func requestGeneric<T: Decodable, U: TargetType>(target: U) -> Single<NetworkResult<T>> where U: TargetType {
+        return Single.create { single in
+            let provider = MoyaProvider<U>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            let request = provider.request(target) { result in
+                switch result {
+                case let .success(response):
+                    do {
+                        let returnObject = try response.map(T.self)
+                        single(.success(.success(returnObject)))
+                    } catch {
+                        single(.failure(error))
+                    }
+                    
+                case let .failure(error):
+                    if let statusCode = error.response?.statusCode {
+                        if let networkError = NetworkError(rawValue: statusCode) {
+                            single(.success(.error(networkError)))
+                        }
+                    } else {
+                        single(.failure(error))
+                    }
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
     
     //MARK: - User
-    private let userProvider = MoyaProvider<UserService>(plugins: [NetworkLoggerPlugin()])
-    
-    func join(query: JoinQuery) -> Single<JoinModel> {
-        return userProvider.rx.request(.join(query: query)).map(JoinModel.self)
+    func join(query: JoinQuery) -> Single<NetworkResult<JoinModel>> {
+        return requestGeneric(target: UserService.join(query: query))
     }
     
-    func emailCheck(query: EmailQuery) -> Single<EmailModel> {
-        return userProvider.rx.request(.email(query: query)).map(EmailModel.self)
+    func emailCheck(query: EmailQuery) -> Single<NetworkResult<EmailModel>> {
+        return requestGeneric(target: UserService.email(query: query))
     }
     
-    func login(query: LoginQuery) -> Single<LoginModel> {
-        return userProvider.rx.request(.login(query: query))
-            .map(LoginModel.self)
-            .do(onSuccess: { response in
-                UserDefaultsManager.userId = response.user_id
-                UserDefaultsManager.accessToken = response.accessToken
-                UserDefaultsManager.refreshToken = response.refreshToken
-            })
+    func login(query: LoginQuery) -> Single<NetworkResult<LoginModel>> {
+        return requestGeneric(target: UserService.login(query: query))
     }
     
-    func withdraw() -> Single<WithdrawModel> {
-        return userProvider.rx.request(.withdraw).map(WithdrawModel.self)
+    func withdraw() -> Single<NetworkResult<WithdrawModel>> {
+        return requestGeneric(target: UserService.withdraw)
     }
     
-    func refresh() -> Single<TokenModel> {
-        return userProvider.rx.request(.refresh).map(TokenModel.self)
-    }
-    
-    // MARK: - Post
-    private let postProvider = MoyaProvider<PostService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-    
-    func imageUpload(query: FilesQuery) -> Single<FilesModel> {
-        return postProvider.rx.request(.imageUpload(query: query)).map(FilesModel.self)
-    }
-    
-    func postUpload(query: PostQuery) -> Single<PostModel> {
-        return postProvider.rx.request(.postUpload(query: query)).map(PostModel.self)
-    }
-    
-    func postCheck(productId: String) -> Single<PostListModel> {
-        return postProvider.rx.request(.postCheck(productId: productId)).map(PostListModel.self)
-    }
-    
-    func postCheckSpecific(postId: String) -> Single<PostModel> {
-        return postProvider.rx.request(.postCheckSpecific(postId: postId)).map(PostModel.self)
-    }
-    
-    func postCheckUser(userId: String) -> Single<PostListModel> {
-        return postProvider.rx.request(.postCheckUser(userId: userId)).map(PostListModel.self)
-    }
-    
-    func postDelete(postId: String) -> Single<Response> {
-        return postProvider.rx.request(.postDelete(postID: postId))
-    }
-    
-    func postEdit(query: PostQuery, postId: String) -> Single<PostModel> {
-        return postProvider.rx.request(.postEdit(query: query, postId: postId)).map(PostModel.self)
-    }
-    
-    // MARK: - Comment
-
-    private let commentProvider = MoyaProvider<CommentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-    
-    func commentUpload(query: CommentQuery, postId: String) -> Single<CommentModel> {
-        return commentProvider.rx.request(.uploadComment(query: query, postId: postId)).map(CommentModel.self)
-    }
-    
-    func commentDelete(postId: String, commentId: String) -> Single<Response> {
-        return commentProvider.rx.request(.commentDelete(postId: postId, commentId: commentId))
+    func refresh() -> Single<NetworkResult<TokenModel>> {
+        return requestGeneric(target: UserService.refresh)
     }
     
     //MARK: - Profile
-    private let profileProvider = MoyaProvider<ProfileService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-    
-    func profileCheck() -> Single<ProfileModel> {
-        return profileProvider.rx.request(.profileCheck).map(ProfileModel.self)
+    func profileCheck() -> Single<NetworkResult<ProfileModel>> {
+        return requestGeneric(target: ProfileService.profileCheck)
     }
     
-    func profileEdit(query: ProfileEditQuery) -> Single<ProfileModel> {
-        return profileProvider.rx.request(.profileEdit(query: query)).map(ProfileModel.self)
+    func profileEdit(query: ProfileEditQuery) -> Single<NetworkResult<ProfileModel>> {
+        return requestGeneric(target: ProfileService.profileEdit(query: query))
     }
     
-    func otherUserProfileCheck(userId: String) -> Single<OtherUserProfileModel> {
-        return profileProvider.rx.request(.otherUserProfileCheck(userId: userId)).map(OtherUserProfileModel.self)
+    func otherUserProfileCheck(userId: String) -> Single<NetworkResult<OtherUserProfileModel>> {
+        return requestGeneric(target: ProfileService.otherUserProfileCheck(userId: userId))
     }
     
-    //MARK: - Like
-    private let likeProvider = MoyaProvider<LikeService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+    // MARK: - Post
+    func imageUpload(query: FilesQuery) -> Single<NetworkResult<FilesModel>> {
+        return requestGeneric(target: PostService.imageUpload(query: query))
+    }
     
-    func likeUpload(query: LikeQuery, postId: String) -> Single<LikeModel> {
-        return likeProvider.rx.request(.likeUpload(query: query, postId: postId)).map(LikeModel.self)
+    func postUpload(query: PostQuery) -> Single<NetworkResult<PostModel>> {
+        return requestGeneric(target: PostService.postUpload(query: query))
+    }
+    
+    func postCheck(productId: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: PostService.postCheck(productId: productId))
+    }
+    
+    func postCheckSpecific(postId: String) -> Single<NetworkResult<PostModel>> {
+        return requestGeneric(target: PostService.postCheckSpecific(postId: postId))
+    }
+    
+    func postCheckUser(userId: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: PostService.postCheckUser(userId: userId))
+    }
+    
+    func postDelete(postId: String) -> Single<NetworkResult<Empty>> {
+        return requestGeneric(target: PostService.postDelete(postID: postId))
+    }
+    
+    func postEdit(query: PostQuery, postId: String) -> Single<NetworkResult<PostModel>> {
+        return requestGeneric(target: PostService.postEdit(query: query, postId: postId))
+    }
+    
+    // MARK: - Comment
+    func commentUpload(query: CommentQuery, postId: String) -> Single<NetworkResult<CommentModel>> {
+        return requestGeneric(target: CommentService.commentUpload(query: query, postId: postId))
+    }
+    
+    func commentDelete(postId: String, commentId: String) -> Single<NetworkResult<Empty>> {
+        return requestGeneric(target: CommentService.commentDelete(postId: postId, commentId: commentId))
+    }
+    
+    //MARK: - Like    
+    func likeUpload(query: LikeQuery, postId: String) -> Single<NetworkResult<LikeModel>> {
+        return requestGeneric(target: LikeService.likeUpload(query: query, postId: postId))
     }
     
     //MARK: - Scrap
-    private let scrapProvider = MoyaProvider<ScrapService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-    
-    func scrapUpload(query: ScrapQuery, postId: String) -> Single<ScrapModel> {
-        return scrapProvider.rx.request(.scrapUpload(query: query, postId: postId)).map(ScrapModel.self)
+    func scrapUpload(query: ScrapQuery, postId: String) -> Single<NetworkResult<ScrapModel>> {
+        return requestGeneric(target: ScrapService.scrapUpload(query: query, postId: postId))
     }
     
-    func scrapPostCheck() -> Single<PostListModel> {
-        return scrapProvider.rx.request(.scrapPostCheck).map(PostListModel.self)
+    func scrapPostCheck() -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: ScrapService.scrapPostCheck)
     }
     
     //MARK: - Follow
-    private let followProvider = MoyaProvider<FollowService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-    
-    func follow(userId: String) -> Single<FollowModel> {
-        return followProvider.rx.request(.follow(userId: userId)).map(FollowModel.self)
+    func follow(userId: String) -> Single<NetworkResult<FollowModel>> {
+        return requestGeneric(target: FollowService.follow(userId: userId))
     }
     
-    func unfollow(userId: String) -> Single<FollowModel> {
-        return followProvider.rx.request(.unfollow(userId: userId)).map(FollowModel.self)
+    func unfollow(userId: String) -> Single<NetworkResult<FollowModel>> {
+        return requestGeneric(target: FollowService.unfollow(userId: userId))
     }
 }

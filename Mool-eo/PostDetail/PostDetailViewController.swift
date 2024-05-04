@@ -11,6 +11,10 @@ import RxCocoa
 import RxDataSources
 import RxGesture
 
+protocol PostDetailDelegate: AnyObject {
+    func changePost(_ postBoard: PostBoardType)
+}
+
 enum PostDetailSectionItem {
     case post(PostModel)
     case comment(Comment)
@@ -35,19 +39,23 @@ enum postDetailAccessType {
 }
 
 class PostDetailViewController: BaseViewController {
+    weak var delegate: PostDetailDelegate?
     
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
+    // 외부에서 받는 값
     var postBoard: PostBoardType = .free
     var postId: String = ""
     var userId: String = ""
     
-    var reload = BehaviorSubject(value: ())
-    var likeStatus = PublishSubject<Bool>()
-    var scrapStatus = PublishSubject<Bool>()
-    var editButtonTap = PublishSubject<Void>()
-    var deleteButtonTap = PublishSubject<Void>()
+    // 뷰컨에서 변화를 감지해야 하는 값
+    var reload = BehaviorSubject(value: ()) // 좋아요나 댓글이 달리면 다시 리로드 해줘야 하기 때문에 감지를 하고 있어야 함
+    var likeStatus = PublishSubject<Bool>() // 좋아요 버튼이 눌리는지 안눌리는지 감지하기 위해서
+    var scrapStatus = PublishSubject<Bool>() // 스크랩 버튼이 눌리는지 안눌리는지 감지하기 위해서
+    var editButtonTap = PublishSubject<Void>() // 메뉴 안에 존재하는 수정 버튼을 눌렀을 때를 감지하기 위해서
+    var deleteButtonTap = PublishSubject<Void>() // 메뉴 안에 존재하는 삭제 버튼을 눌렀을 때 감지하기 위해서
+    var change = false
     
     private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
     
@@ -57,6 +65,12 @@ class PostDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if change {
+            delegate?.changePost(postBoard)
+        }
     }
     
     override func setNav() {
@@ -132,39 +146,46 @@ class PostDetailViewController: BaseViewController {
         
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
+            owner.change = true
             owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         // 좋아요 업로드가 성공할 경우
         output.likeUploadSuccessTrigger.drive(with: self) { owner, _ in
+            owner.change = true
             owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         // 스크랩 업로드가 성공할 경우
         output.scrapUploadSuccessTrigger.drive(with: self) { owner, _ in
-            print("스크랩 성공")
+            owner.change = true
         }.disposed(by: disposeBag)
         
         // 자신의 게시물 -> 삭제
         output.postDeleteSuccessTrigger.drive(with: self) { owner, _ in
+            owner.change = true
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         
         // 댓글 삭제가 성공할 경우
         output.commentDeleteSuccessTrigger.drive(with: self) { owner, indexPath in
+            owner.change = true
+
             guard var sections = try? owner.sections.value() else { return }
             var items = sections[indexPath.section].items
             items.remove(at: indexPath.row)
             sections[indexPath.section] = PostDetailSectionModel(original: sections[indexPath.section], items: items)
             owner.sections.onNext(sections)
+            
             owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         output.editPostDetail.bind(with: self) { owner, value in
             let vc = WritePostViewController()
+            vc.delegate = owner
             vc.type = .edit
             vc.postBoard = owner.postBoard
             vc.postTitle = value.title
@@ -286,5 +307,13 @@ class PostDetailViewController: BaseViewController {
             return true
         })
         return dataSource
+    }
+}
+
+extension PostDetailViewController: WritePostDelegate {
+    func didUploadPost(_ postBoard: PostBoardType) {
+        postDetailView.tableView.reloadData()
+        reload.onNext(())
+        change = true
     }
 }

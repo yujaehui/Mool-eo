@@ -13,7 +13,7 @@ class PostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let postBoardType: Observable<PostBoardType>
+        let reload: BehaviorSubject<PostBoardType>
         let postWriteButtonTap: Observable<Void>
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
@@ -30,15 +30,17 @@ class PostListViewModel: ViewModelType {
         let post = PublishSubject<String>()
         
         // 게시글 조회 네트워크 통신 진행
-        input.postBoardType.flatMap { value in
-            NetworkManager.shared.postCheck(productId: value.rawValue)
-        }
-        .debug("게시글 조회")
-        .subscribe(with: self) { owner, value in
-            postList.onNext(value.data)
-        } onError: { owner, error in
-            print("오류 발생")
-        }.disposed(by: disposeBag)
+        input.reload
+            .flatMap { value in
+                NetworkManager.shared.postCheck(productId: value.rawValue)
+            }
+            .debug("게시글 조회")
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let postListModel): postList.onNext(postListModel.data)
+                case .error(let error): print(error)
+                }
+            }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
             .map { $0.0.postID }

@@ -85,16 +85,18 @@ class PostDetailViewModel: ViewModelType {
             }
             .debug("특정 게시글 조회")
             .subscribe(with: self) { owner, value in
-                // 특정 게시글 조회
-                postDetail.onNext(value)
-                // 자신의 게시글인지 확인
-                if value.creator.userID == input.userId {
-                    accessType.onNext(.me)
-                } else {
-                    accessType.onNext(.other)
+                switch value {
+                case .success(let postModel):
+                    // 특정 게시글 조회
+                    postDetail.onNext(postModel)
+                    // 자신의 게시글인지 확인
+                    if postModel.creator.userID == input.userId {
+                        accessType.onNext(.me)
+                    } else {
+                        accessType.onNext(.other)
+                    }
+                case .error(let error): print(error)
                 }
-            } onError: { owner, error in
-                print("오류 발생")
             }.disposed(by: disposeBag)
         
         // MARK: - 댓글 업로드 네트워크 통신 진행
@@ -110,9 +112,10 @@ class PostDetailViewModel: ViewModelType {
                 NetworkManager.shared.commentUpload(query: commentQuery, postId: postId)
             }.debug("댓글")
             .subscribe(with: self) { owner, value in
-                commentUploadSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): commentUploadSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         // MARK: - 좋아요 업로드 네트워크 통신 진행
@@ -129,9 +132,10 @@ class PostDetailViewModel: ViewModelType {
             }
             .debug("좋아요 업로드")
             .subscribe(with: self) { owner, value in
-                likeUploadSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): likeUploadSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         // MARK: - 스크랩 업로드 네트워크 통신 진행
@@ -148,9 +152,10 @@ class PostDetailViewModel: ViewModelType {
             }
             .debug("스크랩 업로드")
             .subscribe(with: self) { owner, value in
-                scrapUploadSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): scrapUploadSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         //MARK: - 특정 게시물 삭제 네트워크 통신 진행
@@ -161,9 +166,10 @@ class PostDetailViewModel: ViewModelType {
             }
             .debug("특정 게시물 삭제")
             .subscribe(with: self) { owner, value in
-                postDeleteSuccessTrigger.onNext(())
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(_): postDeleteSuccessTrigger.onNext(())
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         //MARK: - 댓글 삭제 네트워크 통신 진행
@@ -173,14 +179,15 @@ class PostDetailViewModel: ViewModelType {
                     .take(1)
                     .flatMap { postId in
                         NetworkManager.shared.commentDelete(postId: postId, commentId: commentId)
-                            .map { _ in (indexPath, ()) } // 성공적으로 삭제되면 IndexPath와 Void를 방출합니다
+                            .map { result in (indexPath, result) }
                     }
             }
             .debug("댓글 삭제")
             .subscribe(with: self) { owner, value in
-                commentDeleteSuccessTrigger.onNext(value.0)
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value.1 {
+                case .success(_): commentDeleteSuccessTrigger.onNext(value.0)
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         input.postEditButtonTap
@@ -190,9 +197,10 @@ class PostDetailViewModel: ViewModelType {
             }
             .debug("특정 게시글 조회")
             .subscribe(with: self) { owner, value in
-                editPostDetail.onNext(value)
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(let postModel): editPostDetail.onNext(postModel)
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         return Output(keyboardWillShow: input.keyboardWillShow,

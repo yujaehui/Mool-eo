@@ -13,7 +13,7 @@ class ScrapPostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let viewDidLoad: Observable<Void>
+        let reload: BehaviorSubject<Void>
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
     }
@@ -27,15 +27,16 @@ class ScrapPostListViewModel: ViewModelType {
         let scrapPostList = PublishSubject<[PostModel]>()
         let post = PublishSubject<String>()
         
-        input.viewDidLoad
+        input.reload
             .flatMap { _ in
                 NetworkManager.shared.scrapPostCheck()
             }
             .debug("스크랩 게시물 조회")
             .subscribe(with: self) { owner, value in
-                scrapPostList.onNext(value.data)
-            } onError: { owner, error in
-                print("오류 발생")
+                switch value {
+                case .success(let postListModel): scrapPostList.onNext(postListModel.data)
+                case .error(let error): print(error)
+                }
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
