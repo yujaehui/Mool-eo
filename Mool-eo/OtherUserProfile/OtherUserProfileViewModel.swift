@@ -18,24 +18,33 @@ class OtherUserProfileViewModel: ViewModelType {
         let itemSelected: Observable<IndexPath>
         let userId: String
         let followStatus: PublishSubject<Bool>
+        let lastRow: PublishSubject<Int>
+        let prefetch: Observable<[IndexPath]>
+        let nextCursor: PublishSubject<String>
     }
     
     struct Output {
         let result: PublishSubject<(OtherUserProfileModel, PostListModel)>
+        let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
         let followOrUnfollowSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(OtherUserProfileModel, PostListModel)>()
+        let nextPostList = PublishSubject<PostListModel>()
+        
+        let prefetch = PublishSubject<Void>()
+        
         let post = PublishSubject<PostModel>()
+        
         let followOrUnfollowSuccessTrigger = PublishSubject<Void>()
         
         input.reload
             .flatMap {
                 Observable.zip(
                     NetworkManager.shared.otherUserProfileCheck(userId: input.userId).asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId).asObservable()
+                    NetworkManager.shared.postCheckUser(userId: input.userId, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult -> (NetworkResult<OtherUserProfileModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult)
                 }
@@ -46,6 +55,30 @@ class OtherUserProfileViewModel: ViewModelType {
                 case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
                 case (.error(let profileError), _): print(profileError)
                 case (_, .error(let postError)): print(postError)
+                }
+            }.disposed(by: disposeBag)
+        
+        // Pagination
+        let prefetchObservable = Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
+        
+        prefetchObservable
+            .bind(with: self) { owner, value in
+                guard value.0 == value.1 else { return }
+                prefetch.onNext(())
+            }.disposed(by: disposeBag)
+        
+        let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
+        
+        nextPrefetch
+            .flatMap { (next, _) in
+                NetworkManager.shared.postCheckUser(userId: input.userId, limit: "10", next: next)
+            }
+            .debug("🔥Pagination🔥")
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let postListModel):
+                    nextPostList.onNext(postListModel)
+                case .error(let error): print(error)
                 }
             }.disposed(by: disposeBag)
         
@@ -69,6 +102,6 @@ class OtherUserProfileViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(result: result, post: post, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(result: result, nextPostList: nextPostList, post: post, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

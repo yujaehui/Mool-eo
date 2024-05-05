@@ -26,6 +26,11 @@ class OtherUserProfileViewController: BaseViewController {
     
     private var sections = BehaviorSubject<[OtherUserProfileSectionModel]>(value: [])
     
+    private let lastRow = PublishSubject<Int>()
+    private let nextCursor = PublishSubject<String>()
+    
+    private var nickname: String = ""
+    
     override func loadView() {
         self.view = otherUserProfileView
     }
@@ -40,12 +45,33 @@ class OtherUserProfileViewController: BaseViewController {
         
         let modelSelected = otherUserProfileView.tableView.rx.modelSelected(OtherUserProfileSectionItem.self).asObservable()
         let itemSelected =  otherUserProfileView.tableView.rx.itemSelected.asObservable()
-        let input = OtherUserProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, userId: userId, followStatus: followStatus)
+        let prefetch = otherUserProfileView.tableView.rx.prefetchRows.asObservable()
+        let input = OtherUserProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, userId: userId, followStatus: followStatus, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
+            owner.nickname = value.0.nick
             owner.sections.onNext([OtherUserProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [OtherUserProfileSectionModel(title: "\(value.0.nick)의 게시물", items: value.1.data.map { .myPostItem($0) })])
+                                  + [OtherUserProfileSectionModel(title: "\(owner.nickname)의 게시물", items: value.1.data.map { .myPostItem($0) })])
+            guard value.1.nextCursor != "0" else { return }
+            owner.nextCursor.onNext(value.1.nextCursor)
+            let lastSection = owner.otherUserProfileView.tableView.numberOfSections - 1
+            let lastRow = owner.otherUserProfileView.tableView.numberOfRows(inSection: lastSection) - 1
+            owner.lastRow.onNext(lastRow)
+        }.disposed(by: disposeBag)
+        
+        output.nextPostList.bind(with: self) { owner, value in
+            owner.sections
+                .take(1)
+                .subscribe(onNext: { currentSections in
+                    var updatedSections = currentSections
+                    updatedSections.append(OtherUserProfileSectionModel(title: "\(owner.nickname)의 게시물", items: value.data.map { .myPostItem($0) }))
+                    owner.sections.onNext(updatedSections)
+                    owner.otherUserProfileView.tableView.reloadData()
+                    guard value.nextCursor != "0" else { return }
+                    owner.nextCursor.onNext(value.nextCursor)
+                })
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.post.bind(with: self) { owner, value in

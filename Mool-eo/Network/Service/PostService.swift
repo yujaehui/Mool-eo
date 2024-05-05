@@ -12,9 +12,9 @@ import Moya
 enum PostService {
     case imageUpload(query: FilesQuery)
     case postUpload(query: PostQuery)
-    case postCheck(productId: String)
+    case postCheck(productId: String, limit: String, next: String)
     case postCheckSpecific(postId: String)
-    case postCheckUser(userId: String)
+    case postCheckUser(userId: String, limit: String, next: String)
     case postDelete(postID: String)
     case postEdit(query: PostQuery, postId: String)
 }
@@ -31,7 +31,7 @@ extension PostService: Moya.TargetType {
         case .postUpload: "posts"
         case .postCheck: "posts"
         case .postCheckSpecific(let postId): "posts/\(postId)"
-        case .postCheckUser(let userId): "posts/users/\(userId)"
+        case .postCheckUser(let userId, _, _): "posts/users/\(userId)"
         case .postDelete(let postId): "posts/\(postId)"
         case .postEdit(_, let postId): "posts/\(postId)"
         }
@@ -60,12 +60,17 @@ extension PostService: Moya.TargetType {
             return .uploadMultipart(formData)
         case .postUpload(let query): 
             return .requestJSONEncodable(query)
-        case .postCheck(let productId):
-            return .requestParameters(parameters: ["product_id" : productId], encoding: URLEncoding.queryString)
+        case .postCheck(let productId, let limit, let next):
+            let param = ["product_id" : productId,
+                         "limit" : limit,
+                         "next" : next]
+            return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         case .postCheckSpecific(_):
             return .requestPlain
-        case .postCheckUser(_):
-            return .requestPlain
+        case .postCheckUser(_, let limit, let next):
+            let param = ["limit" : limit,
+                         "next" : next]
+            return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         case .postDelete(_):
             return .requestPlain
         case .postEdit(let query, _):

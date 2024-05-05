@@ -26,6 +26,9 @@ class ProfileViewController: BaseViewController {
     private var sections = BehaviorSubject<[ProfileSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
     
+    private let lastRow = PublishSubject<Int>()
+    private let nextCursor = PublishSubject<String>()
+    
     override func loadView() {
         self.view = profileView
     }
@@ -47,12 +50,32 @@ class ProfileViewController: BaseViewController {
         let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
         let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
         let withdrawButtonTap = profileView.withdrawButton.rx.tap.asObservable()
-        let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, withdrawButtonTap: withdrawButtonTap)
+        let prefetch = profileView.tableView.rx.prefetchRows.asObservable()
+        let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor, withdrawButtonTap: withdrawButtonTap)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
             owner.sections.onNext([ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
                                   + [ProfileSectionModel(title: "내 게시물", items: value.1.data.map { .myPostItem($0) })])
+            guard value.1.nextCursor != "0" else { return }
+            owner.nextCursor.onNext(value.1.nextCursor)
+            let lastSection = owner.profileView.tableView.numberOfSections - 1
+            let lastRow = owner.profileView.tableView.numberOfRows(inSection: lastSection) - 1
+            owner.lastRow.onNext(lastRow)
+        }.disposed(by: disposeBag)
+        
+        output.nextPostList.bind(with: self) { owner, value in
+            owner.sections
+                .take(1)
+                .subscribe(onNext: { currentSections in
+                    var updatedSections = currentSections
+                    updatedSections.append(ProfileSectionModel(title: "내 게시물", items: value.data.map { .myPostItem($0) }))
+                    owner.sections.onNext(updatedSections)
+                    owner.profileView.tableView.reloadData()
+                    guard value.nextCursor != "0" else { return }
+                    owner.nextCursor.onNext(value.nextCursor)
+                })
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.post.bind(with: self) { owner, value in
@@ -123,19 +146,19 @@ class ProfileViewController: BaseViewController {
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
-        case 1: return 50
-        default: return 0
+        case 0: return 0
+        default: return 50
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
-        case 1:
+        case 0: return nil
+        default:
             let title = dataSource[section]
             let view = ProfileMyPostHeaderView()
             view.myPostLabel.text = title.title
             return view
-        default: return nil
         }
     }
 }

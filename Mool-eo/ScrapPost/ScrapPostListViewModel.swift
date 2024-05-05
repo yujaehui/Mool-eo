@@ -16,25 +16,58 @@ class ScrapPostListViewModel: ViewModelType {
         let reload: BehaviorSubject<Void>
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
+        let lastRow: PublishSubject<Int>
+        let prefetch: Observable<[IndexPath]>
+        let nextCursor: PublishSubject<String>
     }
     
     struct Output {
-        let scrapPostList: PublishSubject<[PostModel]>
+        let scrapPostList: PublishSubject<PostListModel>
+        let nextScrapPostList: PublishSubject<PostListModel>
         let post: Driver<String>
     }
     
     func transform(input: Input) -> Output {
-        let scrapPostList = PublishSubject<[PostModel]>()
+        let scrapPostList = PublishSubject<PostListModel>()
+        let nextScrapPostList = PublishSubject<PostListModel>()
+        
+        let prefetch = PublishSubject<Void>()
+        
         let post = PublishSubject<String>()
         
         input.reload
             .flatMap { _ in
-                NetworkManager.shared.scrapPostCheck()
+                NetworkManager.shared.scrapPostCheck(limit: "7", next: "")
             }
             .debug("스크랩 게시물 조회")
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let postListModel): scrapPostList.onNext(postListModel.data)
+                case .success(let postListModel):
+                    scrapPostList.onNext(postListModel)
+                case .error(let error): print(error)
+                }
+            }.disposed(by: disposeBag)
+        
+        // Pagination
+        let prefetchObservable = Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
+        
+        prefetchObservable
+            .bind(with: self) { owner, value in
+                guard value.0 == value.1 else { return }
+                prefetch.onNext(())
+            }.disposed(by: disposeBag)
+        
+        let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
+        
+        nextPrefetch
+            .debug("🔥Pagination🔥")
+            .flatMap { (next, _) in
+                NetworkManager.shared.scrapPostCheck(limit: "7", next: next)
+            }
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let postListModel):
+                    nextScrapPostList.onNext(postListModel)
                 case .error(let error): print(error)
                 }
             }.disposed(by: disposeBag)
@@ -45,6 +78,6 @@ class ScrapPostListViewModel: ViewModelType {
                 post.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(scrapPostList: scrapPostList, post: post.asDriver(onErrorJustReturn: ""))
+        return Output(scrapPostList: scrapPostList, nextScrapPostList: nextScrapPostList, post: post.asDriver(onErrorJustReturn: ""))
     }
 }

@@ -105,16 +105,16 @@ struct NetworkManager {
         return requestGeneric(target: PostService.postUpload(query: query))
     }
     
-    func postCheck(productId: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: PostService.postCheck(productId: productId))
+    func postCheck(productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: PostService.postCheck(productId: productId, limit: limit, next: next))
     }
     
     func postCheckSpecific(postId: String) -> Single<NetworkResult<PostModel>> {
         return requestGeneric(target: PostService.postCheckSpecific(postId: postId))
     }
     
-    func postCheckUser(userId: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: PostService.postCheckUser(userId: userId))
+    func postCheckUser(userId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: PostService.postCheckUser(userId: userId, limit: limit, next: next))
     }
     
     func postDelete(postId: String) -> Single<NetworkResult<Void>> {
@@ -183,8 +183,8 @@ struct NetworkManager {
         return requestGeneric(target: ScrapService.scrapUpload(query: query, postId: postId))
     }
     
-    func scrapPostCheck() -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: ScrapService.scrapPostCheck)
+    func scrapPostCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: ScrapService.scrapPostCheck(limit: limit, next: next))
     }
     
     //MARK: - Follow

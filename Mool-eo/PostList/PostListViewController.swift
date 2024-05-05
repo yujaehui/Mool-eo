@@ -26,6 +26,9 @@ class PostListViewController: BaseViewController {
     private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
     
+    private let lastRow = PublishSubject<Int>()
+    private let nextCursor = PublishSubject<String>()
+    
     override func loadView() {
         self.view = postListView
     }
@@ -47,12 +50,32 @@ class PostListViewController: BaseViewController {
         let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
         let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
-        let input = PostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected)
+        let prefetch = postListView.tableView.rx.prefetchRows.asObservable()
+        let input = PostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         
         output.postList.bind(with: self) { owner, value in
-            owner.sections.onNext([PostListSectionModel(items: value)])
+            owner.sections.onNext([PostListSectionModel(items: value.data)])
+            guard value.nextCursor != "0" else { return }
+            owner.nextCursor.onNext(value.nextCursor)
+            let lastSection = owner.postListView.tableView.numberOfSections - 1
+            let lastRow = owner.postListView.tableView.numberOfRows(inSection: lastSection) - 1
+            owner.lastRow.onNext(lastRow)
+        }.disposed(by: disposeBag)
+        
+        output.nextPostList.bind(with: self) { owner, value in
+            owner.sections
+                .take(1)
+                .subscribe(onNext: { currentSections in
+                    var updatedSections = currentSections
+                    updatedSections.append(PostListSectionModel(items: value.data))
+                    owner.sections.onNext(updatedSections)
+                    owner.postListView.tableView.reloadData()
+                    guard value.nextCursor != "0" else { return }
+                    owner.nextCursor.onNext(value.nextCursor)
+                })
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.postWriteButtonTap.drive(with: self) { owner, _ in

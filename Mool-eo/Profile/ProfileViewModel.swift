@@ -16,18 +16,27 @@ class ProfileViewModel: ViewModelType {
         let reload: BehaviorSubject<Void>
         let modelSelected: Observable<ProfileSectionItem>
         let itemSelected: Observable<IndexPath>
+        let lastRow: PublishSubject<Int>
+        let prefetch: Observable<[IndexPath]>
+        let nextCursor: PublishSubject<String>
         let withdrawButtonTap: Observable<Void>
     }
     
     struct Output {
         let result: PublishSubject<(ProfileModel, PostListModel)>
+        let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
         let withdrawSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(ProfileModel, PostListModel)>()
+        let nextPostList = PublishSubject<PostListModel>()
+        
+        let prefetch = PublishSubject<Void>()
+        
         let post = PublishSubject<PostModel>()
+        
         let withdrawSuccessTrigger = PublishSubject<Void>()
         
         input.reload
@@ -37,7 +46,7 @@ class ProfileViewModel: ViewModelType {
             .flatMap { userId in
                 Observable.zip(
                     NetworkManager.shared.profileCheck().asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: userId).asObservable()
+                    NetworkManager.shared.postCheckUser(userId: userId, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult -> (NetworkResult<ProfileModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult)
                 }
@@ -48,6 +57,30 @@ class ProfileViewModel: ViewModelType {
                 case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
                 case (.error(let profileError), _): print(profileError)
                 case (_, .error(let postError)): print(postError)
+                }
+            }.disposed(by: disposeBag)
+        
+        // Pagination
+        let prefetchObservable = Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
+        
+        prefetchObservable
+            .bind(with: self) { owner, value in
+                guard value.0 == value.1 else { return }
+                prefetch.onNext(())
+            }.disposed(by: disposeBag)
+        
+        let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
+        
+        nextPrefetch
+            .flatMap { (next, _) in
+                NetworkManager.shared.postCheckUser(userId: UserDefaultsManager.userId!, limit: "10", next: next)
+            }
+            .debug("🔥Pagination🔥")
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let postListModel):
+                    nextPostList.onNext(postListModel)
+                case .error(let error): print(error)
                 }
             }.disposed(by: disposeBag)
         
@@ -76,6 +109,7 @@ class ProfileViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         return Output(result: result,
+                      nextPostList: nextPostList,
                       post: post,
                       withdrawSuccessTrigger: withdrawSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }

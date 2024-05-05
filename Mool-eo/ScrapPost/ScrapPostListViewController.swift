@@ -24,6 +24,9 @@ class ScrapPostListViewController: BaseViewController {
     private var sections = BehaviorSubject<[ScrapPostListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
     
+    private let lastRow = PublishSubject<Int>()
+    private let nextCursor = PublishSubject<String>()
+    
     override func loadView() {
         self.view = scrapPostListView
     }
@@ -39,12 +42,32 @@ class ScrapPostListViewController: BaseViewController {
         let reload = reload
         let modelSelected = scrapPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = scrapPostListView.tableView.rx.itemSelected.asObservable()
-        let input = ScrapPostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected)
+        let prefetch = scrapPostListView.tableView.rx.prefetchRows.asObservable()
+        let input = ScrapPostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         
         output.scrapPostList.bind(with: self) { owner, value in
-            owner.sections.onNext([ScrapPostListSectionModel(items: value)])
+            owner.sections.onNext([ScrapPostListSectionModel(items: value.data)])
+            guard value.nextCursor != "0" else { return }
+            owner.nextCursor.onNext(value.nextCursor)
+            let lastSection = owner.scrapPostListView.tableView.numberOfSections - 1
+            let lastRow = owner.scrapPostListView.tableView.numberOfRows(inSection: lastSection) - 1
+            owner.lastRow.onNext(lastRow)
+        }.disposed(by: disposeBag)
+        
+        output.nextScrapPostList.bind(with: self) { owner, value in
+            owner.sections
+                .take(1)
+                .subscribe(onNext: { currentSections in
+                    var updatedSections = currentSections
+                    updatedSections.append(ScrapPostListSectionModel(items: value.data))
+                    owner.sections.onNext(updatedSections)
+                    owner.scrapPostListView.tableView.reloadData()
+                    guard value.nextCursor != "0" else { return }
+                    owner.nextCursor.onNext(value.nextCursor)
+                })
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.post.drive(with: self) { owner, value in

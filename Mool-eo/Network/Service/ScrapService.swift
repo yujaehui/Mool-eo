@@ -11,7 +11,7 @@ import Moya
 
 enum ScrapService {
     case scrapUpload(query: ScrapQuery, postId: String)
-    case scrapPostCheck
+    case scrapPostCheck(limit: String, next: String)
 }
 
 extension ScrapService: Moya.TargetType {
@@ -37,7 +37,10 @@ extension ScrapService: Moya.TargetType {
     var task: Task {
         switch self {
         case .scrapUpload(let query, _): return .requestJSONEncodable(query)
-        case .scrapPostCheck: return .requestPlain
+        case .scrapPostCheck(let limit, let next):
+            let param = ["limit" : limit,
+                         "next" : next]
+            return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         }
     }
     
