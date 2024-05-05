@@ -14,7 +14,7 @@ class WritePostImageCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
     
-    let selectImageView = CustomImageView(frame: .zero)
+    let selectImageView = PostImageView(frame: .zero)
     let deleteButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)

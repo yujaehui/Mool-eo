@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Toast
 
 class OtherUserProfileViewController: BaseViewController {
     
@@ -38,6 +39,11 @@ class OtherUserProfileViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerObserver()
+    }
+    
+    override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {
@@ -84,6 +90,22 @@ class OtherUserProfileViewController: BaseViewController {
         
         output.followOrUnfollowSuccessTrigger.drive(with: self) { owner, _ in
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+        }.disposed(by: disposeBag)
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.otherUserProfileView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.otherUserProfileView)
+        }.disposed(by: disposeBag)
+        
+        output.notFoundErr.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.otherUserProfileView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.otherUserProfileView)
         }.disposed(by: disposeBag)
     }
     

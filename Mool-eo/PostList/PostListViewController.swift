@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import RxGesture
+import Toast
 
 class PostListViewController: BaseViewController {
     
@@ -41,6 +42,12 @@ class PostListViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func setNav() {
+        navigationItem.title = postBoard.rawValue
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {
@@ -94,6 +101,18 @@ class PostListViewController: BaseViewController {
             vc.postId = value
             vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.postListView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.postListView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.postListView)
         }.disposed(by: disposeBag)
     }
     

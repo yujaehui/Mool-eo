@@ -10,7 +10,7 @@ import SnapKit
 
 class WritePostImageEditCollectionViewCell: BaseCollectionViewCell {
     
-    let selectImageView = CustomImageView(frame: .zero)
+    let selectImageView = PostImageView(frame: .zero)
     let overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = ColorStyle.subBackground.withAlphaComponent(0.8)

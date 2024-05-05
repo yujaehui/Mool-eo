@@ -24,7 +24,7 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
     
@@ -39,37 +39,18 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
-    let likeIconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart")
-        imageView.tintColor = ColorStyle.point
-        return imageView
-    }()
-    
-    let likeCountLabel = CustomLabel(type: .description)
-    
-    let commentIconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "bubble")
-        imageView.tintColor = ColorStyle.point
-        return imageView
-    }()
-    
-    let commentCountLabel = CustomLabel(type: .description)
-    
-    // TODO: 버튼 디자인 수정 필요
+
     let likeButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("좋아요")
         return button
     }()
     
     let scrapButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("스크랩")
         return button
     }()
+    
+    let lineView = LineView()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -82,12 +63,9 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         profileStackView.addArrangedSubview(nickNameLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
-        contentView.addSubview(likeIconImageView)
-        contentView.addSubview(likeCountLabel)
-        contentView.addSubview(commentIconImageView)
-        contentView.addSubview(commentCountLabel)
         contentView.addSubview(likeButton)
         contentView.addSubview(scrapButton)
+        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {
@@ -115,40 +93,22 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        likeIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
-            make.leading.equalTo(contentView).inset(20)
-            make.size.equalTo(20)
-        }
-        
-        likeCountLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(likeIconImageView.snp.centerY)
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
-            make.leading.equalTo(likeIconImageView.snp.trailing).offset(5)
-        }
-        
-        commentIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
-            make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
-            make.size.equalTo(20)
-        }
-        
-        commentCountLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(commentIconImageView.snp.centerY)
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
-            make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
-        }
-        
         likeButton.snp.makeConstraints { make in
-            make.top.equalTo(likeIconImageView.snp.bottom).offset(10)
+            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         scrapButton.snp.makeConstraints { make in
-            make.top.equalTo(likeIconImageView.snp.bottom).offset(10)
-            make.leading.equalTo(likeButton.snp.trailing).offset(10)
+            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
+            make.leading.equalTo(likeButton.snp.trailing).offset(20)
+        }
+        
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(likeButton.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(1)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+
         }
     }
     
@@ -156,8 +116,8 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
         postTitleLabel.text = post.title
         postContentLabel.text = post.content
-        likeCountLabel.text = "\(post.likes.count)"
-        commentCountLabel.text = "\(post.comments.count)"
+        likeButton.configuration = post.likes.contains(UserDefaultsManager.userId!) ? .pressed("heart.fill") : .pressed("heart")
+        scrapButton.configuration = post.scraps.contains(UserDefaultsManager.userId!) ? .pressed("bookmark.fill") : .pressed("bookmark")
         nickNameLabel.text = post.creator.nick
     }
 }

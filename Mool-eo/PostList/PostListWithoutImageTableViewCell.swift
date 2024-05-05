@@ -25,7 +25,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
     

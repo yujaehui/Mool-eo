@@ -43,7 +43,6 @@ extension ProfileService: Moya.TargetType {
         case .profileEdit(let query):
             var formData: [MultipartFormData] = []
             formData.append(MultipartFormData(provider: .data("\(query.nick)".data(using: .utf8)!), name: "nick"))
-            formData.append(MultipartFormData(provider: .data("\(query.birthDay)".data(using: .utf8)!), name: "birthDay"))
             formData.append(MultipartFormData(provider: .data(query.profile), name: "profile", fileName: "image.png", mimeType: "image/png"))
             return .uploadMultipart(formData)
         case .otherUserProfileCheck: return .requestPlain

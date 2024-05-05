@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import PhotosUI
+import Toast
 
 enum PostInteractionType: String {
     case upload
@@ -47,6 +48,25 @@ final class WritePostViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true) // 화면 터치시 키보드 내려가도록
+    }
+    
+    override func setNav() {
+        navigationItem.title = "글 쓰기"
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
+        writePostView.completeButton.title = type == .upload ? "완료" : "수정"
+        navigationItem.rightBarButtonItem = writePostView.completeButton
+        navigationItem.leftBarButtonItem = writePostView.cancelButton
+    }
+    
+    override func setToolBar() {
+        navigationController?.isToolbarHidden = type == .upload ? false : true
+        let barItems = [writePostView.imageAddButton]
+        self.toolbarItems = barItems
+    }
+    
     override func configureView() {
         switch type {
         case .upload:
@@ -70,6 +90,8 @@ final class WritePostViewController: BaseViewController {
                     }
                 }.disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
+            writePostView.writePostBoxView.contentTextView.text = "내용을 입력해주세요"
+            writePostView.writePostBoxView.contentTextView.textColor = ColorStyle.placeholder
         case .edit:
             Observable.just(postFiles).bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageEditCollectionViewCell.identifier, cellType: WritePostImageEditCollectionViewCell.self)) { (row, element, cell) in
                 URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element)
@@ -108,6 +130,8 @@ final class WritePostViewController: BaseViewController {
             owner.present(picker, animated: true)
         }.disposed(by: disposeBag)
         
+        output.completeButtonValidation.drive(writePostView.completeButton.rx.isEnabled).disposed(by: disposeBag)
+        
         output.uploadSuccessTrigger.drive(with: self) { owner, _ in
             NotificationCenter.default.post(name: Notification.Name(Noti.writePost.rawValue), object: postBoard)
             owner.dismiss(animated: true)
@@ -121,19 +145,26 @@ final class WritePostViewController: BaseViewController {
         output.cancelButtonTap.drive(with: self) { owner, _ in
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
-    }
-    
-    override func setNav() {
-        navigationItem.title = "글 쓰기"
-        writePostView.completeButton.title = type == .upload ? "완료" : "수정"
-        navigationItem.rightBarButtonItem = writePostView.completeButton
-        navigationItem.leftBarButtonItem = writePostView.cancelButton
-    }
-    
-    override func setToolBar() {
-        navigationController?.isToolbarHidden = type == .upload ? false : true
-        let barItems = [writePostView.imageAddButton]
-        self.toolbarItems = barItems
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.writePostView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.writePostView)
+        }.disposed(by: disposeBag)
+        
+        output.notFoundErr.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.writePostView)
+        }.disposed(by: disposeBag)
+        
+        output.unauthorized.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .unauthorized, in: owner.writePostView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.writePostView)
+        }.disposed(by: disposeBag)
     }
 }
 

@@ -11,9 +11,10 @@ import SnapKit
 class ScrapPostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(PostListTableViewCell.self, forCellReuseIdentifier: PostListTableViewCell.identifier)
-        tableView.register(PostListWithoutImageTableViewCell.self, forCellReuseIdentifier: PostListWithoutImageTableViewCell.identifier)
+        tableView.register(ProfileMyPostTableViewCell.self, forCellReuseIdentifier: ProfileMyPostTableViewCell.identifier)
+        tableView.register(ProfileMyPostWithoutImageTableViewCell.self, forCellReuseIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .none
         return tableView
     }()
     

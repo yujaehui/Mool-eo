@@ -33,7 +33,6 @@ class JoinSecondViewModel: ViewModelType {
                 let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
                 return passwordPredicate.evaluate(with: value)
             }
-            .debug("비밀번호")
             .bind(with: self) { owner, value in
                 passwordValidation.onNext(value)
             }.disposed(by: disposeBag)

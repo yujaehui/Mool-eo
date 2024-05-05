@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		09279A302BDF98C900E4A65D /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* CustomImageView.swift */; };
+		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
 		09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */; };
 		09279A452BE1201800E4A65D /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 09279A442BE1201800E4A65D /* CombineMoya */; };
@@ -110,6 +110,10 @@
 		0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CF2BE6B0B30045D361 /* Noti.swift */; };
 		0987A7D22BE6B0F90045D361 /* ScrapPostSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D12BE6B0F90045D361 /* ScrapPostSectionModel.swift */; };
 		0987A7D42BE6B1870045D361 /* OtherUserProfileSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D32BE6B1870045D361 /* OtherUserProfileSectionModel.swift */; };
+		0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D72BE765990045D361 /* ProfileImageView.swift */; };
+		0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D92BE766770045D361 /* LargePostImageView.swift */; };
+		0987A7DC2BE771A90045D361 /* PostBoardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7DB2BE771A90045D361 /* PostBoardImageView.swift */; };
+		0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7DD2BE790610045D361 /* ToastManager.swift */; };
 		0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB002BCA97F3004B6D1F /* JoinViewController.swift */; };
 		0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB012BCA97F3004B6D1F /* JoinView.swift */; };
 		0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */; };
@@ -144,7 +148,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		09279A2F2BDF98C900E4A65D /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		09279A2F2BDF98C900E4A65D /* PostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
 		09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoResizableTextView.swift; sourceTree = "<group>"; };
 		09279A4F2BE1426E00E4A65D /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
@@ -236,6 +240,10 @@
 		0987A7CF2BE6B0B30045D361 /* Noti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noti.swift; sourceTree = "<group>"; };
 		0987A7D12BE6B0F90045D361 /* ScrapPostSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostSectionModel.swift; sourceTree = "<group>"; };
 		0987A7D32BE6B1870045D361 /* OtherUserProfileSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileSectionModel.swift; sourceTree = "<group>"; };
+		0987A7D72BE765990045D361 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		0987A7D92BE766770045D361 /* LargePostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargePostImageView.swift; sourceTree = "<group>"; };
+		0987A7DB2BE771A90045D361 /* PostBoardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardImageView.swift; sourceTree = "<group>"; };
+		0987A7DD2BE790610045D361 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		0999EB002BCA97F3004B6D1F /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		0999EB012BCA97F3004B6D1F /* JoinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		0999EB022BCA97F3004B6D1F /* JoinSecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondViewController.swift; sourceTree = "<group>"; };
@@ -481,7 +489,10 @@
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
 				0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */,
 				0999EB0E2BCA981B004B6D1F /* CustomTextFieldView.swift */,
-				09279A2F2BDF98C900E4A65D /* CustomImageView.swift */,
+				0987A7DB2BE771A90045D361 /* PostBoardImageView.swift */,
+				09279A2F2BDF98C900E4A65D /* PostImageView.swift */,
+				0987A7D92BE766770045D361 /* LargePostImageView.swift */,
+				0987A7D72BE765990045D361 /* ProfileImageView.swift */,
 				09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */,
 				09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */,
 				095678FE2BC6A9140030F0CD /* LineView.swift */,
@@ -569,8 +580,8 @@
 				09602B662BD3E27700A6AFEA /* PostDetailView.swift */,
 				09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */,
 				09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */,
-				09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */,
 				09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */,
+				09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */,
 				09602B6F2BD3F22D00A6AFEA /* CommentTableViewCell.swift */,
 				0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */,
 				09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */,
@@ -637,6 +648,7 @@
 				0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */,
 				09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */,
 				0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */,
+				0987A7DD2BE790610045D361 /* ToastManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -826,6 +838,7 @@
 				09602B4A2BD3A5DB00A6AFEA /* PostListViewController.swift in Sources */,
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
 				09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */,
+				0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
@@ -857,6 +870,7 @@
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
+				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
 				0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */,
@@ -868,6 +882,7 @@
 				09279A602BE202F300E4A65D /* ScrapService.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0987A78F2BE352260045D361 /* OtherUserProfileViewModel.swift in Sources */,
+				0987A7DC2BE771A90045D361 /* PostBoardImageView.swift in Sources */,
 				0987A7992BE378080045D361 /* FollowModel.swift in Sources */,
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
@@ -880,6 +895,7 @@
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
+				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
 				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
 				09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */,
 				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,
@@ -904,7 +920,7 @@
 				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
-				09279A302BDF98C900E4A65D /* CustomImageView.swift in Sources */,
+				09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */,
 				0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */,
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
 				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
@@ -1093,11 +1109,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mool-eo/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "유재희";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1105,9 +1123,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.j.Mool-eo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1120,11 +1141,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mool-eo/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "유재희";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1132,9 +1155,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.j.Mool-eo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

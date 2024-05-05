@@ -11,4 +11,5 @@ enum Noti: String {
     case writePost
     case changePost
     case changeProfile
+    case sessionExpiration
 }

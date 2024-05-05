@@ -23,6 +23,8 @@ class JoinViewModel: ViewModelType {
         let idCheckSuccessValidation: Driver<Bool?>
         let nextButtonValidation: Driver<Bool>
         let nextButtonTap: Driver<Void>
+        let networkFail: Driver<Void>
+
     }
     
     func transform(input: Input) -> Output {
@@ -30,6 +32,7 @@ class JoinViewModel: ViewModelType {
         let idValidation = BehaviorSubject<Bool>(value: false)
         let idCheckSuccessValidation = BehaviorSubject<Bool?>(value: false)
         let nextButtonValidation = BehaviorSubject<Bool>(value: false)
+        let networkFail = PublishSubject<Void>()
         
         input.id
             .map { id in
@@ -37,7 +40,6 @@ class JoinViewModel: ViewModelType {
                 let idPredicate = NSPredicate(format: "SELF MATCHES %@", idRegex)
                 return idPredicate.evaluate(with: id)
             }
-            .debug("아이디")
             .bind(with: self) { owner, value in
                 idValidation.onNext(value)
                 idCheckSuccessValidation.onNext(nil) // 값이 변경되면 중복 확인을 진행하지 않은 상태로!
@@ -52,15 +54,21 @@ class JoinViewModel: ViewModelType {
                 NetworkManager.shared.emailCheck(query: query)
             }
             .debug("아이디 중복 확인")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): idCheckSuccessValidation.onNext(true)
                 case .error(let error):
                     switch error {
                     case .conflict: idCheckSuccessValidation.onNext(false)
-                    default: print("other error")
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         idCheckSuccessValidation
@@ -76,6 +84,7 @@ class JoinViewModel: ViewModelType {
         return Output(idValidation: idValidation.asDriver(onErrorJustReturn: false),
                       idCheckSuccessValidation: idCheckSuccessValidation.asDriver(onErrorJustReturn: nil),
                       nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
-                      nextButtonTap: input.nextButtonTap.asDriver(onErrorJustReturn: ()))
+                      nextButtonTap: input.nextButtonTap.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

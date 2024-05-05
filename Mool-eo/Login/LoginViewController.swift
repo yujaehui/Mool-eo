@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Toast
 
 class LoginViewController: BaseViewController {
     
@@ -29,6 +30,11 @@ class LoginViewController: BaseViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true) // 화면 터치시 키보드 내려가도록
+    }
+    
+    override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {
@@ -66,6 +72,18 @@ class LoginViewController: BaseViewController {
         output.joinButtonTap.drive(with: self) { owner, _ in
             print("...")
             owner.navigationController?.pushViewController(JoinViewController(), animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.authenticationErr.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .authenticationErr, in: owner.loginView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.loginView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.loginView)
         }.disposed(by: disposeBag)
     }
     

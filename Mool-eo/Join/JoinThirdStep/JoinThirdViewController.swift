@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 // 회원가입 세번째 로직 : 닉네임 입력
 class JoinThirdViewController: BaseViewController {
@@ -29,6 +30,15 @@ class JoinThirdViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true) // 화면 터치시 키보드 내려가도록
+    }
+    
+    override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {
@@ -54,6 +64,18 @@ class JoinThirdViewController: BaseViewController {
             let sceneDelegate = windowScene?.delegate as? SceneDelegate
             sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
             sceneDelegate?.window?.makeKeyAndVisible()
+        }.disposed(by: disposeBag)
+        
+        output.conflict.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .conflict, in: owner.joinThirdView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.joinThirdView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.joinThirdView)
         }.disposed(by: disposeBag)
     }
 }

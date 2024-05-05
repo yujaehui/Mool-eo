@@ -14,6 +14,7 @@ enum PostDetailSectionItem {
 }
 
 struct PostDetailSectionModel {
+    let title: String?
     var items: [PostDetailSectionItem]
 }
 

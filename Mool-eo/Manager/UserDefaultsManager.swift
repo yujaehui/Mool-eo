@@ -24,9 +24,11 @@ enum UserDefaultsManager {
         case userId
         case accessToken
         case refreshToken
+        case userImage
     }
     
     @MyDefaults(key: Key.userId.rawValue, defaultsValue: "") static var userId
     @MyDefaults(key: Key.accessToken.rawValue, defaultsValue: "") static var accessToken
     @MyDefaults(key: Key.refreshToken.rawValue, defaultsValue: "") static var refreshToken
+    @MyDefaults(key: Key.userImage.rawValue, defaultsValue: "person.fill") static var userImage
 }

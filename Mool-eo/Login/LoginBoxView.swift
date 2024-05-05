@@ -11,9 +11,9 @@ import SnapKit
 
 // 키보드가 올라옴에 따라서 해당 화면 자체의 constraints가 변경될 것.
 class LoginBoxView: BaseView {
-    let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "dog.circle.fill")
+    let logoImageView: PostImageView = {
+        let imageView = PostImageView(frame: .zero)
+        imageView.image = .logo
         imageView.tintColor = ColorStyle.point
         return imageView
     }()
@@ -25,6 +25,8 @@ class LoginBoxView: BaseView {
     
     let passwordTextField: CustomTextField = {
         let textField = CustomTextField(type: .password)
+        textField.textContentType = .password
+        textField.isSecureTextEntry = true
         return textField
     }()
     

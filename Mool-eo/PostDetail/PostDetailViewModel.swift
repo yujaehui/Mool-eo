@@ -37,11 +37,18 @@ class PostDetailViewModel: ViewModelType {
         let postDetail: PublishSubject<PostModel>
         let editPostDetail: PublishSubject<PostModel>
         let accessType: Driver<postDetailAccessType>
+        let commentButtonValidation: Driver<Bool>
         let commentUploadSuccessTrigger: Driver<Void>
         let likeUploadSuccessTrigger: Driver<Void>
         let scrapUploadSuccessTrigger: Driver<Void>
         let postDeleteSuccessTrigger: Driver<Void>
         let commentDeleteSuccessTrigger: Driver<IndexPath>
+        
+        let forbidden: Driver<Void>
+        let badRequest: Driver<Void>
+        let notFoundErr: Driver<Void>
+        let unauthorized: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -51,11 +58,19 @@ class PostDetailViewModel: ViewModelType {
         let postDetail = PublishSubject<PostModel>()
         let editPostDetail = PublishSubject<PostModel>()
         let accessType = PublishSubject<postDetailAccessType>()
+        let commentButtonValidation = PublishSubject<Bool>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         let likeUploadSuccessTrigger = PublishSubject<Void>()
         let scrapUploadSuccessTrigger = PublishSubject<Void>()
         let postDeleteSuccessTrigger = PublishSubject<Void>()
         let commentDeleteSuccessTrigger = PublishSubject<IndexPath>()
+        
+        let forbidden = PublishSubject<Void>()
+        let badRequest = PublishSubject<Void>()
+        let notFoundErr = PublishSubject<Void>()
+        let unauthorized = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
+        
         
         // 텍스트뷰 입력이 시작되는 시점
         input.textViewBegin
@@ -77,6 +92,11 @@ class PostDetailViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
+        input.comment
+            .bind(with: self) { owner, value in
+                commentButtonValidation.onNext(!value.isEmpty)
+            }.disposed(by: disposeBag)
+        
         // MARK: - 특정 게시글 조회 네트워크 통신 진행
         input.reload
             .withLatestFrom(input.postId)
@@ -95,8 +115,16 @@ class PostDetailViewModel: ViewModelType {
                     } else {
                         accessType.onNext(.other)
                     }
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // MARK: - 댓글 업로드 네트워크 통신 진행
@@ -110,12 +138,25 @@ class PostDetailViewModel: ViewModelType {
             .withLatestFrom(commentObservable)
             .flatMap { commentQuery, postId in
                 NetworkManager.shared.commentUpload(query: commentQuery, postId: postId)
-            }.debug("댓글")
+            }
+            .debug("댓글")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): commentUploadSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // MARK: - 좋아요 업로드 네트워크 통신 진행
@@ -131,11 +172,23 @@ class PostDetailViewModel: ViewModelType {
                 NetworkManager.shared.likeUpload(query: likeQuery, postId: postId)
             }
             .debug("좋아요 업로드")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): likeUploadSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // MARK: - 스크랩 업로드 네트워크 통신 진행
@@ -151,11 +204,23 @@ class PostDetailViewModel: ViewModelType {
                 NetworkManager.shared.scrapUpload(query: scrapQuery, postId: postId)
             }
             .debug("스크랩 업로드")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): scrapUploadSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         //MARK: - 특정 게시물 삭제 네트워크 통신 진행
@@ -165,11 +230,23 @@ class PostDetailViewModel: ViewModelType {
                 NetworkManager.shared.postDelete(postId: postId)
             }
             .debug("특정 게시물 삭제")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): postDeleteSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .unauthorized: unauthorized.onNext(())
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         //MARK: - 댓글 삭제 네트워크 통신 진행
@@ -182,12 +259,20 @@ class PostDetailViewModel: ViewModelType {
                             .map { result in (indexPath, result) }
                     }
             }
-            .debug("댓글 삭제")
             .subscribe(with: self) { owner, value in
                 switch value.1 {
                 case .success(_): commentDeleteSuccessTrigger.onNext(value.0)
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .unauthorized: unauthorized.onNext(())
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         input.postEditButtonTap
@@ -199,8 +284,16 @@ class PostDetailViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postModel): editPostDetail.onNext(postModel)
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         return Output(keyboardWillShow: input.keyboardWillShow,
@@ -210,10 +303,16 @@ class PostDetailViewModel: ViewModelType {
                       postDetail: postDetail,
                       editPostDetail: editPostDetail,
                       accessType: accessType.asDriver(onErrorJustReturn: .other),
+                      commentButtonValidation: commentButtonValidation.asDriver(onErrorJustReturn: false),
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       scrapUploadSuccessTrigger: scrapUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       postDeleteSuccessTrigger: postDeleteSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      commentDeleteSuccessTrigger: commentDeleteSuccessTrigger.asDriver(onErrorJustReturn: IndexPath()))
+                      commentDeleteSuccessTrigger: commentDeleteSuccessTrigger.asDriver(onErrorJustReturn: IndexPath()),
+                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
+                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
+                      notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
+                      unauthorized: unauthorized.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

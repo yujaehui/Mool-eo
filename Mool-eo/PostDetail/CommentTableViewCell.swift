@@ -23,7 +23,7 @@ class CommentTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let nicknameLabel = CustomLabel(type: .descriptionBold)
     
@@ -32,6 +32,8 @@ class CommentTableViewCell: BaseTableViewCell {
         label.numberOfLines = 0
         return label
     }()
+    
+    let lineView = LineView()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -43,6 +45,7 @@ class CommentTableViewCell: BaseTableViewCell {
         profileStackView.addArrangedSubview(profileImageView)
         profileStackView.addArrangedSubview(nicknameLabel)
         contentView.addSubview(commentLabel)
+        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {
@@ -63,7 +66,13 @@ class CommentTableViewCell: BaseTableViewCell {
         commentLabel.snp.makeConstraints { make in
             make.top.equalTo(profileStackView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(nicknameLabel.snp.horizontalEdges)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+        }
+        
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(commentLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(1)
+            make.bottom.lessThanOrEqualTo(contentView).inset(20)
         }
     }
     

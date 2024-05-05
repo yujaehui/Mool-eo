@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Toast
 
 class ScrapPostListViewController: BaseViewController {
     
@@ -34,6 +35,12 @@ class ScrapPostListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerObserver()
+    }
+    
+    override func setNav() {
+        navigationItem.title = "스크랩"
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {
@@ -75,17 +82,29 @@ class ScrapPostListViewController: BaseViewController {
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.scrapPostListView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.scrapPostListView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.scrapPostListView)
+        }.disposed(by: disposeBag)
     }
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<ScrapPostListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<ScrapPostListSectionModel> { dataSource, tableView, indexPath, item in
             if item.files.isEmpty { // 이미지가 없는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostListWithoutImageTableViewCell.identifier, for: indexPath) as! PostListWithoutImageTableViewCell
-                cell.configureCell(item: item)
+                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier, for: indexPath) as! ProfileMyPostWithoutImageTableViewCell
+                cell.configureCell(myPost: item)
                 return cell
             } else { // 이미지가 있는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostListTableViewCell.identifier, for: indexPath) as! PostListTableViewCell
-                cell.configureCell(item: item)
+                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
+                cell.configureCell(myPost: item)
                 return cell
             }
         }

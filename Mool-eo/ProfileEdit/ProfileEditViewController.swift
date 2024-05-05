@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 import PhotosUI
+import Toast
 
 class ProfileEditViewController: BaseViewController {
     
@@ -35,9 +36,20 @@ class ProfileEditViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true) // 화면 터치시 키보드 내려가도록
+    }
+    
+    override func setNav() {
+        navigationItem.title = "프로필 수정하기"
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
+        navigationItem.rightBarButtonItem = profileEditView.completeButton
+        navigationItem.leftBarButtonItem = profileEditView.cancelButton
+    }
+    
     override func configureView() {
         profileEditView.nicknameView.customTextField.text = nickname
-        profileEditView.introductionView.customTextField.text = introduction
         URLImageSettingManager.shared.setImageWithUrl(profileEditView.profileImageView, urlString: profileImage)
     }
     
@@ -46,9 +58,8 @@ class ProfileEditViewController: BaseViewController {
         let completeButtonTap = profileEditView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = profileEditView.cancelButton.rx.tap.asObservable()
         let afterNickname = profileEditView.nicknameView.customTextField.rx.text.orEmpty.asObservable()
-        let afterIntroduction = profileEditView.introductionView.customTextField.rx.text.orEmpty.asObservable()
         let afterProfileImageData = selectedImageSubject
-        let input = ProfileEditViewModel.Input(profileImageEditButtonTap: profileImageEditButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, beforeNickname: nickname, afterNickname: afterNickname, beforeIntroduction: introduction, afterIntroduction: afterIntroduction, beforeProfileImageData: profileImageData, afterProfileImageData: afterProfileImageData)
+        let input = ProfileEditViewModel.Input(profileImageEditButtonTap: profileImageEditButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, beforeNickname: nickname, afterNickname: afterNickname, beforeProfileImageData: profileImageData, afterProfileImageData: afterProfileImageData)
         
         let output = viewModel.transform(input: input)
         
@@ -65,10 +76,6 @@ class ProfileEditViewController: BaseViewController {
             owner.profileEditView.nicknameView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
         }.disposed(by: disposeBag)
         
-        output.introductionValidation.drive(with: self) { owner, value in
-            owner.profileEditView.introductionView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
-        }.disposed(by: disposeBag)
-        
         output.completeButtonValidation.drive(profileEditView.completeButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.profileEditSuccessTrigger.drive(with: self) { owner, _ in
@@ -79,12 +86,18 @@ class ProfileEditViewController: BaseViewController {
         output.cancelButtonTap.drive(with: self) { owner, _ in
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
-    }
-    
-    override func setNav() {
-        navigationItem.title = "프로필 수정하기"
-        navigationItem.rightBarButtonItem = profileEditView.completeButton
-        navigationItem.leftBarButtonItem = profileEditView.cancelButton
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.profileEditView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.profileEditView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileEditView)
+        }.disposed(by: disposeBag)
     }
 }
 

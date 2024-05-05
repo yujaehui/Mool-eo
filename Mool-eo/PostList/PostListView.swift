@@ -19,7 +19,7 @@ class PostListView: BaseView {
     
     let postWriteButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("글쓰기")
+        button.configuration = .capsule2("글쓰기")
         return button
     }()
     

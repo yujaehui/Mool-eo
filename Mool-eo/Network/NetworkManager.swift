@@ -17,16 +17,17 @@ enum NetworkResult<T> {
 }
 
 enum NetworkError: Int, Error {
-    case AuthenticationErr = 401
+    case badRequest = 400
+    case authenticationErr = 401
+    case forbidden = 403
+    case conflict = 409
+    case notFoundErr = 410
+    case unauthorized = 445
+
     case missingKey = 420
     case overRequestLimit = 429
     case invalidURL = 444
     case serverError = 500
-    case badRequest = 400
-    case conflict = 409
-    case forbidden = 403
-    case gone = 410
-    case Unauthorized = 445
 }
 
 struct NetworkManager {

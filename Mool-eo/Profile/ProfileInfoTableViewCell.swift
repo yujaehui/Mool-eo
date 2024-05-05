@@ -14,7 +14,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let countStackView: UIStackView = {
         let stackView = UIStackView()
@@ -32,9 +32,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     let postCountView = ProfileCountView(frame: .zero, profileCountType: .post)
     
     let nicknameLabel = CustomLabel(type: .titleBold)
-    
-    let introductionLabel = CustomLabel(type: .content)
-    
+        
     let profileEditButton: UIButton = {
         let button = UIButton()
         button.configuration = .check2("프로필 수정")
@@ -53,7 +51,6 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         countStackView.addArrangedSubview(followingCountView)
         countStackView.addArrangedSubview(postCountView)
         contentView.addSubview(nicknameLabel)
-        contentView.addSubview(introductionLabel)
         contentView.addSubview(profileEditButton)
     }
     
@@ -75,13 +72,8 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        introductionLabel.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-        }
-        
         profileEditButton.snp.makeConstraints { make in
-            make.top.equalTo(introductionLabel.snp.bottom).offset(20)
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(40)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
@@ -94,6 +86,5 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         followingCountView.countLabel.text = "\(info.following.count)"
         postCountView.countLabel.text = "\(info.posts.count)"
         nicknameLabel.text = info.nick
-        introductionLabel.text = info.introduction
     }
 }

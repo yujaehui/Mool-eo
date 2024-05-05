@@ -28,11 +28,17 @@ class LoginViewModel: ViewModelType {
         let loginValidation: Driver<Bool>
         let loginSuccessTrigger: Driver<Void>
         let joinButtonTap: Driver<Void>
+        let authenticationErr: Driver<Void>
+        let badRequest: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let loginValidation = BehaviorSubject<Bool>(value: false)
         let loginSuccessTrigger = PublishSubject<Void>()
+        let authenticationErr = PublishSubject<Void>()
+        let badRequest = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
         
         let loginQuery = Observable.combineLatest(input.id, input.password).map { (id, password) in
             return LoginQuery(email: id, password: password)
@@ -53,6 +59,9 @@ class LoginViewModel: ViewModelType {
                 NetworkManager.shared.login(query: loginQuery)
             }
             .debug("로그인")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let loginModel):
@@ -62,18 +71,26 @@ class LoginViewModel: ViewModelType {
                     loginSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
-                    case .AuthenticationErr: print("아이디 또는 비밀번호가 일치하지 않습니다.") // TODO: Toast 처리
-                    default: print("other error")
+                    case .authenticationErr: authenticationErr.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            }.disposed(by: disposeBag)
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
+            }
+            .disposed(by: disposeBag)
         
         
         return Output(keyboardWillShow: input.keyboardWillShow,
                       keyboardWillHide: input.keyboardWillHide,
                       loginValidation: loginValidation.asDriver(onErrorJustReturn: false),
                       loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      joinButtonTap: input.joinButtonTap.asDriver(onErrorJustReturn: ()))
+                      joinButtonTap: input.joinButtonTap.asDriver(onErrorJustReturn: ()),
+                      authenticationErr: authenticationErr.asDriver(onErrorJustReturn: ()),
+                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }
 

@@ -23,7 +23,7 @@ class ProfileEditView: BaseView {
         return button
     }()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let profileImageEditButton: UIButton = {
         let button = UIButton()
@@ -33,14 +33,10 @@ class ProfileEditView: BaseView {
     
     let nicknameView = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
     
-    let introductionView = CustomTextFieldView(frame: .zero, textFieldType: .introduction)
-    
-    
     override func configureHierarchy() {
         addSubview(profileImageView)
         addSubview(profileImageEditButton)
         addSubview(nicknameView)
-        addSubview(introductionView)
     }
     
     override func configureConstraints() {
@@ -57,11 +53,6 @@ class ProfileEditView: BaseView {
         
         nicknameView.snp.makeConstraints { make in
             make.top.equalTo(profileImageEditButton.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
-        }
-        
-        introductionView.snp.makeConstraints { make in
-            make.top.equalTo(nicknameView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
     }

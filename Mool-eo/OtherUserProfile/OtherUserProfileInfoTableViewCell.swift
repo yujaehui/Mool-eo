@@ -14,7 +14,7 @@ class OtherUserProfileInfoTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let countStackView: UIStackView = {
         let stackView = UIStackView()

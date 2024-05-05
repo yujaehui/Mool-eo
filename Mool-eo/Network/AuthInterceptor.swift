@@ -34,31 +34,31 @@ class AuthInterceptor: RequestInterceptor {
     
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419 else {
+        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419  else {
             completion(.doNotRetryWithError(error))
+            DispatchQueue.main.async {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                let sceneDelegate = windowScene?.delegate as? SceneDelegate
+                sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+                sceneDelegate?.window?.makeKeyAndVisible()
+            }
             return
         }
         
-        NetworkManager.shared.refresh()
-            .debug("토큰 갱신")
-            .subscribe { event in
-                switch event {
-                case .success(let result):
-                    switch result {
-                    case .success(let tokenModel):
-                        UserDefaultsManager.accessToken = tokenModel.accessToken
-                        completion(.retry)
-                    case .error(let networkError):
-                        completion(.doNotRetryWithError(networkError))
-                    }
-                case .failure(let error):
-                    completion(.doNotRetryWithError(error))
-                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
-                    sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
-                    sceneDelegate?.window?.makeKeyAndVisible()
-                }
+        Observable.just(())
+            .flatMap { _ in
+                NetworkManager.shared.refresh()
             }
-            .disposed(by: disposeBag)
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let tokenModel):
+                    UserDefaultsManager.accessToken = tokenModel.accessToken
+                    completion(.retry)
+                case .error(let error):
+                    completion(.doNotRetryWithError(error))
+                }
+            } onError: { owner, error in
+                completion(.doNotRetryWithError(error))
+            }.disposed(by: disposeBag)
     }
 }

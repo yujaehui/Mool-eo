@@ -25,7 +25,7 @@ class PostListTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    let profileImageView = CustomImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
     
@@ -41,7 +41,7 @@ class PostListTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageView = CustomImageView(frame: .zero)
+    let postImageView = PostImageView(frame: .zero)
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()

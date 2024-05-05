@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import RxGesture
+import Toast
 
 enum postDetailAccessType {
     case me
@@ -25,17 +26,15 @@ class PostDetailViewController: BaseViewController {
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
-    // 외부에서 받는 값
     var postBoard: PostBoardType = .free
     var postId: String = ""
     var userId: String = ""
     
-    // 뷰컨에서 변화를 감지해야 하는 값
-    var reload = BehaviorSubject(value: ()) // 좋아요나 댓글이 달리면 다시 리로드 해줘야 하기 때문에 감지를 하고 있어야 함
-    var likeStatus = PublishSubject<Bool>() // 좋아요 버튼이 눌리는지 안눌리는지 감지하기 위해서
-    var scrapStatus = PublishSubject<Bool>() // 스크랩 버튼이 눌리는지 안눌리는지 감지하기 위해서
-    var editButtonTap = PublishSubject<Void>() // 메뉴 안에 존재하는 수정 버튼을 눌렀을 때를 감지하기 위해서
-    var deleteButtonTap = PublishSubject<Void>() // 메뉴 안에 존재하는 삭제 버튼을 눌렀을 때 감지하기 위해서
+    var reload = BehaviorSubject(value: ())
+    var likeStatus = PublishSubject<Bool>()
+    var scrapStatus = PublishSubject<Bool>()
+    var editButtonTap = PublishSubject<Void>()
+    var deleteButtonTap = PublishSubject<Void>()
     var change = false
     
     private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
@@ -56,7 +55,13 @@ class PostDetailViewController: BaseViewController {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true) // 화면 터치시 키보드 내려가도록
+    }
+    
     override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
         var items: [UIAction] {
             let edit = UIAction(title: "수정", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
                 self.editButtonTap.onNext(())
@@ -67,7 +72,6 @@ class PostDetailViewController: BaseViewController {
             let Items = [edit, delete]
             return Items
         }
-        
         let menu = UIMenu(title: "", children: items)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
     }
@@ -115,8 +119,8 @@ class PostDetailViewController: BaseViewController {
         
         // 특정 게시글 조회가 성공할 경우
         output.postDetail.bind(with: self) { owner, value in
-            owner.sections.onNext([PostDetailSectionModel(items: [.post(value)])] 
-                                  + [PostDetailSectionModel(items: value.comments.map { .comment($0) })])
+            owner.sections.onNext([PostDetailSectionModel(title: nil, items: [.post(value)])]
+                                  + [PostDetailSectionModel(title: "댓글", items: value.comments.map { .comment($0) })])
         }.disposed(by: disposeBag)
         
         // 자신의 게시물인지 확인
@@ -127,8 +131,11 @@ class PostDetailViewController: BaseViewController {
             }
         }.disposed(by: disposeBag)
         
+        output.commentButtonValidation.drive(postDetailView.writeCommentView.commentUploadButton.rx.isEnabled).disposed(by: disposeBag)
+        
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
+            owner.postDetailView.writeCommentView.commentTextView.text = ""
             owner.change = true
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
@@ -142,6 +149,7 @@ class PostDetailViewController: BaseViewController {
         // 스크랩 업로드가 성공할 경우
         output.scrapUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
+            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         // 자신의 게시물 -> 삭제
@@ -153,7 +161,7 @@ class PostDetailViewController: BaseViewController {
         // 댓글 삭제가 성공할 경우
         output.commentDeleteSuccessTrigger.drive(with: self) { owner, indexPath in
             owner.change = true
-
+            
             guard var sections = try? owner.sections.value() else { return }
             var items = sections[indexPath.section].items
             items.remove(at: indexPath.row)
@@ -161,6 +169,8 @@ class PostDetailViewController: BaseViewController {
             owner.sections.onNext(sections)
             
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+            
+            ToastManager.shared.showToast(title: "댓글이 삭제되었습니다", in: owner.postDetailView)
         }.disposed(by: disposeBag)
         
         output.editPostDetail.bind(with: self) { owner, value in
@@ -174,6 +184,26 @@ class PostDetailViewController: BaseViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.postDetailView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.postDetailView)
+        }.disposed(by: disposeBag)
+        
+        output.notFoundErr.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.postDetailView)
+        }.disposed(by: disposeBag)
+        
+        output.unauthorized.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .unauthorized, in: owner.postDetailView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.postDetailView)
         }.disposed(by: disposeBag)
     }
     
@@ -280,7 +310,9 @@ class PostDetailViewController: BaseViewController {
                     }.disposed(by: cell.disposeBag)
                 return cell
             }
-        },canEditRowAtIndexPath: { dataSource, indexPath in
+        }, titleForHeaderInSection: { dataSource, index in
+            return dataSource.sectionModels[index].title
+        }, canEditRowAtIndexPath: { dataSource, indexPath in
             guard case .comment(let comment) = dataSource[indexPath],
                   comment.creator.userID == UserDefaultsManager.userId else { return false }
             return true
@@ -296,5 +328,5 @@ class PostDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
     }
-
+    
 }

@@ -22,11 +22,7 @@ class PostBoardCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let pointImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star.fill")
-        return imageView
-    }()
+    let pointImageView = PostBoardImageView(type: .free)
     
     override func configureHierarchy() {
         contentView.addSubview(backgrounView)
@@ -51,5 +47,6 @@ class PostBoardCollectionViewCell: BaseCollectionViewCell {
     
     func configureCell(element: PostBoardType) {
         titleLabel.text = element.rawValue
+        pointImageView.image = element.image
     }
 }

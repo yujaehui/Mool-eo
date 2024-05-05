@@ -1,23 +1,17 @@
 //
-//  CustomImageView.swift
+//  LargePostImageView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/29/24.
+//  Created by Jaehui Yu on 5/5/24.
 //
 
 import UIKit
 
-class CustomImageView: UIImageView {
+class LargePostImageView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-    
-    convenience init(type: TextFieldType) {
-        self.init(frame: .zero)
         contentMode = .scaleAspectFill
-        clipsToBounds = true
-        layer.cornerRadius = 20
     }
     
     required init?(coder: NSCoder) {

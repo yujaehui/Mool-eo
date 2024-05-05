@@ -18,8 +18,6 @@ class ProfileEditViewModel: ViewModelType {
         let cancelButtonTap: Observable<Void>
         let beforeNickname: String
         let afterNickname: Observable<String>
-        let beforeIntroduction: String
-        let afterIntroduction: Observable<String>
         let beforeProfileImageData: Data?
         let afterProfileImageData: BehaviorSubject<Data?>
     }
@@ -27,18 +25,22 @@ class ProfileEditViewModel: ViewModelType {
     struct Output {
         let profileImageEditButtonTap: Driver<Void>
         let nicknameValidation: Driver<Bool>
-        let introductionValidation: Driver<Bool>
         let completeButtonValidation: Driver<Bool>
         let profileEditSuccessTrigger: Driver<Void>
         let cancelButtonTap: Driver<Void>
+        let forbidden: Driver<Void>
+        let badRequest: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let nicknameValidation = BehaviorSubject(value: false)
-        let introductionValidation = BehaviorSubject(value: false)
         let changeValidation = BehaviorSubject(value: false)
         let completeButtonValidation = BehaviorSubject(value: false)
         let profileSuccessTrigger = PublishSubject<Void>()
+        let forbidden = PublishSubject<Void>()
+        let badRequest = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
         
         input.afterNickname
             .map { value in
@@ -50,33 +52,25 @@ class ProfileEditViewModel: ViewModelType {
                 nicknameValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        input.afterIntroduction
-            .map { value in
-                return value.count < 15
-            }
-            .bind(with: self) { owner, value in
-                introductionValidation.onNext(value)
-            }.disposed(by: disposeBag)
-        
-        Observable.combineLatest(input.afterNickname, input.afterIntroduction, input.afterProfileImageData)
-            .map { (nick, intro, image) in
-                return nick != input.beforeNickname || intro != input.beforeIntroduction || image != input.beforeProfileImageData
+        Observable.combineLatest(input.afterNickname, input.afterProfileImageData)
+            .map { (nick, image) in
+                return nick != input.beforeNickname || image != input.beforeProfileImageData
             }
             .bind(with: self) { owner, value in
                 changeValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(nicknameValidation, introductionValidation, changeValidation)
-            .map { (nickValid, introValid, changeValid) in
-                return nickValid && introValid && changeValid
+        Observable.combineLatest(nicknameValidation, changeValidation)
+            .map { (nickValid, changeValid) in
+                return nickValid && changeValid
             }
             .bind(with: self) { owner, value in
                 completeButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
         
-        let profileEditObservable = Observable.combineLatest(input.afterNickname, input.afterIntroduction, input.afterProfileImageData)
-            .map { (nick, intro, image) in
-                return ProfileEditQuery(nick: nick, birthDay: intro, profile: image ?? Data())
+        let profileEditObservable = Observable.combineLatest(input.afterNickname, input.afterProfileImageData)
+            .map { (nick, image) in
+                return ProfileEditQuery(nick: nick, profile: image ?? Data())
             }
         
         // 프로필 수정 네트워크 통신
@@ -86,20 +80,31 @@ class ProfileEditViewModel: ViewModelType {
                 NetworkManager.shared.profileEdit(query: query)
             }
             .debug("프로필 수정")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owenr, value in
                 switch value {
                 case .success(_): profileSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
             } onError: { owner, error in
-                print("오류 발생")
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         return Output(profileImageEditButtonTap: input.profileImageEditButtonTap.asDriver(onErrorJustReturn: ()),
                       nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
-                      introductionValidation: introductionValidation.asDriver(onErrorJustReturn: false),
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       profileEditSuccessTrigger: profileSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
+                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()),
+                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
+                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

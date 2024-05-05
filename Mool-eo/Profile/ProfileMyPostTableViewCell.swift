@@ -28,7 +28,7 @@ class ProfileMyPostTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageView = CustomImageView(frame: .zero)
+    let postImageView = PostImageView(frame: .zero)
     
     let likeIconImageView: UIImageView = {
         let imageView = UIImageView()

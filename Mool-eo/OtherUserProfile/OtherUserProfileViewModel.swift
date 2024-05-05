@@ -28,17 +28,22 @@ class OtherUserProfileViewModel: ViewModelType {
         let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
         let followOrUnfollowSuccessTrigger: Driver<Void>
+        let forbidden: Driver<Void>
+        let badRequest: Driver<Void>
+        let notFoundErr: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(OtherUserProfileModel, PostListModel)>()
         let nextPostList = PublishSubject<PostListModel>()
-        
         let prefetch = PublishSubject<Void>()
-        
         let post = PublishSubject<PostModel>()
-        
         let followOrUnfollowSuccessTrigger = PublishSubject<Void>()
+        let forbidden = PublishSubject<Void>()
+        let badRequest = PublishSubject<Void>()
+        let notFoundErr = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
         
         input.reload
             .flatMap {
@@ -53,9 +58,21 @@ class OtherUserProfileViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 switch (value.0, value.1) {
                 case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
-                case (.error(let profileError), _): print(profileError)
-                case (_, .error(let postError)): print(postError)
+                case (.error(let profileError), _):
+                    switch profileError {
+                    case .forbidden: forbidden.onNext(())
+                    default: print("⚠️OTHER ERROR : \(profileError)⚠️")
+                    }
+                case (_, .error(let postError)):
+                    switch postError {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(postError)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // Pagination
@@ -78,8 +95,16 @@ class OtherUserProfileViewModel: ViewModelType {
                 switch value {
                 case .success(let postListModel):
                     nextPostList.onNext(postListModel)
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
@@ -95,13 +120,32 @@ class OtherUserProfileViewModel: ViewModelType {
                 status ? NetworkManager.shared.unfollow(userId: input.userId) : NetworkManager.shared.follow(userId: input.userId)
             }
             .debug("팔로우 및 언팔로우")
+            .do(onSubscribe: { networkFail.onNext(()) })
+            .retry(3)
+            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): followOrUnfollowSuccessTrigger.onNext(())
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .notFoundErr: notFoundErr.onNext(())
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
-        return Output(result: result, nextPostList: nextPostList, post: post, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(result: result, 
+                      nextPostList: nextPostList,
+                      post: post,
+                      followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
+                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
+                      notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

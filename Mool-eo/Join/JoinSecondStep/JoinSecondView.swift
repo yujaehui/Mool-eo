@@ -19,6 +19,8 @@ class JoinSecondView: BaseView {
 
     let passwordView: CustomTextFieldView = {
         let view = CustomTextFieldView(frame: .zero, textFieldType: .password)
+        view.customTextField.textContentType = .password
+        view.customTextField.isSecureTextEntry = true
         return view
     }()
     

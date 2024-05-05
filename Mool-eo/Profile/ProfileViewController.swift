@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Toast
 
 class ProfileViewController: BaseViewController {
     
@@ -39,6 +40,8 @@ class ProfileViewController: BaseViewController {
     }
     
     override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
         navigationItem.rightBarButtonItem = profileView.withdrawButton
     }
     
@@ -92,6 +95,18 @@ class ProfileViewController: BaseViewController {
             sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
             sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
+        
+        output.forbidden.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.profileView)
+        }.disposed(by: disposeBag)
+        
+        output.badRequest.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.profileView)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileView)
+        }.disposed(by: disposeBag)
     }
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProfileSectionModel> {
@@ -137,7 +152,7 @@ class ProfileViewController: BaseViewController {
         .subscribe(with: self) { owner, noti in
             owner.reload.onNext(())
             guard let object = noti.object as? Bool else { return }
-            owner.profileView.makeToast("프로필 수정 성공", duration: 2, position: .top)
+            ToastManager.shared.showToast(title: "프로필이 수정되었습니다", in: owner.profileView)
         }
         .disposed(by: disposeBag)
     }

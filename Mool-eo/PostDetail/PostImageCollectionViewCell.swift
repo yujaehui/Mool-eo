@@ -10,7 +10,8 @@ import SnapKit
 
 class PostImageCollectionViewCell: BaseCollectionViewCell {
     
-    let postImageView = CustomImageView(frame: .zero)
+    let postImageView = LargePostImageView(frame: .zero)
+    
     let postImageCountLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
         label.textAlignment = .center

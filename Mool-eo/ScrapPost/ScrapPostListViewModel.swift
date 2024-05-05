@@ -25,15 +25,19 @@ class ScrapPostListViewModel: ViewModelType {
         let scrapPostList: PublishSubject<PostListModel>
         let nextScrapPostList: PublishSubject<PostListModel>
         let post: Driver<String>
+        let forbidden: Driver<Void>
+        let badRequest: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let scrapPostList = PublishSubject<PostListModel>()
         let nextScrapPostList = PublishSubject<PostListModel>()
-        
         let prefetch = PublishSubject<Void>()
-        
         let post = PublishSubject<String>()
+        let forbidden = PublishSubject<Void>()
+        let badRequest = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
         
         input.reload
             .flatMap { _ in
@@ -44,8 +48,16 @@ class ScrapPostListViewModel: ViewModelType {
                 switch value {
                 case .success(let postListModel):
                     scrapPostList.onNext(postListModel)
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // Pagination
@@ -60,16 +72,24 @@ class ScrapPostListViewModel: ViewModelType {
         let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
         
         nextPrefetch
-            .debug("🔥Pagination🔥")
             .flatMap { (next, _) in
                 NetworkManager.shared.scrapPostCheck(limit: "7", next: next)
             }
+            .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postListModel):
                     nextScrapPostList.onNext(postListModel)
-                case .error(let error): print(error)
+                case .error(let error):
+                    switch error {
+                    case .forbidden: forbidden.onNext(())
+                    case .badRequest: badRequest.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
                 }
+            } onError: { owner, error in
+                print("🛰️NETWORK ERROR : \(error)🛰️")
+                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
@@ -78,6 +98,11 @@ class ScrapPostListViewModel: ViewModelType {
                 post.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(scrapPostList: scrapPostList, nextScrapPostList: nextScrapPostList, post: post.asDriver(onErrorJustReturn: ""))
+        return Output(scrapPostList: scrapPostList, 
+                      nextScrapPostList: nextScrapPostList,
+                      post: post.asDriver(onErrorJustReturn: ""),
+                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
+                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }
