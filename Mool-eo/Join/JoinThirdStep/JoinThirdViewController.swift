@@ -12,6 +12,10 @@ import RxCocoa
 // 회원가입 세번째 로직 : 닉네임 입력
 class JoinThirdViewController: BaseViewController {
     
+    deinit {
+        print("‼️JoinThirdViewController Deinit‼️")
+    }
+    
     let viewModel = JoinThirdViewModel()
     let joinThirdView = JoinThirdView()
     

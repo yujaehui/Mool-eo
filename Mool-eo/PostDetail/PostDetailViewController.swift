@@ -11,35 +11,16 @@ import RxCocoa
 import RxDataSources
 import RxGesture
 
-protocol PostDetailDelegate: AnyObject {
-    func changePost(_ postBoard: PostBoardType)
-}
-
-enum PostDetailSectionItem {
-    case post(PostModel)
-    case comment(Comment)
-}
-
-struct PostDetailSectionModel {
-    var items: [PostDetailSectionItem]
-}
-
-extension PostDetailSectionModel: SectionModelType {
-    typealias Item = PostDetailSectionItem
-    
-    init(original: PostDetailSectionModel, items: [PostDetailSectionItem]) {
-        self = original
-        self.items = items
-    }
-}
-
 enum postDetailAccessType {
     case me
     case other
 }
 
 class PostDetailViewController: BaseViewController {
-    weak var delegate: PostDetailDelegate?
+    
+    deinit {
+        print("‼️PostDetailViewController Deinit‼️")
+    }
     
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
@@ -58,6 +39,7 @@ class PostDetailViewController: BaseViewController {
     var change = false
     
     private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = postDetailView
@@ -65,11 +47,12 @@ class PostDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         if change {
-            delegate?.changePost(postBoard)
+            NotificationCenter.default.post(name: Notification.Name(Noti.changePost.rawValue), object: postBoard)
         }
     }
     
@@ -90,7 +73,7 @@ class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: postDetailView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: postDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let input = PostDetailViewModel.Input(
             keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
@@ -147,14 +130,12 @@ class PostDetailViewController: BaseViewController {
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
-            owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         // 좋아요 업로드가 성공할 경우
         output.likeUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
-            owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
@@ -179,13 +160,11 @@ class PostDetailViewController: BaseViewController {
             sections[indexPath.section] = PostDetailSectionModel(original: sections[indexPath.section], items: items)
             owner.sections.onNext(sections)
             
-            owner.postDetailView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
         output.editPostDetail.bind(with: self) { owner, value in
             let vc = WritePostViewController()
-            vc.delegate = owner
             vc.type = .edit
             vc.postBoard = owner.postBoard
             vc.postTitle = value.title
@@ -308,12 +287,14 @@ class PostDetailViewController: BaseViewController {
         })
         return dataSource
     }
-}
-
-extension PostDetailViewController: WritePostDelegate {
-    func didUploadPost(_ postBoard: PostBoardType) {
-        postDetailView.tableView.reloadData()
-        reload.onNext(())
-        change = true
+    
+    private func registerObserver() {
+        NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue))
+            .take(until: self.rx.deallocated)
+            .subscribe(with: self) { owner, _ in
+                owner.reload.onNext(())
+            }
+            .disposed(by: disposeBag)
     }
+
 }

@@ -10,33 +10,21 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-enum ProfileSectionItem {
-    case infoItem(ProfileModel)
-    case myPostItem(PostModel)
-}
-
-struct ProfileSectionModel {
-    let title: String?
-    var items: [ProfileSectionItem]
-}
-
-extension ProfileSectionModel: SectionModelType {
-    typealias Item = ProfileSectionItem
-    
-    init(original: ProfileSectionModel, items: [ProfileSectionItem]) {
-        self = original
-        self.items = items
-    }
-}
-
 class ProfileViewController: BaseViewController {
+    
+    deinit {
+        print("‼️ProfileViewController Deinit‼️")
+    }
     
     let viewModel = ProfileViewModel()
     let profileView = ProfileView()
     
     var showProfileUpdateAlert: Bool = false
     
+    var reload = BehaviorSubject(value: ())
+    
     private var sections = BehaviorSubject<[ProfileSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = profileView
@@ -44,13 +32,7 @@ class ProfileViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if showProfileUpdateAlert {
-            profileView.makeToast("프로필 수정 성공", duration: 2, position: .top)
-            showProfileUpdateAlert = false
-        }
+        registerObserver()
     }
     
     override func setNav() {
@@ -58,13 +40,14 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: profileView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: profileView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        let viewDidLoad = Observable.just(())
+        let reload = reload
         let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
         let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
         let withdrawButtonTap = profileView.withdrawButton.rx.tap.asObservable()
-        let input = ProfileViewModel.Input(viewDidLoad: viewDidLoad, modelSelected: modelSelected, itemSelected: itemSelected, withdrawButtonTap: withdrawButtonTap)
+        let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, withdrawButtonTap: withdrawButtonTap)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
@@ -72,9 +55,11 @@ class ProfileViewController: BaseViewController {
                                   + [ProfileSectionModel(title: "내 게시물", items: value.1.data.map { .myPostItem($0) })])
         }.disposed(by: disposeBag)
         
-        output.post.drive(with: self) { owner, value in
+        output.post.bind(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.postId = value
+            vc.postBoard = PostBoardType.allCases.first(where: { $0.rawValue == value.productID })!
+            vc.postId = value.postID
+            vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
@@ -116,5 +101,41 @@ class ProfileViewController: BaseViewController {
             return dataSource.sectionModels[index].title
         })
         return dataSource
+    }
+    
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changeProfile.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            owner.reload.onNext(())
+            guard let object = noti.object as? Bool else { return }
+            owner.profileView.makeToast("프로필 수정 성공", duration: 2, position: .top)
+        }
+        .disposed(by: disposeBag)
+    }
+}
+
+extension ProfileViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1: return 50
+        default: return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            let title = dataSource[section]
+            let view = ProfileMyPostHeaderView()
+            view.myPostLabel.text = title.title
+            return view
+        default: return nil
+        }
     }
 }

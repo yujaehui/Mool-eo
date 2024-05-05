@@ -13,7 +13,7 @@ class ProfileViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let viewDidLoad: Observable<Void>
+        let reload: BehaviorSubject<Void>
         let modelSelected: Observable<ProfileSectionItem>
         let itemSelected: Observable<IndexPath>
         let withdrawButtonTap: Observable<Void>
@@ -21,16 +21,16 @@ class ProfileViewModel: ViewModelType {
     
     struct Output {
         let result: PublishSubject<(ProfileModel, PostListModel)>
-        let post: Driver<String>
+        let post: PublishSubject<PostModel>
         let withdrawSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(ProfileModel, PostListModel)>()
-        let post = PublishSubject<String>()
+        let post = PublishSubject<PostModel>()
         let withdrawSuccessTrigger = PublishSubject<Void>()
         
-        input.viewDidLoad
+        input.reload
             .map {
                 return UserDefaultsManager.userId!
             }
@@ -55,7 +55,7 @@ class ProfileViewModel: ViewModelType {
         Observable.zip(input.modelSelected, input.itemSelected)
             .bind(with: self) { owner, value in
                 switch value.0 {
-                case .myPostItem(let myPost): post.onNext(myPost.postID)
+                case .myPostItem(let myPost): post.onNext(myPost)
                 case .infoItem( _): break
                 }
             }.disposed(by: disposeBag)
@@ -76,7 +76,7 @@ class ProfileViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         return Output(result: result,
-                      post: post.asDriver(onErrorJustReturn: ""),
+                      post: post,
                       withdrawSuccessTrigger: withdrawSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

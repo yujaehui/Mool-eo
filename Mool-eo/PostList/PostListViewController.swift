@@ -11,20 +11,11 @@ import RxCocoa
 import RxDataSources
 import RxGesture
 
-struct PostListSectionModel {
-    var items: [PostModel]
-}
-
-extension PostListSectionModel: SectionModelType {
-    typealias Item = PostModel
-    
-    init(original: PostListSectionModel, items: [PostModel]) {
-        self = original
-        self.items = items
-    }
-}
-
 class PostListViewController: BaseViewController {
+    
+    deinit {
+        print("‼️PostListViewController Deinit‼️")
+    }
     
     let viewModel = PostListViewModel()
     let postListView = PostListView()
@@ -33,6 +24,7 @@ class PostListViewController: BaseViewController {
     lazy var reload = BehaviorSubject<PostBoardType>(value: postBoard)
     
     private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = postListView
@@ -40,6 +32,7 @@ class PostListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +41,7 @@ class PostListViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: postListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
         let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
@@ -64,7 +57,6 @@ class PostListViewController: BaseViewController {
         
         output.postWriteButtonTap.drive(with: self) { owner, _ in
             let vc = WritePostViewController()
-            vc.delegate = owner
             vc.type = .upload
             vc.postBoard = owner.postBoard
             let nav = UINavigationController(rootViewController: vc)
@@ -75,7 +67,6 @@ class PostListViewController: BaseViewController {
         // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.delegate = owner
             vc.postBoard = owner.postBoard
             vc.postId = value
             vc.userId = UserDefaultsManager.userId!
@@ -121,17 +112,20 @@ class PostListViewController: BaseViewController {
         }
         return dataSource
     }
-}
-
-extension PostListViewController: WritePostDelegate, PostDetailDelegate {
-    func didUploadPost(_ postBoard: PostBoardType) { // 포스트를 새로 업로드한 경우
-        postListView.tableView.reloadData()
-        reload.onNext(postBoard)
-    }
     
-    func changePost(_ postBoard: PostBoardType) { // 기존 포스트의 수정, 댓글, 좋아요, 스크랩의 변화가 있을 경우
-        postListView.tableView.reloadData()
-        reload.onNext(postBoard)
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            if let postBoard = noti.object as? PostBoardType {
+                owner.reload.onNext(postBoard)
+            }
+        }
+        .disposed(by: disposeBag)
     }
 }
 

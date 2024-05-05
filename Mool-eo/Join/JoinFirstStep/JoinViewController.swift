@@ -11,6 +11,10 @@ import RxSwift
 // 회원가입 첫번째 로직 : 아이디 입력 & 중복 확인
 class JoinViewController: BaseViewController {
     
+    deinit {
+        print("‼️JoinViewController Deinit‼️")
+    }
+    
     let viewModel = JoinViewModel()
     let joinView = JoinView()
     

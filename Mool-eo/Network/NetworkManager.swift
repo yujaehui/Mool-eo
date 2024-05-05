@@ -11,7 +11,7 @@ import RxSwift
 import Moya
 import RxMoya
 
-enum NetworkResult<T: Decodable> {
+enum NetworkResult<T> {
     case success(T)
     case error(NetworkError)
 }
@@ -117,9 +117,29 @@ struct NetworkManager {
         return requestGeneric(target: PostService.postCheckUser(userId: userId))
     }
     
-    func postDelete(postId: String) -> Single<NetworkResult<Empty>> {
-        return requestGeneric(target: PostService.postDelete(postID: postId))
+    func postDelete(postId: String) -> Single<NetworkResult<Void>> {
+        return Single.create { single in
+            let provider = MoyaProvider<PostService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            let request = provider.request(.postDelete(postID: postId)) { result in
+                switch result {
+                case .success:
+                    single(.success(.success(())))
+                case .failure(let error):
+                    if let statusCode = error.response?.statusCode {
+                        if let networkError = NetworkError(rawValue: statusCode) {
+                            single(.success(.error(networkError)))
+                        }
+                    } else {
+                        single(.failure(error))
+                    }
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
+
     
     func postEdit(query: PostQuery, postId: String) -> Single<NetworkResult<PostModel>> {
         return requestGeneric(target: PostService.postEdit(query: query, postId: postId))
@@ -130,8 +150,27 @@ struct NetworkManager {
         return requestGeneric(target: CommentService.commentUpload(query: query, postId: postId))
     }
     
-    func commentDelete(postId: String, commentId: String) -> Single<NetworkResult<Empty>> {
-        return requestGeneric(target: CommentService.commentDelete(postId: postId, commentId: commentId))
+    func commentDelete(postId: String, commentId: String) -> Single<NetworkResult<Void>> {
+        return Single.create { single in
+            let provider = MoyaProvider<CommentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            let request = provider.request(.commentDelete(postId: postId, commentId: commentId)) { result in
+                switch result {
+                case .success:
+                    single(.success(.success(())))
+                case .failure(let error):
+                    if let statusCode = error.response?.statusCode {
+                        if let networkError = NetworkError(rawValue: statusCode) {
+                            single(.success(.error(networkError)))
+                        }
+                    } else {
+                        single(.failure(error))
+                    }
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
     
     //MARK: - Like    

@@ -10,20 +10,11 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-struct ScrapPostListSectionModel {
-    var items: [PostModel]
-}
-
-extension ScrapPostListSectionModel: SectionModelType {
-    typealias Item = PostModel
-    
-    init(original: ScrapPostListSectionModel, items: [PostModel]) {
-        self = original
-        self.items = items
-    }
-}
-
 class ScrapPostListViewController: BaseViewController {
+    
+    deinit {
+        print("‼️ScrapPostListViewController Deinit‼️")
+    }
     
     let viewModel = ScrapPostListViewModel()
     let scrapPostListView = ScrapPostListView()
@@ -31,6 +22,7 @@ class ScrapPostListViewController: BaseViewController {
     var reload = BehaviorSubject(value: ())
     
     private var sections = BehaviorSubject<[ScrapPostListSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = scrapPostListView
@@ -38,10 +30,11 @@ class ScrapPostListViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     override func bind() {
-        sections.bind(to: scrapPostListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: scrapPostListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
         let modelSelected = scrapPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
@@ -56,7 +49,6 @@ class ScrapPostListViewController: BaseViewController {
         
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.delegate = owner
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
@@ -76,11 +68,13 @@ class ScrapPostListViewController: BaseViewController {
         }
         return dataSource
     }
-}
-
-extension ScrapPostListViewController: PostDetailDelegate {
-    func changePost(_ postBoard: PostBoardType) {
-        scrapPostListView.tableView.reloadData()
-        reload.onNext(())
+    
+    private func registerObserver() {
+        NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue))
+            .take(until: self.rx.deallocated)
+            .subscribe(with: self) { owner, _ in
+                owner.reload.onNext(())
+            }
+            .disposed(by: disposeBag)
     }
 }

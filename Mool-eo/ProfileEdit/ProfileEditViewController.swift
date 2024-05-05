@@ -11,8 +11,11 @@ import RxCocoa
 import Kingfisher
 import PhotosUI
 
-
 class ProfileEditViewController: BaseViewController {
+    
+    deinit {
+        print("‼️ProfileEditViewController Deinit‼️")
+    }
     
     let viewModel = ProfileEditViewModel()
     let profileEditView = ProfileEditView()
@@ -69,12 +72,8 @@ class ProfileEditViewController: BaseViewController {
         output.completeButtonValidation.drive(profileEditView.completeButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.profileEditSuccessTrigger.drive(with: self) { owner, _ in
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            let sceneDelegate = windowScene?.delegate as? SceneDelegate
-            let vc = ProfileViewController()
-            vc.showProfileUpdateAlert = true
-            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: vc)
-            sceneDelegate?.window?.makeKeyAndVisible()
+            NotificationCenter.default.post(name: Notification.Name(Noti.changeProfile.rawValue), object: true)
+            owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         
         output.cancelButtonTap.drive(with: self) { owner, _ in

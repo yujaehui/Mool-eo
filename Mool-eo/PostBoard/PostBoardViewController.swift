@@ -19,6 +19,10 @@ enum PostBoardType: String, CaseIterable {
 
 class PostBoardViewController: BaseViewController {
     
+    deinit {
+        print("‼️PostBoardViewController Deinit‼️")
+    }
+    
     let viewModel = PostBoardViewModel()
     let postBoardView = PostBoardView()
     

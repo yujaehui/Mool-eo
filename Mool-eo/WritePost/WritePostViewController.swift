@@ -11,17 +11,16 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 
-protocol WritePostDelegate: AnyObject {
-    func didUploadPost(_ postBoard: PostBoardType)
-}
-
 enum PostInteractionType: String {
     case upload
     case edit
 }
 
 final class WritePostViewController: BaseViewController {
-    weak var delegate: WritePostDelegate?
+    
+    deinit {
+        print("‼️WritePostViewController Deinit‼️")
+    }
     
     let viewModel = WritePostViewModel()
     let writePostView = WritePostView()
@@ -110,12 +109,12 @@ final class WritePostViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.uploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.delegate?.didUploadPost(postBoard)
+            NotificationCenter.default.post(name: Notification.Name(Noti.writePost.rawValue), object: postBoard)
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         
         output.editSuccessTrigger.drive(with: self) { owner, _ in
-            owner.delegate?.didUploadPost(postBoard)
+            NotificationCenter.default.post(name: Notification.Name(Noti.writePost.rawValue), object: postBoard)
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         

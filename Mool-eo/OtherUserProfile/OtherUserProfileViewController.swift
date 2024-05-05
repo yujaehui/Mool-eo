@@ -10,26 +10,11 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-enum OtherUserProfileSectionItem {
-    case infoItem(OtherUserProfileModel)
-    case myPostItem(PostModel)
-}
-
-struct OtherUserProfileSectionModel {
-    let title: String?
-    var items: [OtherUserProfileSectionItem]
-}
-
-extension OtherUserProfileSectionModel: SectionModelType {
-    typealias Item = OtherUserProfileSectionItem
-    
-    init(original: OtherUserProfileSectionModel, items: [OtherUserProfileSectionItem]) {
-        self = original
-        self.items = items
-    }
-}
-
 class OtherUserProfileViewController: BaseViewController {
+    
+    deinit {
+        print("‼️OtherUserProfileViewController Deinit‼️")
+    }
     
     let viewModel = OtherUserProfileViewModel()
     let otherUserProfileView = OtherUserProfileView()
@@ -47,12 +32,15 @@ class OtherUserProfileViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     override func bind() {
         sections.bind(to: otherUserProfileView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
         
-        let input = OtherUserProfileViewModel.Input(reload: reload, userId: userId, followStatus: followStatus)
+        let modelSelected = otherUserProfileView.tableView.rx.modelSelected(OtherUserProfileSectionItem.self).asObservable()
+        let itemSelected =  otherUserProfileView.tableView.rx.itemSelected.asObservable()
+        let input = OtherUserProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, userId: userId, followStatus: followStatus)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
@@ -60,8 +48,15 @@ class OtherUserProfileViewController: BaseViewController {
                                   + [OtherUserProfileSectionModel(title: "\(value.0.nick)의 게시물", items: value.1.data.map { .myPostItem($0) })])
         }.disposed(by: disposeBag)
         
+        output.post.bind(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postBoard = PostBoardType.allCases.first(where: { $0.rawValue == value.productID })!
+            vc.postId = value.postID
+            vc.userId = UserDefaultsManager.userId!
+            owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
+        
         output.followOrUnfollowSuccessTrigger.drive(with: self) { owner, _ in
-            owner.otherUserProfileView.tableView.reloadData()
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
     }
@@ -99,5 +94,18 @@ class OtherUserProfileViewController: BaseViewController {
             return dataSource.sectionModels[index].title
         })
         return dataSource
+    }
+    
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            owner.reload.onNext(())
+        }
+        .disposed(by: disposeBag)
     }
 }

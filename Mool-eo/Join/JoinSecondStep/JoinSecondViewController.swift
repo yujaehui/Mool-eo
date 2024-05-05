@@ -12,6 +12,10 @@ import RxCocoa
 // 회원가입 두번째 로직 : 비밀번호 입력
 class JoinSecondViewController: BaseViewController {
     
+    deinit {
+        print("‼️JoinSecondViewController Deinit‼️")
+    }
+    
     let viewModel = JoinSecondViewModel()
     let joinSecondView = JoinSecondView()
     

@@ -14,17 +14,21 @@ class OtherUserProfileViewModel: ViewModelType {
     
     struct Input {
         let reload: BehaviorSubject<Void>
+        let modelSelected: Observable<OtherUserProfileSectionItem>
+        let itemSelected: Observable<IndexPath>
         let userId: String
         let followStatus: PublishSubject<Bool>
     }
     
     struct Output {
         let result: PublishSubject<(OtherUserProfileModel, PostListModel)>
+        let post: PublishSubject<PostModel>
         let followOrUnfollowSuccessTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(OtherUserProfileModel, PostListModel)>()
+        let post = PublishSubject<PostModel>()
         let followOrUnfollowSuccessTrigger = PublishSubject<Void>()
         
         input.reload
@@ -45,6 +49,14 @@ class OtherUserProfileViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .bind(with: self) { owner, value in
+                switch value.0 {
+                case .myPostItem(let myPost): post.onNext(myPost)
+                case .infoItem( _): break
+                }
+            }.disposed(by: disposeBag)
+        
         input.followStatus
             .flatMap { status in
                 status ? NetworkManager.shared.unfollow(userId: input.userId) : NetworkManager.shared.follow(userId: input.userId)
@@ -57,6 +69,6 @@ class OtherUserProfileViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(result: result, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))
+        return Output(result: result, post: post, followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()))
     }
 }

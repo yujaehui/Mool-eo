@@ -12,6 +12,10 @@ import RxCocoa
 
 class LoginViewController: BaseViewController {
     
+    deinit {
+        print("‼️LoginViewController Deinit‼️")
+    }
+    
     let viewModel = LoginViewModel()
     let loginView = LoginView()
     
