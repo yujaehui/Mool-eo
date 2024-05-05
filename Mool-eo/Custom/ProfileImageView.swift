@@ -13,7 +13,6 @@ class ProfileImageView: UIImageView {
         super.init(frame: frame)
         contentMode = .scaleAspectFill
         clipsToBounds = true
-        image = .logo
         tintColor = ColorStyle.point
         backgroundColor = ColorStyle.subBackground
     }
