@@ -54,21 +54,16 @@ class JoinViewModel: ViewModelType {
                 NetworkManager.shared.emailCheck(query: query)
             }
             .debug("아이디 중복 확인")
-            .do(onSubscribe: { networkFail.onNext(()) })
-            .retry(3)
-            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): idCheckSuccessValidation.onNext(true)
                 case .error(let error):
                     switch error {
                     case .conflict: idCheckSuccessValidation.onNext(false)
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         idCheckSuccessValidation

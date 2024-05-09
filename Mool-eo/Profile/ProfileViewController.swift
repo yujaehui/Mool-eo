@@ -96,14 +96,6 @@ class ProfileViewController: BaseViewController {
             sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
         
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.profileView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.profileView)
-        }.disposed(by: disposeBag)
-        
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileView)
         }.disposed(by: disposeBag)

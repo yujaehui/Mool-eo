@@ -28,8 +28,6 @@ class PostListViewModel: ViewModelType {
         let nextPostList: PublishSubject<PostListModel>
         let postWriteButtonTap: Driver<Void>
         let post: Driver<String>
-        let forbidden: Driver<Void>
-        let badRequest: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -38,8 +36,6 @@ class PostListViewModel: ViewModelType {
         let nextPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
         let post = PublishSubject<String>()
-        let forbidden = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         // 게시글 조회 네트워크 통신 진행
@@ -54,14 +50,10 @@ class PostListViewModel: ViewModelType {
                     postList.onNext(postListModel)
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // Pagination
@@ -86,14 +78,10 @@ class PostListViewModel: ViewModelType {
                     nextPostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
@@ -106,8 +94,6 @@ class PostListViewModel: ViewModelType {
                       nextPostList: nextPostList,
                       postWriteButtonTap: input.postWriteButtonTap.asDriver(onErrorJustReturn: ()),
                       post: post.asDriver(onErrorJustReturn: ""),
-                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

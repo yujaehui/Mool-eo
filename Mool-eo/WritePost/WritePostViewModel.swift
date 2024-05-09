@@ -16,6 +16,8 @@ class WritePostViewModel: ViewModelType {
     struct Input {
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let postBoard: PostBoardType
         let title: Observable<String>
         let content: Observable<String>
@@ -31,15 +33,15 @@ class WritePostViewModel: ViewModelType {
     struct Output {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let imageAddButtonTap: Driver<Void>
         let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: Driver<Void>
         let editSuccessTrigger: Driver<Void>
         let cancelButtonTap: Driver<Void>
-        let forbidden: Driver<Void>
         let badRequest: Driver<Void>
         let notFoundErr: Driver<Void>
-        let unauthorized: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -50,10 +52,8 @@ class WritePostViewModel: ViewModelType {
         let completeButtonValidation = BehaviorSubject(value: false)
         let uploadSuccessTrigger = PublishSubject<Void>()
         let editSuccessTrigger = PublishSubject<Void>()
-        let forbidden = PublishSubject<Void>()
         let badRequest = PublishSubject<Void>()
         let notFoundErr = PublishSubject<Void>()
-        let unauthorized = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         input.textViewBegin
@@ -106,21 +106,18 @@ class WritePostViewModel: ViewModelType {
                             .flatMapLatest { result -> Observable<PostQuery> in
                                 switch result {
                                 case .success(let filesModel):
-                                    let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
+                                    return Observable.combineLatest(input.title, input.content).map { (title, content) in
                                         return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: filesModel.files)
                                     }
-                                    return postQuery
                                 case .error(let error):
                                     switch error {
-                                    case .forbidden: forbidden.onNext(())
                                     case .badRequest: badRequest.onNext(())
+                                    case .networkFail: networkFail.onNext(())
                                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                                     }
-                                    
-                                    let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
+                                    return Observable.combineLatest(input.title, input.content).map { (title, content) in
                                         return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
                                     }
-                                    return postQuery
                                 }
                             }
                     } else {
@@ -134,22 +131,16 @@ class WritePostViewModel: ViewModelType {
                     NetworkManager.shared.postUpload(query: query)
                 }
                 .debug("게시글 업로드")
-                .do(onSubscribe: { networkFail.onNext(()) })
-                .retry(3)
-                .share()
                 .subscribe(with: self) { owner, value in
                     switch value {
                     case .success(_): uploadSuccessTrigger.onNext(())
                     case .error(let error):
                         switch error {
                         case .notFoundErr: notFoundErr.onNext(())
-                        case .forbidden: forbidden.onNext(())
+                        case .networkFail: networkFail.onNext(())
                         default: print("⚠️OTHER ERROR : \(error)⚠️")
                         }
                     }
-                } onError: { owner, error in
-                    print("🛰️NETWORK ERROR : \(error)🛰️")
-                    networkFail.onNext(())
                 }.disposed(by: disposeBag)
             
         case .edit:
@@ -159,37 +150,29 @@ class WritePostViewModel: ViewModelType {
                     NetworkManager.shared.postEdit(query: query, postId: postId)
                 }
                 .debug("게시글 수정")
-                .do(onSubscribe: { networkFail.onNext(()) })
-                .retry(3)
-                .share()
                 .subscribe(with: self) { owner, value in
                     switch value {
                     case .success(_): editSuccessTrigger.onNext(())
                     case .error(let error):
                         switch error {
-                        case .unauthorized: unauthorized.onNext(())
-                        case .notFoundErr: notFoundErr.onNext(())
-                        case .forbidden: forbidden.onNext(())
+                        case .networkFail: networkFail.onNext(())
                         default: print("⚠️OTHER ERROR : \(error)⚠️")
                         }
                     }
-                } onError: { owner, error in
-                    print("🛰️NETWORK ERROR : \(error)🛰️")
-                    networkFail.onNext(())
                 }.disposed(by: disposeBag)
         }
         
         return Output(text: text.asDriver(onErrorJustReturn: ""),
                       textColorType: textColorType.asDriver(onErrorJustReturn: false),
+                      keyboardWillShow: input.keyboardWillShow,
+                      keyboardWillHide: input.keyboardWillHide,
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       editSuccessTrigger: editSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()),
-                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
                       badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
-                      unauthorized: unauthorized.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

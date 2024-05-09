@@ -23,11 +23,13 @@ enum NetworkError: Int, Error {
     case conflict = 409
     case notFoundErr = 410
     case unauthorized = 445
-
+    
     case missingKey = 420
     case overRequestLimit = 429
     case invalidURL = 444
     case serverError = 500
+    
+    case networkFail
 }
 
 struct NetworkManager {
@@ -53,7 +55,7 @@ struct NetworkManager {
                             single(.success(.error(networkError)))
                         }
                     } else {
-                        single(.failure(error))
+                        single(.success(.error(NetworkError.networkFail)))
                     }
                 }
             }

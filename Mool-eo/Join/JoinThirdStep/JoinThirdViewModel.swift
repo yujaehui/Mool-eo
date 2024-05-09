@@ -23,8 +23,6 @@ class JoinThirdViewModel: ViewModelType {
         let nicknameValidation: Driver<Bool>
         let joinButtonValidation: Driver<Bool>
         let joinSuccessTrigger: Driver<Void>
-        let conflict: Driver<Void>
-        let badRequest: Driver<Void>
         let networkFail: Driver<Void>
 
     }
@@ -33,8 +31,6 @@ class JoinThirdViewModel: ViewModelType {
         let nicknameValidation = BehaviorSubject<Bool>(value: false)
         let joinButtonValidation = BehaviorSubject<Bool>(value: false)
         let joinSuccessTrigger = PublishSubject<Void>()
-        let conflict = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
 
         input.nickname
@@ -64,29 +60,20 @@ class JoinThirdViewModel: ViewModelType {
                 NetworkManager.shared.join(query: query)
             }
             .debug("회원가입")
-            .do(onSubscribe: { networkFail.onNext(()) })
-            .retry(3)
-            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): joinSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
-                    case .conflict: conflict.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         return Output(nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
                       joinButtonValidation: joinButtonValidation.asDriver(onErrorJustReturn: false),
                       joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      conflict: conflict.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

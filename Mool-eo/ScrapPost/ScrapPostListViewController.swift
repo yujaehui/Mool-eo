@@ -83,14 +83,6 @@ class ScrapPostListViewController: BaseViewController {
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.scrapPostListView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.scrapPostListView)
-        }.disposed(by: disposeBag)
-        
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.scrapPostListView)
         }.disposed(by: disposeBag)

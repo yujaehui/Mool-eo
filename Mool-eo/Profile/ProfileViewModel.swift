@@ -27,8 +27,6 @@ class ProfileViewModel: ViewModelType {
         let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
         let withdrawSuccessTrigger: Driver<Void>
-        let forbidden: Driver<Void>
-        let badRequest: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -38,8 +36,6 @@ class ProfileViewModel: ViewModelType {
         let prefetch = PublishSubject<Void>()
         let post = PublishSubject<PostModel>()
         let withdrawSuccessTrigger = PublishSubject<Void>()
-        let forbidden = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         input.reload
@@ -60,20 +56,15 @@ class ProfileViewModel: ViewModelType {
                 case (.success(let profileModel), .success(let postListModel)): result.onNext((profileModel, postListModel))
                 case (.error(let profileError), _):
                     switch profileError {
-                    case .forbidden: forbidden.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(profileError)⚠️")
                     }
                 case (_, .error(let postError)):
                     switch postError {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(postError)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
-
             }.disposed(by: disposeBag)
         
         // Pagination
@@ -98,15 +89,10 @@ class ProfileViewModel: ViewModelType {
                     nextPostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
-
             }.disposed(by: disposeBag)
         
         
@@ -123,30 +109,21 @@ class ProfileViewModel: ViewModelType {
                 NetworkManager.shared.withdraw()
             }
             .debug("탈퇴")
-            .do(onSubscribe: { networkFail.onNext(()) })
-            .retry(3)
-            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): withdrawSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
-
             }.disposed(by: disposeBag)
         
         return Output(result: result,
                       nextPostList: nextPostList,
                       post: post,
                       withdrawSuccessTrigger: withdrawSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

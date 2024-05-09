@@ -90,18 +90,11 @@ class OtherUserProfileViewController: BaseViewController {
         
         output.followOrUnfollowSuccessTrigger.drive(with: self) { owner, _ in
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
-        }.disposed(by: disposeBag)
-        
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.otherUserProfileView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.otherUserProfileView)
+            NotificationCenter.default.post(name: Notification.Name(Noti.changeProfile.rawValue), object: nil)
         }.disposed(by: disposeBag)
         
         output.notFoundErr.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.otherUserProfileView)
+            ToastManager.shared.showErrorToast(title: .notFoundErrFollow, in: owner.otherUserProfileView)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in

@@ -72,7 +72,7 @@ class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
         
         postContentLabel.snp.makeConstraints { make in
             make.top.equalTo(postTitleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
         likeIconImageView.snp.makeConstraints { make in

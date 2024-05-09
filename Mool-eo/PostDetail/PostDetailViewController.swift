@@ -80,6 +80,7 @@ class PostDetailViewController: BaseViewController {
         sections.bind(to: postDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let input = PostDetailViewModel.Input(
+            didScroll: postDetailView.tableView.rx.didScroll.asObservable(),
             keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
             keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
             textViewBegin: postDetailView.writeCommentView.commentTextView.rx.didBeginEditing.asObservable(),
@@ -100,6 +101,10 @@ class PostDetailViewController: BaseViewController {
             })
         
         let output = viewModel.transform(input: input)
+        
+        output.didScroll.bind(with: self) { owner, _ in
+            owner.view.endEditing(true)
+        }.disposed(by: disposeBag)
         
         // 키보드가 나타나는 경우
         output.keyboardWillShow.bind(with: self) { owner, notification in
@@ -184,22 +189,6 @@ class PostDetailViewController: BaseViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
-        }.disposed(by: disposeBag)
-        
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.postDetailView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.postDetailView)
-        }.disposed(by: disposeBag)
-        
-        output.notFoundErr.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.postDetailView)
-        }.disposed(by: disposeBag)
-        
-        output.unauthorized.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .unauthorized, in: owner.postDetailView)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in

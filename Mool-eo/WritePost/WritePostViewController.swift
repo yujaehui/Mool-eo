@@ -48,10 +48,6 @@ final class WritePostViewController: BaseViewController {
         super.viewDidLoad()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true) // 화면 터치시 키보드 내려가도록
-    }
-    
     override func setNav() {
         navigationItem.title = "글 쓰기"
         navigationItem.backButtonTitle = ""
@@ -62,9 +58,18 @@ final class WritePostViewController: BaseViewController {
     }
     
     override func setToolBar() {
-        navigationController?.isToolbarHidden = type == .upload ? false : true
-        let barItems = [writePostView.imageAddButton]
-        self.toolbarItems = barItems
+        //navigationController?.isToolbarHidden = type == .upload ? false : true
+        // MARK: Hotfix
+        if type == .upload {
+            let toolbar = UIToolbar()
+            toolbar.items = [writePostView.imageAddButton]
+            toolbar.sizeToFit()
+            writePostView.writePostBoxView.titleTextField.inputAccessoryView = toolbar
+            writePostView.writePostBoxView.contentTextView.inputAccessoryView = toolbar
+        } else {
+            writePostView.writePostBoxView.titleTextField.inputAccessoryView = nil
+            writePostView.writePostBoxView.contentTextView.inputAccessoryView = nil
+        }
     }
     
     override func configureView() {
@@ -104,6 +109,8 @@ final class WritePostViewController: BaseViewController {
     override func bind() {
         let textViewBegin = writePostView.writePostBoxView.contentTextView.rx.didBeginEditing.asObservable()
         let textViewEnd = writePostView.writePostBoxView.contentTextView.rx.didEndEditing.asObservable()
+        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification) // 키보드가 나타나는 시점
+        let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification) // 키보드가 사라지는 시점
         let postBoard = postBoard
         let title = writePostView.writePostBoxView.titleTextField.rx.text.orEmpty.asObservable()
         let content = writePostView.writePostBoxView.contentTextView.rx.text.orEmpty.asObservable()
@@ -111,7 +118,7 @@ final class WritePostViewController: BaseViewController {
         let imageAddButtonTap = writePostView.imageAddButton.rx.tap.asObservable()
         let completeButtonTap = writePostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writePostView.cancelButton.rx.tap.asObservable()
-        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelectedSubject: imageSelectedSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, type: type, postId: Observable.just(postId))
+        let input = WritePostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, postBoard: postBoard, title: title, content: content, selectedImageDataSubject: selectedImageDataSubject, imageSelectedSubject: imageSelectedSubject, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, type: type, postId: Observable.just(postId))
         
         let output = viewModel.transform(input: input)
         
@@ -119,6 +126,16 @@ final class WritePostViewController: BaseViewController {
         output.text.drive(writePostView.writePostBoxView.contentTextView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
             owner.writePostView.writePostBoxView.contentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+        }.disposed(by: disposeBag)
+        
+        // 키보드가 나타났을 경우
+        output.keyboardWillShow.bind(with: self) { owner, notification in
+            owner.keyboardWillShow(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        // 키보드가 사라졌을 경우
+        output.keyboardWillHide.bind(with: self) { owner, notification in
+            owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
         
         output.imageAddButtonTap.drive(with: self) { owner, _ in
@@ -146,25 +163,33 @@ final class WritePostViewController: BaseViewController {
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.writePostView)
-        }.disposed(by: disposeBag)
-        
         output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.writePostView)
+            ToastManager.shared.showErrorToast(title: .badRequestImageUpload, in: owner.writePostView)
         }.disposed(by: disposeBag)
         
         output.notFoundErr.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .notFoundErr, in: owner.writePostView)
-        }.disposed(by: disposeBag)
-        
-        output.unauthorized.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .unauthorized, in: owner.writePostView)
+            ToastManager.shared.showErrorToast(title: .notFoundErrPostUpload, in: owner.writePostView)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.writePostView)
         }.disposed(by: disposeBag)
+    }
+    
+    func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrameValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = keyboardFrameValue.cgRectValue
+        let keyboardHeight = keyboardFrame.size.height
+        
+        var contentInset = writePostView.scrollView.contentInset
+        contentInset.bottom = keyboardHeight
+        writePostView.scrollView.contentInset = contentInset
+        writePostView.scrollView.scrollIndicatorInsets = contentInset
+    }
+    
+    func keyboardWillHide(notification: Notification) {
+        writePostView.scrollView.contentInset = .zero
+        writePostView.scrollView.scrollIndicatorInsets = .zero
     }
 }
 

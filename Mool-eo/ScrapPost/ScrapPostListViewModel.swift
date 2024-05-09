@@ -25,8 +25,6 @@ class ScrapPostListViewModel: ViewModelType {
         let scrapPostList: PublishSubject<PostListModel>
         let nextScrapPostList: PublishSubject<PostListModel>
         let post: Driver<String>
-        let forbidden: Driver<Void>
-        let badRequest: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -35,8 +33,6 @@ class ScrapPostListViewModel: ViewModelType {
         let nextScrapPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
         let post = PublishSubject<String>()
-        let forbidden = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         input.reload
@@ -50,14 +46,10 @@ class ScrapPostListViewModel: ViewModelType {
                     scrapPostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         // Pagination
@@ -82,14 +74,10 @@ class ScrapPostListViewModel: ViewModelType {
                     nextScrapPostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
@@ -101,8 +89,6 @@ class ScrapPostListViewModel: ViewModelType {
         return Output(scrapPostList: scrapPostList, 
                       nextScrapPostList: nextScrapPostList,
                       post: post.asDriver(onErrorJustReturn: ""),
-                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

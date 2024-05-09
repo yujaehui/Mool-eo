@@ -79,7 +79,7 @@ class LoginViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.loginView)
+            ToastManager.shared.showErrorToast(title: .badRequestLogin, in: owner.loginView)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in

@@ -59,9 +59,6 @@ class LoginViewModel: ViewModelType {
                 NetworkManager.shared.login(query: loginQuery)
             }
             .debug("로그인")
-            .do(onSubscribe: { networkFail.onNext(()) })
-            .retry(3)
-            .share()
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let loginModel):
@@ -73,12 +70,10 @@ class LoginViewModel: ViewModelType {
                     switch error {
                     case .authenticationErr: authenticationErr.onNext(())
                     case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }
             .disposed(by: disposeBag)
         

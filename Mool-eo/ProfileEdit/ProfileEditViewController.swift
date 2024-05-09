@@ -87,14 +87,6 @@ class ProfileEditViewController: BaseViewController {
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         
-        output.forbidden.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .forbidden, in: owner.profileEditView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.profileEditView)
-        }.disposed(by: disposeBag)
-        
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileEditView)
         }.disposed(by: disposeBag)

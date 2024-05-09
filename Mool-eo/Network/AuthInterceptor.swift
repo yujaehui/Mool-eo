@@ -36,29 +36,27 @@ class AuthInterceptor: RequestInterceptor {
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
         guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419  else {
             completion(.doNotRetryWithError(error))
+            return
+        }
+        
+        if response.statusCode == 418 {
             DispatchQueue.main.async {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
                 sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
                 sceneDelegate?.window?.makeKeyAndVisible()
             }
-            return
+        } else {
+            NetworkManager.shared.refresh()
+                .subscribe(with: self) { owner, value in
+                    switch value {
+                    case .success(let tokenModel):
+                        UserDefaultsManager.accessToken = tokenModel.accessToken
+                        completion(.retry)
+                    case .error(let error):
+                        completion(.doNotRetryWithError(error))
+                    }
+                }.disposed(by: disposeBag)
         }
-        
-        Observable.just(())
-            .flatMap { _ in
-                NetworkManager.shared.refresh()
-            }
-            .subscribe(with: self) { owner, value in
-                switch value {
-                case .success(let tokenModel):
-                    UserDefaultsManager.accessToken = tokenModel.accessToken
-                    completion(.retry)
-                case .error(let error):
-                    completion(.doNotRetryWithError(error))
-                }
-            } onError: { owner, error in
-                completion(.doNotRetryWithError(error))
-            }.disposed(by: disposeBag)
     }
 }

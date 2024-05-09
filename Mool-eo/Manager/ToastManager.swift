@@ -12,11 +12,10 @@ import Toast
 enum ErrorToastTitle: String {
     case networkFail = "네트워크 연결이 원할하지 않습니다"
     case authenticationErr = "아이디 또는 비밀번호가 일치하지 않습니다"
-    case conflict = "이미 가입된 회원입니다"
-    case forbidden = "권한이 없습니다"
-    case badRequest = "잘못된 요청입니다"
-    case notFoundErr = "찾을 수 없습니다"
-    case unauthorized = "삭제 또는 수정 권한이 없습니다"
+    case badRequestLogin = "제대로 된 값을 입력해주세요"
+    case badRequestImageUpload = "이미지의 용량이 너무 큽니다"
+    case notFoundErrPostUpload = "DB 서버 장애로 인해\n게시글 작성에 오류가 발생했습니다"
+    case notFoundErrFollow = "해당 유저를 찾을 수 없습니다"
 }
 
 class ToastManager {

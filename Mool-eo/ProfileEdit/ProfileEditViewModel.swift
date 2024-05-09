@@ -28,8 +28,6 @@ class ProfileEditViewModel: ViewModelType {
         let completeButtonValidation: Driver<Bool>
         let profileEditSuccessTrigger: Driver<Void>
         let cancelButtonTap: Driver<Void>
-        let forbidden: Driver<Void>
-        let badRequest: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -38,8 +36,6 @@ class ProfileEditViewModel: ViewModelType {
         let changeValidation = BehaviorSubject(value: false)
         let completeButtonValidation = BehaviorSubject(value: false)
         let profileSuccessTrigger = PublishSubject<Void>()
-        let forbidden = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         input.afterNickname
@@ -80,22 +76,15 @@ class ProfileEditViewModel: ViewModelType {
                 NetworkManager.shared.profileEdit(query: query)
             }
             .debug("프로필 수정")
-            .do(onSubscribe: { networkFail.onNext(()) })
-            .retry(3)
-            .share()
             .subscribe(with: self) { owenr, value in
                 switch value {
                 case .success(_): profileSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
-                    case .forbidden: forbidden.onNext(())
-                    case .badRequest: badRequest.onNext(())
+                    case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
-            } onError: { owner, error in
-                print("🛰️NETWORK ERROR : \(error)🛰️")
-                networkFail.onNext(())
             }.disposed(by: disposeBag)
         
         return Output(profileImageEditButtonTap: input.profileImageEditButtonTap.asDriver(onErrorJustReturn: ()),
@@ -103,8 +92,6 @@ class ProfileEditViewModel: ViewModelType {
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       profileEditSuccessTrigger: profileSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()),
-                      forbidden: forbidden.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

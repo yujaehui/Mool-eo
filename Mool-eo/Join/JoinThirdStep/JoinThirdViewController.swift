@@ -66,14 +66,6 @@ class JoinThirdViewController: BaseViewController {
             sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
         
-        output.conflict.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .conflict, in: owner.joinThirdView)
-        }.disposed(by: disposeBag)
-        
-        output.badRequest.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .badRequest, in: owner.joinThirdView)
-        }.disposed(by: disposeBag)
-        
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.joinThirdView)
         }.disposed(by: disposeBag)
