@@ -108,7 +108,7 @@ class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(myPost: PostModel) {
-        postBoardLabel.text = myPost.productID
+        postBoardLabel.text = myPost.productId
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likes.count)"

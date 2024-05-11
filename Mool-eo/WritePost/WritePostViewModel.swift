@@ -39,10 +39,10 @@ class WritePostViewModel: ViewModelType {
         let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: Driver<Void>
         let editSuccessTrigger: Driver<Void>
-        let cancelButtonTap: Driver<Void>
         let badRequest: Driver<Void>
         let notFoundErr: Driver<Void>
         let networkFail: Driver<Void>
+        let cancelButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -88,7 +88,7 @@ class WritePostViewModel: ViewModelType {
         }
         
         let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
-            return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
+            return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
         }
         
         let editPostObservable = Observable.combineLatest(postQuery, input.postId)
@@ -107,7 +107,7 @@ class WritePostViewModel: ViewModelType {
                                 switch result {
                                 case .success(let filesModel):
                                     return Observable.combineLatest(input.title, input.content).map { (title, content) in
-                                        return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: filesModel.files)
+                                        return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: filesModel.files)
                                     }
                                 case .error(let error):
                                     switch error {
@@ -116,13 +116,13 @@ class WritePostViewModel: ViewModelType {
                                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                                     }
                                     return Observable.combineLatest(input.title, input.content).map { (title, content) in
-                                        return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
+                                        return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
                                     }
                                 }
                             }
                     } else {
                         let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
-                            return PostQuery(title: title, content: content, product_id: input.postBoard.rawValue, files: nil)
+                            return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
                         }
                         return postQuery
                     }
@@ -170,9 +170,9 @@ class WritePostViewModel: ViewModelType {
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       editSuccessTrigger: editSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()),
                       badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()),
+                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
     }
 }

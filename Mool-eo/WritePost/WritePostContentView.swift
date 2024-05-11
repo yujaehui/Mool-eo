@@ -1,5 +1,5 @@
 //
-//  WritePostBoxView.swift
+//  WritePostContentView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 4/20/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class WritePostBoxView: BaseView {
+class WritePostContentView: BaseView {
     let titleTextField: UITextField = {
         let textField = UITextField()
         textField.addLeftPadding()

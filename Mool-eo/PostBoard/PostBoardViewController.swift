@@ -13,14 +13,14 @@ import Toast
 enum PostBoardType: String, CaseIterable {
     case free = "자유게시판"
     case question = "질문게시판"
-    case market = "장터게시판"
+    case share = "나눔게시판"
     case boast = "자랑게시판"
     
     var image: UIImage {
         switch self {
         case .free: return UIImage(systemName: "face.smiling")!.withTintColor(ColorStyle.point)
         case .question: return UIImage(systemName: "exclamationmark.questionmark")!.withTintColor(ColorStyle.point)
-        case .market: return UIImage(systemName: "bag")!.withTintColor(ColorStyle.point)
+        case .share: return UIImage(systemName: "bag")!.withTintColor(ColorStyle.point)
         case .boast: return UIImage(systemName: "hand.thumbsup")!.withTintColor(ColorStyle.point)
         }
     }

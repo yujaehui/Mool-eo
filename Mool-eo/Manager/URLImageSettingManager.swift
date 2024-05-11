@@ -26,4 +26,5 @@ class URLImageSettingManager {
         
         imageView.kf.setImage(with: url, options: [.requestModifier(modifier)])
     }
+
 }

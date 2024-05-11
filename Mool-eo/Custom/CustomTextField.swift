@@ -13,12 +13,16 @@ enum TextFieldType: String {
     case nickname = "닉네임"
     case introduction = "한줄소개"
     
+    case productName = "상품명"
+    case price = "가격"
+    
     var description: String {
         switch self {
         case .id: "4~12자/공백 X, 영문 소문자, 숫자"
         case .password: "4~12자/공백 X, 영문 소문자, 숫자"
         case .nickname: "2~10자/공백 없이 입력해주세요."
         case .introduction: "15자 이내로 자신을 표현해보세요."
+        default: ""
         }
     }
 }
@@ -40,6 +44,9 @@ class CustomTextField: UITextField {
     
     func configureView(_ type: TextFieldType) {
         self.placeholder = type.rawValue
-        self.borderStyle = .roundedRect
+        self.addLeftPadding()
+        self.layer.borderColor = ColorStyle.placeholder.cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 10
     }
 }

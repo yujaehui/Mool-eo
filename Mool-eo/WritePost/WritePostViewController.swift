@@ -57,25 +57,25 @@ final class WritePostViewController: BaseViewController {
         navigationItem.leftBarButtonItem = writePostView.cancelButton
     }
     
+    // MARK: Hotfix
     override func setToolBar() {
         //navigationController?.isToolbarHidden = type == .upload ? false : true
-        // MARK: Hotfix
         if type == .upload {
             let toolbar = UIToolbar()
             toolbar.items = [writePostView.imageAddButton]
             toolbar.sizeToFit()
-            writePostView.writePostBoxView.titleTextField.inputAccessoryView = toolbar
-            writePostView.writePostBoxView.contentTextView.inputAccessoryView = toolbar
+            writePostView.writePostContentView.titleTextField.inputAccessoryView = toolbar
+            writePostView.writePostContentView.contentTextView.inputAccessoryView = toolbar
         } else {
-            writePostView.writePostBoxView.titleTextField.inputAccessoryView = nil
-            writePostView.writePostBoxView.contentTextView.inputAccessoryView = nil
+            writePostView.writePostContentView.titleTextField.inputAccessoryView = nil
+            writePostView.writePostContentView.contentTextView.inputAccessoryView = nil
         }
     }
     
     override func configureView() {
         switch type {
         case .upload:
-            selectedImageSubject.bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
+            selectedImageSubject.bind(to: writePostView.writePostContentView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
                 cell.selectImageView.image = element
                 cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
                     // 이미지 삭제
@@ -95,25 +95,25 @@ final class WritePostViewController: BaseViewController {
                     }
                 }.disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
-            writePostView.writePostBoxView.contentTextView.text = "내용을 입력해주세요"
-            writePostView.writePostBoxView.contentTextView.textColor = ColorStyle.placeholder
+            writePostView.writePostContentView.contentTextView.text = "내용을 입력해주세요"
+            writePostView.writePostContentView.contentTextView.textColor = ColorStyle.placeholder
         case .edit:
-            Observable.just(postFiles).bind(to: writePostView.writePostBoxView.collectionView.rx.items(cellIdentifier: WritePostImageEditCollectionViewCell.identifier, cellType: WritePostImageEditCollectionViewCell.self)) { (row, element, cell) in
+            Observable.just(postFiles).bind(to: writePostView.writePostContentView.collectionView.rx.items(cellIdentifier: WritePostImageEditCollectionViewCell.identifier, cellType: WritePostImageEditCollectionViewCell.self)) { (row, element, cell) in
                 URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element)
             }.disposed(by: disposeBag)
-            writePostView.writePostBoxView.titleTextField.text = postTitle
-            writePostView.writePostBoxView.contentTextView.text = postContent
+            writePostView.writePostContentView.titleTextField.text = postTitle
+            writePostView.writePostContentView.contentTextView.text = postContent
         }
     }
     
     override func bind() {
-        let textViewBegin = writePostView.writePostBoxView.contentTextView.rx.didBeginEditing.asObservable()
-        let textViewEnd = writePostView.writePostBoxView.contentTextView.rx.didEndEditing.asObservable()
+        let textViewBegin = writePostView.writePostContentView.contentTextView.rx.didBeginEditing.asObservable()
+        let textViewEnd = writePostView.writePostContentView.contentTextView.rx.didEndEditing.asObservable()
         let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification) // 키보드가 나타나는 시점
         let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification) // 키보드가 사라지는 시점
         let postBoard = postBoard
-        let title = writePostView.writePostBoxView.titleTextField.rx.text.orEmpty.asObservable()
-        let content = writePostView.writePostBoxView.contentTextView.rx.text.orEmpty.asObservable()
+        let title = writePostView.writePostContentView.titleTextField.rx.text.orEmpty.asObservable()
+        let content = writePostView.writePostContentView.contentTextView.rx.text.orEmpty.asObservable()
         let selectedImageDataSubject = selectedImageDataSubject
         let imageAddButtonTap = writePostView.imageAddButton.rx.tap.asObservable()
         let completeButtonTap = writePostView.completeButton.rx.tap.asObservable()
@@ -123,9 +123,9 @@ final class WritePostViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         
         // 텍스트뷰 placeholder 작업
-        output.text.drive(writePostView.writePostBoxView.contentTextView.rx.text).disposed(by: disposeBag)
+        output.text.drive(writePostView.writePostContentView.contentTextView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
-            owner.writePostView.writePostBoxView.contentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+            owner.writePostView.writePostContentView.contentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         
         // 키보드가 나타났을 경우

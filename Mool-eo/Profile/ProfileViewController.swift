@@ -83,8 +83,8 @@ class ProfileViewController: BaseViewController {
         
         output.post.bind(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.postBoard = PostBoardType.allCases.first(where: { $0.rawValue == value.productID })!
-            vc.postId = value.postID
+            vc.postBoard = PostBoardType.allCases.first(where: { $0.rawValue == value.productId })!
+            vc.postId = value.postId
             vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

@@ -81,7 +81,7 @@ class ScrapPostListViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
-            .map { $0.0.postID }
+            .map { $0.0.postId }
             .bind(with: self) { owner, value in
                 post.onNext(value)
             }.disposed(by: disposeBag)

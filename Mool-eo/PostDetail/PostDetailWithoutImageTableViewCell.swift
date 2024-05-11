@@ -45,11 +45,6 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         return button
     }()
     
-    let scrapButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
-    
     let lineView = LineView()
     
     override func prepareForReuse() {
@@ -64,7 +59,6 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(likeButton)
-        contentView.addSubview(scrapButton)
         contentView.addSubview(lineView)
     }
     
@@ -98,11 +92,6 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
             make.leading.equalTo(contentView).inset(20)
         }
         
-        scrapButton.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
-            make.leading.equalTo(likeButton.snp.trailing).offset(20)
-        }
-        
         lineView.snp.makeConstraints { make in
             make.top.equalTo(likeButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
@@ -117,7 +106,6 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         postTitleLabel.text = post.title
         postContentLabel.text = post.content
         likeButton.configuration = post.likes.contains(UserDefaultsManager.userId!) ? .pressed("heart.fill") : .pressed("heart")
-        scrapButton.configuration = post.scraps.contains(UserDefaultsManager.userId!) ? .pressed("bookmark.fill") : .pressed("bookmark")
         nickNameLabel.text = post.creator.nick
     }
 }

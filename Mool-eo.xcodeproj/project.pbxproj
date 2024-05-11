@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */; };
 		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
 		09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */; };
@@ -30,6 +31,29 @@
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
 		093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */; };
+		09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 09444F8E2BEE2F7D00086E20 /* iamport-ios */; };
+		09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F932BEE326600086E20 /* ProductPostListView.swift */; };
+		09444F962BEE327000086E20 /* ProductPostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F952BEE327000086E20 /* ProductPostListViewController.swift */; };
+		09444F982BEE328000086E20 /* ProductPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F972BEE328000086E20 /* ProductPostListViewModel.swift */; };
+		09444F9A2BEE34C700086E20 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F992BEE34C700086E20 /* PinterestLayout.swift */; };
+		09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */; };
+		09444FA02BEE3DAA00086E20 /* WriteProductPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F9F2BEE3DAA00086E20 /* WriteProductPostView.swift */; };
+		09444FA22BEE3DBC00086E20 /* WriteProductPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA12BEE3DBC00086E20 /* WriteProductPostViewController.swift */; };
+		09444FA42BEE3DC200086E20 /* WriteProductPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA32BEE3DC200086E20 /* WriteProductPostViewModel.swift */; };
+		09444FA62BEE3E6100086E20 /* ProductPostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA52BEE3E6100086E20 /* ProductPostDetailView.swift */; };
+		09444FA82BEE3E6700086E20 /* ProductPostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA72BEE3E6700086E20 /* ProductPostDetailViewController.swift */; };
+		09444FAA2BEE3E6D00086E20 /* ProductPostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA92BEE3E6D00086E20 /* ProductPostDetailViewModel.swift */; };
+		09444FAC2BEE3F1600086E20 /* WriteProductPostContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FAB2BEE3F1600086E20 /* WriteProductPostContentView.swift */; };
+		09444FB02BEE3FEA00086E20 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FAF2BEE3FEA00086E20 /* Section.swift */; };
+		09444FB22BEE400300086E20 /* ProductImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FB12BEE400300086E20 /* ProductImageSection.swift */; };
+		09444FB62BEE441F00086E20 /* ProductTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FB52BEE441F00086E20 /* ProductTextFieldView.swift */; };
+		09444FBD2BEF46CC00086E20 /* ProductImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FBC2BEF46CC00086E20 /* ProductImageTableViewCell.swift */; };
+		09444FBF2BEF46DA00086E20 /* ProductInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FBE2BEF46DA00086E20 /* ProductInfoTableViewCell.swift */; };
+		09444FC12BEF46E000086E20 /* ProductDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FC02BEF46E000086E20 /* ProductDetailTableViewCell.swift */; };
+		09444FC52BEF49FA00086E20 /* ProductPostDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FC42BEF49FA00086E20 /* ProductPostDetailSectionModel.swift */; };
+		09444FCB2BEF6E3C00086E20 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FCA2BEF6E3C00086E20 /* ProductWebViewController.swift */; };
+		09444FCE2BEF708C00086E20 /* ProductWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FCD2BEF708C00086E20 /* ProductWebView.swift */; };
+		09444FD02BEF713A00086E20 /* ProductWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FCF2BEF713A00086E20 /* ProductWebViewModel.swift */; };
 		094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB5F2BC670BA00342DC3 /* AppDelegate.swift */; };
 		094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB612BC670BA00342DC3 /* SceneDelegate.swift */; };
 		094BEB642BC670BA00342DC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094BEB632BC670BA00342DC3 /* ViewController.swift */; };
@@ -81,7 +105,7 @@
 		09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */; };
 		09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */; };
 		09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */; };
-		09602B642BD3CD7800A6AFEA /* WritePostBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B632BD3CD7800A6AFEA /* WritePostBoxView.swift */; };
+		09602B642BD3CD7800A6AFEA /* WritePostContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B632BD3CD7800A6AFEA /* WritePostContentView.swift */; };
 		09602B672BD3E27700A6AFEA /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B662BD3E27700A6AFEA /* PostDetailView.swift */; };
 		09602B692BD3E28200A6AFEA /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */; };
 		09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */; };
@@ -121,7 +145,7 @@
 		0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */; };
 		0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */; };
 		0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */; };
-		0999EB0F2BCA981B004B6D1F /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0E2BCA981B004B6D1F /* CustomTextFieldView.swift */; };
+		0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */; };
 		0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */; };
 		0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB162BCAA01E004B6D1F /* PostBoardView.swift */; };
 		0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB182BCAA028004B6D1F /* PostBoardViewController.swift */; };
@@ -148,6 +172,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterManager.swift; sourceTree = "<group>"; };
 		09279A2F2BDF98C900E4A65D /* PostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
 		09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoResizableTextView.swift; sourceTree = "<group>"; };
@@ -167,6 +192,28 @@
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostTableViewCell.swift; sourceTree = "<group>"; };
+		09444F932BEE326600086E20 /* ProductPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListView.swift; sourceTree = "<group>"; };
+		09444F952BEE327000086E20 /* ProductPostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListViewController.swift; sourceTree = "<group>"; };
+		09444F972BEE328000086E20 /* ProductPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListViewModel.swift; sourceTree = "<group>"; };
+		09444F992BEE34C700086E20 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
+		09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListCollectionViewCell.swift; sourceTree = "<group>"; };
+		09444F9F2BEE3DAA00086E20 /* WriteProductPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostView.swift; sourceTree = "<group>"; };
+		09444FA12BEE3DBC00086E20 /* WriteProductPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostViewController.swift; sourceTree = "<group>"; };
+		09444FA32BEE3DC200086E20 /* WriteProductPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostViewModel.swift; sourceTree = "<group>"; };
+		09444FA52BEE3E6100086E20 /* ProductPostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostDetailView.swift; sourceTree = "<group>"; };
+		09444FA72BEE3E6700086E20 /* ProductPostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostDetailViewController.swift; sourceTree = "<group>"; };
+		09444FA92BEE3E6D00086E20 /* ProductPostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostDetailViewModel.swift; sourceTree = "<group>"; };
+		09444FAB2BEE3F1600086E20 /* WriteProductPostContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostContentView.swift; sourceTree = "<group>"; };
+		09444FAF2BEE3FEA00086E20 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		09444FB12BEE400300086E20 /* ProductImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductImageSection.swift; sourceTree = "<group>"; };
+		09444FB52BEE441F00086E20 /* ProductTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductTextFieldView.swift; sourceTree = "<group>"; };
+		09444FBC2BEF46CC00086E20 /* ProductImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductImageTableViewCell.swift; sourceTree = "<group>"; };
+		09444FBE2BEF46DA00086E20 /* ProductInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInfoTableViewCell.swift; sourceTree = "<group>"; };
+		09444FC02BEF46E000086E20 /* ProductDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailTableViewCell.swift; sourceTree = "<group>"; };
+		09444FC42BEF49FA00086E20 /* ProductPostDetailSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostDetailSectionModel.swift; sourceTree = "<group>"; };
+		09444FCA2BEF6E3C00086E20 /* ProductWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
+		09444FCD2BEF708C00086E20 /* ProductWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductWebView.swift; sourceTree = "<group>"; };
+		09444FCF2BEF713A00086E20 /* ProductWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductWebViewModel.swift; sourceTree = "<group>"; };
 		094BEB5C2BC670BA00342DC3 /* Mool-eo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mool-eo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		094BEB5F2BC670BA00342DC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		094BEB612BC670BA00342DC3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -212,7 +259,7 @@
 		09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListTableViewCell.swift; sourceTree = "<group>"; };
 		09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
 		09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		09602B632BD3CD7800A6AFEA /* WritePostBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostBoxView.swift; sourceTree = "<group>"; };
+		09602B632BD3CD7800A6AFEA /* WritePostContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostContentView.swift; sourceTree = "<group>"; };
 		09602B662BD3E27700A6AFEA /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewModel.swift; sourceTree = "<group>"; };
@@ -251,7 +298,7 @@
 		0999EB042BCA97F3004B6D1F /* JoinSecondView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinSecondView.swift; sourceTree = "<group>"; };
 		0999EB052BCA97F3004B6D1F /* JoinViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewModel.swift; sourceTree = "<group>"; };
 		0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
-		0999EB0E2BCA981B004B6D1F /* CustomTextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
+		0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTextFieldView.swift; sourceTree = "<group>"; };
 		0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		0999EB162BCAA01E004B6D1F /* PostBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardView.swift; sourceTree = "<group>"; };
 		0999EB182BCAA028004B6D1F /* PostBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardViewController.swift; sourceTree = "<group>"; };
@@ -287,6 +334,7 @@
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
+				09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
 				09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */,
@@ -387,6 +435,62 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		09444F902BEE307E00086E20 /* WriteProductPost */ = {
+			isa = PBXGroup;
+			children = (
+				09444FAD2BEE3FB000086E20 /* Section */,
+				09444F9F2BEE3DAA00086E20 /* WriteProductPostView.swift */,
+				09444FAB2BEE3F1600086E20 /* WriteProductPostContentView.swift */,
+				09444FA12BEE3DBC00086E20 /* WriteProductPostViewController.swift */,
+				09444FA32BEE3DC200086E20 /* WriteProductPostViewModel.swift */,
+			);
+			path = WriteProductPost;
+			sourceTree = "<group>";
+		};
+		09444F912BEE30A000086E20 /* ProductPostList */ = {
+			isa = PBXGroup;
+			children = (
+				09444F932BEE326600086E20 /* ProductPostListView.swift */,
+				09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */,
+				09444F952BEE327000086E20 /* ProductPostListViewController.swift */,
+				09444F972BEE328000086E20 /* ProductPostListViewModel.swift */,
+			);
+			path = ProductPostList;
+			sourceTree = "<group>";
+		};
+		09444F922BEE30B000086E20 /* ProductPostDetail */ = {
+			isa = PBXGroup;
+			children = (
+				09444FA52BEE3E6100086E20 /* ProductPostDetailView.swift */,
+				09444FBC2BEF46CC00086E20 /* ProductImageTableViewCell.swift */,
+				09444FBE2BEF46DA00086E20 /* ProductInfoTableViewCell.swift */,
+				09444FC02BEF46E000086E20 /* ProductDetailTableViewCell.swift */,
+				09444FC42BEF49FA00086E20 /* ProductPostDetailSectionModel.swift */,
+				09444FA72BEE3E6700086E20 /* ProductPostDetailViewController.swift */,
+				09444FA92BEE3E6D00086E20 /* ProductPostDetailViewModel.swift */,
+			);
+			path = ProductPostDetail;
+			sourceTree = "<group>";
+		};
+		09444FAD2BEE3FB000086E20 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				09444FAF2BEE3FEA00086E20 /* Section.swift */,
+				09444FB12BEE400300086E20 /* ProductImageSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		09444FCC2BEF705F00086E20 /* ProductWeb */ = {
+			isa = PBXGroup;
+			children = (
+				09444FCD2BEF708C00086E20 /* ProductWebView.swift */,
+				09444FCA2BEF6E3C00086E20 /* ProductWebViewController.swift */,
+				09444FCF2BEF713A00086E20 /* ProductWebViewModel.swift */,
+			);
+			path = ProductWeb;
+			sourceTree = "<group>";
+		};
 		094BEB532BC670BA00342DC3 = {
 			isa = PBXGroup;
 			children = (
@@ -407,6 +511,10 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				09444F912BEE30A000086E20 /* ProductPostList */,
+				09444F922BEE30B000086E20 /* ProductPostDetail */,
+				09444FCC2BEF705F00086E20 /* ProductWeb */,
+				09444F902BEE307E00086E20 /* WriteProductPost */,
 				095679892BC931290030F0CD /* Login */,
 				0999EAFF2BCA97F3004B6D1F /* Join */,
 				0999EB152BCA9FA4004B6D1F /* PostBoard */,
@@ -488,7 +596,8 @@
 			children = (
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
 				0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */,
-				0999EB0E2BCA981B004B6D1F /* CustomTextFieldView.swift */,
+				0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */,
+				09444FB52BEE441F00086E20 /* ProductTextFieldView.swift */,
 				0987A7DB2BE771A90045D361 /* PostBoardImageView.swift */,
 				09279A2F2BDF98C900E4A65D /* PostImageView.swift */,
 				0987A7D92BE766770045D361 /* LargePostImageView.swift */,
@@ -496,6 +605,7 @@
 				09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */,
 				09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */,
 				095678FE2BC6A9140030F0CD /* LineView.swift */,
+				09444F992BEE34C700086E20 /* PinterestLayout.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -523,7 +633,7 @@
 			isa = PBXGroup;
 			children = (
 				095679042BC6BCFE0030F0CD /* WritePostView.swift */,
-				09602B632BD3CD7800A6AFEA /* WritePostBoxView.swift */,
+				09602B632BD3CD7800A6AFEA /* WritePostContentView.swift */,
 				09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */,
 				0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */,
 				095678FA2BC6A4120030F0CD /* WritePostViewController.swift */,
@@ -645,6 +755,7 @@
 		0987A7D52BE6B1A70045D361 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */,
 				0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */,
 				09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */,
 				0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */,
@@ -768,6 +879,7 @@
 				09279A482BE1201800E4A65D /* ReactiveMoya */,
 				09279A4A2BE1201800E4A65D /* RxMoya */,
 				0987A7932BE356880045D361 /* RxGesture */,
+				09444F8E2BEE2F7D00086E20 /* iamport-ios */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -806,6 +918,7 @@
 				0952A6D62BCFDD9A00F71C76 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */,
 				0987A7922BE356880045D361 /* XCRemoteSwiftPackageReference "RxGesture" */,
+				09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -854,22 +967,30 @@
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
-				0999EB0F2BCA981B004B6D1F /* CustomTextFieldView.swift in Sources */,
+				0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */,
 				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
+				09444FCB2BEF6E3C00086E20 /* ProductWebViewController.swift in Sources */,
 				09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */,
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
 				09279A502BE1426E00E4A65D /* CommentService.swift in Sources */,
 				0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */,
+				09444FA42BEE3DC200086E20 /* WriteProductPostViewModel.swift in Sources */,
 				09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */,
+				09444FCE2BEF708C00086E20 /* ProductWebView.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */,
+				09444FD02BEF713A00086E20 /* ProductWebViewModel.swift in Sources */,
 				09279A652BE2171F00E4A65D /* ScrapPostListViewController.swift in Sources */,
+				09444FB22BEE400300086E20 /* ProductImageSection.swift in Sources */,
 				0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
+				09444FA82BEE3E6700086E20 /* ProductPostDetailViewController.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
+				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
+				09444F9A2BEE34C700086E20 /* PinterestLayout.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
@@ -879,6 +1000,7 @@
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
+				09444F982BEE328000086E20 /* ProductPostListViewModel.swift in Sources */,
 				09279A602BE202F300E4A65D /* ScrapService.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0987A78F2BE352260045D361 /* OtherUserProfileViewModel.swift in Sources */,
@@ -893,6 +1015,7 @@
 				093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */,
 				09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
+				09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
 				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
@@ -907,10 +1030,14 @@
 				09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */,
 				09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */,
 				09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */,
+				09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
 				09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */,
 				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
+				09444FAA2BEE3E6D00086E20 /* ProductPostDetailViewModel.swift in Sources */,
+				09444FC12BEF46E000086E20 /* ProductDetailTableViewCell.swift in Sources */,
+				09444FA22BEE3DBC00086E20 /* WriteProductPostViewController.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
 				093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */,
 				09602B702BD3F22D00A6AFEA /* CommentTableViewCell.swift in Sources */,
@@ -925,6 +1052,7 @@
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
 				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
 				09279A632BE2171600E4A65D /* ScrapPostListView.swift in Sources */,
+				09444FAC2BEE3F1600086E20 /* WriteProductPostContentView.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				09279A582BE14E9300E4A65D /* PostService.swift in Sources */,
 				09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */,
@@ -936,21 +1064,29 @@
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
 				09279A672BE2172700E4A65D /* ScrapPostListViewModel.swift in Sources */,
 				0987A7D22BE6B0F90045D361 /* ScrapPostSectionModel.swift in Sources */,
+				09444FA02BEE3DAA00086E20 /* WriteProductPostView.swift in Sources */,
 				0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
+				09444FBF2BEF46DA00086E20 /* ProductInfoTableViewCell.swift in Sources */,
 				0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */,
 				0987A7962BE36AD40045D361 /* OtherUserProfileModel.swift in Sources */,
 				0987A7912BE353040045D361 /* OtherUserProfileInfoTableViewCell.swift in Sources */,
 				09279A542BE1472800E4A65D /* UserService.swift in Sources */,
-				09602B642BD3CD7800A6AFEA /* WritePostBoxView.swift in Sources */,
+				09602B642BD3CD7800A6AFEA /* WritePostContentView.swift in Sources */,
 				09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */,
+				0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */,
 				0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */,
 				09602B672BD3E27700A6AFEA /* PostDetailView.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
+				09444FA62BEE3E6100086E20 /* ProductPostDetailView.swift in Sources */,
 				0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */,
 				0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */,
+				09444F962BEE327000086E20 /* ProductPostListViewController.swift in Sources */,
+				09444FB62BEE441F00086E20 /* ProductTextFieldView.swift in Sources */,
+				09444FC52BEF49FA00086E20 /* ProductPostDetailSectionModel.swift in Sources */,
+				09444FBD2BEF46CC00086E20 /* ProductImageTableViewCell.swift in Sources */,
 				095678F12BC67F000030F0CD /* BaseCollectionViewCell.swift in Sources */,
 				0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
@@ -1198,6 +1334,14 @@
 				minimumVersion = 15.0.3;
 			};
 		};
+		09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		094BEB732BC672B000342DC3 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -1276,6 +1420,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
 			productName = RxMoya;
+		};
+		09444F8E2BEE2F7D00086E20 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
 		};
 		094BEB742BC672B000342DC3 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;

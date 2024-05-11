@@ -17,6 +17,9 @@ class ViewController: UITabBarController {
     }
     
     private func addVC() {
+        let productPostListVC = UINavigationController(rootViewController: ProductPostListViewController())
+        productPostListVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
+        
         let postBoardVC = UINavigationController(rootViewController: PostBoardViewController())
         postBoardVC.tabBarItem = UITabBarItem(title: "게시판", image: UIImage(systemName: "list.clipboard"), selectedImage: UIImage(systemName: "list.clipboard"))
         
@@ -26,7 +29,7 @@ class ViewController: UITabBarController {
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person"))
         
-        self.viewControllers = [postBoardVC, scrapPostListVC, profileVC]
+        self.viewControllers = [productPostListVC, postBoardVC, scrapPostListVC, profileVC]
     }
 }
 

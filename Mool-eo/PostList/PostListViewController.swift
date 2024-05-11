@@ -116,9 +116,9 @@ class PostListViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if item.creator.userID != UserDefaultsManager.userId {
+                        if item.creator.userId != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
-                            vc.userId = item.creator.userID
+                            vc.userId = item.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {
                             let vc = ProfileViewController()
@@ -132,9 +132,9 @@ class PostListViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if item.creator.userID != UserDefaultsManager.userId {
+                        if item.creator.userId != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
-                            vc.userId = item.creator.userID
+                            vc.userId = item.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {
                             let vc = ProfileViewController()

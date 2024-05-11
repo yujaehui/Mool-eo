@@ -89,4 +89,16 @@ extension UIButton.Configuration {
         
         return config
     }
+    
+    static func imageAdd() -> UIButton.Configuration {
+        var config = UIButton.Configuration.filled()
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
+        config.image = UIImage(systemName: "camera", withConfiguration: imageConfig)
+        
+        config.baseForegroundColor = ColorStyle.point
+        config.baseBackgroundColor = ColorStyle.subBackground
+        
+        return config
+    }
 }

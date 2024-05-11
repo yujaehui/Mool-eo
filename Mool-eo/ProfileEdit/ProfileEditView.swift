@@ -31,7 +31,7 @@ class ProfileEditView: BaseView {
         return button
     }()
     
-    let nicknameView = CustomTextFieldView(frame: .zero, textFieldType: .nickname)
+    let nicknameView = ProfileTextFieldView(frame: .zero, textFieldType: .nickname)
     
     override func configureHierarchy() {
         addSubview(profileImageView)

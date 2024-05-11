@@ -24,7 +24,6 @@ class PostDetailViewModel: ViewModelType {
         let comment: Observable<String>
         let commentUploadButtonTap: Observable<Void>
         let likeStatus: PublishSubject<Bool>
-        let scrapStauts: PublishSubject<Bool>
         let postEditButtonTap: Observable<Void>
         let postDeleteButtonTap: Observable<Void>
         let itemDeletedWithCommentId: Observable<(IndexPath, String)>
@@ -42,7 +41,6 @@ class PostDetailViewModel: ViewModelType {
         let commentButtonValidation: Driver<Bool>
         let commentUploadSuccessTrigger: Driver<Void>
         let likeUploadSuccessTrigger: Driver<Void>
-        let scrapUploadSuccessTrigger: Driver<Void>
         let postDeleteSuccessTrigger: Driver<Void>
         let commentDeleteSuccessTrigger: Driver<IndexPath>
         let networkFail: Driver<Void>
@@ -58,7 +56,6 @@ class PostDetailViewModel: ViewModelType {
         let commentButtonValidation = PublishSubject<Bool>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         let likeUploadSuccessTrigger = PublishSubject<Void>()
-        let scrapUploadSuccessTrigger = PublishSubject<Void>()
         let postDeleteSuccessTrigger = PublishSubject<Void>()
         let commentDeleteSuccessTrigger = PublishSubject<IndexPath>()
         let networkFail = PublishSubject<Void>()
@@ -102,7 +99,7 @@ class PostDetailViewModel: ViewModelType {
                     // 특정 게시글 조회
                     postDetail.onNext(postModel)
                     // 자신의 게시글인지 확인
-                    if postModel.creator.userID == input.userId {
+                    if postModel.creator.userId == input.userId {
                         accessType.onNext(.me)
                     } else {
                         accessType.onNext(.other)
@@ -155,30 +152,6 @@ class PostDetailViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): likeUploadSuccessTrigger.onNext(())
-                case .error(let error):
-                    switch error {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(error)⚠️")
-                    }
-                }
-            }.disposed(by: disposeBag)
-        
-        // MARK: - 스크랩 업로드 네트워크 통신 진행
-        let scrapQuery = input.scrapStauts.map { status in
-            return ScrapQuery(like_status: status)
-        }
-        
-        let scrapObservable = Observable.combineLatest(scrapQuery, input.postId)
-        
-        input.scrapStauts
-            .withLatestFrom(scrapObservable)
-            .flatMap { scrapQuery, postId in
-                NetworkManager.shared.scrapUpload(query: scrapQuery, postId: postId)
-            }
-            .debug("스크랩 업로드")
-            .subscribe(with: self) { owner, value in
-                switch value {
-                case .success(_): scrapUploadSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
                     case .networkFail: networkFail.onNext(())
@@ -254,7 +227,6 @@ class PostDetailViewModel: ViewModelType {
                       commentButtonValidation: commentButtonValidation.asDriver(onErrorJustReturn: false),
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      scrapUploadSuccessTrigger: scrapUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       postDeleteSuccessTrigger: postDeleteSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       commentDeleteSuccessTrigger: commentDeleteSuccessTrigger.asDriver(onErrorJustReturn: IndexPath()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))

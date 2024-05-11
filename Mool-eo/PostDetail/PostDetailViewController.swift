@@ -32,7 +32,6 @@ class PostDetailViewController: BaseViewController {
     
     var reload = BehaviorSubject(value: ())
     var likeStatus = PublishSubject<Bool>()
-    var scrapStatus = PublishSubject<Bool>()
     var editButtonTap = PublishSubject<Void>()
     var deleteButtonTap = PublishSubject<Void>()
     var change = false
@@ -91,13 +90,12 @@ class PostDetailViewController: BaseViewController {
             comment: postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable(),
             commentUploadButtonTap: postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable(),
             likeStatus: likeStatus,
-            scrapStauts: scrapStatus,
             postEditButtonTap: editButtonTap,
             postDeleteButtonTap: deleteButtonTap,
             itemDeletedWithCommentId: postDetailView.tableView.rx.itemDeleted.flatMap { [weak self] indexPath -> Observable<(IndexPath, String)> in
                 guard let sections = try? self?.sections.value(),
                       case let .comment(comment) = sections[indexPath.section].items[indexPath.row] else { return Observable.empty() }
-                return Observable.just((indexPath, comment.commentID))
+                return Observable.just((indexPath, comment.commentId))
             })
         
         let output = viewModel.transform(input: input)
@@ -151,12 +149,6 @@ class PostDetailViewController: BaseViewController {
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)
         
-        // 스크랩 업로드가 성공할 경우
-        output.scrapUploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.change = true
-            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
-        }.disposed(by: disposeBag)
-        
         // 자신의 게시물 -> 삭제
         output.postDeleteSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
@@ -185,7 +177,7 @@ class PostDetailViewController: BaseViewController {
             vc.postTitle = value.title
             vc.postContent = value.content
             vc.postFiles = value.files
-            vc.postId = value.postID
+            vc.postId = value.postId
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
@@ -235,9 +227,9 @@ class PostDetailViewController: BaseViewController {
                     cell.profileStackView.rx.tapGesture()
                         .when(.recognized)
                         .bind(with: self) { owner, value in
-                            if post.creator.userID != UserDefaultsManager.userId {
+                            if post.creator.userId != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
-                                vc.userId = post.creator.userID
+                                vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
                                 let vc = ProfileViewController()
@@ -248,11 +240,6 @@ class PostDetailViewController: BaseViewController {
                         let userId = UserDefaultsManager.userId!
                         let status = !post.likes.contains(userId)
                         owner.likeStatus.onNext(status)
-                    }.disposed(by: cell.disposeBag)
-                    cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaultsManager.userId!
-                        let status = !post.scraps.contains(userId)
-                        owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell
                 } else { // 이미지가 있는 게시글일 경우
@@ -261,9 +248,9 @@ class PostDetailViewController: BaseViewController {
                     cell.profileStackView.rx.tapGesture()
                         .when(.recognized)
                         .bind(with: self) { owner, value in
-                            if post.creator.userID != UserDefaultsManager.userId {
+                            if post.creator.userId != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
-                                vc.userId = post.creator.userID
+                                vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
                                 let vc = ProfileViewController()
@@ -274,11 +261,6 @@ class PostDetailViewController: BaseViewController {
                         let userId = UserDefaultsManager.userId!
                         let status = !post.likes.contains(userId)
                         owner.likeStatus.onNext(status)
-                    }.disposed(by: cell.disposeBag)
-                    cell.scrapButton.rx.tap.bind(with: self) { owner, _ in
-                        let userId = UserDefaultsManager.userId!
-                        let status = !post.scraps.contains(userId)
-                        owner.scrapStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell
                 }
@@ -288,9 +270,9 @@ class PostDetailViewController: BaseViewController {
                 cell.profileStackView.rx.tapGesture()
                     .when(.recognized)
                     .bind(with: self) { owner, value in
-                        if comment.creator.userID != UserDefaultsManager.userId {
+                        if comment.creator.userId != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
-                            vc.userId = comment.creator.userID
+                            vc.userId = comment.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {
                             let vc = ProfileViewController()
@@ -303,7 +285,7 @@ class PostDetailViewController: BaseViewController {
             return dataSource.sectionModels[index].title
         }, canEditRowAtIndexPath: { dataSource, indexPath in
             guard case .comment(let comment) = dataSource[indexPath],
-                  comment.creator.userID == UserDefaultsManager.userId else { return false }
+                  comment.creator.userId == UserDefaultsManager.userId else { return false }
             return true
         })
         return dataSource

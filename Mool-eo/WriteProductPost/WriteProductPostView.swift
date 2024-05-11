@@ -1,18 +1,14 @@
 //
-//  WritePostView.swift
+//  WriteProductPostView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/10/24.
+//  Created by Jaehui Yu on 5/10/24.
 //
 
 import UIKit
 import SnapKit
 
-class WritePostView: BaseView {
-    
-    let scrollView = UIScrollView()
-    
-    let writePostContentView = WritePostContentView()
+class WriteProductPostView: BaseView {
     
     // Navigation
     let completeButton: UIBarButtonItem = {
@@ -27,17 +23,13 @@ class WritePostView: BaseView {
         return button
     }()
     
-    // ToolBar
-    let imageAddButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.image = UIImage(systemName: "camera")
-        button.tintColor = ColorStyle.point
-        return button
-    }()
+    let scrollView = UIScrollView()
+    
+    let writeProductPostContentView = WriteProductPostContentView()
     
     override func configureHierarchy() {
         addSubview(scrollView)
-        scrollView.addSubview(writePostContentView)
+        scrollView.addSubview(writeProductPostContentView)
     }
     
     override func configureConstraints() {
@@ -45,13 +37,13 @@ class WritePostView: BaseView {
             make.edges.equalTo(safeAreaLayoutGuide)
         }
         
-        writePostContentView.snp.makeConstraints { make in
+        writeProductPostContentView.snp.makeConstraints { make in
             make.edges.width.equalToSuperview()
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        scrollView.contentSize = writePostContentView.bounds.size
+        scrollView.contentSize = writeProductPostContentView.bounds.size
     }
 }
