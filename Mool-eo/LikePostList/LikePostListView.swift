@@ -1,18 +1,18 @@
 //
-//  ScrapPostListView.swift
+//  LikePostListView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/1/24.
+//  Created by Jaehui Yu on 5/11/24.
 //
 
 import UIKit
 import SnapKit
 
-class ScrapPostListView: BaseView {
+class LikePostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ProfileMyPostTableViewCell.self, forCellReuseIdentifier: ProfileMyPostTableViewCell.identifier)
-        tableView.register(ProfileMyPostWithoutImageTableViewCell.self, forCellReuseIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier)
+        tableView.register(LikePostTableViewCell.self, forCellReuseIdentifier: LikePostTableViewCell.identifier)
+        tableView.register(LikePostWithoutImageTableViewCell.self, forCellReuseIdentifier: LikePostWithoutImageTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

@@ -11,7 +11,7 @@ class LargePostImageView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentMode = .scaleAspectFit
+        contentMode = .scaleAspectFill
     }
     
     required init?(coder: NSCoder) {

@@ -1,15 +1,15 @@
 //
-//  ScrapPostListViewModel.swift
+//  LikePostListViewModel.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/1/24.
+//  Created by Jaehui Yu on 5/11/24.
 //
 
 import Foundation
 import RxSwift
 import RxCocoa
 
-class ScrapPostListViewModel: ViewModelType {
+class LikePostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -22,28 +22,27 @@ class ScrapPostListViewModel: ViewModelType {
     }
     
     struct Output {
-        let scrapPostList: PublishSubject<PostListModel>
-        let nextScrapPostList: PublishSubject<PostListModel>
+        let likePostList: PublishSubject<PostListModel>
+        let nextLikePostList: PublishSubject<PostListModel>
         let post: Driver<String>
         let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let scrapPostList = PublishSubject<PostListModel>()
-        let nextScrapPostList = PublishSubject<PostListModel>()
+        let likePostList = PublishSubject<PostListModel>()
+        let nextLikePostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
         let post = PublishSubject<String>()
         let networkFail = PublishSubject<Void>()
         
         input.reload
             .flatMap { _ in
-                NetworkManager.shared.scrapPostCheck(limit: "7", next: "")
+                NetworkManager.shared.likePostCheck(limit: "7", next: "")
             }
-            .debug("스크랩 게시물 조회")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postListModel):
-                    scrapPostList.onNext(postListModel)
+                    likePostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
                     case .networkFail: networkFail.onNext(())
@@ -65,13 +64,13 @@ class ScrapPostListViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.scrapPostCheck(limit: "7", next: next)
+                NetworkManager.shared.likePostCheck(limit: "7", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postListModel):
-                    nextScrapPostList.onNext(postListModel)
+                    nextLikePostList.onNext(postListModel)
                 case .error(let error):
                     switch error {
                     case .networkFail: networkFail.onNext(())
@@ -86,8 +85,8 @@ class ScrapPostListViewModel: ViewModelType {
                 post.onNext(value)
             }.disposed(by: disposeBag)
         
-        return Output(scrapPostList: scrapPostList, 
-                      nextScrapPostList: nextScrapPostList,
+        return Output(likePostList: likePostList,
+                      nextLikePostList: nextLikePostList,
                       post: post.asDriver(onErrorJustReturn: ""),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }

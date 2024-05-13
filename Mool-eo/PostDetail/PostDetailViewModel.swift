@@ -138,7 +138,7 @@ class PostDetailViewModel: ViewModelType {
         
         // MARK: - 좋아요 업로드 네트워크 통신 진행
         let likeQuery = input.likeStatus.map { status in
-            return LikeQuery(like_status: status)
+            return LikePostQuery(like_status: status)
         }
         
         let likeObservable = Observable.combineLatest(likeQuery, input.postId)
@@ -146,7 +146,7 @@ class PostDetailViewModel: ViewModelType {
         input.likeStatus
             .withLatestFrom(likeObservable)
             .flatMap { likeQuery, postId in
-                NetworkManager.shared.likeUpload(query: likeQuery, postId: postId)
+                NetworkManager.shared.likePostUpload(query: likeQuery, postId: postId)
             }
             .debug("좋아요 업로드")
             .subscribe(with: self) { owner, value in

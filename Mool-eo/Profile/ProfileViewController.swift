@@ -23,6 +23,7 @@ class ProfileViewController: BaseViewController {
     var showProfileUpdateAlert: Bool = false
     
     var reload = BehaviorSubject(value: ())
+    private var settingButtonTap = PublishSubject<Void>()
     
     private var sections = BehaviorSubject<[ProfileSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
@@ -40,9 +41,13 @@ class ProfileViewController: BaseViewController {
     }
     
     override func setNav() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
-        navigationItem.rightBarButtonItem = profileView.withdrawButton
+    }
+    
+    @objc func rightBarButtonTapped() {
+        settingButtonTap.onNext(())
     }
     
     override func bind() {
@@ -52,14 +57,14 @@ class ProfileViewController: BaseViewController {
         let reload = reload
         let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
         let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
-        let withdrawButtonTap = profileView.withdrawButton.rx.tap.asObservable()
         let prefetch = profileView.tableView.rx.prefetchRows.asObservable()
-        let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor, withdrawButtonTap: withdrawButtonTap)
+        let settingButtonTap = settingButtonTap
+        let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor, settingButtonTap: settingButtonTap)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
             owner.sections.onNext([ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [ProfileSectionModel(title: "내 게시물", items: value.1.data.map { .myPostItem($0) })])
+                                  + [ProfileSectionModel(title: "내가 판매 중인 상품", items: value.1.data.map { .product($0) })])
             guard value.1.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.1.nextCursor)
             let lastSection = owner.profileView.tableView.numberOfSections - 1
@@ -72,32 +77,34 @@ class ProfileViewController: BaseViewController {
                 .take(1)
                 .subscribe(onNext: { currentSections in
                     var updatedSections = currentSections
-                    updatedSections.append(ProfileSectionModel(title: "내 게시물", items: value.data.map { .myPostItem($0) }))
+                    let updatedItems = updatedSections[1].items + value.data.map { .product($0) }
+                    updatedSections[1] = ProfileSectionModel(title: "내가 판매 중인 상품", items: updatedItems)
                     owner.sections.onNext(updatedSections)
                     owner.profileView.tableView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
+                    let lastSection = owner.profileView.tableView.numberOfSections - 1
+                    let lastRow = owner.profileView.tableView.numberOfRows(inSection: lastSection) - 1
+                    owner.lastRow.onNext(lastRow)
                 })
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
+
         
         output.post.bind(with: self) { owner, value in
-            let vc = PostDetailViewController()
-            vc.postBoard = PostBoardType.allCases.first(where: { $0.rawValue == value.productId })!
+            let vc = ProductPostDetailViewController()
             vc.postId = value.postId
-            vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
-        
-        output.withdrawSuccessTrigger.drive(with: self) { owner, _ in
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            let sceneDelegate = windowScene?.delegate as? SceneDelegate
-            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
-            sceneDelegate?.window?.makeKeyAndVisible()
-        }.disposed(by: disposeBag)
+
         
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileView)
+        }.disposed(by: disposeBag)
+        
+        output.settingButtonTap.bind(with: self) { owner, _ in
+            let vc = SettingViewController()
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     
@@ -116,16 +123,10 @@ class ProfileViewController: BaseViewController {
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }.disposed(by: cell.disposeBag)
                 return cell
-            case .myPostItem(let myPost):
-                if myPost.files.isEmpty {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier, for: indexPath) as! ProfileMyPostWithoutImageTableViewCell
-                    cell.configureCell(myPost: myPost)
-                    return cell
-                } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
-                    cell.configureCell(myPost: myPost)
-                    return cell
-                }
+            case .product(let product):
+                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileProdcutTableViewCell.identifier, for: indexPath) as! ProfileProdcutTableViewCell
+                cell.configureCell(product)
+                return cell
             }
         }, titleForHeaderInSection: { dataSource, index in
             return dataSource.sectionModels[index].title
@@ -143,8 +144,9 @@ class ProfileViewController: BaseViewController {
         .take(until: self.rx.deallocated)
         .subscribe(with: self) { owner, noti in
             owner.reload.onNext(())
-            guard let object = noti.object as? Bool else { return }
-            ToastManager.shared.showToast(title: "프로필이 수정되었습니다", in: owner.profileView)
+            if (noti.object as? Bool) != nil {
+                ToastManager.shared.showToast(title: "프로필이 수정되었습니다", in: owner.profileView)
+            }
         }
         .disposed(by: disposeBag)
     }

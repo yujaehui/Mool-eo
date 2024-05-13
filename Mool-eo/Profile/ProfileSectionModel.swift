@@ -10,7 +10,7 @@ import RxDataSources
 
 enum ProfileSectionItem {
     case infoItem(ProfileModel)
-    case myPostItem(PostModel)
+    case product(PostModel)
 }
 
 struct ProfileSectionModel {

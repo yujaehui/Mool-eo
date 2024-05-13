@@ -13,10 +13,12 @@ import RxCocoa
 
 class ProductWebViewController: BaseViewController {
     
-    //let viewModel = ProductWebViewModel()
+    let viewModel = ProductWebViewModel()
     let productWebView = ProductWebView()
-
-    var payment: IamportPayment = IamportPayment(pg: "", merchant_uid: "", amount: "")
+    
+    var postModel: PostModel!
+    
+    var iamportResponseSubject = PublishSubject<IamportResponse?>()
     
     override func loadView() {
         self.view = productWebView
@@ -24,12 +26,40 @@ class ProductWebViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+    }
+    
+    override func bind() {
+        let postModel = Observable.just(postModel)
+        let iamportResponseSubject = iamportResponseSubject
         
-        Iamport.shared.paymentWebView(
-            webViewMode: self.productWebView.wkWebView,
-            userCode: "imp57573124",
-            payment: payment) { iamportResponse in
-                print(String(describing: iamportResponse))
-            }
+        let input = ProductWebViewModel.Input(postModel: postModel, iamportResponseSubject: iamportResponseSubject)
+        
+        let output = viewModel.transform(input: input)
+        
+        output.postModel.bind(with: self) { owner, postModel in
+            let payment = IamportPayment(
+                pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
+                merchant_uid: "ios_\(APIKey.secretKey)_\(Int(Date().timeIntervalSince1970))",
+                amount: self.postModel.content1)
+                .then {
+                    $0.pay_method = PayMethod.card.rawValue
+                    $0.name = self.postModel.title
+                    $0.buyer_name = "유재희"
+                    $0.app_scheme = "sesac"
+                }
+            
+            Iamport.shared.paymentWebView(
+                webViewMode: self.productWebView.wkWebView,
+                userCode: "imp57573124",
+                payment: payment) { iamportResponse in
+                    self.iamportResponseSubject.onNext(iamportResponse)
+                }
+        }.disposed(by: disposeBag)
+        
+        output.paymentValidationSuccessTrigger.bind(with: self) { owner, _ in
+            NotificationCenter.default.post(name: Notification.Name(Noti.payment.rawValue), object: true)
+            owner.dismiss(animated: true)
+        }.disposed(by: disposeBag)
     }
 }

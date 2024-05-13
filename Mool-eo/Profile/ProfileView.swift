@@ -10,18 +10,10 @@ import SnapKit
 
 class ProfileView: BaseView {
     
-    // Navigation
-    let withdrawButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.title = "탈퇴"
-        return button
-    }()
-    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ProfileInfoTableViewCell.self, forCellReuseIdentifier: ProfileInfoTableViewCell.identifier)
-        tableView.register(ProfileMyPostTableViewCell.self, forCellReuseIdentifier: ProfileMyPostTableViewCell.identifier)
-        tableView.register(ProfileMyPostWithoutImageTableViewCell.self, forCellReuseIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier)
+        tableView.register(ProfileProdcutTableViewCell.self, forCellReuseIdentifier: ProfileProdcutTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

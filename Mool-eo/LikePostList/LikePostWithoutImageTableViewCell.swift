@@ -1,5 +1,5 @@
 //
-//  ProfileMyPostWithoutImageTableViewCell.swift
+//  LikePostWithoutImageTableViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 4/19/24.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 // 이미지가 없는 게시글일 경우 사용할 Cell
-class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
+class LikePostWithoutImageTableViewCell: BaseTableViewCell {
     let postBoardLabel: CustomLabel = {
         let label = CustomLabel(type: .colorContentBold)
         label.text = "게시판 테스트"
@@ -111,7 +111,7 @@ class ProfileMyPostWithoutImageTableViewCell: BaseTableViewCell {
         postBoardLabel.text = myPost.productId
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
-        likeCountLabel.text = "\(myPost.likes.count)"
+        likeCountLabel.text = "\(myPost.likePost.count)"
         commentCountLabel.text = "\(myPost.comments.count)"
     }
 }

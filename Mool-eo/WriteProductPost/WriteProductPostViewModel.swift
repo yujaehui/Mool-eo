@@ -71,7 +71,7 @@ class WriteProductPostViewModel: ViewModelType {
         
         Observable.combineLatest(input.productName, input.price, input.detail, input.selectedImageDataSubject)
             .map { (productName, price, detail, imageData) in
-                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty
+                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty && detail != placeholderText
             }
             .bind(with: self) { owner, value in
                 completeButtonValidation.onNext(value)

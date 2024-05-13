@@ -17,26 +17,13 @@ class PostListView: BaseView {
         return tableView
     }()
     
-    let postWriteButton: UIButton = {
-        let button = UIButton()
-        button.configuration = .capsule2("글쓰기")
-        return button
-    }()
-    
     override func configureHierarchy() {
         addSubview(tableView)
-        addSubview(postWriteButton)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(self)
-        }
-        
-        postWriteButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
 }

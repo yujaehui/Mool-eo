@@ -57,22 +57,22 @@ class ProductPostDetailViewModel: ViewModelType {
             .withLatestFrom(input.postModel)
             .map { postModel in
                 let userId = UserDefaultsManager.userId!
-                let status = !postModel.scraps.contains(userId)
+                let status = !postModel.likesProduct.contains(userId)
                 return status
             }
             .map { status in
-                return ScrapQuery(like_status: status)
+                return LikeProductQuery(like_status: status)
             }
             .withLatestFrom(input.postId) { query, postId in
                 return (query, postId)
             }
             .flatMap { (query, postId) in
-                NetworkManager.shared.scrapUpload(query: query, postId: postId)
+                NetworkManager.shared.likeProductUpload(query: query, postId: postId)
             }
             .debug("스크랩 업로드")
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let success):
+                case .success(_):
                     likeButtonTapResult.onNext(())
                 case .error(let error):
                     switch error {

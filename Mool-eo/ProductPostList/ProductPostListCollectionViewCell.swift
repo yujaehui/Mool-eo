@@ -10,10 +10,8 @@ import SnapKit
 
 class ProductPostListCollectionViewCell: BaseCollectionViewCell {
     
-    let productImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
+    let productImageView: PostImageView = {
+        let imageView = PostImageView(frame: .zero)
         return imageView
     }()
     
@@ -37,6 +35,7 @@ class ProductPostListCollectionViewCell: BaseCollectionViewCell {
         productImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
             make.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(productImageView.snp.width)
         }
         
         productNameLabel.snp.makeConstraints { make in
@@ -46,16 +45,16 @@ class ProductPostListCollectionViewCell: BaseCollectionViewCell {
         }
         
         priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(productNameLabel.snp.bottom).offset(10)
+            make.top.equalTo(productNameLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(contentView).inset(10)
             make.height.equalTo(20)
-            make.bottom.equalTo(contentView)
+            make.bottom.lessThanOrEqualTo(contentView)
         }
     }
     
     func configureCell(item: PostListSectionModel.Item) {
         URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: item.files.first!)
         productNameLabel.text = item.title
-        priceLabel.text = item.content1
+        priceLabel.text = NumberFormatterManager.shared.formatCurrency(item.content1)
     }
 }

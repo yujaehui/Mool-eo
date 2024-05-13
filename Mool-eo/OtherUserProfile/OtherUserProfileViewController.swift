@@ -58,7 +58,7 @@ class OtherUserProfileViewController: BaseViewController {
         output.result.bind(with: self) { owner, value in
             owner.nickname = value.0.nick
             owner.sections.onNext([OtherUserProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [OtherUserProfileSectionModel(title: "\(owner.nickname)의 게시물", items: value.1.data.map { .myPostItem($0) })])
+                                  + [OtherUserProfileSectionModel(title: "\(owner.nickname)의 상품", items: value.1.data.map { .product($0) })])
             guard value.1.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.1.nextCursor)
             let lastSection = owner.otherUserProfileView.tableView.numberOfSections - 1
@@ -71,11 +71,15 @@ class OtherUserProfileViewController: BaseViewController {
                 .take(1)
                 .subscribe(onNext: { currentSections in
                     var updatedSections = currentSections
-                    updatedSections.append(OtherUserProfileSectionModel(title: "\(owner.nickname)의 게시물", items: value.data.map { .myPostItem($0) }))
+                    let updatedItems = updatedSections[1].items + value.data.map { .product($0) }
+                    updatedSections[1] = OtherUserProfileSectionModel(title: "\(owner.nickname)의 상품", items: updatedItems)
                     owner.sections.onNext(updatedSections)
                     owner.otherUserProfileView.tableView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
+                    let lastSection = owner.otherUserProfileView.tableView.numberOfSections - 1
+                    let lastRow = owner.otherUserProfileView.tableView.numberOfRows(inSection: lastSection) - 1
+                    owner.lastRow.onNext(lastRow)
                 })
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
@@ -120,16 +124,10 @@ class OtherUserProfileViewController: BaseViewController {
                     }.disposed(by: cell.disposeBag)
                 }
                 return cell
-            case .myPostItem(let myPost):
-                if myPost.files.isEmpty {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostWithoutImageTableViewCell.identifier, for: indexPath) as! ProfileMyPostWithoutImageTableViewCell
-                    cell.configureCell(myPost: myPost)
-                    return cell
-                } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: ProfileMyPostTableViewCell.identifier, for: indexPath) as! ProfileMyPostTableViewCell
-                    cell.configureCell(myPost: myPost)
-                    return cell
-                }
+            case .product(let product):
+                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileProdcutTableViewCell.identifier, for: indexPath) as! ProfileProdcutTableViewCell
+                cell.configureCell(product)
+                return cell
             }
         }, titleForHeaderInSection: { dataSource, index in
             return dataSource.sectionModels[index].title

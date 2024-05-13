@@ -30,6 +30,7 @@ class ProductPostListViewController: BaseViewController {
     private lazy var dataSource = configureDataSource()
     private let lastItem = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
+    private let postWriteButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = productPostListView
@@ -37,23 +38,28 @@ class ProductPostListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        productPostListView.pinterestLayout.delegate = self
+        registerObserver()
     }
+
     
     override func setNav() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.title = "Mool-eo!"
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
+    @objc func rightBarButtonTapped() {
+        postWriteButtonTap.onNext(())
+    }
+    
     override func configureView() {
-        sections.onNext([PostListSectionModel(items: [])]) // 초기에 빈 섹션 추가
         sections.bind(to: productPostListView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
     
     override func bind() {
         let reload = reload
-        let postWriteButtonTap = productPostListView.productPostWriteButton.rx.tap.asObservable()
+        let postWriteButtonTap = postWriteButtonTap.asObservable()
         let modelSelected = productPostListView.collectionView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = productPostListView.collectionView.rx.itemSelected.asObservable()
         let prefetch = productPostListView.collectionView.rx.prefetchItems.asObservable()
@@ -61,7 +67,7 @@ class ProductPostListViewController: BaseViewController {
         let input = ProductPostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected, lastItem: lastItem, nextCursor: nextCursor, prefetch: prefetch)
         
         let output = viewModel.transform(input: input)
-        
+
         output.productPostList.bind(with: self) { owner, value in
             owner.sections.onNext([PostListSectionModel(items: value.data)])
             owner.productPostListView.collectionView.reloadData()
@@ -79,7 +85,6 @@ class ProductPostListViewController: BaseViewController {
                     var updatedSections = currentSections
                     updatedSections.append(PostListSectionModel(items: value.data))
                     owner.sections.onNext(updatedSections)
-                    owner.productPostListView.collectionView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
                 }.disposed(by: owner.disposeBag)
@@ -113,37 +118,17 @@ class ProductPostListViewController: BaseViewController {
         }
         return dataSource
     }
-}
-
-extension ProductPostListViewController: PinterestLayoutDelegate {
-    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath, completion: @escaping (CGFloat) -> Void) {
-        var imageViewHeight: CGFloat = 180
-        
-        let item = dataSource[indexPath.section].items[indexPath.item]
-        guard let imageUrl = URL(string: APIKey.baseURL.rawValue + item.files.first!) else {
-            completion(imageViewHeight)
-            return
+    
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.writeProduct.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changeProduct.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            owner.reload.onNext(ProductIdentifier.market)
         }
-        
-        let modifier = AnyModifier { request in
-            var urlRequest = request
-            urlRequest.headers[HTTPHeader.sesacKey.rawValue] = APIKey.secretKey.rawValue
-            urlRequest.headers[HTTPHeader.authorization.rawValue] = UserDefaultsManager.accessToken!
-            return urlRequest
-        }
-        
-        KingfisherManager.shared.retrieveImage(with: imageUrl, options: [.requestModifier(modifier)]) { result in
-            switch result {
-            case .success(let value):
-                let aspectRatio = value.image.size.width / value.image.size.height
-                let cellWidth = (collectionView.bounds.width - 10) / 2
-                imageViewHeight = cellWidth / aspectRatio
-                completion(imageViewHeight + 60)
-                collectionView.collectionViewLayout.invalidateLayout()
-            case .failure(let error):
-                print("Failed to load image: \(error)")
-                completion(imageViewHeight)
-            }
-        }
+        .disposed(by: disposeBag)
     }
 }

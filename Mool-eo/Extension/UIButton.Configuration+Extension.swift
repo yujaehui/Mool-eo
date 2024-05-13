@@ -40,7 +40,7 @@ extension UIButton.Configuration {
         var config = UIButton.Configuration.filled()
         
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = FontStyle.contentBold
+        titleAttr.font = FontStyle.titleBold
         config.attributedTitle = titleAttr
         config.titleAlignment = .center
         
@@ -54,7 +54,7 @@ extension UIButton.Configuration {
         var config = UIButton.Configuration.filled()
         
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = FontStyle.contentBold
+        titleAttr.font = FontStyle.titleBold
         config.attributedTitle = titleAttr
         config.titleAlignment = .center
         
@@ -76,7 +76,7 @@ extension UIButton.Configuration {
         return config
     }
     
-    static func pressed(_ imageName: String) -> UIButton.Configuration {
+    static func heart(_ imageName: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)

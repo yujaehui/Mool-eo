@@ -101,6 +101,7 @@ class WriteProductPostViewController: BaseViewController {
         output.completeButtonValidation.drive(writeProductPostView.completeButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.uploadSuccessTrigger.drive(with: self) { owner, _ in
+            NotificationCenter.default.post(name: Notification.Name(Noti.writeProduct.rawValue), object: nil)
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         

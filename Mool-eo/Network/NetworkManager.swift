@@ -116,8 +116,8 @@ struct NetworkManager {
         return requestGeneric(target: PostService.postCheckSpecific(postId: postId))
     }
     
-    func postCheckUser(userId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: PostService.postCheckUser(userId: userId, limit: limit, next: next))
+    func postCheckUser(userId: String, productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: PostService.postCheckUser(userId: userId, productId: productId, limit: limit, next: next))
     }
     
     func postDelete(postId: String) -> Single<NetworkResult<Void>> {
@@ -176,18 +176,22 @@ struct NetworkManager {
         }
     }
     
-    //MARK: - Like    
-    func likeUpload(query: LikeQuery, postId: String) -> Single<NetworkResult<LikeModel>> {
-        return requestGeneric(target: LikeService.likeUpload(query: query, postId: postId))
+    //MARK: - LikePost
+    func likePostUpload(query: LikePostQuery, postId: String) -> Single<NetworkResult<LikePostModel>> {
+        return requestGeneric(target: LikePostService.likePostUpload(query: query, postId: postId))
     }
     
-    //MARK: - Scrap
-    func scrapUpload(query: ScrapQuery, postId: String) -> Single<NetworkResult<ScrapModel>> {
-        return requestGeneric(target: ScrapService.scrapUpload(query: query, postId: postId))
+    func likePostCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: LikePostService.likePostCheck(limit: limit, next: next))
     }
     
-    func scrapPostCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: ScrapService.scrapPostCheck(limit: limit, next: next))
+    //MARK: - LikeProduct
+    func likeProductUpload(query: LikeProductQuery, postId: String) -> Single<NetworkResult<LikeProductModel>> {
+        return requestGeneric(target: LikeProductService.likeProductUpload(query: query, postId: postId))
+    }
+    
+    func likeProdcutCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: LikeProductService.likeProdcutCheck(limit: limit, next: next))
     }
     
     //MARK: - Follow
@@ -197,5 +201,33 @@ struct NetworkManager {
     
     func unfollow(userId: String) -> Single<NetworkResult<FollowModel>> {
         return requestGeneric(target: FollowService.unfollow(userId: userId))
+    }
+    
+    //MARK: - Payment
+    func paymentValidation(query: PaymentQuery) -> Single<NetworkResult<Void>> {
+        return Single.create { single in
+            let provider = MoyaProvider<PaymentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            let request = provider.request(.paymentValidation(query: query)) { result in
+                switch result {
+                case .success:
+                    single(.success(.success(())))
+                case .failure(let error):
+                    if let statusCode = error.response?.statusCode {
+                        if let networkError = NetworkError(rawValue: statusCode) {
+                            single(.success(.error(networkError)))
+                        }
+                    } else {
+                        single(.failure(error))
+                    }
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+    
+    func paymentCheck() -> Single<NetworkResult<PaymentModel>> {
+        return requestGeneric(target: PaymentService.paymentCheck)
     }
 }

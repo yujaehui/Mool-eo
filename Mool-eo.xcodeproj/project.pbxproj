@@ -18,24 +18,40 @@
 		09279A502BE1426E00E4A65D /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A4F2BE1426E00E4A65D /* CommentService.swift */; };
 		09279A522BE1447100E4A65D /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A512BE1447100E4A65D /* ProfileService.swift */; };
 		09279A542BE1472800E4A65D /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A532BE1472800E4A65D /* UserService.swift */; };
-		09279A562BE14B2800E4A65D /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A552BE14B2800E4A65D /* LikeService.swift */; };
+		09279A562BE14B2800E4A65D /* LikePostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A552BE14B2800E4A65D /* LikePostService.swift */; };
 		09279A582BE14E9300E4A65D /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A572BE14E9300E4A65D /* PostService.swift */; };
-		09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5A2BE202B200E4A65D /* ScrapQuery.swift */; };
-		09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5D2BE202DE00E4A65D /* ScrapModel.swift */; };
-		09279A602BE202F300E4A65D /* ScrapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5F2BE202F300E4A65D /* ScrapService.swift */; };
-		09279A632BE2171600E4A65D /* ScrapPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A622BE2171600E4A65D /* ScrapPostListView.swift */; };
-		09279A652BE2171F00E4A65D /* ScrapPostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A642BE2171F00E4A65D /* ScrapPostListViewController.swift */; };
-		09279A672BE2172700E4A65D /* ScrapPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A662BE2172700E4A65D /* ScrapPostListViewModel.swift */; };
+		09279A5B2BE202B200E4A65D /* LikeProductQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5A2BE202B200E4A65D /* LikeProductQuery.swift */; };
+		09279A5E2BE202DE00E4A65D /* LikeProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5D2BE202DE00E4A65D /* LikeProductModel.swift */; };
+		09279A602BE202F300E4A65D /* LikeProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A5F2BE202F300E4A65D /* LikeProductService.swift */; };
+		09279A632BE2171600E4A65D /* LikeProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A622BE2171600E4A65D /* LikeProductListView.swift */; };
+		09279A652BE2171F00E4A65D /* LikeProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A642BE2171F00E4A65D /* LikeProductListViewController.swift */; };
+		09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A662BE2172700E4A65D /* LikeProductListViewModel.swift */; };
 		09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */; };
+		093288FC2BEFBAFF00C8F52E /* LikeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093288FB2BEFBAFF00C8F52E /* LikeListView.swift */; };
+		093288FE2BEFBB0900C8F52E /* LikeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */; };
+		093289012BEFBB7200C8F52E /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 093289002BEFBB7200C8F52E /* Tabman */; };
+		093289042BEFBBD100C8F52E /* LikePostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289032BEFBBD100C8F52E /* LikePostListViewController.swift */; };
+		093289062BEFBBDB00C8F52E /* LikePostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289052BEFBBDB00C8F52E /* LikePostListView.swift */; };
+		093289082BEFBC1200C8F52E /* LikePostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289072BEFBC1200C8F52E /* LikePostListViewModel.swift */; };
+		093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289102BF0BE7300C8F52E /* PaymentService.swift */; };
+		093289142BF0BF0900C8F52E /* PaymentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289132BF0BF0900C8F52E /* PaymentQuery.swift */; };
+		093289162BF0C31100C8F52E /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289152BF0C31100C8F52E /* String+Extension.swift */; };
+		093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289182BF0D5E000C8F52E /* PaymentModel.swift */; };
+		0932891D2BF0DA4D00C8F52E /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */; };
+		0932891F2BF0DA7700C8F52E /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932891E2BF0DA7700C8F52E /* SettingView.swift */; };
+		093289212BF0DA8A00C8F52E /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289202BF0DA8A00C8F52E /* SettingViewController.swift */; };
+		093289232BF0DBA700C8F52E /* SettingInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */; };
+		093289252BF0DDC700C8F52E /* SettingManagementTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */; };
+		093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289262BF0DED400C8F52E /* SettingSectionModel.swift */; };
+		093289292BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
-		093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */; };
+		093E60D32BCFCBEC00970FAC /* LikePostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60D22BCFCBEC00970FAC /* LikePostTableViewCell.swift */; };
 		09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 09444F8E2BEE2F7D00086E20 /* iamport-ios */; };
 		09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F932BEE326600086E20 /* ProductPostListView.swift */; };
 		09444F962BEE327000086E20 /* ProductPostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F952BEE327000086E20 /* ProductPostListViewController.swift */; };
 		09444F982BEE328000086E20 /* ProductPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F972BEE328000086E20 /* ProductPostListViewModel.swift */; };
-		09444F9A2BEE34C700086E20 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F992BEE34C700086E20 /* PinterestLayout.swift */; };
 		09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */; };
 		09444FA02BEE3DAA00086E20 /* WriteProductPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444F9F2BEE3DAA00086E20 /* WriteProductPostView.swift */; };
 		09444FA22BEE3DBC00086E20 /* WriteProductPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09444FA12BEE3DBC00086E20 /* WriteProductPostViewController.swift */; };
@@ -115,7 +131,7 @@
 		09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */; };
 		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
-		09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikeQuery.swift */; };
+		09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */; };
 		09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikeModel.swift */; };
 		0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A78A2BE351870045D361 /* OtherUserProfileView.swift */; };
 		0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A78C2BE351960045D361 /* OtherUserProfileViewController.swift */; };
@@ -132,7 +148,7 @@
 		0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CB2BE6B0040045D361 /* PostListSectionModel.swift */; };
 		0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */; };
 		0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CF2BE6B0B30045D361 /* Noti.swift */; };
-		0987A7D22BE6B0F90045D361 /* ScrapPostSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D12BE6B0F90045D361 /* ScrapPostSectionModel.swift */; };
+		0987A7D22BE6B0F90045D361 /* LikeListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D12BE6B0F90045D361 /* LikeListSectionModel.swift */; };
 		0987A7D42BE6B1870045D361 /* OtherUserProfileSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D32BE6B1870045D361 /* OtherUserProfileSectionModel.swift */; };
 		0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D72BE765990045D361 /* ProfileImageView.swift */; };
 		0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7D92BE766770045D361 /* LargePostImageView.swift */; };
@@ -168,7 +184,7 @@
 		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
 		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
 		09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */; };
-		09A7E0D82BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */; };
+		09A7E0D82BD265050024EAEC /* LikePostWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D72BD265050024EAEC /* LikePostWithoutImageTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -179,23 +195,38 @@
 		09279A4F2BE1426E00E4A65D /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
 		09279A512BE1447100E4A65D /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		09279A532BE1472800E4A65D /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		09279A552BE14B2800E4A65D /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
+		09279A552BE14B2800E4A65D /* LikePostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostService.swift; sourceTree = "<group>"; };
 		09279A572BE14E9300E4A65D /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
-		09279A5A2BE202B200E4A65D /* ScrapQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapQuery.swift; sourceTree = "<group>"; };
-		09279A5D2BE202DE00E4A65D /* ScrapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapModel.swift; sourceTree = "<group>"; };
-		09279A5F2BE202F300E4A65D /* ScrapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapService.swift; sourceTree = "<group>"; };
-		09279A622BE2171600E4A65D /* ScrapPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListView.swift; sourceTree = "<group>"; };
-		09279A642BE2171F00E4A65D /* ScrapPostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListViewController.swift; sourceTree = "<group>"; };
-		09279A662BE2172700E4A65D /* ScrapPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostListViewModel.swift; sourceTree = "<group>"; };
+		09279A5A2BE202B200E4A65D /* LikeProductQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductQuery.swift; sourceTree = "<group>"; };
+		09279A5D2BE202DE00E4A65D /* LikeProductModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductModel.swift; sourceTree = "<group>"; };
+		09279A5F2BE202F300E4A65D /* LikeProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductService.swift; sourceTree = "<group>"; };
+		09279A622BE2171600E4A65D /* LikeProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductListView.swift; sourceTree = "<group>"; };
+		09279A642BE2171F00E4A65D /* LikeProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductListViewController.swift; sourceTree = "<group>"; };
+		09279A662BE2172700E4A65D /* LikeProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductListViewModel.swift; sourceTree = "<group>"; };
 		09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		093288FB2BEFBAFF00C8F52E /* LikeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListView.swift; sourceTree = "<group>"; };
+		093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListViewController.swift; sourceTree = "<group>"; };
+		093289032BEFBBD100C8F52E /* LikePostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostListViewController.swift; sourceTree = "<group>"; };
+		093289052BEFBBDB00C8F52E /* LikePostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostListView.swift; sourceTree = "<group>"; };
+		093289072BEFBC1200C8F52E /* LikePostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostListViewModel.swift; sourceTree = "<group>"; };
+		093289102BF0BE7300C8F52E /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
+		093289132BF0BF0900C8F52E /* PaymentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentQuery.swift; sourceTree = "<group>"; };
+		093289152BF0C31100C8F52E /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		093289182BF0D5E000C8F52E /* PaymentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModel.swift; sourceTree = "<group>"; };
+		0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
+		0932891E2BF0DA7700C8F52E /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		093289202BF0DA8A00C8F52E /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInfoTableViewCell.swift; sourceTree = "<group>"; };
+		093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManagementTableViewCell.swift; sourceTree = "<group>"; };
+		093289262BF0DED400C8F52E /* SettingSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionModel.swift; sourceTree = "<group>"; };
+		093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProdcutTableViewCell.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
-		093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostTableViewCell.swift; sourceTree = "<group>"; };
+		093E60D22BCFCBEC00970FAC /* LikePostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostTableViewCell.swift; sourceTree = "<group>"; };
 		09444F932BEE326600086E20 /* ProductPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListView.swift; sourceTree = "<group>"; };
 		09444F952BEE327000086E20 /* ProductPostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListViewController.swift; sourceTree = "<group>"; };
 		09444F972BEE328000086E20 /* ProductPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListViewModel.swift; sourceTree = "<group>"; };
-		09444F992BEE34C700086E20 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostListCollectionViewCell.swift; sourceTree = "<group>"; };
 		09444F9F2BEE3DAA00086E20 /* WriteProductPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostView.swift; sourceTree = "<group>"; };
 		09444FA12BEE3DBC00086E20 /* WriteProductPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteProductPostViewController.swift; sourceTree = "<group>"; };
@@ -269,7 +300,7 @@
 		09602BBB2BD76FF800A6AFEA /* WriteCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentView.swift; sourceTree = "<group>"; };
 		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
-		09602BD02BDE562D00A6AFEA /* LikeQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeQuery.swift; sourceTree = "<group>"; };
+		09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostQuery.swift; sourceTree = "<group>"; };
 		09602BD32BDE565F00A6AFEA /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
 		0987A78A2BE351870045D361 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
 		0987A78C2BE351960045D361 /* OtherUserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileViewController.swift; sourceTree = "<group>"; };
@@ -285,7 +316,7 @@
 		0987A7CB2BE6B0040045D361 /* PostListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListSectionModel.swift; sourceTree = "<group>"; };
 		0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailSectionModel.swift; sourceTree = "<group>"; };
 		0987A7CF2BE6B0B30045D361 /* Noti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noti.swift; sourceTree = "<group>"; };
-		0987A7D12BE6B0F90045D361 /* ScrapPostSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostSectionModel.swift; sourceTree = "<group>"; };
+		0987A7D12BE6B0F90045D361 /* LikeListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListSectionModel.swift; sourceTree = "<group>"; };
 		0987A7D32BE6B1870045D361 /* OtherUserProfileSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileSectionModel.swift; sourceTree = "<group>"; };
 		0987A7D72BE765990045D361 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		0987A7D92BE766770045D361 /* LargePostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargePostImageView.swift; sourceTree = "<group>"; };
@@ -321,7 +352,7 @@
 		09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewController.swift; sourceTree = "<group>"; };
 		09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewModel.swift; sourceTree = "<group>"; };
 		09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCountView.swift; sourceTree = "<group>"; };
-		09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
+		09A7E0D72BD265050024EAEC /* LikePostWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,6 +365,7 @@
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
+				093289012BEFBB7200C8F52E /* Tabman in Frameworks */,
 				09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
@@ -385,39 +417,98 @@
 				09279A532BE1472800E4A65D /* UserService.swift */,
 				09279A572BE14E9300E4A65D /* PostService.swift */,
 				09279A4F2BE1426E00E4A65D /* CommentService.swift */,
-				09279A552BE14B2800E4A65D /* LikeService.swift */,
-				09279A5F2BE202F300E4A65D /* ScrapService.swift */,
+				09279A552BE14B2800E4A65D /* LikePostService.swift */,
+				09279A5F2BE202F300E4A65D /* LikeProductService.swift */,
 				0987A79A2BE3783E0045D361 /* FollowService.swift */,
 				09279A512BE1447100E4A65D /* ProfileService.swift */,
+				093289102BF0BE7300C8F52E /* PaymentService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
 		};
-		09279A592BE2029B00E4A65D /* Scrap */ = {
+		09279A592BE2029B00E4A65D /* LikeProduct */ = {
 			isa = PBXGroup;
 			children = (
-				09279A5A2BE202B200E4A65D /* ScrapQuery.swift */,
+				09279A5A2BE202B200E4A65D /* LikeProductQuery.swift */,
 			);
-			path = Scrap;
+			path = LikeProduct;
 			sourceTree = "<group>";
 		};
-		09279A5C2BE202D200E4A65D /* Scrap */ = {
+		09279A5C2BE202D200E4A65D /* LikeProduct */ = {
 			isa = PBXGroup;
 			children = (
-				09279A5D2BE202DE00E4A65D /* ScrapModel.swift */,
+				09279A5D2BE202DE00E4A65D /* LikeProductModel.swift */,
 			);
-			path = Scrap;
+			path = LikeProduct;
 			sourceTree = "<group>";
 		};
-		09279A612BE216FC00E4A65D /* ScrapPost */ = {
+		09279A612BE216FC00E4A65D /* LikeProductList */ = {
 			isa = PBXGroup;
 			children = (
-				09279A622BE2171600E4A65D /* ScrapPostListView.swift */,
-				0987A7D12BE6B0F90045D361 /* ScrapPostSectionModel.swift */,
-				09279A642BE2171F00E4A65D /* ScrapPostListViewController.swift */,
-				09279A662BE2172700E4A65D /* ScrapPostListViewModel.swift */,
+				09279A622BE2171600E4A65D /* LikeProductListView.swift */,
+				09279A642BE2171F00E4A65D /* LikeProductListViewController.swift */,
+				09279A662BE2172700E4A65D /* LikeProductListViewModel.swift */,
 			);
-			path = ScrapPost;
+			path = LikeProductList;
+			sourceTree = "<group>";
+		};
+		093288FA2BEFBAF000C8F52E /* LikeList */ = {
+			isa = PBXGroup;
+			children = (
+				093288FB2BEFBAFF00C8F52E /* LikeListView.swift */,
+				093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */,
+				0987A7D12BE6B0F90045D361 /* LikeListSectionModel.swift */,
+			);
+			path = LikeList;
+			sourceTree = "<group>";
+		};
+		093289022BEFBBBD00C8F52E /* LikePostList */ = {
+			isa = PBXGroup;
+			children = (
+				093289052BEFBBDB00C8F52E /* LikePostListView.swift */,
+				093E60D22BCFCBEC00970FAC /* LikePostTableViewCell.swift */,
+				09A7E0D72BD265050024EAEC /* LikePostWithoutImageTableViewCell.swift */,
+				093289032BEFBBD100C8F52E /* LikePostListViewController.swift */,
+				093289072BEFBC1200C8F52E /* LikePostListViewModel.swift */,
+			);
+			path = LikePostList;
+			sourceTree = "<group>";
+		};
+		093289092BF0926C00C8F52E /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				09444FAF2BEE3FEA00086E20 /* Section.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		093289122BF0BEF100C8F52E /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				093289132BF0BF0900C8F52E /* PaymentQuery.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		093289172BF0D5D900C8F52E /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				093289182BF0D5E000C8F52E /* PaymentModel.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		0932891B2BF0DA2E00C8F52E /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */,
+				0932891E2BF0DA7700C8F52E /* SettingView.swift */,
+				093289202BF0DA8A00C8F52E /* SettingViewController.swift */,
+				093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */,
+				093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */,
+				093289262BF0DED400C8F52E /* SettingSectionModel.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		093E60C32BCF765F00970FAC /* Profile */ = {
@@ -425,8 +516,7 @@
 			children = (
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
 				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
-				093E60D22BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift */,
-				09A7E0D72BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift */,
+				093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */,
 				0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */,
 				0987A7C42BE687DE0045D361 /* ProfileSectionModel.swift */,
 				093E60C62BCF767F00970FAC /* ProfileViewController.swift */,
@@ -475,7 +565,6 @@
 		09444FAD2BEE3FB000086E20 /* Section */ = {
 			isa = PBXGroup;
 			children = (
-				09444FAF2BEE3FEA00086E20 /* Section.swift */,
 				09444FB12BEE400300086E20 /* ProductImageSection.swift */,
 			);
 			path = Section;
@@ -511,6 +600,7 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				093289092BF0926C00C8F52E /* Section */,
 				09444F912BEE30A000086E20 /* ProductPostList */,
 				09444F922BEE30B000086E20 /* ProductPostDetail */,
 				09444FCC2BEF705F00086E20 /* ProductWeb */,
@@ -521,10 +611,13 @@
 				09602B462BD3A5BA00A6AFEA /* PostList */,
 				09602B652BD3E26100A6AFEA /* PostDetail */,
 				095678F72BC681560030F0CD /* WritePost */,
-				09279A612BE216FC00E4A65D /* ScrapPost */,
+				093288FA2BEFBAF000C8F52E /* LikeList */,
+				093289022BEFBBBD00C8F52E /* LikePostList */,
+				09279A612BE216FC00E4A65D /* LikeProductList */,
 				093E60C32BCF765F00970FAC /* Profile */,
 				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				0987A7892BE351650045D361 /* OtherUserProfile */,
+				0932891B2BF0DA2E00C8F52E /* Setting */,
 				0999EB292BCBAE4B004B6D1F /* Network */,
 				095678E72BC67E320030F0CD /* Base */,
 				095678F22BC67FF60030F0CD /* Protocol */,
@@ -587,6 +680,7 @@
 				095678FC2BC6A8910030F0CD /* UITextField+Extension.swift */,
 				095679902BC9501D0030F0CD /* UIButton.Configuration+Extension.swift */,
 				0999EB1C2BCAA2DD004B6D1F /* UIView+Extension.swift */,
+				093289152BF0C31100C8F52E /* String+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -605,7 +699,6 @@
 				09279A332BDFA62C00E4A65D /* AutoResizableTextView.swift */,
 				09A7E0D52BD258D30024EAEC /* ProfileCountView.swift */,
 				095678FE2BC6A9140030F0CD /* LineView.swift */,
-				09444F992BEE34C700086E20 /* PinterestLayout.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -716,20 +809,20 @@
 			path = Comment;
 			sourceTree = "<group>";
 		};
-		09602BCF2BDE562300A6AFEA /* Like */ = {
+		09602BCF2BDE562300A6AFEA /* LikePost */ = {
 			isa = PBXGroup;
 			children = (
-				09602BD02BDE562D00A6AFEA /* LikeQuery.swift */,
+				09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */,
 			);
-			path = Like;
+			path = LikePost;
 			sourceTree = "<group>";
 		};
-		09602BD22BDE565A00A6AFEA /* Like */ = {
+		09602BD22BDE565A00A6AFEA /* LikePost */ = {
 			isa = PBXGroup;
 			children = (
 				09602BD32BDE565F00A6AFEA /* LikeModel.swift */,
 			);
-			path = Like;
+			path = LikePost;
 			sourceTree = "<group>";
 		};
 		0987A7892BE351650045D361 /* OtherUserProfile */ = {
@@ -805,9 +898,10 @@
 				0999EB3D2BCBBAE7004B6D1F /* User */,
 				09602B512BD3ABA800A6AFEA /* Post */,
 				09602BC62BDBD2DC00A6AFEA /* Comment */,
-				09602BCF2BDE562300A6AFEA /* Like */,
-				09279A592BE2029B00E4A65D /* Scrap */,
+				09602BCF2BDE562300A6AFEA /* LikePost */,
+				09279A592BE2029B00E4A65D /* LikeProduct */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
+				093289122BF0BEF100C8F52E /* Payment */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -829,10 +923,11 @@
 				0999EB532BCBC2C4004B6D1F /* User */,
 				09602B562BD3AC0800A6AFEA /* Post */,
 				09602BC92BDBD32100A6AFEA /* Comment */,
-				09602BD22BDE565A00A6AFEA /* Like */,
-				09279A5C2BE202D200E4A65D /* Scrap */,
+				09602BD22BDE565A00A6AFEA /* LikePost */,
+				09279A5C2BE202D200E4A65D /* LikeProduct */,
 				0987A7972BE377FB0045D361 /* Follow */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
+				093289172BF0D5D900C8F52E /* Payment */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -880,6 +975,7 @@
 				09279A4A2BE1201800E4A65D /* RxMoya */,
 				0987A7932BE356880045D361 /* RxGesture */,
 				09444F8E2BEE2F7D00086E20 /* iamport-ios */,
+				093289002BEFBB7200C8F52E /* Tabman */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -919,6 +1015,7 @@
 				09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */,
 				0987A7922BE356880045D361 /* XCRemoteSwiftPackageReference "RxGesture" */,
 				09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */,
+				093288FF2BEFBB7200C8F52E /* XCRemoteSwiftPackageReference "Tabman" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -950,8 +1047,9 @@
 			files = (
 				09602B4A2BD3A5DB00A6AFEA /* PostListViewController.swift in Sources */,
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
-				09602BD12BDE562D00A6AFEA /* LikeQuery.swift in Sources */,
+				09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */,
 				0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */,
+				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
@@ -963,7 +1061,7 @@
 				0987A7C52BE687DE0045D361 /* ProfileSectionModel.swift in Sources */,
 				0999EB492BCBC207004B6D1F /* NetworkManager.swift in Sources */,
 				09279A522BE1447100E4A65D /* ProfileService.swift in Sources */,
-				09279A562BE14B2800E4A65D /* LikeService.swift in Sources */,
+				09279A562BE14B2800E4A65D /* LikePostService.swift in Sources */,
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
@@ -977,12 +1075,15 @@
 				09444FA42BEE3DC200086E20 /* WriteProductPostViewModel.swift in Sources */,
 				09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */,
 				09444FCE2BEF708C00086E20 /* ProductWebView.swift in Sources */,
+				093288FE2BEFBB0900C8F52E /* LikeListViewController.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */,
 				09444FD02BEF713A00086E20 /* ProductWebViewModel.swift in Sources */,
-				09279A652BE2171F00E4A65D /* ScrapPostListViewController.swift in Sources */,
+				093289042BEFBBD100C8F52E /* LikePostListViewController.swift in Sources */,
+				09279A652BE2171F00E4A65D /* LikeProductListViewController.swift in Sources */,
 				09444FB22BEE400300086E20 /* ProductImageSection.swift in Sources */,
 				0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */,
+				093289292BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
@@ -990,7 +1091,6 @@
 				09444FA82BEE3E6700086E20 /* ProductPostDetailViewController.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
-				09444F9A2BEE34C700086E20 /* PinterestLayout.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
@@ -1001,7 +1101,7 @@
 				094BEB622BC670BA00342DC3 /* SceneDelegate.swift in Sources */,
 				0952A6FC2BD0FE9000F71C76 /* ProfileEditView.swift in Sources */,
 				09444F982BEE328000086E20 /* ProductPostListViewModel.swift in Sources */,
-				09279A602BE202F300E4A65D /* ScrapService.swift in Sources */,
+				09279A602BE202F300E4A65D /* LikeProductService.swift in Sources */,
 				09A7E0D62BD258D30024EAEC /* ProfileCountView.swift in Sources */,
 				0987A78F2BE352260045D361 /* OtherUserProfileViewModel.swift in Sources */,
 				0987A7DC2BE771A90045D361 /* PostBoardImageView.swift in Sources */,
@@ -1019,19 +1119,23 @@
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
 				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
+				093289252BF0DDC700C8F52E /* SettingManagementTableViewCell.swift in Sources */,
 				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
+				093289142BF0BF0900C8F52E /* PaymentQuery.swift in Sources */,
 				09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */,
-				093E60D32BCFCBEC00970FAC /* ProfileMyPostTableViewCell.swift in Sources */,
+				093E60D32BCFCBEC00970FAC /* LikePostTableViewCell.swift in Sources */,
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
 				09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */,
 				0987A7D42BE6B1870045D361 /* OtherUserProfileSectionModel.swift in Sources */,
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
-				09279A5E2BE202DE00E4A65D /* ScrapModel.swift in Sources */,
-				09279A5B2BE202B200E4A65D /* ScrapQuery.swift in Sources */,
+				09279A5E2BE202DE00E4A65D /* LikeProductModel.swift in Sources */,
+				09279A5B2BE202B200E4A65D /* LikeProductQuery.swift in Sources */,
 				09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */,
+				093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */,
 				09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
+				0932891F2BF0DA7700C8F52E /* SettingView.swift in Sources */,
 				09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */,
 				0999EB062BCA97F3004B6D1F /* JoinViewController.swift in Sources */,
 				095678B62BC674A50030F0CD /* ColorStyle.swift in Sources */,
@@ -1051,29 +1155,33 @@
 				0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */,
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
 				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
-				09279A632BE2171600E4A65D /* ScrapPostListView.swift in Sources */,
+				09279A632BE2171600E4A65D /* LikeProductListView.swift in Sources */,
 				09444FAC2BEE3F1600086E20 /* WriteProductPostContentView.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,
 				09279A582BE14E9300E4A65D /* PostService.swift in Sources */,
 				09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
-				09A7E0D82BD265050024EAEC /* ProfileMyPostWithoutImageTableViewCell.swift in Sources */,
+				09A7E0D82BD265050024EAEC /* LikePostWithoutImageTableViewCell.swift in Sources */,
 				09602B692BD3E28200A6AFEA /* PostDetailViewController.swift in Sources */,
 				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
+				093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */,
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
-				09279A672BE2172700E4A65D /* ScrapPostListViewModel.swift in Sources */,
-				0987A7D22BE6B0F90045D361 /* ScrapPostSectionModel.swift in Sources */,
+				09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */,
+				0987A7D22BE6B0F90045D361 /* LikeListSectionModel.swift in Sources */,
+				093289162BF0C31100C8F52E /* String+Extension.swift in Sources */,
 				09444FA02BEE3DAA00086E20 /* WriteProductPostView.swift in Sources */,
 				0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
 				09444FBF2BEF46DA00086E20 /* ProductInfoTableViewCell.swift in Sources */,
+				093289062BEFBBDB00C8F52E /* LikePostListView.swift in Sources */,
 				0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */,
 				0987A7962BE36AD40045D361 /* OtherUserProfileModel.swift in Sources */,
 				0987A7912BE353040045D361 /* OtherUserProfileInfoTableViewCell.swift in Sources */,
 				09279A542BE1472800E4A65D /* UserService.swift in Sources */,
 				09602B642BD3CD7800A6AFEA /* WritePostContentView.swift in Sources */,
+				093289082BEFBC1200C8F52E /* LikePostListViewModel.swift in Sources */,
 				09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */,
 				0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */,
 				0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */,
@@ -1083,15 +1191,19 @@
 				09444FA62BEE3E6100086E20 /* ProductPostDetailView.swift in Sources */,
 				0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */,
 				0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */,
+				0932891D2BF0DA4D00C8F52E /* SettingViewModel.swift in Sources */,
 				09444F962BEE327000086E20 /* ProductPostListViewController.swift in Sources */,
 				09444FB62BEE441F00086E20 /* ProductTextFieldView.swift in Sources */,
+				093289232BF0DBA700C8F52E /* SettingInfoTableViewCell.swift in Sources */,
 				09444FC52BEF49FA00086E20 /* ProductPostDetailSectionModel.swift in Sources */,
 				09444FBD2BEF46CC00086E20 /* ProductImageTableViewCell.swift in Sources */,
 				095678F12BC67F000030F0CD /* BaseCollectionViewCell.swift in Sources */,
 				0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */,
+				093289212BF0DA8A00C8F52E /* SettingViewController.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,
+				093288FC2BEFBAFF00C8F52E /* LikeListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1334,6 +1446,14 @@
 				minimumVersion = 15.0.3;
 			};
 		};
+		093288FF2BEFBB7200C8F52E /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/iamport/iamport-ios.git";
@@ -1420,6 +1540,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;
 			productName = RxMoya;
+		};
+		093289002BEFBB7200C8F52E /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 093288FF2BEFBB7200C8F52E /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
 		};
 		09444F8E2BEE2F7D00086E20 /* iamport-ios */ = {
 			isa = XCSwiftPackageProductDependency;

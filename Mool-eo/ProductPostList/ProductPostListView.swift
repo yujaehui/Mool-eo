@@ -9,34 +9,30 @@ import UIKit
 import SnapKit
 
 class ProductPostListView: BaseView {
-    let pinterestLayout = PinterestLayout()
-    
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: pinterestLayout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
         return collectionView
     }()
     
-    let productPostWriteButton: UIButton = {
-        let button = UIButton()
-        button.configuration = .capsule2("상품 등록")
-        return button
-    }()
-
     override func configureHierarchy() {
         addSubview(collectionView)
-        addSubview(productPostWriteButton)
     }
     
     override func configureConstraints() {
         collectionView.snp.makeConstraints { make in
             make.verticalEdges.equalTo(safeAreaLayoutGuide)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(5)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
-        
-        productPostWriteButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
-        }
+    }
+    
+    private func configureCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let spacing: CGFloat = 10
+        let cellWidth = UIScreen.main.bounds.width - (spacing * 3)
+        layout.itemSize = CGSize(width: cellWidth / 2, height: cellWidth / 2 + 55)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
+        layout.minimumInteritemSpacing = spacing
+        return layout
     }
 }

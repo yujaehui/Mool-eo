@@ -1,5 +1,5 @@
 //
-//  ScrapService.swift
+//  LikePostService.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/1/24.
@@ -9,12 +9,12 @@ import Foundation
 import RxSwift
 import Moya
 
-enum ScrapService {
-    case scrapUpload(query: ScrapQuery, postId: String)
-    case scrapPostCheck(limit: String, next: String)
+enum LikePostService {
+    case likePostUpload(query: LikePostQuery, postId: String)
+    case likePostCheck(limit: String, next: String)
 }
 
-extension ScrapService: Moya.TargetType {
+extension LikePostService: Moya.TargetType {
     
     var baseURL: URL {
         return URL(string: APIKey.baseURL.rawValue)!
@@ -22,22 +22,22 @@ extension ScrapService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .scrapUpload(query: _, postId: let postId): "posts/\(postId)/like-2"
-        case .scrapPostCheck: "posts/likes-2/me"
+        case .likePostUpload(query: _, postId: let postId): "posts/\(postId)/like"
+        case .likePostCheck: "posts/likes/me"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .scrapUpload(query: _, postId: _): .post
-        case .scrapPostCheck : .get
+        case .likePostUpload(query: _, postId: _): .post
+        case .likePostCheck : .get
         }
     }
     
     var task: Task {
         switch self {
-        case .scrapUpload(let query, _): return .requestJSONEncodable(query)
-        case .scrapPostCheck(let limit, let next):
+        case .likePostUpload(let query, _): return .requestJSONEncodable(query)
+        case .likePostCheck(let limit, let next):
             let param = ["limit" : limit,
                          "next" : next]
             return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
@@ -46,10 +46,10 @@ extension ScrapService: Moya.TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .scrapUpload(query: _, postId: _):
+        case .likePostUpload(query: _, postId: _):
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .scrapPostCheck:
+        case .likePostCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
@@ -59,3 +59,4 @@ extension ScrapService: Moya.TargetType {
         return .successCodes
     }
 }
+

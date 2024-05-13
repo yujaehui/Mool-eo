@@ -45,7 +45,7 @@ class OtherUserProfileViewModel: ViewModelType {
             .flatMap {
                 Observable.zip(
                     NetworkManager.shared.otherUserProfileCheck(userId: input.userId).asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId, limit: "10", next: "").asObservable()
+                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult -> (NetworkResult<OtherUserProfileModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult)
                 }
@@ -80,7 +80,7 @@ class OtherUserProfileViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheckUser(userId: input.userId, limit: "10", next: next)
+                NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in
@@ -98,7 +98,7 @@ class OtherUserProfileViewModel: ViewModelType {
         Observable.zip(input.modelSelected, input.itemSelected)
             .bind(with: self) { owner, value in
                 switch value.0 {
-                case .myPostItem(let myPost): post.onNext(myPost)
+                case .product(let myPost): post.onNext(myPost)
                 case .infoItem( _): break
                 }
             }.disposed(by: disposeBag)

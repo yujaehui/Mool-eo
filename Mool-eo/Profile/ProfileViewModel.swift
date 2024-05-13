@@ -19,15 +19,15 @@ class ProfileViewModel: ViewModelType {
         let lastRow: PublishSubject<Int>
         let prefetch: Observable<[IndexPath]>
         let nextCursor: PublishSubject<String>
-        let withdrawButtonTap: Observable<Void>
+        let settingButtonTap: PublishSubject<Void>
     }
     
     struct Output {
         let result: PublishSubject<(ProfileModel, PostListModel)>
         let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
-        let withdrawSuccessTrigger: Driver<Void>
         let networkFail: Driver<Void>
+        let settingButtonTap: PublishSubject<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -35,7 +35,6 @@ class ProfileViewModel: ViewModelType {
         let nextPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
         let post = PublishSubject<PostModel>()
-        let withdrawSuccessTrigger = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
         input.reload
@@ -45,7 +44,7 @@ class ProfileViewModel: ViewModelType {
             .flatMap { userId in
                 Observable.zip(
                     NetworkManager.shared.profileCheck().asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: userId, limit: "10", next: "").asObservable()
+                    NetworkManager.shared.postCheckUser(userId: userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult -> (NetworkResult<ProfileModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult)
                 }
@@ -80,7 +79,7 @@ class ProfileViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheckUser(userId: UserDefaultsManager.userId!, limit: "10", next: next)
+                NetworkManager.shared.postCheckUser(userId: UserDefaultsManager.userId!, productId: ProductIdentifier.market.rawValue, limit: "10", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in
@@ -99,31 +98,17 @@ class ProfileViewModel: ViewModelType {
         Observable.zip(input.modelSelected, input.itemSelected)
             .bind(with: self) { owner, value in
                 switch value.0 {
-                case .myPostItem(let myPost): post.onNext(myPost)
+                case .product(let myPost): post.onNext(myPost)
                 case .infoItem( _): break
                 }
             }.disposed(by: disposeBag)
         
-        input.withdrawButtonTap
-            .flatMap { _ in
-                NetworkManager.shared.withdraw()
-            }
-            .debug("탈퇴")
-            .subscribe(with: self) { owner, value in
-                switch value {
-                case .success(_): withdrawSuccessTrigger.onNext(())
-                case .error(let error):
-                    switch error {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(error)⚠️")
-                    }
-                }
-            }.disposed(by: disposeBag)
+
         
         return Output(result: result,
                       nextPostList: nextPostList,
                       post: post,
-                      withdrawSuccessTrigger: withdrawSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()),
+                      settingButtonTap: input.settingButtonTap)
     }
 }

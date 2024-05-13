@@ -29,6 +29,7 @@ class PostListViewController: BaseViewController {
     
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
+    private let postWirteButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = postListView
@@ -39,22 +40,22 @@ class PostListViewController: BaseViewController {
         registerObserver()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tabBarController?.tabBar.isHidden = true
-    }
-    
     override func setNav() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.title = postBoard.rawValue
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
+    }
+    
+    @objc func rightBarButtonTapped() {
+        postWirteButtonTap.onNext(())
     }
     
     override func bind() {
         sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
-        let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
+        let postWriteButtonTap = postWirteButtonTap
         let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
         let prefetch = postListView.tableView.rx.prefetchRows.asObservable()

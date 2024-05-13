@@ -14,7 +14,7 @@ enum PostService {
     case postUpload(query: PostQuery)
     case postCheck(productId: String, limit: String, next: String)
     case postCheckSpecific(postId: String)
-    case postCheckUser(userId: String, limit: String, next: String)
+    case postCheckUser(userId: String, productId: String, limit: String, next: String)
     case postDelete(postID: String)
     case postEdit(query: PostQuery, postId: String)
 }
@@ -31,7 +31,7 @@ extension PostService: Moya.TargetType {
         case .postUpload: "posts"
         case .postCheck: "posts"
         case .postCheckSpecific(let postId): "posts/\(postId)"
-        case .postCheckUser(let userId, _, _): "posts/users/\(userId)"
+        case .postCheckUser(let userId, _, _, _): "posts/users/\(userId)"
         case .postDelete(let postId): "posts/\(postId)"
         case .postEdit(_, let postId): "posts/\(postId)"
         }
@@ -67,8 +67,9 @@ extension PostService: Moya.TargetType {
             return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         case .postCheckSpecific(_):
             return .requestPlain
-        case .postCheckUser(_, let limit, let next):
-            let param = ["limit" : limit,
+        case .postCheckUser(_, let productId, let limit, let next):
+            let param = ["product_id" : productId,
+                         "limit" : limit,
                          "next" : next]
             return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         case .postDelete(_):

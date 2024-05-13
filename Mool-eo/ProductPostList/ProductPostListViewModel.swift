@@ -41,7 +41,7 @@ class ProductPostListViewModel: ViewModelType {
         // 게시글 조회 네트워크 통신 진행
         input.reload
             .flatMap { value in
-                NetworkManager.shared.postCheck(productId: value.rawValue, limit: "10", next: "")
+                NetworkManager.shared.postCheck(productId: value.rawValue, limit: "12", next: "")
             }
             .debug("게시글 조회")
             .subscribe(with: self) { owner, value in
@@ -69,7 +69,7 @@ class ProductPostListViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheck(productId: ProductIdentifier.market.rawValue, limit: "10", next: next)
+                NetworkManager.shared.postCheck(productId: ProductIdentifier.market.rawValue, limit: "12", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in

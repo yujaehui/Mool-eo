@@ -131,7 +131,7 @@ class PostListWithoutImageTableViewCell: BaseTableViewCell {
         nickNameLabel.text = item.creator.nick
         postTitleLabel.text = item.title
         postContentLabel.text = item.content
-        likeCountLabel.text = "\(item.likes.count)"
+        likeCountLabel.text = "\(item.likePost.count)"
         commentCountLabel.text = "\(item.comments.count)"
     }
 }

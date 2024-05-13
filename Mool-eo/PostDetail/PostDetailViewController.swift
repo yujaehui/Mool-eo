@@ -238,7 +238,7 @@ class PostDetailViewController: BaseViewController {
                         }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaultsManager.userId!
-                        let status = !post.likes.contains(userId)
+                        let status = !post.likePost.contains(userId)
                         owner.likeStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell
@@ -259,7 +259,7 @@ class PostDetailViewController: BaseViewController {
                         }.disposed(by: cell.disposeBag)
                     cell.likeButton.rx.tap.bind(with: self) { owner, _ in
                         let userId = UserDefaultsManager.userId!
-                        let status = !post.likes.contains(userId)
+                        let status = !post.likePost.contains(userId)
                         owner.likeStatus.onNext(status)
                     }.disposed(by: cell.disposeBag)
                     return cell

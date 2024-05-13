@@ -36,6 +36,7 @@ class ProductPostDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     
@@ -58,26 +59,17 @@ class ProductPostDetailViewController: BaseViewController {
                                   + [ProductPostDetailSectionModel(title: nil, items: [.info(value)])]
                                   + [ProductPostDetailSectionModel(title: "상세 정보", items: [.detail(value)])])
             owner.postModel.onNext(value)
-            owner.productPostDetailView.likeButton.configuration = value.scraps.contains(UserDefaultsManager.userId!) ? .pressed("heart.fill") : .pressed("heart")
+            owner.productPostDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
         }.disposed(by: disposeBag)
         
         output.likeButtonTapResult.bind(with: self) { owner, value in
+            NotificationCenter.default.post(name: Notification.Name(Noti.changeProduct.rawValue), object: nil)
             owner.reload.onNext(())
         }.disposed(by: disposeBag)
         
         output.buyButtonTapResult.bind(with: self) { owner, postModel in
-            let payment = IamportPayment(
-                pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
-                merchant_uid: "ios_\(APIKey.secretKey)_\(Int(Date().timeIntervalSince1970))",
-                amount: postModel.content1)
-                .then {
-                    $0.pay_method = PayMethod.card.rawValue
-                    $0.name = postModel.title
-                    $0.buyer_name = "유재희"
-                    $0.app_scheme = "sesac"
-                }
             let vc = ProductWebViewController()
-            vc.payment = payment
+            vc.postModel = postModel
             owner.present(vc, animated: true)
         }.disposed(by: disposeBag)
     }
@@ -102,5 +94,21 @@ class ProductPostDetailViewController: BaseViewController {
             return dataSource.sectionModels[index].title
         })
         return dataSource
+    }
+    
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.writeProduct.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.payment.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            owner.reload.onNext(())
+            if (noti.object as? Bool) != nil {
+                ToastManager.shared.showToast(title: "결제가 완료되었습니다", in: owner.productPostDetailView)
+            }
+        }
+        .disposed(by: disposeBag)
     }
 }

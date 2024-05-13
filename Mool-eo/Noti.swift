@@ -8,8 +8,11 @@
 import Foundation
 
 enum Noti: String {
+    case writeProduct
+    case changeProduct
     case writePost
     case changePost
     case changeProfile
     case sessionExpiration
+    case payment
 }
