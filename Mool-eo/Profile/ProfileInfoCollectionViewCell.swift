@@ -1,16 +1,16 @@
 //
-//  ProfileInfoTableViewCell.swift
+//  ProfileInfoCollectionViewCell.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/17/24.
+//  Created by Jaehui Yu on 5/13/24.
 //
 
 import UIKit
 import SnapKit
 import RxSwift
-import Kingfisher
+import RxCocoa
 
-class ProfileInfoTableViewCell: BaseTableViewCell {
+class ProfileInfoCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -41,7 +41,7 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag() // 프로필 수정 버튼이 구독 될 것 -> disposeBag 초기화
+        disposeBag = DisposeBag()
     }
     
     override func configureHierarchy() {
@@ -70,10 +70,11 @@ class ProfileInfoTableViewCell: BaseTableViewCell {
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(20)
         }
         
         profileEditButton.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(20)
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(40)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)

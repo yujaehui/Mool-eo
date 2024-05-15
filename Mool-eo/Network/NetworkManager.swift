@@ -39,6 +39,7 @@ struct NetworkManager {
     func requestGeneric<T: Decodable, U: TargetType>(target: U) -> Single<NetworkResult<T>> where U: TargetType {
         return Single.create { single in
             let provider = MoyaProvider<U>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            
             let request = provider.request(target) { result in
                 switch result {
                 case let .success(response):

@@ -54,15 +54,15 @@ class ProductPostListViewController: BaseViewController {
     }
     
     override func configureView() {
-        sections.bind(to: productPostListView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        sections.bind(to: productPostListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
     
     override func bind() {
         let reload = reload
         let postWriteButtonTap = postWriteButtonTap.asObservable()
-        let modelSelected = productPostListView.collectionView.rx.modelSelected(PostModel.self).asObservable()
-        let itemSelected = productPostListView.collectionView.rx.itemSelected.asObservable()
-        let prefetch = productPostListView.collectionView.rx.prefetchItems.asObservable()
+        let modelSelected = productPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
+        let itemSelected = productPostListView.tableView.rx.itemSelected.asObservable()
+        let prefetch = productPostListView.tableView.rx.prefetchRows.asObservable()
         
         let input = ProductPostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected, lastItem: lastItem, nextCursor: nextCursor, prefetch: prefetch)
         
@@ -70,11 +70,11 @@ class ProductPostListViewController: BaseViewController {
 
         output.productPostList.bind(with: self) { owner, value in
             owner.sections.onNext([PostListSectionModel(items: value.data)])
-            owner.productPostListView.collectionView.reloadData()
+            owner.productPostListView.tableView.reloadData()
             guard value.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.nextCursor)
-            let lastSection = owner.productPostListView.collectionView.numberOfSections - 1
-            let lastItem = owner.productPostListView.collectionView.numberOfItems(inSection: lastSection) - 1
+            let lastSection = owner.productPostListView.tableView.numberOfSections - 1
+            let lastItem = owner.productPostListView.tableView.numberOfRows(inSection: lastSection) - 1
             owner.lastItem.onNext(lastItem)
         }.disposed(by: disposeBag)
         
@@ -110,10 +110,10 @@ class ProductPostListViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<PostListSectionModel> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<PostListSectionModel> { dataSource, collectionView, indexPath, item in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
-            cell.configureCell(item: item)
+    func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostListSectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<PostListSectionModel> { dataSource, tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: ProdcutPostListTableViewCell.identifier, for: indexPath) as! ProdcutPostListTableViewCell
+            cell.configureCell(item)
             return cell
         }
         return dataSource

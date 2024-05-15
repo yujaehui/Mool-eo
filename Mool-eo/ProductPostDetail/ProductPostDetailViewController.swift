@@ -59,7 +59,7 @@ class ProductPostDetailViewController: BaseViewController {
                                   + [ProductPostDetailSectionModel(title: nil, items: [.info(value)])]
                                   + [ProductPostDetailSectionModel(title: "상세 정보", items: [.detail(value)])])
             owner.postModel.onNext(value)
-            owner.productPostDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
+            owner.productPostDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .image("heart.fill") : .image("heart")
         }.disposed(by: disposeBag)
         
         output.likeButtonTapResult.bind(with: self) { owner, value in

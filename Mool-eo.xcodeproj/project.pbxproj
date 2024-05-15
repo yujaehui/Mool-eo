@@ -43,7 +43,14 @@
 		093289232BF0DBA700C8F52E /* SettingInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */; };
 		093289252BF0DDC700C8F52E /* SettingManagementTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */; };
 		093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289262BF0DED400C8F52E /* SettingSectionModel.swift */; };
-		093289292BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */; };
+		093289292BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289282BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift */; };
+		0932896B2BF2499E00C8F52E /* ProfileInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */; };
+		0932896D2BF249A400C8F52E /* ProfileProductSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932896C2BF249A400C8F52E /* ProfileProductSection.swift */; };
+		0932896F2BF24BE000C8F52E /* ProfileInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932896E2BF24BE000C8F52E /* ProfileInfoCollectionViewCell.swift */; };
+		093289712BF3224700C8F52E /* BaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289702BF3224700C8F52E /* BaseCollectionReusableView.swift */; };
+		093289732BF3226D00C8F52E /* ProductCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */; };
+		093289782BF4CBAF00C8F52E /* PostListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289772BF4CBAF00C8F52E /* PostListCollectionViewCell.swift */; };
+		0932897A2BF4CBB800C8F52E /* PostListWithoutImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289792BF4CBB800C8F52E /* PostListWithoutImageCollectionViewCell.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
@@ -83,7 +90,6 @@
 		094BEB802BC6732700342DC3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 094BEB7F2BC6732700342DC3 /* Alamofire */; };
 		0952A6D82BCFDD9A00F71C76 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 0952A6D72BCFDD9A00F71C76 /* Differentiator */; };
 		0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 0952A6D92BCFDD9A00F71C76 /* RxDataSources */; };
-		0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */; };
 		0952A6E42BCFF47100F71C76 /* ProfileMyPostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */; };
 		0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6E62BD0095500F71C76 /* ProfileModel.swift */; };
 		0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */; };
@@ -219,7 +225,14 @@
 		093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInfoTableViewCell.swift; sourceTree = "<group>"; };
 		093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManagementTableViewCell.swift; sourceTree = "<group>"; };
 		093289262BF0DED400C8F52E /* SettingSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionModel.swift; sourceTree = "<group>"; };
-		093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProdcutTableViewCell.swift; sourceTree = "<group>"; };
+		093289282BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdcutPostListTableViewCell.swift; sourceTree = "<group>"; };
+		0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoSection.swift; sourceTree = "<group>"; };
+		0932896C2BF249A400C8F52E /* ProfileProductSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProductSection.swift; sourceTree = "<group>"; };
+		0932896E2BF24BE000C8F52E /* ProfileInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCollectionViewCell.swift; sourceTree = "<group>"; };
+		093289702BF3224700C8F52E /* BaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionReusableView.swift; sourceTree = "<group>"; };
+		093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionReusableView.swift; sourceTree = "<group>"; };
+		093289772BF4CBAF00C8F52E /* PostListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListCollectionViewCell.swift; sourceTree = "<group>"; };
+		093289792BF4CBB800C8F52E /* PostListWithoutImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithoutImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -253,7 +266,6 @@
 		094BEB682BC670BC00342DC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		094BEB6B2BC670BC00342DC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		094BEB6D2BC670BC00342DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoTableViewCell.swift; sourceTree = "<group>"; };
 		0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyPostHeaderView.swift; sourceTree = "<group>"; };
 		0952A6E62BD0095500F71C76 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		0952A6EA2BD00A4100F71C76 /* AuthInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptor.swift; sourceTree = "<group>"; };
@@ -511,16 +523,29 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		093289692BF2498600C8F52E /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */,
+				0932896C2BF249A400C8F52E /* ProfileProductSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
 		093E60C32BCF765F00970FAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				093289692BF2498600C8F52E /* Section */,
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
-				0952A6E12BCFF32000F71C76 /* ProfileInfoTableViewCell.swift */,
-				093289282BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift */,
+				0932896E2BF24BE000C8F52E /* ProfileInfoCollectionViewCell.swift */,
+				093289772BF4CBAF00C8F52E /* PostListCollectionViewCell.swift */,
+				093289792BF4CBB800C8F52E /* PostListWithoutImageCollectionViewCell.swift */,
+				09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */,
 				0952A6E32BCFF47100F71C76 /* ProfileMyPostHeaderView.swift */,
 				0987A7C42BE687DE0045D361 /* ProfileSectionModel.swift */,
 				093E60C62BCF767F00970FAC /* ProfileViewController.swift */,
 				093E60C82BCF768800970FAC /* ProfileViewModel.swift */,
+				093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -541,8 +566,8 @@
 			isa = PBXGroup;
 			children = (
 				09444F932BEE326600086E20 /* ProductPostListView.swift */,
-				09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */,
 				09444F952BEE327000086E20 /* ProductPostListViewController.swift */,
+				093289282BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift */,
 				09444F972BEE328000086E20 /* ProductPostListViewModel.swift */,
 			);
 			path = ProductPostList;
@@ -710,6 +735,7 @@
 				095678E82BC67E3A0030F0CD /* BaseViewController.swift */,
 				095678EE2BC67EBA0030F0CD /* BaseTableViewCell.swift */,
 				095678F02BC67F000030F0CD /* BaseCollectionViewCell.swift */,
+				093289702BF3224700C8F52E /* BaseCollectionReusableView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1049,6 +1075,8 @@
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
 				09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */,
 				0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */,
+				093289782BF4CBAF00C8F52E /* PostListCollectionViewCell.swift in Sources */,
+				0932896D2BF249A400C8F52E /* ProfileProductSection.swift in Sources */,
 				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
@@ -1065,6 +1093,7 @@
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
+				0932896F2BF24BE000C8F52E /* ProfileInfoCollectionViewCell.swift in Sources */,
 				0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */,
 				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
 				09444FCB2BEF6E3C00086E20 /* ProductWebViewController.swift in Sources */,
@@ -1082,8 +1111,9 @@
 				093289042BEFBBD100C8F52E /* LikePostListViewController.swift in Sources */,
 				09279A652BE2171F00E4A65D /* LikeProductListViewController.swift in Sources */,
 				09444FB22BEE400300086E20 /* ProductImageSection.swift in Sources */,
+				0932896B2BF2499E00C8F52E /* ProfileInfoSection.swift in Sources */,
 				0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */,
-				093289292BF0E9CB00C8F52E /* ProfileProdcutTableViewCell.swift in Sources */,
+				093289292BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */,
 				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
@@ -1092,6 +1122,8 @@
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
+				093289712BF3224700C8F52E /* BaseCollectionReusableView.swift in Sources */,
+				093289732BF3226D00C8F52E /* ProductCollectionReusableView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
 				0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */,
@@ -1150,6 +1182,7 @@
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
 				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */,
+				0932897A2BF4CBB800C8F52E /* PostListWithoutImageCollectionViewCell.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
 				09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */,
 				0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */,
@@ -1184,7 +1217,6 @@
 				093289082BEFBC1200C8F52E /* LikePostListViewModel.swift in Sources */,
 				09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */,
 				0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */,
-				0952A6E22BCFF32000F71C76 /* ProfileInfoTableViewCell.swift in Sources */,
 				09602B672BD3E27700A6AFEA /* PostDetailView.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,

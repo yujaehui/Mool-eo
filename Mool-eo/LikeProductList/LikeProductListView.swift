@@ -27,9 +27,9 @@ class LikeProductListView: BaseView {
     
     private func configureCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let spacing: CGFloat = 10
-        let cellWidth = UIScreen.main.bounds.width - (spacing * 3)
-        layout.itemSize = CGSize(width: cellWidth / 2, height: cellWidth / 2 + 60)
+        let spacing: CGFloat = 0
+        let cellWidth = UIScreen.main.bounds.width - (spacing * 4)
+        layout.itemSize = CGSize(width: cellWidth / 3, height: cellWidth / 3 + 60)
         layout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
         layout.minimumInteritemSpacing = spacing
         return layout

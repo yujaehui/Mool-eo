@@ -51,13 +51,14 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: profileView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        profileView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        sections.bind(to: profileView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        //profileView.collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
         
         let reload = reload
-        let modelSelected = profileView.tableView.rx.modelSelected(ProfileSectionItem.self).asObservable()
-        let itemSelected = profileView.tableView.rx.itemSelected.asObservable()
-        let prefetch = profileView.tableView.rx.prefetchRows.asObservable()
+        let modelSelected = profileView.collectionView.rx.modelSelected(ProfileSectionItem.self).asObservable()
+        let itemSelected = profileView.collectionView.rx.itemSelected.asObservable()
+        let prefetch = profileView.collectionView.rx.prefetchItems.asObservable()
         let settingButtonTap = settingButtonTap
         let input = ProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor, settingButtonTap: settingButtonTap)
         
@@ -67,8 +68,8 @@ class ProfileViewController: BaseViewController {
                                   + [ProfileSectionModel(title: "내가 판매 중인 상품", items: value.1.data.map { .product($0) })])
             guard value.1.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.1.nextCursor)
-            let lastSection = owner.profileView.tableView.numberOfSections - 1
-            let lastRow = owner.profileView.tableView.numberOfRows(inSection: lastSection) - 1
+            let lastSection = owner.profileView.collectionView.numberOfSections - 1
+            let lastRow = owner.profileView.collectionView.numberOfItems(inSection: lastSection) - 1
             owner.lastRow.onNext(lastRow)
         }.disposed(by: disposeBag)
         
@@ -80,23 +81,23 @@ class ProfileViewController: BaseViewController {
                     let updatedItems = updatedSections[1].items + value.data.map { .product($0) }
                     updatedSections[1] = ProfileSectionModel(title: "내가 판매 중인 상품", items: updatedItems)
                     owner.sections.onNext(updatedSections)
-                    owner.profileView.tableView.reloadData()
+                    owner.profileView.collectionView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
-                    let lastSection = owner.profileView.tableView.numberOfSections - 1
-                    let lastRow = owner.profileView.tableView.numberOfRows(inSection: lastSection) - 1
+                    let lastSection = owner.profileView.collectionView.numberOfSections - 1
+                    let lastRow = owner.profileView.collectionView.numberOfItems(inSection: lastSection) - 1
                     owner.lastRow.onNext(lastRow)
                 })
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
-
+        
         
         output.post.bind(with: self) { owner, value in
             let vc = ProductPostDetailViewController()
             vc.postId = value.postId
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
-
+        
         
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profileView)
@@ -108,11 +109,11 @@ class ProfileViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProfileSectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<ProfileSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
+    func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<ProfileSectionModel> {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<ProfileSectionModel>(configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
             case .infoItem(let info):
-                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.identifier, for: indexPath) as! ProfileInfoTableViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCollectionViewCell.identifier, for: indexPath) as! ProfileInfoCollectionViewCell
                 cell.configureCell(info)
                 cell.profileEditButton.rx.tap.bind(with: self) { owner, _ in
                     let vc = ProfileEditViewController()
@@ -124,13 +125,21 @@ class ProfileViewController: BaseViewController {
                 }.disposed(by: cell.disposeBag)
                 return cell
             case .product(let product):
-                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileProdcutTableViewCell.identifier, for: indexPath) as! ProfileProdcutTableViewCell
-                cell.configureCell(product)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
+                cell.configureCell(item: product)
                 return cell
             }
-        }, titleForHeaderInSection: { dataSource, index in
-            return dataSource.sectionModels[index].title
-        })
+        },configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                headerView.headerLabel.text = dataSource[indexPath.section].title
+                return headerView
+            default:
+                fatalError("Unexpected element kind")
+            }
+        }
+        )
         return dataSource
     }
     
@@ -152,22 +161,22 @@ class ProfileViewController: BaseViewController {
     }
 }
 
-extension ProfileViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0: return 0
-        default: return 50
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0: return nil
-        default:
-            let title = dataSource[section]
-            let view = ProfileMyPostHeaderView()
-            view.myPostLabel.text = title.title
-            return view
-        }
-    }
-}
+//extension ProfileViewController: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        switch section {
+//        case 0: return 0
+//        default: return 50
+//        }
+//    }
+//    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        switch section {
+//        case 0: return nil
+//        default:
+//            let title = dataSource[section]
+//            let view = ProfileMyPostHeaderView()
+//            view.myPostLabel.text = title.title
+//            return view
+//        }
+//    }
+//}

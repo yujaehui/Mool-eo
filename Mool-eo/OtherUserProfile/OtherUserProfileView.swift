@@ -13,7 +13,7 @@ class OtherUserProfileView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(OtherUserProfileInfoTableViewCell.self, forCellReuseIdentifier: OtherUserProfileInfoTableViewCell.identifier)
-        tableView.register(ProfileProdcutTableViewCell.self, forCellReuseIdentifier: ProfileProdcutTableViewCell.identifier)
+        tableView.register(ProdcutPostListTableViewCell.self, forCellReuseIdentifier: ProdcutPostListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

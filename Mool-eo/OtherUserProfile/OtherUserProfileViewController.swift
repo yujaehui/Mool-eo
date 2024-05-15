@@ -125,7 +125,7 @@ class OtherUserProfileViewController: BaseViewController {
                 }
                 return cell
             case .product(let product):
-                let cell = tableView.dequeueReusableCell(withIdentifier: ProfileProdcutTableViewCell.identifier, for: indexPath) as! ProfileProdcutTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: ProdcutPostListTableViewCell.identifier, for: indexPath) as! ProdcutPostListTableViewCell
                 cell.configureCell(product)
                 return cell
             }

@@ -1,5 +1,5 @@
 //
-//  ProfileProdcutTableViewCell.swift
+//  ProdcutPostListTableViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/12/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProfileProdcutTableViewCell: BaseTableViewCell {
+class ProdcutPostListTableViewCell: BaseTableViewCell {
     
     let productImageView: PostImageView = {
         let imageView = PostImageView(frame: .zero)
