@@ -1,8 +1,8 @@
 //
-//  PostListViewController.swift
+//  ProfilePostListViewController.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/20/24.
+//  Created by Jaehui Yu on 5/16/24.
 //
 
 import UIKit
@@ -12,15 +12,16 @@ import RxDataSources
 import RxGesture
 import Toast
 
-class PostListViewController: BaseViewController {
+class ProfilePostListViewController: BaseViewController {
     
     deinit {
         print("‼️PostListViewController Deinit‼️")
     }
     
-    let viewModel = PostListViewModel()
-    let postListView = PostListView()
+    let viewModel = ProfilePostListViewModel()
+    let profilePostListView = ProfilePostListView()
     
+    var nickname = ""
     var postBoard: ProductIdentifier = .postBoard
     lazy var reload = BehaviorSubject<ProductIdentifier>(value: postBoard)
     
@@ -29,10 +30,9 @@ class PostListViewController: BaseViewController {
     
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
-    private let postWirteButtonTap = PublishSubject<Void>()
     
     override func loadView() {
-        self.view = postListView
+        self.view = profilePostListView
     }
     
     override func viewDidLoad() {
@@ -41,25 +41,19 @@ class PostListViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.title = "게시판"
+        navigationItem.title = "\(nickname)의 게시글"
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
-    @objc func rightBarButtonTapped() {
-        postWirteButtonTap.onNext(())
-    }
-    
     override func bind() {
-        sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        sections.bind(to: profilePostListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
-        let postWriteButtonTap = postWirteButtonTap
-        let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
-        let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
-        let prefetch = postListView.tableView.rx.prefetchRows.asObservable()
-        let input = PostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
+        let modelSelected = profilePostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
+        let itemSelected = profilePostListView.tableView.rx.itemSelected.asObservable()
+        let prefetch = profilePostListView.tableView.rx.prefetchRows.asObservable()
+        let input = ProfilePostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         
@@ -67,8 +61,8 @@ class PostListViewController: BaseViewController {
             owner.sections.onNext([PostListSectionModel(items: value.data)])
             guard value.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.nextCursor)
-            let lastSection = owner.postListView.tableView.numberOfSections - 1
-            let lastRow = owner.postListView.tableView.numberOfRows(inSection: lastSection) - 1
+            let lastSection = owner.profilePostListView.tableView.numberOfSections - 1
+            let lastRow = owner.profilePostListView.tableView.numberOfRows(inSection: lastSection) - 1
             owner.lastRow.onNext(lastRow)
         }.disposed(by: disposeBag)
         
@@ -79,20 +73,11 @@ class PostListViewController: BaseViewController {
                     var updatedSections = currentSections
                     updatedSections.append(PostListSectionModel(items: value.data))
                     owner.sections.onNext(updatedSections)
-                    owner.postListView.tableView.reloadData()
+                    owner.profilePostListView.tableView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
                 })
                 .disposed(by: owner.disposeBag)
-        }.disposed(by: disposeBag)
-        
-        output.postWriteButtonTap.drive(with: self) { owner, _ in
-            let vc = WritePostViewController()
-            vc.type = .upload
-            vc.postBoard = owner.postBoard
-            let nav = UINavigationController(rootViewController: vc)
-            nav.modalPresentationStyle = .fullScreen
-            owner.present(nav, animated: true)
         }.disposed(by: disposeBag)
         
         // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
@@ -105,7 +90,7 @@ class PostListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.postListView)
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.profilePostListView)
         }.disposed(by: disposeBag)
     }
     
@@ -163,5 +148,3 @@ class PostListViewController: BaseViewController {
         .disposed(by: disposeBag)
     }
 }
-
-

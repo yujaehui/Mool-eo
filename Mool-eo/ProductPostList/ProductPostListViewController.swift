@@ -14,6 +14,8 @@ import Kingfisher
 
 enum ProductIdentifier: String {
     case market = "Mool-eo! Market"
+    case postBoard = "Mool-eo! PostBoard"
+    
 }
 
 class ProductPostListViewController: BaseViewController {

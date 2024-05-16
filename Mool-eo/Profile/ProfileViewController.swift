@@ -51,9 +51,7 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: profileView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        //profileView.collectionView.rx.setDelegate(self).disposed(by: disposeBag)
-        
+        sections.bind(to: profileView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)        
         
         let reload = reload
         let modelSelected = profileView.collectionView.rx.modelSelected(ProfileSectionItem.self).asObservable()
@@ -65,9 +63,10 @@ class ProfileViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
             owner.sections.onNext([ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [ProfileSectionModel(title: "내가 판매 중인 상품", items: value.1.data.map { .product($0) })])
-            guard value.1.nextCursor != "0" else { return }
-            owner.nextCursor.onNext(value.1.nextCursor)
+                                  + [ProfileSectionModel(title: "작성한 게시글", items: value.1.data.map { .post($0) })]
+                                  + [ProfileSectionModel(title: "판매 중인 상품", items: value.2.data.map { .product($0) })])
+            guard value.2.nextCursor != "0" else { return }
+            owner.nextCursor.onNext(value.2.nextCursor)
             let lastSection = owner.profileView.collectionView.numberOfSections - 1
             let lastRow = owner.profileView.collectionView.numberOfItems(inSection: lastSection) - 1
             owner.lastRow.onNext(lastRow)
@@ -78,8 +77,8 @@ class ProfileViewController: BaseViewController {
                 .take(1)
                 .subscribe(onNext: { currentSections in
                     var updatedSections = currentSections
-                    let updatedItems = updatedSections[1].items + value.data.map { .product($0) }
-                    updatedSections[1] = ProfileSectionModel(title: "내가 판매 중인 상품", items: updatedItems)
+                    let updatedItems = updatedSections[2].items + value.data.map { .product($0) }
+                    updatedSections[2] = ProfileSectionModel(title: "판매 중인 상품", items: updatedItems)
                     owner.sections.onNext(updatedSections)
                     owner.profileView.collectionView.reloadData()
                     guard value.nextCursor != "0" else { return }
@@ -113,7 +112,7 @@ class ProfileViewController: BaseViewController {
         let dataSource = RxCollectionViewSectionedReloadDataSource<ProfileSectionModel>(configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
             case .infoItem(let info):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCollectionViewCell.identifier, for: indexPath) as! ProfileInfoCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.identifier, for: indexPath) as! ProfileCollectionViewCell
                 cell.configureCell(info)
                 cell.profileEditButton.rx.tap.bind(with: self) { owner, _ in
                     let vc = ProfileEditViewController()
@@ -124,6 +123,16 @@ class ProfileViewController: BaseViewController {
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }.disposed(by: cell.disposeBag)
                 return cell
+            case .post(let post):
+                if post.files.isEmpty {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier, for: indexPath) as! PostListWithoutImageCollectionViewCell
+                    cell.configureCell(myPost: post)
+                    return cell
+                } else {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
+                    cell.configureCell(myPost: post)
+                    return cell
+                }
             case .product(let product):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
                 cell.configureCell(item: product)
@@ -132,9 +141,22 @@ class ProfileViewController: BaseViewController {
         },configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
             switch kind {
             case UICollectionView.elementKindSectionHeader:
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
-                headerView.headerLabel.text = dataSource[indexPath.section].title
-                return headerView
+                switch dataSource[indexPath.section].items[indexPath.item] {
+                case .post(let post):
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    headerView.headerLabel.text = dataSource[indexPath.section].title
+                    headerView.seeMoreButton.rx.tap.bind(with: self) { owner, _ in
+                        let vc = ProfilePostListViewController()
+                        vc.nickname = post.creator.nick
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }.disposed(by: headerView.disposeBag)
+                    return headerView
+                default:
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    headerView.headerLabel.text = dataSource[indexPath.section].title
+                    headerView.seeMoreButton.isHidden = true
+                    return headerView
+                }
             default:
                 fatalError("Unexpected element kind")
             }
@@ -160,23 +182,3 @@ class ProfileViewController: BaseViewController {
         .disposed(by: disposeBag)
     }
 }
-
-//extension ProfileViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        switch section {
-//        case 0: return 0
-//        default: return 50
-//        }
-//    }
-//    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        switch section {
-//        case 0: return nil
-//        default:
-//            let title = dataSource[section]
-//            let view = ProfileMyPostHeaderView()
-//            view.myPostLabel.text = title.title
-//            return view
-//        }
-//    }
-//}

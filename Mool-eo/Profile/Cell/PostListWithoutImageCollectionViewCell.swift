@@ -1,34 +1,22 @@
 //
-//  PostListCollectionViewCell.swift
+//  PostListWithoutImageCollectionViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/15/24.
 //
 
 import UIKit
-import SnapKit
-import Kingfisher
-import RxSwift
-import RxCocoa
 
-// 이미지가 있는 게시글일 경우 사용할 Cell
-class PostListCollectionViewCell: BaseCollectionViewCell {
-    
-    var disposeBag = DisposeBag()
-    
-    let postBoardLabel: CustomLabel = {
-        let label = CustomLabel(type: .colorDescriptionBold)
-        return label
-    }()
+class PostListWithoutImageCollectionViewCell: BaseCollectionViewCell {
     
     let postTitleLabel: CustomLabel = {
-        let label = CustomLabel(type: .descriptionBold)
+        let label = CustomLabel(type: .contentBold)
         label.numberOfLines = 1
         return label
     }()
     
     let postContentLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
+        let label = CustomLabel(type: .content)
         label.numberOfLines = 2
         return label
     }()
@@ -53,13 +41,20 @@ class PostListCollectionViewCell: BaseCollectionViewCell {
     
     let commentCountLabel = CustomLabel(type: .description)
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        disposeBag = DisposeBag()
+    let lineView = LineView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.borderColor = ColorStyle.subBackground.cgColor
+        layer.borderWidth = 1
+        layer.cornerRadius = 10
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func configureHierarchy() {
-        contentView.addSubview(postBoardLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(postImageView)
@@ -67,30 +62,33 @@ class PostListCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
         contentView.addSubview(commentCountLabel)
+        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {
         
-        postBoardLabel.snp.makeConstraints { make in
+        postTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(postBoardLabel.snp.bottom).offset(5)
-            make.horizontalEdges.equalTo(contentView).inset(20)
+        postContentLabel.snp.makeConstraints { make in
+            make.top.equalTo(postTitleLabel.snp.bottom).offset(10)
+            make.leading.equalTo(contentView).inset(20)
         }
         
-        postContentLabel.snp.makeConstraints { make in
-            make.top.equalTo(postTitleLabel.snp.bottom).offset(5)
-            make.leading.equalTo(contentView).inset(20)
+        postImageView.snp.makeConstraints { make in
+            make.top.equalTo(postContentLabel.snp.top)
+            make.leading.equalTo(postContentLabel.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView).inset(20)
+            make.size.equalTo(60)
         }
         
         likeIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
+            make.top.equalTo(postImageView.snp.bottom).offset(10)
             make.leading.equalTo(contentView).inset(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -99,31 +97,22 @@ class PostListCollectionViewCell: BaseCollectionViewCell {
         }
         
         commentIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.bottom).offset(20)
+            make.top.equalTo(postImageView.snp.bottom).offset(10)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
-        
-        postImageView.snp.makeConstraints { make in
-            make.top.equalTo(postBoardLabel.snp.top)
-            make.bottom.equalTo(likeIconImageView.snp.bottom)
-            make.leading.equalTo(postContentLabel.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView).inset(20)
-            make.width.equalTo(postImageView.snp.height)
-        }
     }
     
-    func configureCell(item: PostListSectionModel.Item) {
-        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: item.files.first!)
-        postTitleLabel.text = item.title
-        postContentLabel.text = item.content
-        likeCountLabel.text = "\(item.likePost.count)"
-        commentCountLabel.text = "\(item.comments.count)"
+    func configureCell(myPost: PostModel) {
+        postTitleLabel.text = myPost.title
+        postContentLabel.text = myPost.content
+        likeCountLabel.text = "\(myPost.likePost.count)"
+        commentCountLabel.text = "\(myPost.comments.count)"
     }
 }

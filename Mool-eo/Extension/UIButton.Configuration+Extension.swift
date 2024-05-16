@@ -54,7 +54,7 @@ extension UIButton.Configuration {
         var config = UIButton.Configuration.filled()
         
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = FontStyle.titleBold
+        titleAttr.font = FontStyle.description
         config.attributedTitle = titleAttr
         config.titleAlignment = .center
         
@@ -76,11 +76,25 @@ extension UIButton.Configuration {
         return config
     }
     
-    static func image(_ imageName: String) -> UIButton.Configuration {
+    static func heart(_ imageName: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
         config.image = UIImage(systemName: imageName, withConfiguration: imageConfig)
+        config.imagePlacement = .leading
+        config.imagePadding = 0
+        config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        config.baseForegroundColor = ColorStyle.point
+        
+        return config
+    }
+    
+    static func pencil() -> UIButton.Configuration {
+        var config = UIButton.Configuration.plain()
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .heavy)
+        config.image = UIImage(systemName: "pencil", withConfiguration: imageConfig)
         config.imagePlacement = .leading
         config.imagePadding = 0
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
@@ -98,6 +112,25 @@ extension UIButton.Configuration {
         
         config.baseForegroundColor = ColorStyle.point
         config.baseBackgroundColor = ColorStyle.subBackground
+        
+        return config
+    }
+    
+    static func seeMore() -> UIButton.Configuration {
+        var config = UIButton.Configuration.plain()
+        
+        var titleAttr = AttributedString.init("더보기")
+        titleAttr.font = FontStyle.content
+        config.attributedTitle = titleAttr
+        config.titleAlignment = .trailing
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 14)
+        config.image = UIImage(systemName: "plus", withConfiguration: imageConfig)
+        config.imagePlacement = .leading
+        config.imagePadding = 5
+        
+        config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        config.baseForegroundColor = ColorStyle.point
         
         return config
     }

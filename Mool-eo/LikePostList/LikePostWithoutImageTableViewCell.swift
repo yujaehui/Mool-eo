@@ -10,11 +10,6 @@ import SnapKit
 
 // 이미지가 없는 게시글일 경우 사용할 Cell
 class LikePostWithoutImageTableViewCell: BaseTableViewCell {
-    let postBoardLabel: CustomLabel = {
-        let label = CustomLabel(type: .colorContentBold)
-        label.text = "게시판 테스트"
-        return label
-    }()
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -49,7 +44,6 @@ class LikePostWithoutImageTableViewCell: BaseTableViewCell {
     let lineView = LineView()
     
     override func configureHierarchy() {
-        contentView.addSubview(postBoardLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(likeIconImageView)
@@ -60,13 +54,9 @@ class LikePostWithoutImageTableViewCell: BaseTableViewCell {
     }
     
     override func configureConstraints() {
-        postBoardLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-        }
         
         postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(postBoardLabel.snp.bottom).offset(10)
+            make.top.equalTo(contentView).inset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
@@ -108,7 +98,6 @@ class LikePostWithoutImageTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(myPost: PostModel) {
-        postBoardLabel.text = myPost.productId
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likePost.count)"

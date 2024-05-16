@@ -40,7 +40,6 @@ class LikeProductListViewController: BaseViewController {
     override func bind() {
         sections.bind(to: likeProductListView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
 
-        
         let reload = reload
         let modelSelected = likeProductListView.collectionView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = likeProductListView.collectionView.rx.itemSelected.asObservable()
@@ -73,7 +72,7 @@ class LikeProductListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.post.drive(with: self) { owner, value in
-            let vc = PostDetailViewController()
+            let vc = ProductPostDetailViewController()
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

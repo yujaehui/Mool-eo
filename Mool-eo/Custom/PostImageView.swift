@@ -13,8 +13,7 @@ class PostImageView: UIImageView {
         super.init(frame: frame)
         contentMode = .scaleAspectFill
         clipsToBounds = true
-//        layer.cornerRadius = 10
-        backgroundColor = .systemCyan
+        layer.cornerRadius = 10
     }
     
     required init?(coder: NSCoder) {

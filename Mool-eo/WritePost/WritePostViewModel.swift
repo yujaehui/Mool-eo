@@ -18,7 +18,7 @@ class WritePostViewModel: ViewModelType {
         let textViewEnd: Observable<Void>
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
-        let postBoard: PostBoardType
+        let postBoard: ProductIdentifier
         let title: Observable<String>
         let content: Observable<String>
         let selectedImageDataSubject: BehaviorSubject<[Data]>

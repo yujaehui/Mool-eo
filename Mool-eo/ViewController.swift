@@ -20,7 +20,7 @@ class ViewController: UITabBarController {
         let productPostListVC = UINavigationController(rootViewController: ProductPostListViewController())
         productPostListVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
         
-        let postBoardVC = UINavigationController(rootViewController: PostBoardViewController())
+        let postBoardVC = UINavigationController(rootViewController: PostListViewController())
         postBoardVC.tabBarItem = UITabBarItem(title: "게시판", image: UIImage(systemName: "list.clipboard"), selectedImage: UIImage(systemName: "list.clipboard"))
         
         let likeListVC = UINavigationController(rootViewController: LikeListViewController())

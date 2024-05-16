@@ -9,6 +9,9 @@ import UIKit
 
 class CustomLabel: UILabel {
     enum labelType {
+        case largeTitle
+        case largeTitleBold
+        
         case title
         case titleBold
         case colorTitle
@@ -32,6 +35,8 @@ class CustomLabel: UILabel {
         
         var font: UIFont {
             switch self {
+            case .largeTitle: FontStyle.largeTitle
+            case .largeTitleBold: FontStyle.largeTitleBold
             case .title, .colorTitle, .subTitle: FontStyle.title
             case .titleBold, .colorTitleBold, .subTitleBold: FontStyle.titleBold
             case .content, .colorContent, .subContent: FontStyle.content
@@ -43,6 +48,7 @@ class CustomLabel: UILabel {
         
         var color: UIColor {
             switch self {
+            case .largeTitle, .largeTitleBold: ColorStyle.mainText
             case .title, .titleBold, .content, .contentBold, .description, .descriptionBold: ColorStyle.mainText
             case .colorTitle, .colorTitleBold, .colorContent, .colorContentBold, .colorDescription, .colorDescriptionBold: ColorStyle.point
             case .subTitle, .subTitleBold, .subContent, .subContentBold, .subDescription, .subDescriptionBold: ColorStyle.subText

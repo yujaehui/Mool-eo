@@ -1,23 +1,23 @@
 //
-//  ProfileProductSection.swift
+//  ProfilePostSection.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/13/24.
+//  Created by Jaehui Yu on 5/15/24.
 //
 
 import UIKit
 
-struct ProfileProductSection: Section {
+struct ProfilePostSection: Section {
     func layoutSection() -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(0.4))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(150))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
+        section.orthogonalScrollingBehavior = .continuous
         section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(40))
@@ -26,7 +26,6 @@ struct ProfileProductSection: Section {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-        header.pinToVisibleBounds = true
         
         section.boundarySupplementaryItems = [header]
         

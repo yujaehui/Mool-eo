@@ -10,11 +10,6 @@ import SnapKit
 
 // 이미지가 있는 게시글일 경우 사용할 Cell
 class LikePostTableViewCell: BaseTableViewCell {
-    let postBoardLabel: CustomLabel = {
-        let label = CustomLabel(type: .colorContentBold)
-        label.text = "게시판 테스트"
-        return label
-    }()
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -51,7 +46,6 @@ class LikePostTableViewCell: BaseTableViewCell {
     let lineView = LineView()
     
     override func configureHierarchy() {
-        contentView.addSubview(postBoardLabel)
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
         contentView.addSubview(postImageView)
@@ -63,13 +57,9 @@ class LikePostTableViewCell: BaseTableViewCell {
     }
     
     override func configureConstraints() {
-        postBoardLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(10)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-        }
         
         postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(postBoardLabel.snp.bottom).offset(10)
+            make.top.equalTo(contentView).inset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
@@ -119,7 +109,6 @@ class LikePostTableViewCell: BaseTableViewCell {
     
     func configureCell(myPost: PostModel) {
         URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: myPost.files.first!)
-        postBoardLabel.text = myPost.productId
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likePost.count)"

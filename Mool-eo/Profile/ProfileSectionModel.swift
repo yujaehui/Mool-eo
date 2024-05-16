@@ -10,6 +10,7 @@ import RxDataSources
 
 enum ProfileSectionItem {
     case infoItem(ProfileModel)
+    case post(PostModel)
     case product(PostModel)
 }
 

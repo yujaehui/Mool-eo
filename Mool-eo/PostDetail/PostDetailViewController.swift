@@ -26,7 +26,7 @@ class PostDetailViewController: BaseViewController {
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
-    var postBoard: PostBoardType = .free
+    var postBoard: ProductIdentifier = .postBoard
     var postId: String = ""
     var userId: String = ""
     
