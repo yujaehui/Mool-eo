@@ -84,6 +84,18 @@ class ProductPostDetailViewController: BaseViewController {
             case .info(let postModel):
                 let cell = tableView.dequeueReusableCell(withIdentifier: ProductInfoTableViewCell.identifier, for: indexPath) as! ProductInfoTableViewCell
                 cell.configureCell(postModel)
+                cell.profileStackView.rx.tapGesture()
+                    .when(.recognized)
+                    .bind(with: self) { owner, value in
+                        if postModel.creator.userId != UserDefaultsManager.userId {
+                            let vc = OtherUserProfileViewController()
+                            vc.userId = postModel.creator.userId
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        } else {
+                            let vc = ProfileViewController()
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        }
+                    }.disposed(by: cell.disposeBag)
                 return cell
             case .detail(let postModel):
                 let cell = tableView.dequeueReusableCell(withIdentifier: ProductDetailTableViewCell.identifier, for: indexPath) as! ProductDetailTableViewCell

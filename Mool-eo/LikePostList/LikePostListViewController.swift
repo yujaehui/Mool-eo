@@ -49,7 +49,22 @@ class LikePostListViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         
         output.likePostList.bind(with: self) { owner, value in
-            owner.sections.onNext([LikeListSectionModel(items: value.data)])
+            
+            var sectionModels: [LikeListSectionModel] = []
+            
+            if !value.data.isEmpty {
+                owner.likePostListView.tableView.isHidden = false
+                owner.likePostListView.emptyView.isHidden = true
+                let postSection = LikeListSectionModel(items: value.data)
+                sectionModels.append(postSection)
+            } else {
+                owner.likePostListView.tableView.isHidden = true
+                owner.likePostListView.emptyView.isHidden = false
+                owner.likePostListView.emptyView.emptyLabel.text = "좋아요한 게시글이 없습니다"
+            }
+            
+            owner.sections.onNext(sectionModels)
+            
             guard value.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.nextCursor)
             let lastSection = owner.likePostListView.tableView.numberOfSections - 1

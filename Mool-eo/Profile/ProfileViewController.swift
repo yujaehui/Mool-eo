@@ -51,7 +51,7 @@ class ProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: profileView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)        
+        sections.bind(to: profileView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
         let modelSelected = profileView.collectionView.rx.modelSelected(ProfileSectionItem.self).asObservable()
@@ -62,14 +62,37 @@ class ProfileViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
-            owner.sections.onNext([ProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [ProfileSectionModel(title: "작성한 게시글", items: value.1.data.map { .post($0) })]
-                                  + [ProfileSectionModel(title: "판매 중인 상품", items: value.2.data.map { .product($0) })])
+            var sectionModels: [ProfileSectionModel] = []
+            
+            sectionModels.append(ProfileSectionModel(title: nil, items: [.infoItem(value.0)]))
+            
+            if !value.1.data.isEmpty {
+                owner.profileView.sections.insert(.post, at: 1)
+                let postSection = ProfileSectionModel(title: "작성한 게시글", items: value.1.data.map { .post($0) })
+                sectionModels.append(postSection)
+            } else {
+                owner.profileView.sections.insert(.empty, at: 1)
+                sectionModels.append(ProfileSectionModel(title: "작성한 게시글", items: [.noPost]))
+            }
+            
+            if !value.2.data.isEmpty {
+                owner.profileView.sections.insert(.product, at: 2)
+                let productSection = ProfileSectionModel(title: "판매 중인 상품", items: value.2.data.map { .product($0) })
+                sectionModels.append(productSection)
+            } else {
+                owner.profileView.sections.insert(.empty, at: 2)
+                sectionModels.append(ProfileSectionModel(title: "판매 중인 상품", items: [.noProduct]))
+            }
+            
+            owner.sections.onNext(sectionModels)
+            
             guard value.2.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.2.nextCursor)
+            
             let lastSection = owner.profileView.collectionView.numberOfSections - 1
             let lastRow = owner.profileView.collectionView.numberOfItems(inSection: lastSection) - 1
             owner.lastRow.onNext(lastRow)
+            
         }.disposed(by: disposeBag)
         
         output.nextPostList.bind(with: self) { owner, value in
@@ -137,7 +160,16 @@ class ProfileViewController: BaseViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
                 cell.configureCell(item: product)
                 return cell
+            case .noPost:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
+                cell.emptyLabel.text = "게시글이 없습니다"
+                return cell
+            case .noProduct:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
+                cell.emptyLabel.text = "상품이 없습니다"
+                return cell
             }
+            
         },configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
             switch kind {
             case UICollectionView.elementKindSectionHeader:
@@ -147,6 +179,7 @@ class ProfileViewController: BaseViewController {
                     headerView.headerLabel.text = dataSource[indexPath.section].title
                     headerView.seeMoreButton.rx.tap.bind(with: self) { owner, _ in
                         let vc = ProfilePostListViewController()
+                        vc.userId = UserDefaultsManager.userId!
                         vc.nickname = post.creator.nick
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }.disposed(by: headerView.disposeBag)
@@ -160,8 +193,7 @@ class ProfileViewController: BaseViewController {
             default:
                 fatalError("Unexpected element kind")
             }
-        }
-        )
+        })
         return dataSource
     }
     

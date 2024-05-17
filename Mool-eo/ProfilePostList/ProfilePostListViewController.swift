@@ -22,6 +22,7 @@ class ProfilePostListViewController: BaseViewController {
     let profilePostListView = ProfilePostListView()
     
     var nickname = ""
+    var userId = ""
     var postBoard: ProductIdentifier = .postBoard
     lazy var reload = BehaviorSubject<ProductIdentifier>(value: postBoard)
     
@@ -50,10 +51,11 @@ class ProfilePostListViewController: BaseViewController {
         sections.bind(to: profilePostListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
+        let userId = userId
         let modelSelected = profilePostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = profilePostListView.tableView.rx.itemSelected.asObservable()
         let prefetch = profilePostListView.tableView.rx.prefetchRows.asObservable()
-        let input = ProfilePostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
+        let input = ProfilePostListViewModel.Input(reload: reload, userId: userId, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         

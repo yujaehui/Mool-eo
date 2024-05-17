@@ -47,22 +47,46 @@ class OtherUserProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: otherUserProfileView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: otherUserProfileView.collectionView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
         
-        let modelSelected = otherUserProfileView.tableView.rx.modelSelected(OtherUserProfileSectionItem.self).asObservable()
-        let itemSelected =  otherUserProfileView.tableView.rx.itemSelected.asObservable()
-        let prefetch = otherUserProfileView.tableView.rx.prefetchRows.asObservable()
+        let modelSelected = otherUserProfileView.collectionView.rx.modelSelected(OtherUserProfileSectionItem.self).asObservable()
+        let itemSelected =  otherUserProfileView.collectionView.rx.itemSelected.asObservable()
+        let prefetch = otherUserProfileView.collectionView.rx.prefetchItems.asObservable()
         let input = OtherUserProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, userId: userId, followStatus: followStatus, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
             owner.nickname = value.0.nick
-            owner.sections.onNext([OtherUserProfileSectionModel(title: nil, items: [.infoItem(value.0)])]
-                                  + [OtherUserProfileSectionModel(title: "\(owner.nickname)의 상품", items: value.1.data.map { .product($0) })])
+            
+            var sectionModels: [OtherUserProfileSectionModel] = []
+            
+            sectionModels.append(OtherUserProfileSectionModel(title: nil, items: [.infoItem(value.0)]))
+            
+            if !value.1.data.isEmpty {
+                owner.otherUserProfileView.sections.insert(.post, at: 1)
+                let postSection = OtherUserProfileSectionModel(title: "작성한 게시글", items: value.1.data.map { .post($0) })
+                sectionModels.append(postSection)
+            } else {
+                owner.otherUserProfileView.sections.insert(.empty, at: 1)
+                sectionModels.append(OtherUserProfileSectionModel(title: "작성한 게시글", items: [.noPost]))
+            }
+            
+            if !value.2.data.isEmpty {
+                owner.otherUserProfileView.sections.insert(.product, at: 2)
+                let productSection = OtherUserProfileSectionModel(title: "판매 중인 상품", items: value.2.data.map { .product($0) })
+                sectionModels.append(productSection)
+            } else {
+                owner.otherUserProfileView.sections.insert(.empty, at: 2)
+                sectionModels.append(OtherUserProfileSectionModel(title: "판매 중인 상품", items: [.noProduct]))
+            }
+            
+            owner.sections.onNext(sectionModels)
+            
             guard value.1.nextCursor != "0" else { return }
-            owner.nextCursor.onNext(value.1.nextCursor)
-            let lastSection = owner.otherUserProfileView.tableView.numberOfSections - 1
-            let lastRow = owner.otherUserProfileView.tableView.numberOfRows(inSection: lastSection) - 1
+            owner.nextCursor.onNext(value.2.nextCursor)
+            
+            let lastSection = owner.otherUserProfileView.collectionView.numberOfSections - 1
+            let lastRow = owner.otherUserProfileView.collectionView.numberOfItems(inSection: lastSection) - 1
             owner.lastRow.onNext(lastRow)
         }.disposed(by: disposeBag)
         
@@ -71,14 +95,14 @@ class OtherUserProfileViewController: BaseViewController {
                 .take(1)
                 .subscribe(onNext: { currentSections in
                     var updatedSections = currentSections
-                    let updatedItems = updatedSections[1].items + value.data.map { .product($0) }
-                    updatedSections[1] = OtherUserProfileSectionModel(title: "\(owner.nickname)의 상품", items: updatedItems)
+                    let updatedItems = updatedSections[2].items + value.data.map { .product($0) }
+                    updatedSections[2] = OtherUserProfileSectionModel(title: "\(owner.nickname)의 상품", items: updatedItems)
                     owner.sections.onNext(updatedSections)
-                    owner.otherUserProfileView.tableView.reloadData()
+                    owner.otherUserProfileView.collectionView.reloadData()
                     guard value.nextCursor != "0" else { return }
                     owner.nextCursor.onNext(value.nextCursor)
-                    let lastSection = owner.otherUserProfileView.tableView.numberOfSections - 1
-                    let lastRow = owner.otherUserProfileView.tableView.numberOfRows(inSection: lastSection) - 1
+                    let lastSection = owner.otherUserProfileView.collectionView.numberOfSections - 1
+                    let lastRow = owner.otherUserProfileView.collectionView.numberOfItems(inSection: lastSection) - 1
                     owner.lastRow.onNext(lastRow)
                 })
                 .disposed(by: owner.disposeBag)
@@ -106,11 +130,11 @@ class OtherUserProfileViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<OtherUserProfileSectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<OtherUserProfileSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
+    func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<OtherUserProfileSectionModel> {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<OtherUserProfileSectionModel>(configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
             case .infoItem(let info):
-                let cell = tableView.dequeueReusableCell(withIdentifier: OtherUserProfileInfoTableViewCell.identifier, for: indexPath) as! OtherUserProfileInfoTableViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherUserProfileCollectionViewCell.identifier, for: indexPath) as! OtherUserProfileCollectionViewCell
                 cell.configureCell(info)
                 if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {
                     cell.followButton.configuration = .check("팔로잉")
@@ -124,13 +148,52 @@ class OtherUserProfileViewController: BaseViewController {
                     }.disposed(by: cell.disposeBag)
                 }
                 return cell
+            case .post(let post):
+                if post.files.isEmpty {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier, for: indexPath) as! PostListWithoutImageCollectionViewCell
+                    cell.configureCell(myPost: post)
+                    return cell
+                } else {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
+                    cell.configureCell(myPost: post)
+                    return cell
+                }
             case .product(let product):
-                let cell = tableView.dequeueReusableCell(withIdentifier: ProdcutPostListTableViewCell.identifier, for: indexPath) as! ProdcutPostListTableViewCell
-                cell.configureCell(product)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
+                cell.configureCell(item: product)
+                return cell
+            case .noPost:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
+                cell.emptyLabel.text = "게시글이 없습니다"
+                return cell
+            case .noProduct:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
+                cell.emptyLabel.text = "상품이 없습니다"
                 return cell
             }
-        }, titleForHeaderInSection: { dataSource, index in
-            return dataSource.sectionModels[index].title
+        },configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                switch dataSource[indexPath.section].items[indexPath.item] {
+                case .post(let post):
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    headerView.headerLabel.text = dataSource[indexPath.section].title
+                    headerView.seeMoreButton.rx.tap.bind(with: self) { owner, _ in
+                        let vc = ProfilePostListViewController()
+                        vc.userId = post.creator.userId
+                        vc.nickname = post.creator.nick
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }.disposed(by: headerView.disposeBag)
+                    return headerView
+                default:
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    headerView.headerLabel.text = dataSource[indexPath.section].title
+                    headerView.seeMoreButton.isHidden = true
+                    return headerView
+                }
+            default:
+                fatalError("Unexpected element kind")
+            }
         })
         return dataSource
     }

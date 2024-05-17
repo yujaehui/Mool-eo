@@ -10,21 +10,32 @@ import SnapKit
 
 class OtherUserProfileView: BaseView {
     
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(OtherUserProfileInfoTableViewCell.self, forCellReuseIdentifier: OtherUserProfileInfoTableViewCell.identifier)
-        tableView.register(ProdcutPostListTableViewCell.self, forCellReuseIdentifier: ProdcutPostListTableViewCell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
-        return tableView
+    var sections: [SectionType] = [.info]
+    
+    lazy var collectionViewLayout = {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+            return self.sections[sectionIndex].makeSection().layoutSection()
+        }
+        return layout
+    }()
+    
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        collectionView.register(OtherUserProfileCollectionViewCell.self, forCellWithReuseIdentifier: OtherUserProfileCollectionViewCell.identifier)
+        collectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
+        collectionView.register(PostListWithoutImageCollectionViewCell.self, forCellWithReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier)
+        collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
+        collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
+        collectionView.register(ProductCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductCollectionReusableView.identifier)
+        return collectionView
     }()
     
     override func configureHierarchy() {
-        addSubview(tableView)
+        addSubview(collectionView)
     }
     
     override func configureConstraints() {
-        tableView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
     }

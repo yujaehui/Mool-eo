@@ -7,8 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class ProductInfoTableViewCell: BaseTableViewCell {
+    
+    var disposeBag = DisposeBag()
     
     let profileStackView: UIStackView = {
         let stackView = UIStackView()
@@ -32,6 +36,11 @@ class ProductInfoTableViewCell: BaseTableViewCell {
         let label = CustomLabel(type: .titleBold)
         return label
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         contentView.addSubview(profileStackView)

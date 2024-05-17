@@ -49,7 +49,23 @@ class LikeProductListViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         
         output.likeProductList.bind(with: self) { owner, value in
-            owner.sections.onNext([LikeListSectionModel(items: value.data)])
+            //owner.sections.onNext([LikeListSectionModel(items: value.data)])
+            
+            var sectionModels: [LikeListSectionModel] = []
+            
+            if !value.data.isEmpty {
+                owner.likeProductListView.collectionView.isHidden = false
+                owner.likeProductListView.emptyView.isHidden = true
+                let postSection = LikeListSectionModel(items: value.data)
+                sectionModels.append(postSection)
+            } else {
+                owner.likeProductListView.collectionView.isHidden = true
+                owner.likeProductListView.emptyView.isHidden = false
+                owner.likeProductListView.emptyView.emptyLabel.text = "좋아요한 상품이 없습니다"
+            }
+            
+            owner.sections.onNext(sectionModels)
+            
             guard value.nextCursor != "0" else { return }
             owner.nextCursor.onNext(value.nextCursor)
             let lastSection = owner.likeProductListView.collectionView.numberOfSections - 1

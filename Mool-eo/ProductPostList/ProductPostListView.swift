@@ -15,8 +15,15 @@ class ProductPostListView: BaseView {
         return tableView
     }()
     
+    let postWirteButton: UIButton = {
+        let button = UIButton()
+        button.configuration = .capsule("상품 등록")
+        return button
+    }()
+    
     override func configureHierarchy() {
         addSubview(tableView)
+        addSubview(postWirteButton)
     }
     
     override func configureConstraints() {
@@ -24,15 +31,11 @@ class ProductPostListView: BaseView {
             make.verticalEdges.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
+        
+        postWirteButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(30)
+        }
     }
-    
-//    private func configureCollectionViewLayout() -> UICollectionViewLayout {
-//        let layout = UICollectionViewFlowLayout()
-//        let spacing: CGFloat = 10
-//        let cellWidth = UIScreen.main.bounds.width - (spacing * 3)
-//        layout.itemSize = CGSize(width: cellWidth / 2, height: cellWidth / 2 + 55)
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
-//        layout.minimumInteritemSpacing = spacing
-//        return layout
-//    }
 }

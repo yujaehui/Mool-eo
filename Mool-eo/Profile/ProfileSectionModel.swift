@@ -12,6 +12,8 @@ enum ProfileSectionItem {
     case infoItem(ProfileModel)
     case post(PostModel)
     case product(PostModel)
+    case noPost
+    case noProduct
 }
 
 struct ProfileSectionModel {

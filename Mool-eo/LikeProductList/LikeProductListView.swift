@@ -15,12 +15,19 @@ class LikeProductListView: BaseView {
         return collectionView
     }()
     
+    let emptyView = EmptyView()
+    
     override func configureHierarchy() {
         addSubview(collectionView)
+        addSubview(emptyView)
     }
     
     override func configureConstraints() {
         collectionView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        
+        emptyView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
     }

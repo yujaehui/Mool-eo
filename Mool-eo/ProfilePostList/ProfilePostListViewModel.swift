@@ -14,6 +14,7 @@ class ProfilePostListViewModel: ViewModelType {
     
     struct Input {
         let reload: BehaviorSubject<ProductIdentifier>
+        let userId: String
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
         let lastRow: PublishSubject<Int>
@@ -39,7 +40,7 @@ class ProfilePostListViewModel: ViewModelType {
         // 게시글 조회 네트워크 통신 진행
         input.reload
             .flatMap { value in
-                NetworkManager.shared.postCheckUser(userId: UserDefaultsManager.userId!, productId: value.rawValue, limit: "10", next: "")
+                NetworkManager.shared.postCheckUser(userId: input.userId, productId: value.rawValue, limit: "10", next: "")
             }
             .debug("게시글 조회")
             .subscribe(with: self) { owner, value in
@@ -67,7 +68,7 @@ class ProfilePostListViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheckUser(userId: UserDefaultsManager.userId!, productId: input.postBoard.rawValue, limit: "10", next: next)
+                NetworkManager.shared.postCheckUser(userId: input.userId, productId: input.postBoard.rawValue, limit: "10", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in

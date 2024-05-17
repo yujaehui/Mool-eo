@@ -12,21 +12,25 @@ enum SectionType: CaseIterable {
     case info
     case post
     case product
+    case empty
     
     func makeSection() -> Section {
         switch self {
         case .info: return ProfileInfoSection()
         case .post: return ProfilePostSection()
         case .product: return ProfileProductSection()
+        case .empty: return EmptySection()
         }
     }
 }
 
 class ProfileView: BaseView {
     
+    var sections: [SectionType] = [.info]
+    
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            return SectionType.allCases[sectionIndex].makeSection().layoutSection()
+            return self.sections[sectionIndex].makeSection().layoutSection()
         }
         return layout
     }()
@@ -37,6 +41,7 @@ class ProfileView: BaseView {
         collectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         collectionView.register(PostListWithoutImageCollectionViewCell.self, forCellWithReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier)
         collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
+        collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
         collectionView.register(ProductCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductCollectionReusableView.identifier)
         return collectionView
     }()
