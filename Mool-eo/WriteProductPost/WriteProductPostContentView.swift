@@ -30,6 +30,28 @@ class WriteProductPostContentView: BaseView {
         return collectionView
     }()
     
+    let categoryStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    let categoryLabel: CustomLabel = {
+        let label = CustomLabel(type: .colorContentBold)
+        label.text = "카테고리를 선택해주세요"
+        return label
+    }()
+    
+    let categoryImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "chevron.right")
+        imageView.tintColor = ColorStyle.point
+        return imageView
+    }()
+    
     let productNameView: ProductTextFieldView = {
         let view = ProductTextFieldView(frame: .zero, textFieldType: .productName)
         return view
@@ -60,6 +82,9 @@ class WriteProductPostContentView: BaseView {
     override func configureHierarchy() {
         addSubview(imageAddButton)
         addSubview(collectionView)
+        addSubview(categoryStackView)
+        categoryStackView.addArrangedSubview(categoryLabel)
+        categoryStackView.addArrangedSubview(categoryImage)
         addSubview(productNameView)
         addSubview(priceView)
         addSubview(detailLabel)
@@ -80,8 +105,14 @@ class WriteProductPostContentView: BaseView {
             make.height.equalTo(80)
         }
         
-        productNameView.snp.makeConstraints { make in
+        categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(imageAddButton.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+        }
+        
+        
+        productNameView.snp.makeConstraints { make in
+            make.top.equalTo(categoryImage.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         

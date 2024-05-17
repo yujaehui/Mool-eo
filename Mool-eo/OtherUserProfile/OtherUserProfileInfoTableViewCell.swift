@@ -37,7 +37,7 @@ class OtherUserProfileInfoTableViewCell: BaseTableViewCell {
     
     let followButton: UIButton = {
         let button = UIButton()
-        button.configuration = .check2("팔로우")
+        button.configuration = .capsule("팔로우")
         return button
     }()
     

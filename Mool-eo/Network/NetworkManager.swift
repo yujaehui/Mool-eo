@@ -231,4 +231,9 @@ struct NetworkManager {
     func paymentCheck() -> Single<NetworkResult<PaymentModel>> {
         return requestGeneric(target: PaymentService.paymentCheck)
     }
+    
+    //MARK: - Hashtag
+    func hashtag(hashtag: String, productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return requestGeneric(target: HashtagService.hashtag(hashtag: hashtag, productId: productId, limit: limit, next: next))
+    }
 }

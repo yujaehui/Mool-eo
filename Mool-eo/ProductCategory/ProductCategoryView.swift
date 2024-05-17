@@ -1,17 +1,17 @@
 //
-//  ProfilePostListView.swift
+//  ProductCategoryView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/16/24.
+//  Created by Jaehui Yu on 5/17/24.
 //
 
 import UIKit
 import SnapKit
 
-class ProfilePostListView: BaseView {
+class ProductCategoryView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(PostListTableViewCell.self, forCellReuseIdentifier: PostListTableViewCell.identifier)
+        tableView.register(ProductCategoryTableViewCell.self, forCellReuseIdentifier: ProductCategoryTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()
@@ -22,7 +22,7 @@ class ProfilePostListView: BaseView {
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
     }
 }

@@ -32,7 +32,6 @@ class ProductPostListViewController: BaseViewController {
     private lazy var dataSource = configureDataSource()
     private let lastItem = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
-    private let postWriteButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = productPostListView
@@ -45,14 +44,9 @@ class ProductPostListViewController: BaseViewController {
 
     
     override func setNav() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.title = "Mool-eo!"
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
-    }
-    
-    @objc func rightBarButtonTapped() {
-        postWriteButtonTap.onNext(())
     }
     
     override func configureView() {
@@ -61,7 +55,7 @@ class ProductPostListViewController: BaseViewController {
     
     override func bind() {
         let reload = reload
-        let postWriteButtonTap = postWriteButtonTap.asObservable()
+        let postWriteButtonTap = productPostListView.postWirteButton.rx.tap.asObservable()
         let modelSelected = productPostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = productPostListView.tableView.rx.itemSelected.asObservable()
         let prefetch = productPostListView.tableView.rx.prefetchRows.asObservable()

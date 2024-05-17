@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxGesture
 import PhotosUI
 import Toast
 
@@ -24,6 +25,8 @@ class WriteProductPostViewController: BaseViewController {
     private var selectedImageData: [Data] = []
     private var selectedImageSubject = BehaviorSubject<[UIImage]>(value: [])
     private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
+    
+    private var selectedCategory = BehaviorSubject<String>(value: "")
     
     override func loadView() {
         self.view = writeProductPostView
@@ -57,6 +60,17 @@ class WriteProductPostViewController: BaseViewController {
                 
             }.disposed(by: cell.disposeBag)
         }.disposed(by: disposeBag)
+        
+        writeProductPostView.writeProductPostContentView.categoryStackView.rx.tapGesture().bind(with: self) { owner, _ in
+            let vc = ProductCategoryViewController()
+            vc.selectedCategory = { value in
+                owner.selectedCategory.onNext(value)
+                owner.writeProductPostView.writeProductPostContentView.categoryLabel.text = value
+            }
+            let nav = UINavigationController(rootViewController: vc)
+            if let sheet = nav.sheetPresentationController { sheet.detents = [.medium()] }
+            owner.present(nav, animated: true)
+        }.disposed(by: disposeBag)
     }
     
     override func bind() {
@@ -65,6 +79,7 @@ class WriteProductPostViewController: BaseViewController {
         let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
         let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
         let selectedImageDataSubject = selectedImageDataSubject
+        let category = selectedCategory
         let productName = writeProductPostView.writeProductPostContentView.productNameView.customTextField.rx.text.orEmpty.asObservable()
         let price = writeProductPostView.writeProductPostContentView.priceView.customTextField.rx.text.orEmpty.asObservable()
         let detail = writeProductPostView.writeProductPostContentView.detailTextView.rx.text.orEmpty.asObservable()
@@ -72,7 +87,7 @@ class WriteProductPostViewController: BaseViewController {
         let completeButtonTap = writeProductPostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writeProductPostView.cancelButton.rx.tap.asObservable()
     
-        let input = WriteProductPostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, selectedImageDataSubject: selectedImageDataSubject, productName: productName, price: price, detail: detail, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
+        let input = WriteProductPostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, selectedImageDataSubject: selectedImageDataSubject, category: category, productName: productName, price: price, detail: detail, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
         
         let output = viewModel.transform(input: input)
         

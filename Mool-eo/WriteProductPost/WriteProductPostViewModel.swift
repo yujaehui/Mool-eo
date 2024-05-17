@@ -19,6 +19,7 @@ class WriteProductPostViewModel: ViewModelType {
         let keyboardWillShow: Observable<Notification>
         let keyboardWillHide: Observable<Notification>
         let selectedImageDataSubject: BehaviorSubject<[Data]>
+        let category: Observable<String>
         let productName: Observable<String>
         let price: Observable<String>
         let detail: Observable<String>
@@ -69,9 +70,9 @@ class WriteProductPostViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(input.productName, input.price, input.detail, input.selectedImageDataSubject)
-            .map { (productName, price, detail, imageData) in
-                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty && detail != placeholderText
+        Observable.combineLatest(input.category, input.productName, input.price, input.detail, input.selectedImageDataSubject)
+            .map { (category, productName, price, detail, imageData) in
+                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty && detail != placeholderText && category != "카테고리를 선택해주세요"
             }
             .bind(with: self) { owner, value in
                 completeButtonValidation.onNext(value)
@@ -89,8 +90,12 @@ class WriteProductPostViewModel: ViewModelType {
             .flatMapLatest { result -> Observable<PostQuery> in
                 switch result {
                 case .success(let filesModel):
-                    return Observable.combineLatest(input.productName, input.price, input.detail).map { (productName, price, detail) in
-                        return PostQuery(title: productName, content: detail, content1: price, product_id: ProductIdentifier.market.rawValue, files: filesModel.files)
+                    return Observable.combineLatest(input.category, input.productName, input.price, input.detail).map { (category ,productName, price, detail) in
+                        return PostQuery(title: productName,
+                                         content: detail + HashtagManager.shared.convertToHashtagsAndUnderscore(category),
+                                         content1: price,
+                                         product_id: ProductIdentifier.market.rawValue,
+                                         files: filesModel.files)
                     }
                 case .error(let error):
                     switch error {

@@ -29,7 +29,6 @@ class PostListViewController: BaseViewController {
     
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
-    private let postWirteButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = postListView
@@ -41,21 +40,16 @@ class PostListViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.title = "게시판"
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
-    }
-    
-    @objc func rightBarButtonTapped() {
-        postWirteButtonTap.onNext(())
     }
     
     override func bind() {
         sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
-        let postWriteButtonTap = postWirteButtonTap
+        let postWriteButtonTap = postListView.postWirteButton.rx.tap.asObservable()
         let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
         let prefetch = postListView.tableView.rx.prefetchRows.asObservable()
@@ -111,39 +105,21 @@ class PostListViewController: BaseViewController {
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<PostListSectionModel> { dataSource, tableView, indexPath, item in
-            if item.files.isEmpty { // 이미지가 없는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostListWithoutImageTableViewCell.identifier, for: indexPath) as! PostListWithoutImageTableViewCell
-                cell.configureCell(item: item)
-                cell.profileStackView.rx.tapGesture()
-                    .when(.recognized)
-                    .bind(with: self) { owner, value in
-                        if item.creator.userId != UserDefaultsManager.userId {
-                            let vc = OtherUserProfileViewController()
-                            vc.userId = item.creator.userId
-                            owner.navigationController?.pushViewController(vc, animated: true)
-                        } else {
-                            let vc = ProfileViewController()
-                            owner.navigationController?.pushViewController(vc, animated: true)
-                        }
-                    }.disposed(by: cell.disposeBag)
-                return cell
-            } else { // 이미지가 있는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostListTableViewCell.identifier, for: indexPath) as! PostListTableViewCell
-                cell.configureCell(item: item)
-                cell.profileStackView.rx.tapGesture()
-                    .when(.recognized)
-                    .bind(with: self) { owner, value in
-                        if item.creator.userId != UserDefaultsManager.userId {
-                            let vc = OtherUserProfileViewController()
-                            vc.userId = item.creator.userId
-                            owner.navigationController?.pushViewController(vc, animated: true)
-                        } else {
-                            let vc = ProfileViewController()
-                            owner.navigationController?.pushViewController(vc, animated: true)
-                        }
-                    }.disposed(by: cell.disposeBag)
-                return cell
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: PostListTableViewCell.identifier, for: indexPath) as! PostListTableViewCell
+            cell.configureCell(item: item)
+            cell.profileStackView.rx.tapGesture()
+                .when(.recognized)
+                .bind(with: self) { owner, value in
+                    if item.creator.userId != UserDefaultsManager.userId {
+                        let vc = OtherUserProfileViewController()
+                        vc.userId = item.creator.userId
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    } else {
+                        let vc = ProfileViewController()
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }.disposed(by: cell.disposeBag)
+            return cell
         }
         return dataSource
     }

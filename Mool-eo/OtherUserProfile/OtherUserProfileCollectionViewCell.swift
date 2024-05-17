@@ -38,7 +38,7 @@ class OtherUserProfileCollectionViewCell: BaseCollectionViewCell {
     
     let followButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule2("팔로우")
+        button.configuration = .capsule("팔로우")
         return button
     }()
     

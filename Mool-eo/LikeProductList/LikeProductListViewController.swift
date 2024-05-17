@@ -48,9 +48,7 @@ class LikeProductListViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.likeProductList.bind(with: self) { owner, value in
-            //owner.sections.onNext([LikeListSectionModel(items: value.data)])
-            
+        output.likeProductList.bind(with: self) { owner, value in            
             var sectionModels: [LikeListSectionModel] = []
             
             if !value.data.isEmpty {

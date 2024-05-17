@@ -17,7 +17,7 @@ class ProductPostListView: BaseView {
     
     let postWirteButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("상품 등록")
+        button.configuration = .postAdd("상품 등록")
         return button
     }()
     
@@ -33,9 +33,8 @@ class ProductPostListView: BaseView {
         }
         
         postWirteButton.snp.makeConstraints { make in
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(30)
         }
     }
 }

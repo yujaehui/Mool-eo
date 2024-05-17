@@ -38,7 +38,7 @@ class ProfileCollectionViewCell: BaseCollectionViewCell {
     
     let profileEditButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule2("프로필 수정")
+        button.configuration = .capsule("프로필 수정")
         return button
     }()
     

@@ -37,7 +37,7 @@ class PostListTableViewCell: BaseTableViewCell {
     
     let postContentLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
-        label.numberOfLines = 4
+        label.numberOfLines = 3
         return label
     }()
     
@@ -64,6 +64,7 @@ class PostListTableViewCell: BaseTableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
+        postImageView.image = nil
     }
     
     override func configureHierarchy() {
@@ -83,11 +84,11 @@ class PostListTableViewCell: BaseTableViewCell {
         profileStackView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
         
         profileImageView.snp.makeConstraints { make in
-            make.size.equalTo(50)
+            make.size.equalTo(40)
         }
         
         nickNameLabel.snp.makeConstraints { make in
@@ -105,7 +106,7 @@ class PostListTableViewCell: BaseTableViewCell {
         }
         
         postImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.top)
+            make.top.equalTo(postTitleLabel.snp.top)
             make.leading.equalTo(postContentLabel.snp.trailing).offset(10)
             make.trailing.equalTo(contentView).inset(20)
             make.size.equalTo(80)
@@ -137,7 +138,9 @@ class PostListTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(item: PostListSectionModel.Item) {
-        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: item.files.first!)
+        if let firstFile = item.files.first {
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+        }
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: item.creator.profileImage)
         nickNameLabel.text = item.creator.nick
         postTitleLabel.text = item.title

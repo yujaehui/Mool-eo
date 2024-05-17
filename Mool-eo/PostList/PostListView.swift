@@ -12,18 +12,29 @@ class PostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PostListTableViewCell.self, forCellReuseIdentifier: PostListTableViewCell.identifier)
-        tableView.register(PostListWithoutImageTableViewCell.self, forCellReuseIdentifier: PostListWithoutImageTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()
     
+    let postWirteButton: UIButton = {
+        let button = UIButton()
+        button.configuration = .postAdd("글쓰기")
+        return button
+    }()
+    
     override func configureHierarchy() {
         addSubview(tableView)
+        addSubview(postWirteButton)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        
+        postWirteButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }
     }
 }

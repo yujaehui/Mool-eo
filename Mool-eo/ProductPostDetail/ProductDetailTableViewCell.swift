@@ -29,6 +29,6 @@ class ProductDetailTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ postModel: PostModel) {
-        detailLabel.text = postModel.content
+        detailLabel.text = HashtagManager.shared.removingTextAfterHash(postModel.content)
     }
 }

@@ -59,6 +59,12 @@
 		093289932BF63BD700C8F52E /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */; };
 		093289952BF63E3600C8F52E /* EmptySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289942BF63E3600C8F52E /* EmptySection.swift */; };
 		093289C12BF72CD500C8F52E /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289C02BF72CD500C8F52E /* EmptyView.swift */; };
+		093289C32BF73E8700C8F52E /* HashtagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289C22BF73E8700C8F52E /* HashtagService.swift */; };
+		093289CC2BF7410500C8F52E /* HashtagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289CB2BF7410500C8F52E /* HashtagManager.swift */; };
+		093289D12BF7649A00C8F52E /* ProductCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D02BF7649A00C8F52E /* ProductCategoryView.swift */; };
+		093289D32BF764A200C8F52E /* ProductCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D22BF764A200C8F52E /* ProductCategoryViewController.swift */; };
+		093289D52BF764B500C8F52E /* ProductCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D42BF764B500C8F52E /* ProductCategoryViewModel.swift */; };
+		093289D72BF7652D00C8F52E /* ProductCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D62BF7652D00C8F52E /* ProductCategoryTableViewCell.swift */; };
 		093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C42BCF766F00970FAC /* ProfileView.swift */; };
 		093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C62BCF767F00970FAC /* ProfileViewController.swift */; };
 		093E60C92BCF768800970FAC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60C82BCF768800970FAC /* ProfileViewModel.swift */; };
@@ -132,7 +138,6 @@
 		09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B572BD3AC1C00A6AFEA /* FilesModel.swift */; };
 		09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5B2BD3AC3300A6AFEA /* PostListModel.swift */; };
 		09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */; };
-		09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */; };
 		09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */; };
 		09602B642BD3CD7800A6AFEA /* WritePostContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B632BD3CD7800A6AFEA /* WritePostContentView.swift */; };
 		09602B672BD3E27700A6AFEA /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B662BD3E27700A6AFEA /* PostDetailView.swift */; };
@@ -248,6 +253,12 @@
 		093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		093289942BF63E3600C8F52E /* EmptySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptySection.swift; sourceTree = "<group>"; };
 		093289C02BF72CD500C8F52E /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		093289C22BF73E8700C8F52E /* HashtagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagService.swift; sourceTree = "<group>"; };
+		093289CB2BF7410500C8F52E /* HashtagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagManager.swift; sourceTree = "<group>"; };
+		093289D02BF7649A00C8F52E /* ProductCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryView.swift; sourceTree = "<group>"; };
+		093289D22BF764A200C8F52E /* ProductCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryViewController.swift; sourceTree = "<group>"; };
+		093289D42BF764B500C8F52E /* ProductCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryViewModel.swift; sourceTree = "<group>"; };
+		093289D62BF7652D00C8F52E /* ProductCategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		093E60C42BCF766F00970FAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		093E60C62BCF767F00970FAC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		093E60C82BCF768800970FAC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -314,7 +325,6 @@
 		09602B572BD3AC1C00A6AFEA /* FilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesModel.swift; sourceTree = "<group>"; };
 		09602B5B2BD3AC3300A6AFEA /* PostListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListModel.swift; sourceTree = "<group>"; };
 		09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListTableViewCell.swift; sourceTree = "<group>"; };
-		09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
 		09602B612BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		09602B632BD3CD7800A6AFEA /* WritePostContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostContentView.swift; sourceTree = "<group>"; };
 		09602B662BD3E27700A6AFEA /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
@@ -448,6 +458,7 @@
 				0987A79A2BE3783E0045D361 /* FollowService.swift */,
 				09279A512BE1447100E4A65D /* ProfileService.swift */,
 				093289102BF0BE7300C8F52E /* PaymentService.swift */,
+				093289C22BF73E8700C8F52E /* HashtagService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -571,6 +582,17 @@
 			path = ProfilePostList;
 			sourceTree = "<group>";
 		};
+		093289CF2BF7648100C8F52E /* ProductCategory */ = {
+			isa = PBXGroup;
+			children = (
+				093289D62BF7652D00C8F52E /* ProductCategoryTableViewCell.swift */,
+				093289D02BF7649A00C8F52E /* ProductCategoryView.swift */,
+				093289D22BF764A200C8F52E /* ProductCategoryViewController.swift */,
+				093289D42BF764B500C8F52E /* ProductCategoryViewModel.swift */,
+			);
+			path = ProductCategory;
+			sourceTree = "<group>";
+		};
 		093E60C32BCF765F00970FAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -664,6 +686,7 @@
 				09444F922BEE30B000086E20 /* ProductPostDetail */,
 				09444FCC2BEF705F00086E20 /* ProductWeb */,
 				09444F902BEE307E00086E20 /* WriteProductPost */,
+				093289CF2BF7648100C8F52E /* ProductCategory */,
 				095679892BC931290030F0CD /* Login */,
 				0999EAFF2BCA97F3004B6D1F /* Join */,
 				0999EB152BCA9FA4004B6D1F /* PostBoard */,
@@ -813,7 +836,6 @@
 			children = (
 				09602B472BD3A5D300A6AFEA /* PostListView.swift */,
 				09602B5D2BD3AED800A6AFEA /* PostListTableViewCell.swift */,
-				09602B5F2BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift */,
 				0987A7CB2BE6B0040045D361 /* PostListSectionModel.swift */,
 				09602B492BD3A5DB00A6AFEA /* PostListViewController.swift */,
 				09602B4B2BD3A5E500A6AFEA /* PostListViewModel.swift */,
@@ -916,6 +938,7 @@
 				09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */,
 				0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */,
 				0987A7DD2BE790610045D361 /* ToastManager.swift */,
+				093289CB2BF7410500C8F52E /* HashtagManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1112,6 +1135,7 @@
 				09602B552BD3ABC200A6AFEA /* PostQuery.swift in Sources */,
 				09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */,
 				0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */,
+				093289C32BF73E8700C8F52E /* HashtagService.swift in Sources */,
 				0932897E2BF4EEF600C8F52E /* PostListCollectionViewCell.swift in Sources */,
 				0932896D2BF249A400C8F52E /* ProfileProductSection.swift in Sources */,
 				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
@@ -1126,6 +1150,7 @@
 				0987A7C52BE687DE0045D361 /* ProfileSectionModel.swift in Sources */,
 				093289C12BF72CD500C8F52E /* EmptyView.swift in Sources */,
 				0999EB492BCBC207004B6D1F /* NetworkManager.swift in Sources */,
+				093289D72BF7652D00C8F52E /* ProductCategoryTableViewCell.swift in Sources */,
 				09279A522BE1447100E4A65D /* ProfileService.swift in Sources */,
 				09279A562BE14B2800E4A65D /* LikePostService.swift in Sources */,
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
@@ -1159,6 +1184,7 @@
 				0932898B2BF60B6600C8F52E /* ProfilePostListViewController.swift in Sources */,
 				09444FA82BEE3E6700086E20 /* ProductPostDetailViewController.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
+				093289D52BF764B500C8F52E /* ProductCategoryViewModel.swift in Sources */,
 				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
 				093289932BF63BD700C8F52E /* EmptyCollectionViewCell.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
@@ -1185,7 +1211,6 @@
 				0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */,
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
 				093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */,
-				09602B602BD3AFE600A6AFEA /* PostListWithoutImageTableViewCell.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
@@ -1204,6 +1229,7 @@
 				093289892BF60B5700C8F52E /* ProfilePostListView.swift in Sources */,
 				09279A5E2BE202DE00E4A65D /* LikeProductModel.swift in Sources */,
 				09279A5B2BE202B200E4A65D /* LikeProductQuery.swift in Sources */,
+				093289D32BF764A200C8F52E /* ProductCategoryViewController.swift in Sources */,
 				09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */,
 				093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */,
 				09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */,
@@ -1216,6 +1242,7 @@
 				09444FAA2BEE3E6D00086E20 /* ProductPostDetailViewModel.swift in Sources */,
 				09444FC12BEF46E000086E20 /* ProductDetailTableViewCell.swift in Sources */,
 				09444FA22BEE3DBC00086E20 /* WriteProductPostViewController.swift in Sources */,
+				093289D12BF7649A00C8F52E /* ProductCategoryView.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
 				093E60C52BCF766F00970FAC /* ProfileView.swift in Sources */,
 				09602B702BD3F22D00A6AFEA /* CommentTableViewCell.swift in Sources */,
@@ -1244,6 +1271,7 @@
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
 				09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */,
 				0987A7D22BE6B0F90045D361 /* LikeListSectionModel.swift in Sources */,
+				093289CC2BF7410500C8F52E /* HashtagManager.swift in Sources */,
 				093289162BF0C31100C8F52E /* String+Extension.swift in Sources */,
 				09444FA02BEE3DAA00086E20 /* WriteProductPostView.swift in Sources */,
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,

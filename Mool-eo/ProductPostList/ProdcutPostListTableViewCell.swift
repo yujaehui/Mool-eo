@@ -69,6 +69,6 @@ class ProdcutPostListTableViewCell: BaseTableViewCell {
         URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: product.files.first!)
         productNameLabel.text = product.title
         priceLabel.text = NumberFormatterManager.shared.formatCurrency(product.content1)
-        detailLabel.text = product.content
+        detailLabel.text = HashtagManager.shared.removingTextAfterHash(product.content)
     }
 }
