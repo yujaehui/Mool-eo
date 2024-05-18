@@ -12,7 +12,6 @@ class LikePostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(LikePostTableViewCell.self, forCellReuseIdentifier: LikePostTableViewCell.identifier)
-        tableView.register(LikePostWithoutImageTableViewCell.self, forCellReuseIdentifier: LikePostWithoutImageTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

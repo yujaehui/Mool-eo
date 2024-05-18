@@ -69,7 +69,7 @@ class LikePostTableViewCell: BaseTableViewCell {
         }
         
         postImageView.snp.makeConstraints { make in
-            make.top.equalTo(postContentLabel.snp.top)
+            make.top.equalTo(postTitleLabel.snp.top)
             make.leading.equalTo(postContentLabel.snp.trailing).offset(10)
             make.trailing.equalTo(contentView).inset(20)
             make.size.equalTo(80)
@@ -83,7 +83,6 @@ class LikePostTableViewCell: BaseTableViewCell {
         
         likeCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(likeIconImageView.snp.centerY)
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(likeIconImageView.snp.trailing).offset(5)
         }
         
@@ -95,7 +94,6 @@ class LikePostTableViewCell: BaseTableViewCell {
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
         
@@ -108,7 +106,9 @@ class LikePostTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(myPost: PostModel) {
-        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: myPost.files.first!)
+        if let firstFile = myPost.files.first {
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+        }
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likePost.count)"

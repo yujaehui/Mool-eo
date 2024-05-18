@@ -99,15 +99,9 @@ class LikePostListViewController: BaseViewController {
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<LikeListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<LikeListSectionModel> { dataSource, tableView, indexPath, item in
-            if item.files.isEmpty { // 이미지가 없는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: LikePostWithoutImageTableViewCell.identifier, for: indexPath) as! LikePostWithoutImageTableViewCell
-                cell.configureCell(myPost: item)
-                return cell
-            } else { // 이미지가 있는 게시글일 경우
-                let cell = tableView.dequeueReusableCell(withIdentifier: LikePostTableViewCell.identifier, for: indexPath) as! LikePostTableViewCell
-                cell.configureCell(myPost: item)
-                return cell
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: LikePostTableViewCell.identifier, for: indexPath) as! LikePostTableViewCell
+            cell.configureCell(myPost: item)
+            return cell
         }
         return dataSource
     }

@@ -13,6 +13,7 @@ class ProfilePostListView: BaseView {
         let tableView = UITableView()
         tableView.register(PostListTableViewCell.self, forCellReuseIdentifier: PostListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .none
         return tableView
     }()
     
