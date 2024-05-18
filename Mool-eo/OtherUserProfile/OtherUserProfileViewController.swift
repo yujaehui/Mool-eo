@@ -149,15 +149,9 @@ class OtherUserProfileViewController: BaseViewController {
                 }
                 return cell
             case .post(let post):
-                if post.files.isEmpty {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier, for: indexPath) as! PostListWithoutImageCollectionViewCell
-                    cell.configureCell(myPost: post)
-                    return cell
-                } else {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
-                    cell.configureCell(myPost: post)
-                    return cell
-                }
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
+                cell.configureCell(myPost: post)
+                return cell
             case .product(let product):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
                 cell.configureCell(item: product)
@@ -176,7 +170,7 @@ class OtherUserProfileViewController: BaseViewController {
             case UICollectionView.elementKindSectionHeader:
                 switch dataSource[indexPath.section].items[indexPath.item] {
                 case .post(let post):
-                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.identifier, for: indexPath) as! HeaderCollectionReusableView
                     headerView.headerLabel.text = dataSource[indexPath.section].title
                     headerView.seeMoreButton.rx.tap.bind(with: self) { owner, _ in
                         let vc = ProfilePostListViewController()
@@ -186,7 +180,7 @@ class OtherUserProfileViewController: BaseViewController {
                     }.disposed(by: headerView.disposeBag)
                     return headerView
                 default:
-                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProductCollectionReusableView.identifier, for: indexPath) as! ProductCollectionReusableView
+                    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.identifier, for: indexPath) as! HeaderCollectionReusableView
                     headerView.headerLabel.text = dataSource[indexPath.section].title
                     headerView.seeMoreButton.isHidden = true
                     return headerView

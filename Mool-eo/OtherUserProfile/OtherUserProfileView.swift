@@ -23,10 +23,9 @@ class OtherUserProfileView: BaseView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.register(OtherUserProfileCollectionViewCell.self, forCellWithReuseIdentifier: OtherUserProfileCollectionViewCell.identifier)
         collectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        collectionView.register(PostListWithoutImageCollectionViewCell.self, forCellWithReuseIdentifier: PostListWithoutImageCollectionViewCell.identifier)
         collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
         collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
-        collectionView.register(ProductCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductCollectionReusableView.identifier)
+        collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier)
         return collectionView
     }()
     

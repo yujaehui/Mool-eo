@@ -107,9 +107,10 @@ class ProductPostListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
-        output.productPostId.drive(with: self) { owner, value in
+        output.productPost.bind(with: self) { owner, value in
             let vc = ProductPostDetailViewController()
-            vc.postId = value
+            vc.postId = value.postId
+            vc.accessType = UserDefaultsManager.userId == value.creator.userId ? .me : .other
             vc.hidesBottomBarWhenPushed = true
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

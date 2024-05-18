@@ -111,7 +111,9 @@ class PostListCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureCell(myPost: PostModel) {
-        URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: myPost.files.first!)
+        if let firstFile = myPost.files.first {
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+        }        
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likePost.count)"

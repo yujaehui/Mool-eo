@@ -26,6 +26,7 @@ class PostDetailViewController: BaseViewController {
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
+    var accessType: postDetailAccessType = .me
     var postBoard: ProductIdentifier = .postBoard
     var postId: String = ""
     var userId: String = ""
@@ -73,6 +74,7 @@ class PostDetailViewController: BaseViewController {
         }
         let menu = UIMenu(title: "", children: items)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
+        navigationItem.rightBarButtonItem?.isHidden = accessType == .me ? false : true
     }
     
     override func bind() {
@@ -124,14 +126,6 @@ class PostDetailViewController: BaseViewController {
         output.postDetail.bind(with: self) { owner, value in
             owner.sections.onNext([PostDetailSectionModel(title: nil, items: [.post(value)])]
                                   + [PostDetailSectionModel(title: "댓글", items: value.comments.map { .comment($0) })])
-        }.disposed(by: disposeBag)
-        
-        // 자신의 게시물인지 확인
-        output.accessType.drive(with: self) { owner, value in
-            switch value {
-            case .me: owner.navigationItem.rightBarButtonItem?.isHidden = false
-            case .other: owner.navigationItem.rightBarButtonItem?.isHidden = true
-            }
         }.disposed(by: disposeBag)
         
         output.commentButtonValidation.drive(postDetailView.writeCommentView.commentUploadButton.rx.isEnabled).disposed(by: disposeBag)

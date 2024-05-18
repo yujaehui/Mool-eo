@@ -37,7 +37,6 @@ class PostDetailViewModel: ViewModelType {
         let textColorType: Driver<Bool>
         let postDetail: PublishSubject<PostModel>
         let editPostDetail: PublishSubject<PostModel>
-        let accessType: Driver<postDetailAccessType>
         let commentButtonValidation: Driver<Bool>
         let commentUploadSuccessTrigger: Driver<Void>
         let likeUploadSuccessTrigger: Driver<Void>
@@ -52,7 +51,6 @@ class PostDetailViewModel: ViewModelType {
         let textColorType = BehaviorRelay<Bool>(value: false)
         let postDetail = PublishSubject<PostModel>()
         let editPostDetail = PublishSubject<PostModel>()
-        let accessType = PublishSubject<postDetailAccessType>()
         let commentButtonValidation = PublishSubject<Bool>()
         let commentUploadSuccessTrigger = PublishSubject<Void>()
         let likeUploadSuccessTrigger = PublishSubject<Void>()
@@ -96,14 +94,7 @@ class PostDetailViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postModel):
-                    // 특정 게시글 조회
                     postDetail.onNext(postModel)
-                    // 자신의 게시글인지 확인
-                    if postModel.creator.userId == input.userId {
-                        accessType.onNext(.me)
-                    } else {
-                        accessType.onNext(.other)
-                    }
                 case .error(let error):
                     switch error {
                     case .networkFail: networkFail.onNext(())
@@ -223,7 +214,6 @@ class PostDetailViewModel: ViewModelType {
                       textColorType: textColorType.asDriver(),
                       postDetail: postDetail,
                       editPostDetail: editPostDetail,
-                      accessType: accessType.asDriver(onErrorJustReturn: .other),
                       commentButtonValidation: commentButtonValidation.asDriver(onErrorJustReturn: false),
                       commentUploadSuccessTrigger: commentUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),

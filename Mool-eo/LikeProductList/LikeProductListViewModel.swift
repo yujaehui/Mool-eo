@@ -37,7 +37,7 @@ class LikeProductListViewModel: ViewModelType {
         
         input.reload
             .flatMap { _ in
-                NetworkManager.shared.likeProdcutCheck(limit: "7", next: "")
+                NetworkManager.shared.likeProdcutCheck(limit: "15", next: "")
             }
             .subscribe(with: self) { owner, value in
                 switch value {
@@ -56,7 +56,7 @@ class LikeProductListViewModel: ViewModelType {
         
         prefetchObservable
             .bind(with: self) { owner, value in
-                guard value.0 == value.1 else { return }
+                guard value.0 >= value.1 - 1 else { return }
                 prefetch.onNext(())
             }.disposed(by: disposeBag)
         
@@ -64,7 +64,7 @@ class LikeProductListViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.likeProdcutCheck(limit: "7", next: next)
+                NetworkManager.shared.likeProdcutCheck(limit: "15", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in

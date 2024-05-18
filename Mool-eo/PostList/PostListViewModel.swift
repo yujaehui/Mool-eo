@@ -27,7 +27,7 @@ class PostListViewModel: ViewModelType {
         let postList: PublishSubject<PostListModel>
         let nextPostList: PublishSubject<PostListModel>
         let postWriteButtonTap: Driver<Void>
-        let post: Driver<String>
+        let post: PublishSubject<PostModel>
         let networkFail: Driver<Void>
     }
     
@@ -35,7 +35,7 @@ class PostListViewModel: ViewModelType {
         let postList = PublishSubject<PostListModel>()
         let nextPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
-        let post = PublishSubject<String>()
+        let post = PublishSubject<PostModel>()
         let networkFail = PublishSubject<Void>()
         
         // 게시글 조회 네트워크 통신 진행
@@ -85,7 +85,7 @@ class PostListViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
-            .map { $0.0.postId }
+            .map { $0.0 }
             .bind(with: self) { owner, value in
                 post.onNext(value)
             }.disposed(by: disposeBag)
@@ -93,7 +93,7 @@ class PostListViewModel: ViewModelType {
         return Output(postList: postList,
                       nextPostList: nextPostList,
                       postWriteButtonTap: input.postWriteButtonTap.asDriver(onErrorJustReturn: ()),
-                      post: post.asDriver(onErrorJustReturn: ""),
+                      post: post,
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

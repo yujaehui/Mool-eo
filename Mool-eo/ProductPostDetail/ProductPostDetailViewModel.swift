@@ -18,6 +18,7 @@ class ProductPostDetailViewModel: ViewModelType {
         let reload: BehaviorSubject<Void>
         let likeButtonTap: Observable<Void>
         let buyButtonTap: Observable<Void>
+        let deleteButtonTap: PublishSubject<Void>
         let postModel: PublishSubject<PostModel>
     }
     
@@ -26,6 +27,7 @@ class ProductPostDetailViewModel: ViewModelType {
         let networkFail: Driver<Void>
         let likeButtonTapResult: PublishSubject<Void>
         let buyButtonTapResult: PublishSubject<PostModel>
+        let deleteButtonTapResult: PublishSubject<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -33,6 +35,7 @@ class ProductPostDetailViewModel: ViewModelType {
         let networkFail = PublishSubject<Void>()
         let likeButtonTapResult = PublishSubject<Void>()
         let buyButtonTapResult = PublishSubject<PostModel>()
+        let deleteButtonTapResult = PublishSubject<Void>()
         
         input.reload
             .withLatestFrom(input.postId)
@@ -88,10 +91,28 @@ class ProductPostDetailViewModel: ViewModelType {
                 buyButtonTapResult.onNext(postModel)
             }.disposed(by: disposeBag)
         
+        input.deleteButtonTap
+            .withLatestFrom(input.postId)
+            .flatMap { postId in
+                NetworkManager.shared.postDelete(postId: postId)
+            }
+            .debug("특정 게시물 삭제")
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(_): deleteButtonTapResult.onNext(())
+                case .error(let error):
+                    switch error {
+                    case .networkFail: networkFail.onNext(())
+                    default: print("⚠️OTHER ERROR : \(error)⚠️")
+                    }
+                }
+            }.disposed(by: disposeBag)
+        
         
         return Output(postDetail: postDetail, 
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()),
                       likeButtonTapResult: likeButtonTapResult,
-                      buyButtonTapResult: buyButtonTapResult)
+                      buyButtonTapResult: buyButtonTapResult,
+                      deleteButtonTapResult: deleteButtonTapResult)
     }
 }

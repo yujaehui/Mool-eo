@@ -30,7 +30,7 @@ class ProductPostListViewModel: ViewModelType {
         let productPostList: PublishSubject<PostListModel>
         let nextProductPostList: PublishSubject<PostListModel>
         let postWriteButtonTap: Driver<Void>
-        let productPostId: Driver<String>
+        let productPost: PublishSubject<PostModel>
         let networkFail: Driver<Void>
         let selectedCategory: PublishSubject<String>
     }
@@ -39,7 +39,7 @@ class ProductPostListViewModel: ViewModelType {
         let productPostList = PublishSubject<PostListModel>()
         let nextProductPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
-        let productPostId = PublishSubject<String>()
+        let productPost = PublishSubject<PostModel>()
         let networkFail = PublishSubject<Void>()
         let selectedCategory = PublishSubject<String>()
         
@@ -108,15 +108,15 @@ class ProductPostListViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
-            .map { $0.0.postId }
+            .map { $0.0 }
             .bind(with: self) { owner, value in
-                productPostId.onNext(value)
+                productPost.onNext(value)
             }.disposed(by: disposeBag)
         
         return Output(productPostList: productPostList,
                       nextProductPostList: nextProductPostList,
                       postWriteButtonTap: input.postWriteButtonTap.asDriver(onErrorJustReturn: ()),
-                      productPostId: productPostId.asDriver(onErrorJustReturn: ""),
+                      productPost: productPost,
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()),
                       selectedCategory: selectedCategory)
     }

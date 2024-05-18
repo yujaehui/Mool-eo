@@ -1,5 +1,5 @@
 //
-//  ProductCollectionReusableView.swift
+//  HeaderCollectionReusableView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/14/24.
@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class ProductCollectionReusableView: BaseCollectionReusableView {
+class HeaderCollectionReusableView: BaseCollectionReusableView {
     
     var disposeBag = DisposeBag()
     

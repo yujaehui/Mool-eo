@@ -210,10 +210,12 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
                             self.imageSelectedSubject.onNext(self.imageSelected)
                             self.selectedImage.append(image)
                             self.selectedImageSubject.onNext(self.selectedImage)
-                        }
-                        if let imageData = image.pngData() {
-                            self.selectedImageData.append(imageData)
-                            self.selectedImageDataSubject.onNext(self.selectedImageData)
+                            
+                            // 이미지를 압축하여 이미지 데이터에 추가
+                            if let compressedImageData = self.compressImage(image, quality: 0.5) {
+                                self.selectedImageData.append(compressedImageData)
+                                self.selectedImageDataSubject.onNext(self.selectedImageData)
+                            }
                         }
                     }
                 }
@@ -221,4 +223,13 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
         }
         picker.dismiss(animated: true)
     }
+    
+    // 이미지 압축 메서드
+    func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
+        if let imageData = image.jpegData(compressionQuality: quality) {
+            return imageData
+        }
+        return nil
+    }
 }
+

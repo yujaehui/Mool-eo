@@ -27,7 +27,6 @@
 		09279A652BE2171F00E4A65D /* LikeProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A642BE2171F00E4A65D /* LikeProductListViewController.swift */; };
 		09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A662BE2172700E4A65D /* LikeProductListViewModel.swift */; };
 		09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */; };
-		093288FC2BEFBAFF00C8F52E /* LikeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093288FB2BEFBAFF00C8F52E /* LikeListView.swift */; };
 		093288FE2BEFBB0900C8F52E /* LikeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */; };
 		093289012BEFBB7200C8F52E /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 093289002BEFBB7200C8F52E /* Tabman */; };
 		093289042BEFBBD100C8F52E /* LikePostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289032BEFBBD100C8F52E /* LikePostListViewController.swift */; };
@@ -47,9 +46,8 @@
 		0932896B2BF2499E00C8F52E /* ProfileInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */; };
 		0932896D2BF249A400C8F52E /* ProfileProductSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932896C2BF249A400C8F52E /* ProfileProductSection.swift */; };
 		093289712BF3224700C8F52E /* BaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289702BF3224700C8F52E /* BaseCollectionReusableView.swift */; };
-		093289732BF3226D00C8F52E /* ProductCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */; };
+		093289732BF3226D00C8F52E /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289722BF3226D00C8F52E /* HeaderCollectionReusableView.swift */; };
 		0932897E2BF4EEF600C8F52E /* PostListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932897D2BF4EEF600C8F52E /* PostListCollectionViewCell.swift */; };
-		093289802BF4EF0600C8F52E /* PostListWithoutImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932897F2BF4EF0600C8F52E /* PostListWithoutImageCollectionViewCell.swift */; };
 		093289822BF4F04700C8F52E /* ProfilePostSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289812BF4F04700C8F52E /* ProfilePostSection.swift */; };
 		093289842BF6050700C8F52E /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289832BF6050700C8F52E /* ProfileCollectionViewCell.swift */; };
 		093289892BF60B5700C8F52E /* ProfilePostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289882BF60B5700C8F52E /* ProfilePostListView.swift */; };
@@ -223,7 +221,6 @@
 		09279A642BE2171F00E4A65D /* LikeProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductListViewController.swift; sourceTree = "<group>"; };
 		09279A662BE2172700E4A65D /* LikeProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProductListViewModel.swift; sourceTree = "<group>"; };
 		09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		093288FB2BEFBAFF00C8F52E /* LikeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListView.swift; sourceTree = "<group>"; };
 		093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListViewController.swift; sourceTree = "<group>"; };
 		093289032BEFBBD100C8F52E /* LikePostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostListViewController.swift; sourceTree = "<group>"; };
 		093289052BEFBBDB00C8F52E /* LikePostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostListView.swift; sourceTree = "<group>"; };
@@ -242,9 +239,8 @@
 		0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoSection.swift; sourceTree = "<group>"; };
 		0932896C2BF249A400C8F52E /* ProfileProductSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProductSection.swift; sourceTree = "<group>"; };
 		093289702BF3224700C8F52E /* BaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionReusableView.swift; sourceTree = "<group>"; };
-		093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionReusableView.swift; sourceTree = "<group>"; };
+		093289722BF3226D00C8F52E /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		0932897D2BF4EEF600C8F52E /* PostListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListCollectionViewCell.swift; sourceTree = "<group>"; };
-		0932897F2BF4EF0600C8F52E /* PostListWithoutImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithoutImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		093289812BF4F04700C8F52E /* ProfilePostSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostSection.swift; sourceTree = "<group>"; };
 		093289832BF6050700C8F52E /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		093289882BF60B5700C8F52E /* ProfilePostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostListView.swift; sourceTree = "<group>"; };
@@ -495,7 +491,6 @@
 			isa = PBXGroup;
 			children = (
 				093289C02BF72CD500C8F52E /* EmptyView.swift */,
-				093288FB2BEFBAFF00C8F52E /* LikeListView.swift */,
 				093288FD2BEFBB0900C8F52E /* LikeListViewController.swift */,
 				0987A7D12BE6B0F90045D361 /* LikeListSectionModel.swift */,
 			);
@@ -558,7 +553,6 @@
 			children = (
 				093289832BF6050700C8F52E /* ProfileCollectionViewCell.swift */,
 				0932897D2BF4EEF600C8F52E /* PostListCollectionViewCell.swift */,
-				0932897F2BF4EF0600C8F52E /* PostListWithoutImageCollectionViewCell.swift */,
 				09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */,
 				093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */,
 			);
@@ -568,7 +562,7 @@
 		093289862BF6093000C8F52E /* Header */ = {
 			isa = PBXGroup;
 			children = (
-				093289722BF3226D00C8F52E /* ProductCollectionReusableView.swift */,
+				093289722BF3226D00C8F52E /* HeaderCollectionReusableView.swift */,
 			);
 			path = Header;
 			sourceTree = "<group>";
@@ -1208,7 +1202,7 @@
 				093289932BF63BD700C8F52E /* EmptyCollectionViewCell.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
 				093289712BF3224700C8F52E /* BaseCollectionReusableView.swift in Sources */,
-				093289732BF3226D00C8F52E /* ProductCollectionReusableView.swift in Sources */,
+				093289732BF3226D00C8F52E /* HeaderCollectionReusableView.swift in Sources */,
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
 				0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */,
@@ -1272,7 +1266,6 @@
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
 				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */,
-				093289802BF4EF0600C8F52E /* PostListWithoutImageCollectionViewCell.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
 				09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */,
 				0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */,
@@ -1327,7 +1320,6 @@
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,
-				093288FC2BEFBAFF00C8F52E /* LikeListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

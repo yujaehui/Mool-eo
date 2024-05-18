@@ -23,9 +23,11 @@ class ProductPostDetailViewController: BaseViewController {
     let productPostDetailView = ProductPostDetailView()
     
     var postId: String = ""
+    var accessType: postDetailAccessType = .me
     
     var reload = BehaviorSubject(value: ())
     var postModel = PublishSubject<PostModel>()
+    var deleteButtonTap = PublishSubject<Void>()
     
     private var sections = BehaviorSubject<[ProductPostDetailSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
@@ -39,6 +41,20 @@ class ProductPostDetailViewController: BaseViewController {
         registerObserver()
     }
     
+    override func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
+        var items: [UIAction] {
+            let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
+                self.deleteButtonTap.onNext(())
+            })
+            let Items = [delete]
+            return Items
+        }
+        let menu = UIMenu(title: "", children: items)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
+        navigationItem.rightBarButtonItem?.isHidden = accessType == .me ? false : true
+    }
     
     override func configureView() {
         sections.bind(to: productPostDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
@@ -49,8 +65,9 @@ class ProductPostDetailViewController: BaseViewController {
         let reload = reload
         let likeButtonTap = productPostDetailView.likeButton.rx.tap.asObservable()
         let buyButtonTap = productPostDetailView.buyButton.rx.tap.asObservable()
+        let deleteButtonTap = deleteButtonTap
         let postModel = postModel
-        let input = ProductPostDetailViewModel.Input(postId: postId, reload: reload, likeButtonTap: likeButtonTap, buyButtonTap: buyButtonTap, postModel: postModel)
+        let input = ProductPostDetailViewModel.Input(postId: postId, reload: reload, likeButtonTap: likeButtonTap, buyButtonTap: buyButtonTap, deleteButtonTap: deleteButtonTap, postModel: postModel)
         
         let output = viewModel.transform(input: input)
         
@@ -71,6 +88,11 @@ class ProductPostDetailViewController: BaseViewController {
             let vc = ProductWebViewController()
             vc.postModel = postModel
             owner.present(vc, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.deleteButtonTapResult.bind(with: self) { owner, _ in
+            NotificationCenter.default.post(name: Notification.Name(Noti.changeProduct.rawValue), object: nil)
+            owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
     }
     
