@@ -1,16 +1,27 @@
 //
-//  OtherUserProfileView.swift
+//  ShoppingView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/2/24.
+//  Created by Jaehui Yu on 5/19/24.
 //
 
 import UIKit
-import SnapKit
 
-class OtherUserProfileView: BaseView {
+enum ShoppingSectionType: CaseIterable {
+    case payment
+    case empty
     
-    var sections: [ProfileSectionType] = [.info]
+    func makeSection() -> Section {
+        switch self {
+        case .payment: return PaymentSection()
+        case .empty: return EmptySection()
+        }
+    }
+}
+
+class ShoppingView: BaseView {
+    
+    var sections: [ShoppingSectionType] = [.empty]
     
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -21,9 +32,7 @@ class OtherUserProfileView: BaseView {
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.register(OtherUserProfileCollectionViewCell.self, forCellWithReuseIdentifier: OtherUserProfileCollectionViewCell.identifier)
-        collectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
+        collectionView.register(PaymentCollectionViewCell.self, forCellWithReuseIdentifier: PaymentCollectionViewCell.identifier)
         collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier)
         return collectionView

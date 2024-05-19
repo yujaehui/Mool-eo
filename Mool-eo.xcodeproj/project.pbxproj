@@ -151,6 +151,25 @@
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
 		09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */; };
 		09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikeModel.swift */; };
+		09790D602BF905C5004829D5 /* PaymentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D5F2BF905C5004829D5 /* PaymentSection.swift */; };
+		09790D622BF9060B004829D5 /* PaymentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D612BF9060B004829D5 /* PaymentCollectionViewCell.swift */; };
+		09790D652BF913FE004829D5 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D642BF913FE004829D5 /* MyViewController.swift */; };
+		09790D682BF9146D004829D5 /* ShoppingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D672BF9146D004829D5 /* ShoppingView.swift */; };
+		09790D6A2BF914A6004829D5 /* ShoppingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D692BF914A6004829D5 /* ShoppingViewController.swift */; };
+		09790D6C2BF914C7004829D5 /* ShoppingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D6B2BF914C7004829D5 /* ShoppingViewModel.swift */; };
+		09790D6E2BF9154F004829D5 /* ShoppingSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D6D2BF9154F004829D5 /* ShoppingSectionModel.swift */; };
+		09790D7C2BF9F618004829D5 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7B2BF9F618004829D5 /* ChatRoomView.swift */; };
+		09790D7E2BF9F620004829D5 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */; };
+		09790D802BF9F628004829D5 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */; };
+		09790D822BF9F692004829D5 /* MyChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */; };
+		09790D842BF9F6D8004829D5 /* OtherChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */; };
+		09790D862BF9FAAE004829D5 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D852BF9FAAE004829D5 /* ChatService.swift */; };
+		09790D892BF9FB55004829D5 /* ChatProduceQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D882BF9FB55004829D5 /* ChatProduceQuery.swift */; };
+		09790D8C2BF9FD27004829D5 /* ChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D8B2BF9FD26004829D5 /* ChatListModel.swift */; };
+		09790D8F2BFA03C9004829D5 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D8E2BFA03C9004829D5 /* ChatListView.swift */; };
+		09790D912BFA03D0004829D5 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D902BFA03D0004829D5 /* ChatListViewController.swift */; };
+		09790D932BFA03D6004829D5 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D922BFA03D6004829D5 /* ChatListViewModel.swift */; };
+		09790D952BFA042D004829D5 /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D942BFA042D004829D5 /* ChatListTableViewCell.swift */; };
 		0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A78A2BE351870045D361 /* OtherUserProfileView.swift */; };
 		0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A78C2BE351960045D361 /* OtherUserProfileViewController.swift */; };
 		0987A78F2BE352260045D361 /* OtherUserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A78E2BE352260045D361 /* OtherUserProfileViewModel.swift */; };
@@ -337,6 +356,25 @@
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostQuery.swift; sourceTree = "<group>"; };
 		09602BD32BDE565F00A6AFEA /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
+		09790D5F2BF905C5004829D5 /* PaymentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSection.swift; sourceTree = "<group>"; };
+		09790D612BF9060B004829D5 /* PaymentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCollectionViewCell.swift; sourceTree = "<group>"; };
+		09790D642BF913FE004829D5 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		09790D672BF9146D004829D5 /* ShoppingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingView.swift; sourceTree = "<group>"; };
+		09790D692BF914A6004829D5 /* ShoppingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewController.swift; sourceTree = "<group>"; };
+		09790D6B2BF914C7004829D5 /* ShoppingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewModel.swift; sourceTree = "<group>"; };
+		09790D6D2BF9154F004829D5 /* ShoppingSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingSectionModel.swift; sourceTree = "<group>"; };
+		09790D7B2BF9F618004829D5 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
+		09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
+		09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatTableViewCell.swift; sourceTree = "<group>"; };
+		09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherChatTableViewCell.swift; sourceTree = "<group>"; };
+		09790D852BF9FAAE004829D5 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		09790D882BF9FB55004829D5 /* ChatProduceQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProduceQuery.swift; sourceTree = "<group>"; };
+		09790D8B2BF9FD26004829D5 /* ChatListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListModel.swift; sourceTree = "<group>"; };
+		09790D8E2BFA03C9004829D5 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
+		09790D902BFA03D0004829D5 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
+		09790D922BFA03D6004829D5 /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
+		09790D942BFA042D004829D5 /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		0987A78A2BE351870045D361 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
 		0987A78C2BE351960045D361 /* OtherUserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileViewController.swift; sourceTree = "<group>"; };
 		0987A78E2BE352260045D361 /* OtherUserProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileViewModel.swift; sourceTree = "<group>"; };
@@ -457,6 +495,7 @@
 				09279A512BE1447100E4A65D /* ProfileService.swift */,
 				093289102BF0BE7300C8F52E /* PaymentService.swift */,
 				093289C22BF73E8700C8F52E /* HashtagService.swift */,
+				09790D852BF9FAAE004829D5 /* ChatService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -543,7 +582,6 @@
 				0932896A2BF2499E00C8F52E /* ProfileInfoSection.swift */,
 				093289812BF4F04700C8F52E /* ProfilePostSection.swift */,
 				0932896C2BF249A400C8F52E /* ProfileProductSection.swift */,
-				093289942BF63E3600C8F52E /* EmptySection.swift */,
 			);
 			path = Section;
 			sourceTree = "<group>";
@@ -554,17 +592,8 @@
 				093289832BF6050700C8F52E /* ProfileCollectionViewCell.swift */,
 				0932897D2BF4EEF600C8F52E /* PostListCollectionViewCell.swift */,
 				09444F9B2BEE363600086E20 /* ProductPostListCollectionViewCell.swift */,
-				093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		093289862BF6093000C8F52E /* Header */ = {
-			isa = PBXGroup;
-			children = (
-				093289722BF3226D00C8F52E /* HeaderCollectionReusableView.swift */,
-			);
-			path = Header;
 			sourceTree = "<group>";
 		};
 		093289872BF60B2E00C8F52E /* ProfilePostList */ = {
@@ -607,7 +636,6 @@
 		093E60C32BCF765F00970FAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				093289862BF6093000C8F52E /* Header */,
 				093289852BF6091400C8F52E /* Cell */,
 				093289692BF2498600C8F52E /* Section */,
 				093E60C42BCF766F00970FAC /* ProfileView.swift */,
@@ -695,6 +723,8 @@
 		094BEB5E2BC670BA00342DC3 /* Mool-eo */ = {
 			isa = PBXGroup;
 			children = (
+				09790D8D2BFA03B9004829D5 /* ChatList */,
+				09790D7A2BF9F60C004829D5 /* ChatRoom */,
 				09444F912BEE30A000086E20 /* ProductPostList */,
 				09444F922BEE30B000086E20 /* ProductPostDetail */,
 				09444FCC2BEF705F00086E20 /* ProductWeb */,
@@ -709,7 +739,9 @@
 				093288FA2BEFBAF000C8F52E /* LikeList */,
 				093289022BEFBBBD00C8F52E /* LikePostList */,
 				09279A612BE216FC00E4A65D /* LikeProductList */,
+				09790D632BF913E3004829D5 /* My */,
 				093E60C32BCF765F00970FAC /* Profile */,
+				09790D662BF91444004829D5 /* Shopping */,
 				093289872BF60B2E00C8F52E /* ProfilePostList */,
 				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				0987A7892BE351650045D361 /* OtherUserProfile */,
@@ -922,6 +954,85 @@
 			path = LikePost;
 			sourceTree = "<group>";
 		};
+		09790D632BF913E3004829D5 /* My */ = {
+			isa = PBXGroup;
+			children = (
+				093289722BF3226D00C8F52E /* HeaderCollectionReusableView.swift */,
+				093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */,
+				093289942BF63E3600C8F52E /* EmptySection.swift */,
+				09790D642BF913FE004829D5 /* MyViewController.swift */,
+			);
+			path = My;
+			sourceTree = "<group>";
+		};
+		09790D662BF91444004829D5 /* Shopping */ = {
+			isa = PBXGroup;
+			children = (
+				09790D6F2BF919C8004829D5 /* Cell */,
+				09790D702BF919D6004829D5 /* Section */,
+				09790D672BF9146D004829D5 /* ShoppingView.swift */,
+				09790D692BF914A6004829D5 /* ShoppingViewController.swift */,
+				09790D6B2BF914C7004829D5 /* ShoppingViewModel.swift */,
+				09790D6D2BF9154F004829D5 /* ShoppingSectionModel.swift */,
+			);
+			path = Shopping;
+			sourceTree = "<group>";
+		};
+		09790D6F2BF919C8004829D5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				09790D612BF9060B004829D5 /* PaymentCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		09790D702BF919D6004829D5 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				09790D5F2BF905C5004829D5 /* PaymentSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		09790D7A2BF9F60C004829D5 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				09790D7B2BF9F618004829D5 /* ChatRoomView.swift */,
+				09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */,
+				09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */,
+				09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */,
+				09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
+		09790D872BF9FB3E004829D5 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				09790D882BF9FB55004829D5 /* ChatProduceQuery.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		09790D8A2BF9FCEF004829D5 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				09790D8B2BF9FD26004829D5 /* ChatListModel.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		09790D8D2BFA03B9004829D5 /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				09790D8E2BFA03C9004829D5 /* ChatListView.swift */,
+				09790D942BFA042D004829D5 /* ChatListTableViewCell.swift */,
+				09790D902BFA03D0004829D5 /* ChatListViewController.swift */,
+				09790D922BFA03D6004829D5 /* ChatListViewModel.swift */,
+			);
+			path = ChatList;
+			sourceTree = "<group>";
+		};
 		0987A7892BE351650045D361 /* OtherUserProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -1001,6 +1112,7 @@
 				09279A592BE2029B00E4A65D /* LikeProduct */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
 				093289122BF0BEF100C8F52E /* Payment */,
+				09790D872BF9FB3E004829D5 /* Chat */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -1027,6 +1139,7 @@
 				0987A7972BE377FB0045D361 /* Follow */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
 				093289172BF0D5D900C8F52E /* Payment */,
+				09790D8A2BF9FCEF004829D5 /* Chat */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1150,12 +1263,14 @@
 				0987A7DA2BE766770045D361 /* LargePostImageView.swift in Sources */,
 				093289C32BF73E8700C8F52E /* HashtagService.swift in Sources */,
 				0932897E2BF4EEF600C8F52E /* PostListCollectionViewCell.swift in Sources */,
+				09790D952BFA042D004829D5 /* ChatListTableViewCell.swift in Sources */,
 				0932896D2BF249A400C8F52E /* ProfileProductSection.swift in Sources */,
 				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
+				09790D7E2BF9F620004829D5 /* ChatRoomViewController.swift in Sources */,
 				09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */,
 				09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */,
 				0999EB3A2BCBB004004B6D1F /* EmailQuery.swift in Sources */,
@@ -1176,9 +1291,11 @@
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
 				09279A502BE1426E00E4A65D /* CommentService.swift in Sources */,
 				0952A6EB2BD00A4100F71C76 /* AuthInterceptor.swift in Sources */,
+				09790D682BF9146D004829D5 /* ShoppingView.swift in Sources */,
 				09444FA42BEE3DC200086E20 /* WriteProductPostViewModel.swift in Sources */,
 				09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */,
 				09444FCE2BEF708C00086E20 /* ProductWebView.swift in Sources */,
+				09790D602BF905C5004829D5 /* PaymentSection.swift in Sources */,
 				093288FE2BEFBB0900C8F52E /* LikeListViewController.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
 				0987A78D2BE351960045D361 /* OtherUserProfileViewController.swift in Sources */,
@@ -1186,6 +1303,7 @@
 				093289042BEFBBD100C8F52E /* LikePostListViewController.swift in Sources */,
 				09279A652BE2171F00E4A65D /* LikeProductListViewController.swift in Sources */,
 				09444FB22BEE400300086E20 /* ProductImageSection.swift in Sources */,
+				09790D622BF9060B004829D5 /* PaymentCollectionViewCell.swift in Sources */,
 				0932896B2BF2499E00C8F52E /* ProfileInfoSection.swift in Sources */,
 				0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */,
 				093289292BF0E9CB00C8F52E /* ProdcutPostListTableViewCell.swift in Sources */,
@@ -1198,7 +1316,9 @@
 				09444FA82BEE3E6700086E20 /* ProductPostDetailViewController.swift in Sources */,
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				093289D52BF764B500C8F52E /* ProductCategoryViewModel.swift in Sources */,
+				09790D842BF9F6D8004829D5 /* OtherChatTableViewCell.swift in Sources */,
 				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
+				09790D652BF913FE004829D5 /* MyViewController.swift in Sources */,
 				093289932BF63BD700C8F52E /* EmptyCollectionViewCell.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,
 				093289712BF3224700C8F52E /* BaseCollectionReusableView.swift in Sources */,
@@ -1206,6 +1326,7 @@
 				0956798D2BC9383A0030F0CD /* LoginViewController.swift in Sources */,
 				0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */,
 				0952A6E72BD0095500F71C76 /* ProfileModel.swift in Sources */,
+				09790D7C2BF9F618004829D5 /* ChatRoomView.swift in Sources */,
 				095679912BC9501D0030F0CD /* UIButton.Configuration+Extension.swift in Sources */,
 				095678E22BC67AC90030F0CD /* FontStyle.swift in Sources */,
 				095678E62BC67B690030F0CD /* CustomLabel.swift in Sources */,
@@ -1225,8 +1346,12 @@
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
 				093E60C72BCF767F00970FAC /* ProfileViewController.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
+				09790D8C2BF9FD27004829D5 /* ChatListModel.swift in Sources */,
+				09790D6A2BF914A6004829D5 /* ShoppingViewController.swift in Sources */,
 				09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */,
 				095678ED2BC67E840030F0CD /* BaseView.swift in Sources */,
+				09790D932BFA03D6004829D5 /* ChatListViewModel.swift in Sources */,
+				09790D912BFA03D0004829D5 /* ChatListViewController.swift in Sources */,
 				093289E52BF77BE600C8F52E /* ProductCategorySection.swift in Sources */,
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
 				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
@@ -1235,6 +1360,7 @@
 				093289142BF0BF0900C8F52E /* PaymentQuery.swift in Sources */,
 				09602B622BD3BFCC00A6AFEA /* WritePostImageCollectionViewCell.swift in Sources */,
 				093289E72BF77C1700C8F52E /* ProductCategoryCollectionViewCell.swift in Sources */,
+				09790D8F2BFA03C9004829D5 /* ChatListView.swift in Sources */,
 				093E60D32BCFCBEC00970FAC /* LikePostTableViewCell.swift in Sources */,
 				0999EB0B2BCA97F3004B6D1F /* JoinViewModel.swift in Sources */,
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
@@ -1248,6 +1374,8 @@
 				09602BBC2BD76FF800A6AFEA /* WriteCommentView.swift in Sources */,
 				093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */,
 				09444F942BEE326600086E20 /* ProductPostListView.swift in Sources */,
+				09790D892BF9FB55004829D5 /* ChatProduceQuery.swift in Sources */,
+				09790D802BF9F628004829D5 /* ChatRoomViewModel.swift in Sources */,
 				09602B532BD3ABBA00A6AFEA /* FilesQuery.swift in Sources */,
 				0932891F2BF0DA7700C8F52E /* SettingView.swift in Sources */,
 				09279A342BDFA62C00E4A65D /* AutoResizableTextView.swift in Sources */,
@@ -1277,11 +1405,14 @@
 				09279A582BE14E9300E4A65D /* PostService.swift in Sources */,
 				09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */,
 				0999EB382BCBAF3E004B6D1F /* JoinQuery.swift in Sources */,
+				09790D6E2BF9154F004829D5 /* ShoppingSectionModel.swift in Sources */,
+				09790D822BF9F692004829D5 /* MyChatTableViewCell.swift in Sources */,
 				095678FD2BC6A8910030F0CD /* UITextField+Extension.swift in Sources */,
 				09602B692BD3E28200A6AFEA /* PostDetailViewController.swift in Sources */,
 				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
 				093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */,
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
+				09790D862BF9FAAE004829D5 /* ChatService.swift in Sources */,
 				09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */,
 				0987A7D22BE6B0F90045D361 /* LikeListSectionModel.swift in Sources */,
 				093289CC2BF7410500C8F52E /* HashtagManager.swift in Sources */,
@@ -1319,6 +1450,7 @@
 				093289212BF0DA8A00C8F52E /* SettingViewController.swift in Sources */,
 				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
+				09790D6C2BF914C7004829D5 /* ShoppingViewModel.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

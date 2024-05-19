@@ -36,9 +36,24 @@ class OtherUserProfileCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     let followButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("팔로우")
+        button.configuration = .check2("팔로우")
+        return button
+    }()
+    
+    let chatButton: UIButton = {
+        let button = UIButton()
+        button.configuration = .check2("채팅하기")
         return button
     }()
     
@@ -54,7 +69,9 @@ class OtherUserProfileCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(stackView)
         stackView.addArrangedSubview(nicknameLabel)
         stackView.addArrangedSubview(followLabel)
-        contentView.addSubview(followButton)
+        contentView.addSubview(buttonStackView)
+        buttonStackView.addArrangedSubview(followButton)
+        buttonStackView.addArrangedSubview(chatButton)
         contentView.addSubview(lineView)
     }
     
@@ -71,13 +88,14 @@ class OtherUserProfileCollectionViewCell: BaseCollectionViewCell {
             make.trailing.equalTo(contentView).inset(20)
         }
         
-        followButton.snp.makeConstraints { make in
-            make.centerY.equalTo(nicknameLabel.snp.centerY)
-            make.trailing.equalTo(contentView).inset(20)
+        buttonStackView.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView).inset(20)
+            make.height.equalTo(30)
         }
         
         lineView.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(20)
+            make.top.equalTo(buttonStackView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(5)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)

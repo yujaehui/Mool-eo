@@ -236,4 +236,14 @@ struct NetworkManager {
     func hashtag(hashtag: String, productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
         return requestGeneric(target: HashtagService.hashtag(hashtag: hashtag, productId: productId, limit: limit, next: next))
     }
+    
+    //MARK: - Chat
+    func chatProduce(query: ChatProduceQuery) -> Single<NetworkResult<ChatModel>> {
+        return requestGeneric(target: ChatService.chatProduce(query: query))
+    }
+    
+    func chatCheck() -> Single<NetworkResult<ChatListModel>> {
+        return requestGeneric(target: ChatService.chatCheck)
+    }
+    
 }

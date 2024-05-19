@@ -27,10 +27,13 @@ class ViewController: UITabBarController {
         let likeListVC = UINavigationController(rootViewController: LikeListViewController())
         likeListVC.tabBarItem = UITabBarItem(title: "좋아요", image: UIImage(systemName: "heart"), selectedImage: UIImage(systemName: "heart"))
         
-        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        let chatVC = UINavigationController(rootViewController: ChatListViewController())
+        chatVC.tabBarItem = UITabBarItem(title: "채팅", image: UIImage(systemName: "message"), selectedImage: UIImage(systemName: "message"))
+        
+        let profileVC = UINavigationController(rootViewController: MyViewController())
         profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person"))
         
-        self.viewControllers = [productPostListVC, postBoardVC, likeListVC, profileVC]
+        self.viewControllers = [productPostListVC, postBoardVC, likeListVC, chatVC, profileVC]
     }
 }
 

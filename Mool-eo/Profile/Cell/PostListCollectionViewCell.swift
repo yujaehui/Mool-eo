@@ -55,6 +55,10 @@ class PostListCollectionViewCell: BaseCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        postImageView.image = nil
+    }
+    
     override func configureHierarchy() {
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)

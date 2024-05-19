@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-enum SectionType: CaseIterable {
+enum ProfileSectionType: CaseIterable {
     case info
     case post
     case product
@@ -26,7 +26,7 @@ enum SectionType: CaseIterable {
 
 class ProfileView: BaseView {
     
-    var sections: [SectionType] = [.info]
+    var sections: [ProfileSectionType] = [.info]
     
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in

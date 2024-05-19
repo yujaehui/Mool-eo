@@ -137,16 +137,21 @@ class OtherUserProfileViewController: BaseViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherUserProfileCollectionViewCell.identifier, for: indexPath) as! OtherUserProfileCollectionViewCell
                 cell.configureCell(info)
                 if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {
-                    cell.followButton.configuration = .capsuleFill("팔로잉")
+                    cell.followButton.configuration = .check("팔로잉")
                     cell.followButton.rx.tap.bind(with: self) { owner, _ in
                         owner.followStatus.onNext(true)
                     }.disposed(by: cell.disposeBag)
                 } else {
-                    cell.followButton.configuration = .capsule("팔로우")
+                    cell.followButton.configuration = .check2("팔로우")
                     cell.followButton.rx.tap.bind(with: self) { owner, _ in
                         owner.followStatus.onNext(false)
                     }.disposed(by: cell.disposeBag)
                 }
+                cell.chatButton.rx.tap.bind(with: self) { owner, _ in
+                    let vc = ChatRoomViewController()
+                    vc.userId = info.user_id
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                }.disposed(by: cell.disposeBag)
                 return cell
             case .post(let post):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
