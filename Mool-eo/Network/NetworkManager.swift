@@ -238,12 +238,15 @@ struct NetworkManager {
     }
     
     //MARK: - Chat
-    func chatProduce(query: ChatProduceQuery) -> Single<NetworkResult<ChatModel>> {
+    func chatProduce(query: ChatProduceQuery) -> Single<NetworkResult<ChatRoomModel>> {
         return requestGeneric(target: ChatService.chatProduce(query: query))
     }
     
-    func chatCheck() -> Single<NetworkResult<ChatListModel>> {
-        return requestGeneric(target: ChatService.chatCheck)
+    func chatListCheck() -> Single<NetworkResult<ChatListModel>> {
+        return requestGeneric(target: ChatService.chatListCheck)
     }
     
+    func chatHistoryCheck(roomId: String, cursorDate: String) -> Single<NetworkResult<ChatHistoryModel>> {
+        return requestGeneric(target: ChatService.chatHistoryCheck(roomId: roomId, cursorDate: cursorDate))
+    }
 }

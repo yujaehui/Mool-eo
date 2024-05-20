@@ -9,7 +9,7 @@ import Foundation
 
 //MARK: - ChatListModel
 struct ChatListModel: Decodable {
-    let data: [ChatModel]
+    let data: [ChatRoomModel]
     
     enum CodingKeys: CodingKey {
         case data
@@ -17,12 +17,12 @@ struct ChatListModel: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.data = try container.decodeIfPresent([ChatModel].self, forKey: .data) ?? []
+        self.data = try container.decodeIfPresent([ChatRoomModel].self, forKey: .data) ?? []
     }
 }
 
 // MARK: - ChatModel
-struct ChatModel: Decodable {
+struct ChatRoomModel: Decodable {
     let roomID, createdAt, updatedAt: String
     let participants: [Sender]
     let lastChat: LastChat

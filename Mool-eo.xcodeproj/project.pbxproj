@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09138B312BFB34AC005C84B2 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 09138B302BFB34AC005C84B2 /* SocketIO */; };
+		09138B332BFB3521005C84B2 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B322BFB3521005C84B2 /* SocketIOManager.swift */; };
+		09138B352BFB39B8005C84B2 /* ChatHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B342BFB39B8005C84B2 /* ChatHistoryModel.swift */; };
+		09138B3C2BFB3E79005C84B2 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 09138B3B2BFB3E79005C84B2 /* Realm */; };
+		09138B3E2BFB3E79005C84B2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 09138B3D2BFB3E79005C84B2 /* RealmSwift */; };
 		0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */; };
 		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
@@ -224,6 +229,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09138B322BFB3521005C84B2 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
+		09138B342BFB39B8005C84B2 /* ChatHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryModel.swift; sourceTree = "<group>"; };
 		0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterManager.swift; sourceTree = "<group>"; };
 		09279A2F2BDF98C900E4A65D /* PostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
@@ -441,7 +448,10 @@
 				09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
+				09138B3C2BFB3E79005C84B2 /* Realm in Frameworks */,
+				09138B312BFB34AC005C84B2 /* SocketIO in Frameworks */,
 				09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */,
+				09138B3E2BFB3E79005C84B2 /* RealmSwift in Frameworks */,
 				0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */,
 				094BEB772BC672B000342DC3 /* RxSwift in Frameworks */,
 				09279A472BE1201800E4A65D /* Moya in Frameworks */,
@@ -453,6 +463,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09138B382BFB3E0B005C84B2 /* Socket */ = {
+			isa = PBXGroup;
+			children = (
+				09138B322BFB3521005C84B2 /* SocketIOManager.swift */,
+			);
+			path = Socket;
+			sourceTree = "<group>";
+		};
+		09138B392BFB3E21005C84B2 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		09279A2C2BDF89A200E4A65D /* JoinFirstStep */ = {
 			isa = PBXGroup;
 			children = (
@@ -746,6 +771,8 @@
 				0952A6FF2BD100A600F71C76 /* ProfileEdit */,
 				0987A7892BE351650045D361 /* OtherUserProfile */,
 				0932891B2BF0DA2E00C8F52E /* Setting */,
+				09138B392BFB3E21005C84B2 /* Realm */,
+				09138B382BFB3E0B005C84B2 /* Socket */,
 				0999EB292BCBAE4B004B6D1F /* Network */,
 				095678E72BC67E320030F0CD /* Base */,
 				095678F22BC67FF60030F0CD /* Protocol */,
@@ -1018,6 +1045,7 @@
 			isa = PBXGroup;
 			children = (
 				09790D8B2BF9FD26004829D5 /* ChatListModel.swift */,
+				09138B342BFB39B8005C84B2 /* ChatHistoryModel.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1188,6 +1216,9 @@
 				0987A7932BE356880045D361 /* RxGesture */,
 				09444F8E2BEE2F7D00086E20 /* iamport-ios */,
 				093289002BEFBB7200C8F52E /* Tabman */,
+				09138B302BFB34AC005C84B2 /* SocketIO */,
+				09138B3B2BFB3E79005C84B2 /* Realm */,
+				09138B3D2BFB3E79005C84B2 /* RealmSwift */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -1228,6 +1259,8 @@
 				0987A7922BE356880045D361 /* XCRemoteSwiftPackageReference "RxGesture" */,
 				09444F8D2BEE2F7D00086E20 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 				093288FF2BEFBB7200C8F52E /* XCRemoteSwiftPackageReference "Tabman" */,
+				09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
+				09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -1295,6 +1328,7 @@
 				09444FA42BEE3DC200086E20 /* WriteProductPostViewModel.swift in Sources */,
 				09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */,
 				09444FCE2BEF708C00086E20 /* ProductWebView.swift in Sources */,
+				09138B352BFB39B8005C84B2 /* ChatHistoryModel.swift in Sources */,
 				09790D602BF905C5004829D5 /* PaymentSection.swift in Sources */,
 				093288FE2BEFBB0900C8F52E /* LikeListViewController.swift in Sources */,
 				0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */,
@@ -1421,6 +1455,7 @@
 				0999EB522BCBC284004B6D1F /* RefreshModel.swift in Sources */,
 				095678FB2BC6A4120030F0CD /* WritePostViewController.swift in Sources */,
 				0932898F2BF62EE400C8F52E /* OtherUserProfileCollectionViewCell.swift in Sources */,
+				09138B332BFB3521005C84B2 /* SocketIOManager.swift in Sources */,
 				09444FBF2BEF46DA00086E20 /* ProductInfoTableViewCell.swift in Sources */,
 				093289062BEFBBDB00C8F52E /* LikePostListView.swift in Sources */,
 				0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */,
@@ -1686,6 +1721,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 16.1.0;
+			};
+		};
+		09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.47.0;
+			};
+		};
 		09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya.git";
@@ -1769,6 +1820,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		09138B302BFB34AC005C84B2 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			productName = SocketIO;
+		};
+		09138B3B2BFB3E79005C84B2 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		09138B3D2BFB3E79005C84B2 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		09279A442BE1201800E4A65D /* CombineMoya */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */;

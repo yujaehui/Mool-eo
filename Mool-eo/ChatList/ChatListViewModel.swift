@@ -17,15 +17,15 @@ class ChatListViewModel: ViewModelType {
     }
     
     struct Output {
-        let chatList: PublishSubject<[ChatModel]>
+        let chatList: PublishSubject<[ChatRoomModel]>
     }
     
     func transform(input: Input) -> Output {
-        let chatList = PublishSubject<[ChatModel]>()
+        let chatList = PublishSubject<[ChatRoomModel]>()
         
         input.reload
             .flatMap { _ in
-                NetworkManager.shared.chatCheck()
+                NetworkManager.shared.chatListCheck()
             }
             .debug("채탱 내역 조회")
             .subscribe(with: self) { owner, value in

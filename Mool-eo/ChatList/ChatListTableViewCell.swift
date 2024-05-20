@@ -70,7 +70,7 @@ class ChatListTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configureCell(_ chat: ChatModel) {
+    func configureCell(_ chat: ChatRoomModel) {
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: chat.participants[1].profileImage)
         nicknameLabel.text = chat.participants[1].nick
         lastChatLabel.text = chat.lastChat.content

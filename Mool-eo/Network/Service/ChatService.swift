@@ -11,7 +11,8 @@ import Moya
 
 enum ChatService {
     case chatProduce(query: ChatProduceQuery)
-    case chatCheck
+    case chatListCheck
+    case chatHistoryCheck(roomId: String, cursorDate: String)
 }
 
 extension ChatService: Moya.TargetType {
@@ -23,21 +24,27 @@ extension ChatService: Moya.TargetType {
     var path: String {
         switch self {
         case .chatProduce: "chats"
-        case .chatCheck: "chats"
+        case .chatListCheck: "chats"
+        case .chatHistoryCheck(let roomId, _): "chats/\(roomId)"
+        
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .chatProduce: .post
-        case .chatCheck: .get
+        case .chatListCheck: .get
+        case .chatHistoryCheck: .get
         }
     }
     
     var task: Task {
         switch self {
         case .chatProduce(let query): return .requestJSONEncodable(query)
-        case .chatCheck: return .requestPlain
+        case .chatListCheck: return .requestPlain
+        case .chatHistoryCheck(_, let cursorDate):
+            let param = ["cursor_date" : cursorDate]
+            return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
         }
     }
     
@@ -47,7 +54,10 @@ extension ChatService: Moya.TargetType {
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .chatCheck:
+        case .chatListCheck:
+            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
+        case .chatHistoryCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }

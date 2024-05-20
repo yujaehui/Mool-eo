@@ -40,12 +40,6 @@ class MyViewController: TabmanViewController {
     func setNav() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-    }
-    
-    @objc private func rightBarButtonTapped() {
-        print("Right bar button tapped")
     }
 }
 
