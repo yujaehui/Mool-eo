@@ -1,5 +1,5 @@
 //
-//  ProfilePostSection.swift
+//  OtherUserPostSection.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/15/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct ProfilePostSection: Section {
+struct OtherUserPostSection: Section {
     func layoutSection() -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

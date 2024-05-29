@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProductPostListCollectionViewCell: BaseCollectionViewCell {
+class ProductCollectionViewCell: BaseCollectionViewCell {
     
     let productImageView: PostImageView = {
         let imageView = PostImageView(frame: .zero)
@@ -48,7 +48,7 @@ class ProductPostListCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(productNameLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(contentView).inset(10)
             make.height.equalTo(20)
-            make.bottom.lessThanOrEqualTo(contentView)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
     }
     

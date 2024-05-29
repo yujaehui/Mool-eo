@@ -1,5 +1,5 @@
 //
-//  PostListCollectionViewCell.swift
+//  PostCollectionViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/15/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PostListCollectionViewCell: BaseCollectionViewCell {
+class PostCollectionViewCell: BaseCollectionViewCell {
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)

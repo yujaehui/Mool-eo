@@ -98,7 +98,7 @@ class LikeProductListViewController: BaseViewController {
     
     func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<LikeListSectionModel> {
         let dataSource = RxCollectionViewSectionedReloadDataSource<LikeListSectionModel> { dataSource, collectionView, indexPath, item in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.identifier, for: indexPath) as! ProductCollectionViewCell
             cell.configureCell(item: item)
             return cell
         }

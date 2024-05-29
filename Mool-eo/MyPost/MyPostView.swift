@@ -1,27 +1,27 @@
 //
-//  ShoppingView.swift
+//  MyPostView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/19/24.
+//  Created by Jaehui Yu on 5/27/24.
 //
 
 import UIKit
 
-enum ShoppingSectionType: CaseIterable {
-    case payment
+enum MyPostSectionType: CaseIterable {
+    case post
     case empty
     
     func makeSection() -> Section {
         switch self {
-        case .payment: return PaymentSection()
+        case .post: return PostSection()
         case .empty: return EmptySection()
         }
     }
 }
 
-class ShoppingView: BaseView {
+class MyPostView: BaseView {
     
-    var sections: [ShoppingSectionType] = [.empty]
+    var sections: [MyPostSectionType] = [.empty]
     
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -32,9 +32,8 @@ class ShoppingView: BaseView {
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.register(PaymentCollectionViewCell.self, forCellWithReuseIdentifier: PaymentCollectionViewCell.identifier)
+        collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
         collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
-        collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier)
         return collectionView
     }()
     

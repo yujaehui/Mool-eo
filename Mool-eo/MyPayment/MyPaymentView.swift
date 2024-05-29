@@ -1,32 +1,27 @@
 //
-//  ProfileView.swift
+//  MyPaymentView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/17/24.
+//  Created by Jaehui Yu on 5/19/24.
 //
 
 import UIKit
-import SnapKit
 
-enum ProfileSectionType: CaseIterable {
-    case info
-    case post
-    case product
+enum MyPaymentSectionType: CaseIterable {
+    case payment
     case empty
     
     func makeSection() -> Section {
         switch self {
-        case .info: return ProfileInfoSection()
-        case .post: return ProfilePostSection()
-        case .product: return ProfileProductSection()
+        case .payment: return PaymentSection()
         case .empty: return EmptySection()
         }
     }
 }
 
-class ProfileView: BaseView {
+class MyPaymentView: BaseView {
     
-    var sections: [ProfileSectionType] = [.info]
+    var sections: [MyPaymentSectionType] = [.empty]
     
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -37,11 +32,8 @@ class ProfileView: BaseView {
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: ProfileCollectionViewCell.identifier)
-        collectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        collectionView.register(ProductPostListCollectionViewCell.self, forCellWithReuseIdentifier: ProductPostListCollectionViewCell.identifier)
+        collectionView.register(PaymentCollectionViewCell.self, forCellWithReuseIdentifier: PaymentCollectionViewCell.identifier)
         collectionView.register(EmptyCollectionViewCell.self, forCellWithReuseIdentifier: EmptyCollectionViewCell.identifier)
-        collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier)
         return collectionView
     }()
     

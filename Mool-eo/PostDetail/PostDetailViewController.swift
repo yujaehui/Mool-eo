@@ -226,7 +226,7 @@ class PostDetailViewController: BaseViewController {
                                 vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
-                                let vc = ProfileViewController()
+                                let vc = MyViewController()
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             }
                         }.disposed(by: cell.disposeBag)
@@ -247,7 +247,7 @@ class PostDetailViewController: BaseViewController {
                                 vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
-                                let vc = ProfileViewController()
+                                let vc = MyViewController()
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             }
                         }.disposed(by: cell.disposeBag)
@@ -269,7 +269,7 @@ class PostDetailViewController: BaseViewController {
                             vc.userId = comment.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {
-                            let vc = ProfileViewController()
+                            let vc = MyViewController()
                             owner.navigationController?.pushViewController(vc, animated: true)
                         }
                     }.disposed(by: cell.disposeBag)

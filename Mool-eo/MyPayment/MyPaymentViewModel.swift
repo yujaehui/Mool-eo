@@ -1,5 +1,5 @@
 //
-//  ShoppingViewModel.swift
+//  MyPaymentViewModel.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/19/24.
@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ShoppingViewModel: ViewModelType {
+class MyPaymentViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {

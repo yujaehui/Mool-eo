@@ -154,11 +154,11 @@ class OtherUserProfileViewController: BaseViewController {
                 }.disposed(by: cell.disposeBag)
                 return cell
             case .post(let post):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
                 cell.configureCell(myPost: post)
                 return cell
             case .product(let product):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductPostListCollectionViewCell.identifier, for: indexPath) as! ProductPostListCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.identifier, for: indexPath) as! ProductCollectionViewCell
                 cell.configureCell(item: product)
                 return cell
             case .noPost:

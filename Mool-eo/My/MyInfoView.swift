@@ -1,18 +1,14 @@
 //
-//  ProfileCollectionViewCell.swift
+//  MyInfoView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/16/24.
+//  Created by Jaehui Yu on 5/27/24.
 //
 
 import UIKit
 import SnapKit
-import RxSwift
-import RxCocoa
 
-class ProfileCollectionViewCell: BaseCollectionViewCell {
-    
-    var disposeBag = DisposeBag()
+class MyInfoView: BaseView {
     
     let profileImageView = ProfileImageView(frame: .zero)
     
@@ -38,49 +34,36 @@ class ProfileCollectionViewCell: BaseCollectionViewCell {
     
     let profileEditButton: UIButton = {
         let button = UIButton()
-        button.configuration = .capsule("프로필 수정")
+        button.configuration = .check2("프로필 수정")
         return button
     }()
     
-    let lineView = LineView()
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        disposeBag = DisposeBag()
-    }
     
     override func configureHierarchy() {
-        contentView.addSubview(profileImageView)
-        contentView.addSubview(stackView)
+        addSubview(profileImageView)
+        addSubview(stackView)
         stackView.addArrangedSubview(nicknameLabel)
         stackView.addArrangedSubview(followLabel)
-        contentView.addSubview(profileEditButton)
-        contentView.addSubview(lineView)
+        addSubview(profileEditButton)
     }
     
     override func configureConstraints() {
         profileImageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(10)
-            make.leading.equalTo(contentView).inset(20)
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.size.equalTo(80)
         }
         
         stackView.snp.makeConstraints { make in
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.leading.equalTo(profileImageView.snp.trailing).offset(20)
-            make.trailing.equalTo(contentView).inset(20)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
         profileEditButton.snp.makeConstraints { make in
-            make.centerY.equalTo(nicknameLabel.snp.centerY)
-            make.trailing.equalTo(contentView).inset(20)
-        }
-        
-        lineView.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(5)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.top.equalTo(profileImageView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(30)
         }
     }
     

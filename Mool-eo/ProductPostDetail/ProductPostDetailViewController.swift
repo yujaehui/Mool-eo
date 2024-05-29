@@ -114,7 +114,7 @@ class ProductPostDetailViewController: BaseViewController {
                             vc.userId = postModel.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {
-                            let vc = ProfileViewController()
+                            let vc = MyViewController()
                             owner.navigationController?.pushViewController(vc, animated: true)
                         }
                     }.disposed(by: cell.disposeBag)
