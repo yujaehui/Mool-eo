@@ -1,15 +1,15 @@
 //
-//  WriteCommentView.swift
+//  WriteTextView.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/23/24.
+//  Created by Jaehui Yu on 5/30/24.
 //
 
 import UIKit
 import SnapKit
 
-class WriteCommentView: BaseView {
-    let commentTextView: AutoResizableTextView = {
+class WriteTextView: BaseView {
+    let wirteTextView: AutoResizableTextView = {
         let textView = AutoResizableTextView(maxHeight: 120)
         textView.font = FontStyle.content
         textView.backgroundColor = ColorStyle.subBackground
@@ -19,7 +19,7 @@ class WriteCommentView: BaseView {
         return textView
     }()
     
-    let commentUploadButton: UIButton = {
+    let textUploadButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "paperplane"), for: .normal)
         button.tintColor = ColorStyle.point
@@ -27,18 +27,18 @@ class WriteCommentView: BaseView {
     }()
     
     override func configureHierarchy() {
-        addSubview(commentTextView)
-        addSubview(commentUploadButton)
+        addSubview(wirteTextView)
+        addSubview(textUploadButton)
     }
     
     override func configureConstraints() {
-        commentTextView.snp.makeConstraints { make in
+        wirteTextView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
-        commentUploadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(commentTextView.snp.trailing).inset(5)
-            make.bottom.equalTo(commentTextView.snp.bottom).inset(5)
+        textUploadButton.snp.makeConstraints { make in
+            make.trailing.equalTo(wirteTextView.snp.trailing).inset(5)
+            make.bottom.equalTo(wirteTextView.snp.bottom).inset(5)
             make.size.equalTo(25)
         }
     }

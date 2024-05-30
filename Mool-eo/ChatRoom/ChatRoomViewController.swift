@@ -14,7 +14,9 @@ class ChatRoomViewController: BaseViewController {
     let viewModel = ChatRoomViewModel()
     let chatRoomView = ChatRoomView()
     
+    var reload = BehaviorSubject<Void>(value: ())
     var userId: String = ""
+    var roomId = PublishSubject<String>()
     
     override func loadView() {
         self.view = chatRoomView
@@ -30,11 +32,14 @@ class ChatRoomViewController: BaseViewController {
     
     override func bind() {
         let userId = Observable.just(userId)
-        let intput = ChatRoomViewModel.Input(userId: userId)
+        let roomId = roomId
+        let newChat = chatRoomView.wirteTextView.wirteTextView.rx.text.orEmpty.asObservable()
+        let newChatUploadButtonTap = chatRoomView.wirteTextView.textUploadButton.rx.tap.asObservable()
+        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap)
         
         let output = viewModel.transform(input: intput)
-        output.chatProduceSuccessTrigger.bind(with: self) { owner, _ in
-            print("채팅방 생성 성공")
+        output.chatProduceSuccessTrigger.bind(with: self) { owner, value in
+            owner.roomId.onNext(value.roomID)
         }.disposed(by: disposeBag)
     }
 }

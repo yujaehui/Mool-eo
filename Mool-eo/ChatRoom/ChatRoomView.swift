@@ -18,27 +18,22 @@ class ChatRoomView: BaseView {
         return tableView
     }()
     
-    let chatTextField: UITextField = {
-        let textField = UITextField()
-        textField.backgroundColor = ColorStyle.subBackground
-        return textField
-    }()
+    let wirteTextView = WriteTextView()
     
     override func configureHierarchy() {
         addSubview(tableView)
-        addSubview(chatTextField)
+        addSubview(wirteTextView)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(chatTextField.snp.top).offset(-10)
+            make.bottom.equalTo(wirteTextView.snp.top).offset(-10)
         }
         
-        chatTextField.snp.makeConstraints { make in
+        wirteTextView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(30)
         }
     }
 }

@@ -15,26 +15,40 @@ import Kingfisher
 enum ProductIdentifier: String {
     case market = "Mool-eo! Market"
     case postBoard = "Mool-eo! PostBoard"
-    
 }
 
-class ProductPostListViewController: BaseViewController {
+enum Category: String, CaseIterable {
+    case all = "전체"
+    case feed = "사료 및 간식"
+    case clothing = "의류 및 액세서리"
+    case house = "하우스 및 운송"
+    case toy = "장난감"
+    case training = "훈련 및 행동"
+    case insectRepellent = "방충 및 방역"
+    case toiletries = "배변용품"
+    case beautySupplies = "미용용품"
+    case tableware = "식기 및 급수"
+    case etc = "기타"
+}
+
+final class ProductPostListViewController: BaseViewController {
     
     deinit {
         print("‼️ProductPostListViewController Deinit‼️")
     }
     
-    let viewModel = ProductPostListViewModel()
-    let productPostListView = ProductPostListView()
+    private let viewModel = ProductPostListViewModel()
+    private let productPostListView = ProductPostListView()
     
-    private let reload = BehaviorSubject<(ProductIdentifier, String)>(value: (.market, "전체"))
-    private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
+    private let reload = BehaviorSubject<ProductIdentifier>(value: (.market))
     private let lastItem = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
     
-    let category = BehaviorSubject<String>(value: "전체")
-    let categoryList = Observable.just(["전체", "사료 및 간식", "의류 및 액세서리", "건강 관리", "하우스 및 운송", "장난감", "훈련 및 행동", "방충 및 방역", "배변용품", "미용용품", "식기 및 급수", "기타"])
+    private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
+    
+    private let category = BehaviorSubject<String>(value: Category.allCases[0].rawValue)
+    private let categoryList = Observable.just(Category.allCases.map { $0.rawValue })
     
     override func loadView() {
         self.view = productPostListView
@@ -44,10 +58,8 @@ class ProductPostListViewController: BaseViewController {
         super.viewDidLoad()
         registerObserver()
     }
-
     
     override func setNav() {
-//        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Mool-eo!"
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
@@ -106,7 +118,6 @@ class ProductPostListViewController: BaseViewController {
             owner.present(nav, animated: true)
         }.disposed(by: disposeBag)
         
-        // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
         output.productPost.bind(with: self) { owner, value in
             let vc = ProductPostDetailViewController()
             vc.postId = value.postId
@@ -121,7 +132,7 @@ class ProductPostListViewController: BaseViewController {
         
         output.selectedCategory.bind(with: self) { owner, value in
             owner.category.onNext(value)
-            owner.reload.onNext((ProductIdentifier.market, value))
+            owner.reload.onNext(ProductIdentifier.market)
         }.disposed(by: disposeBag)
     }
     
@@ -142,7 +153,7 @@ class ProductPostListViewController: BaseViewController {
         .merge()
         .take(until: self.rx.deallocated)
         .subscribe(with: self) { owner, noti in
-            owner.reload.onNext((ProductIdentifier.market, "전체"))
+            owner.reload.onNext(ProductIdentifier.market)
         }
         .disposed(by: disposeBag)
     }

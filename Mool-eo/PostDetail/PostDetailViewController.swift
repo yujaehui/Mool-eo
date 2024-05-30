@@ -84,13 +84,13 @@ class PostDetailViewController: BaseViewController {
             didScroll: postDetailView.tableView.rx.didScroll.asObservable(),
             keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
             keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
-            textViewBegin: postDetailView.writeCommentView.commentTextView.rx.didBeginEditing.asObservable(),
-            textViewEnd: postDetailView.writeCommentView.commentTextView.rx.didEndEditing.asObservable(),
+            textViewBegin: postDetailView.writeCommentView.wirteTextView.rx.didBeginEditing.asObservable(),
+            textViewEnd: postDetailView.writeCommentView.wirteTextView.rx.didEndEditing.asObservable(),
             postId: Observable.just(postId),
             userId: userId,
             reload: reload,
-            comment: postDetailView.writeCommentView.commentTextView.rx.text.orEmpty.asObservable(),
-            commentUploadButtonTap: postDetailView.writeCommentView.commentUploadButton.rx.tap.asObservable(),
+            comment: postDetailView.writeCommentView.wirteTextView.rx.text.orEmpty.asObservable(),
+            commentUploadButtonTap: postDetailView.writeCommentView.textUploadButton.rx.tap.asObservable(),
             likeStatus: likeStatus,
             postEditButtonTap: editButtonTap,
             postDeleteButtonTap: deleteButtonTap,
@@ -117,9 +117,9 @@ class PostDetailViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         // 텍스트뷰 placeholder 작업
-        output.text.drive(postDetailView.writeCommentView.commentTextView.rx.text).disposed(by: disposeBag)
+        output.text.drive(postDetailView.writeCommentView.wirteTextView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
-            owner.postDetailView.writeCommentView.commentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+            owner.postDetailView.writeCommentView.wirteTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         
         // 특정 게시글 조회가 성공할 경우
@@ -128,11 +128,11 @@ class PostDetailViewController: BaseViewController {
                                   + [PostDetailSectionModel(title: "댓글", items: value.comments.map { .comment($0) })])
         }.disposed(by: disposeBag)
         
-        output.commentButtonValidation.drive(postDetailView.writeCommentView.commentUploadButton.rx.isEnabled).disposed(by: disposeBag)
+        output.commentButtonValidation.drive(postDetailView.writeCommentView.textUploadButton.rx.isEnabled).disposed(by: disposeBag)
         
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.postDetailView.writeCommentView.commentTextView.text = ""
+            owner.postDetailView.writeCommentView.wirteTextView.text = ""
             owner.change = true
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)

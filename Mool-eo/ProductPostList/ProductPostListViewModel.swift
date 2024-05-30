@@ -14,7 +14,7 @@ class ProductPostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let reload: BehaviorSubject<(ProductIdentifier, String)>
+        let reload: BehaviorSubject<(ProductIdentifier)>
         let postWriteButtonTap: Observable<Void>
         let category: BehaviorSubject<String>
         let categoryModelSelected: Observable<String>
@@ -51,6 +51,9 @@ class ProductPostListViewModel: ViewModelType {
         
         // 게시글 조회 네트워크 통신 진행
         input.reload
+            .withLatestFrom(input.category) { productId, category in
+                return (productId, category)
+            }
             .flatMap { value in
                 if value.1 == "전체" {
                     NetworkManager.shared.postCheck(productId: value.0.rawValue, limit: "12", next: "")

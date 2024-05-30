@@ -32,11 +32,19 @@ class ChatListViewController: BaseViewController {
     
     override func bind() {
         let reload = reload
-        let input = ChatListViewModel.Input(reload: reload)
+        let modelSelected = chatListView.tableView.rx.modelSelected(ChatListModel.self).asObservable()
+        let itemSelected = chatListView.tableView.rx.itemSelected.asObservable()
+        let input = ChatListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         output.chatList.bind(to: chatListView.tableView.rx.items(cellIdentifier: ChatListTableViewCell.identifier, cellType: ChatListTableViewCell.self)) { (row, element, cell) in
             cell.configureCell(element)
+        }.disposed(by: disposeBag)
+        
+        output.selectedChatRoom.bind(with: self) { owner, value in
+            let vc = ChatRoomViewController()
+            vc.hidesBottomBarWhenPushed = true
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
 
     }

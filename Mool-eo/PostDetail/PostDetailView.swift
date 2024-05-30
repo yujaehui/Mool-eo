@@ -20,7 +20,7 @@ class PostDetailView: BaseView {
         return tableView
     }()
     
-    let writeCommentView = WriteCommentView()
+    let writeCommentView = WriteTextView()
     
     override func configureHierarchy() {
         addSubview(tableView)

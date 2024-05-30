@@ -24,8 +24,8 @@ struct ChatListModel: Decodable {
 // MARK: - ChatModel
 struct ChatRoomModel: Decodable {
     let roomID, createdAt, updatedAt: String
-    let participants: [Sender]
-    let lastChat: LastChat
+    let participants: [SenderModel]
+    let lastChat: LastChatModel
 
     enum CodingKeys: String, CodingKey {
         case roomID = "room_id"
@@ -37,15 +37,15 @@ struct ChatRoomModel: Decodable {
         self.roomID = try container.decodeIfPresent(String.self, forKey: .roomID) ?? ""
         self.createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt) ?? ""
         self.updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt) ?? ""
-        self.participants = try container.decodeIfPresent([Sender].self, forKey: .participants) ?? []
-        self.lastChat = try container.decodeIfPresent(LastChat.self, forKey: .lastChat) ?? LastChat(from: decoder)
+        self.participants = try container.decodeIfPresent([SenderModel].self, forKey: .participants) ?? []
+        self.lastChat = try container.decodeIfPresent(LastChatModel.self, forKey: .lastChat) ?? LastChatModel(from: decoder)
     }
 }
 
-// MARK: - LastChat
-struct LastChat: Decodable {
+// MARK: - LastChatModel
+struct LastChatModel: Decodable {
     let chatID, roomID, content, createdAt: String
-    let sender: Sender
+    let sender: SenderModel
     let files: [String]
 
     enum CodingKeys: String, CodingKey {
@@ -60,13 +60,13 @@ struct LastChat: Decodable {
         self.roomID = try container.decodeIfPresent(String.self, forKey: .roomID) ?? ""
         self.content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
         self.createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt) ?? ""
-        self.sender = try container.decodeIfPresent(Sender.self, forKey: .sender) ?? Sender(from: decoder)
+        self.sender = try container.decodeIfPresent(SenderModel.self, forKey: .sender) ?? SenderModel(from: decoder)
         self.files = try container.decodeIfPresent([String].self, forKey: .files) ?? []
     }
 }
 
-// MARK: - Sender
-struct Sender: Decodable {
+// MARK: - SenderModel
+struct SenderModel: Decodable {
     let userID, nick: String
     let profileImage: String
 

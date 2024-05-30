@@ -24,7 +24,7 @@ struct ChatHistoryModel: Decodable {
 // MARK: - Datum
 struct ChatModel: Decodable {
     let chatID, roomID, content, createdAt: String
-    let sender: Sender
+    let sender: SenderModel
     let files: [String]
 
     enum CodingKeys: String, CodingKey {
@@ -39,7 +39,7 @@ struct ChatModel: Decodable {
         self.roomID = try container.decodeIfPresent(String.self, forKey: .roomID) ?? ""
         self.content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
         self.createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt) ?? ""
-        self.sender = try container.decodeIfPresent(Sender.self, forKey: .sender) ?? Sender(from: decoder)
+        self.sender = try container.decodeIfPresent(SenderModel.self, forKey: .sender) ?? SenderModel(from: decoder)
         self.files = try container.decodeIfPresent([String].self, forKey: .files) ?? []
     }
 }

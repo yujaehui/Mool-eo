@@ -14,14 +14,18 @@ class ChatListViewModel: ViewModelType {
     
     struct Input {
         let reload: BehaviorSubject<Void>
+        let modelSelected: Observable<ChatListModel>
+        let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
         let chatList: PublishSubject<[ChatRoomModel]>
+        let selectedChatRoom: PublishSubject<ChatListModel>
     }
     
     func transform(input: Input) -> Output {
         let chatList = PublishSubject<[ChatRoomModel]>()
+        let selectedChatRoom = PublishSubject<ChatListModel>()
         
         input.reload
             .flatMap { _ in
@@ -35,6 +39,12 @@ class ChatListViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(chatList: chatList)
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .map { $0.0 }
+            .bind(with: self) { owner, value in
+                selectedChatRoom.onNext(value)
+            }.disposed(by: disposeBag)
+        
+        return Output(chatList: chatList, selectedChatRoom: selectedChatRoom)
     }
 }
