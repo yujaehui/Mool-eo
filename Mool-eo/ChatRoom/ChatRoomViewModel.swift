@@ -9,8 +9,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ChatRoomViewModel: ViewModelType {
+final class ChatRoomViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
+    let repository = ChatRepository()
     
     struct Input {
         let userId: Observable<String>
@@ -53,10 +54,14 @@ class ChatRoomViewModel: ViewModelType {
             .flatMap { (query, roomId) in
                 NetworkManager.shared.chatSend(query: query, roomId: roomId)
             }
+            .debug("채팅 발송")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let chatModel):
                     print(chatModel)
+                    let sender = Sender(user_id: chatModel.sender.userID, nick: chatModel.sender.nick, profileImage: chatModel.sender.profileImage)
+                    let data = Chat(chat_id: chatModel.chatID, room_id: chatModel.roomID, content: chatModel.content, createdAt: chatModel.createdAt, sender: sender, filesArray: chatModel.files)
+                    owner.repository.createChat(data)
                 case .error(let error):
                     print(error)
                 }

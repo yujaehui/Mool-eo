@@ -13,6 +13,7 @@ final class ChatRepository {
     
     // MARK: - Create
     func createChat(_ data: Chat) {
+        print(realm.configuration.fileURL)
         do {
             try realm.write {
                 realm.add(data)

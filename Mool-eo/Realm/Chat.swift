@@ -13,8 +13,8 @@ final class Chat: Object {
     @Persisted var chat_id: String
     @Persisted var room_id: String
     @Persisted var content: String
-    @Persisted var createdAt: Date
-    @Persisted var sender: Sender
+    @Persisted var createdAt: String
+    @Persisted var sender: Sender?
     @Persisted var files: List<String>
     var filesArray: [String] {
         get {
@@ -25,7 +25,7 @@ final class Chat: Object {
         }
     }
     
-    convenience init(chat_id: String, room_id: String, content: String, createdAt: Date, sender: Sender, filesArrar: [String]) {
+    convenience init(chat_id: String, room_id: String, content: String, createdAt: String, sender: Sender, filesArray: [String]) {
         self.init()
         self.chat_id = chat_id
         self.room_id = room_id
@@ -36,8 +36,7 @@ final class Chat: Object {
     }
 }
 
-final class Sender: Object {
-    @Persisted(primaryKey: true) var pk: ObjectId
+final class Sender: EmbeddedObject {
     @Persisted var user_id: String
     @Persisted var nick: String
     @Persisted var profileImage: String
