@@ -32,6 +32,9 @@
 		09138B792C086424005C84B2 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B782C086424005C84B2 /* ChatRepository.swift */; };
 		09138B802C086601005C84B2 /* WriteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B7F2C086601005C84B2 /* WriteTextView.swift */; };
 		09138B822C0867B4005C84B2 /* ChatSendQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B812C0867B4005C84B2 /* ChatSendQuery.swift */; };
+		09138B842C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B832C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift */; };
+		09138B862C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */; };
+		09138B882C0AE61A005C84B2 /* ChatRoomSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */; };
 		0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */; };
 		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
@@ -262,6 +265,9 @@
 		09138B782C086424005C84B2 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
 		09138B7F2C086601005C84B2 /* WriteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteTextView.swift; sourceTree = "<group>"; };
 		09138B812C0867B4005C84B2 /* ChatSendQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSendQuery.swift; sourceTree = "<group>"; };
+		09138B832C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatImageTableViewCell.swift; sourceTree = "<group>"; };
+		09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherChatImageTableViewCell.swift; sourceTree = "<group>"; };
+		09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomSectionModel.swift; sourceTree = "<group>"; };
 		0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterManager.swift; sourceTree = "<group>"; };
 		09279A2F2BDF98C900E4A65D /* PostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
@@ -1089,9 +1095,12 @@
 			children = (
 				09790D7B2BF9F618004829D5 /* ChatRoomView.swift */,
 				09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */,
+				09138B832C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift */,
 				09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */,
+				09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */,
 				09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */,
 				09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */,
+				09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -1379,6 +1388,7 @@
 				09138B542C045AD2005C84B2 /* MyProductViewController.swift in Sources */,
 				09279A522BE1447100E4A65D /* ProfileService.swift in Sources */,
 				09279A562BE14B2800E4A65D /* LikePostService.swift in Sources */,
+				09138B862C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift in Sources */,
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
@@ -1444,6 +1454,7 @@
 				0999EB502BCBC27C004B6D1F /* WithdrawModel.swift in Sources */,
 				095678E92BC67E3A0030F0CD /* BaseViewController.swift in Sources */,
 				09602B482BD3A5D300A6AFEA /* PostListView.swift in Sources */,
+				09138B882C0AE61A005C84B2 /* ChatRoomSectionModel.swift in Sources */,
 				0999EB362BCBAF35004B6D1F /* LoginQuery.swift in Sources */,
 				0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */,
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
@@ -1519,6 +1530,7 @@
 				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
 				093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */,
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
+				09138B842C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift in Sources */,
 				09790D862BF9FAAE004829D5 /* ChatService.swift in Sources */,
 				09279A672BE2172700E4A65D /* LikeProductListViewModel.swift in Sources */,
 				0987A7D22BE6B0F90045D361 /* LikeListSectionModel.swift in Sources */,

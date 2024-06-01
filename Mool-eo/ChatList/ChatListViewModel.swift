@@ -14,18 +14,18 @@ class ChatListViewModel: ViewModelType {
     
     struct Input {
         let reload: BehaviorSubject<Void>
-        let modelSelected: Observable<ChatListModel>
+        let modelSelected: Observable<ChatRoomModel>
         let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
         let chatList: PublishSubject<[ChatRoomModel]>
-        let selectedChatRoom: PublishSubject<ChatListModel>
+        let selectedChatRoom: PublishSubject<ChatRoomModel>
     }
     
     func transform(input: Input) -> Output {
         let chatList = PublishSubject<[ChatRoomModel]>()
-        let selectedChatRoom = PublishSubject<ChatListModel>()
+        let selectedChatRoom = PublishSubject<ChatRoomModel>()
         
         input.reload
             .flatMap { _ in

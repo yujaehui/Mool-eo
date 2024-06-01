@@ -28,4 +28,9 @@ final class ChatRepository {
         let result = realm.objects(Chat.self).where { $0.room_id == room_id }
         return Array(result)
     }
+    
+    func fetchLatestChatByRoom(_ room_id: String) -> Chat? {
+        let result = realm.objects(Chat.self).where { $0.room_id == room_id }.last
+        return result
+    }
 }
