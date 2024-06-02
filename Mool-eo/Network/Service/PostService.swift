@@ -27,13 +27,13 @@ extension PostService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .imageUpload: "posts/files"
-        case .postUpload: "posts"
-        case .postCheck: "posts"
-        case .postCheckSpecific(let postId): "posts/\(postId)"
-        case .postCheckUser(let userId, _, _, _): "posts/users/\(userId)"
-        case .postDelete(let postId): "posts/\(postId)"
-        case .postEdit(_, let postId): "posts/\(postId)"
+        case .imageUpload: "/posts/files"
+        case .postUpload: "/posts"
+        case .postCheck: "/posts"
+        case .postCheckSpecific(let postId): "/posts/\(postId)"
+        case .postCheckUser(let userId, _, _, _): "/posts/users/\(userId)"
+        case .postDelete(let postId): "/posts/\(postId)"
+        case .postEdit(_, let postId): "/posts/\(postId)"
         }
     }
     

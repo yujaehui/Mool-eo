@@ -22,8 +22,8 @@ extension PaymentService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .paymentValidation: "payments/validation"
-        case .paymentCheck: "payments/me"
+        case .paymentValidation: "/payments/validation"
+        case .paymentCheck: "/payments/me"
         }
     }
     

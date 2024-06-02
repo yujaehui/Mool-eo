@@ -23,9 +23,9 @@ extension ProfileService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .profileCheck: "users/me/profile"
-        case .profileEdit: "users/me/profile"
-        case .otherUserProfileCheck(let userId): "users/\(userId)/profile"
+        case .profileCheck: "/users/me/profile"
+        case .profileEdit: "/users/me/profile"
+        case .otherUserProfileCheck(let userId): "/users/\(userId)/profile"
         }
     }
     

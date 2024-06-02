@@ -21,7 +21,7 @@ extension HashtagService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .hashtag: "posts/hashtags"
+        case .hashtag: "/posts/hashtags"
         }
     }
     

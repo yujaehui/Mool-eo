@@ -29,7 +29,7 @@ class ChatRoomViewController: BaseViewController {
     override func loadView() {
         self.view = chatRoomView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -56,6 +56,21 @@ class ChatRoomViewController: BaseViewController {
         
         output.chatList.bind(with: self) { owner, value in
             owner.sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
+
+        }.disposed(by: disposeBag)
+        
+        output.newChatListSubject.bind(with: self) { owner, value in
+            owner.sections
+                .take(1)
+                .subscribe(onNext: { currentSections in
+                    var updatedSections = currentSections
+                    let updatedItems = updatedSections[0].items + value.map { .chat($0) }
+                    updatedSections[0] = ChatRoomSectionModel(items: updatedItems)
+                    owner.sections.onNext(updatedSections)
+                    let indexPath = IndexPath(row: updatedItems.count - 1, section: 0)
+                    owner.chatRoomView.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                })
+                .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
     }
     

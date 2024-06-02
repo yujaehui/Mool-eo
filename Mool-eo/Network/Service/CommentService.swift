@@ -23,7 +23,7 @@ extension CommentService: Moya.TargetType {
     var path: String {
         switch self {
         case .commentUpload(_, let postId): "/posts/\(postId)/comments"
-        case .commentDelete(let postId, let commentId): "posts/\(postId)/comments/\(commentId)"
+        case .commentDelete(let postId, let commentId): "/posts/\(postId)/comments/\(commentId)"
         }
     }
     

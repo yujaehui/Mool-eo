@@ -16,14 +16,15 @@ final class SocketIOManager {
     var manager: SocketManager!
     var socket: SocketIOClient!
     let baseURL = URL(string: APIKey.baseURL.rawValue)!
-    var receivedChatData = PublishSubject<ChatModel>()
-    var roomId: String? // 추가: 룸 아이디를 저장할 변수
+    var roomId: String?
+
+    var receivedChatData = PublishSubject<Chat>()
     
     private init() {
         print("SOCKETIOMANAGER INIT")
         
         manager = SocketManager(socketURL: baseURL, config: [.log(true), .compress])
-        socket = manager.socket(forNamespace: "/roomID")
+        socket = manager.socket(forNamespace: "/chats-roomID")
         
         socket.on(clientEvent: .connect) { data, ack in
             print("socket connected")
@@ -38,7 +39,7 @@ final class SocketIOManager {
             
             if let data = dataArray.first {
                 let result = try? JSONSerialization.data(withJSONObject: data)
-                let decodedData = try? JSONDecoder().decode(ChatModel.self, from: result!)
+                let decodedData = try? JSONDecoder().decode(Chat.self, from: result!)
                 self.receivedChatData.onNext(decodedData!)
             }
         }
@@ -46,7 +47,7 @@ final class SocketIOManager {
     
     func establishConnection(_ roomId: String) {
         self.roomId = roomId
-        let namespace = "/" + roomId // 룸 아이디 앞에 슬래시 추가
+        let namespace = "/chats-" + roomId
         socket = manager.socket(forNamespace: namespace)
         socket.connect()
     }

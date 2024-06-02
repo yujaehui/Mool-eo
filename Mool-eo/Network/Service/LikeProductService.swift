@@ -22,8 +22,8 @@ extension LikeProductService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .likeProductUpload(query: _, postId: let postId): "posts/\(postId)/like-2"
-        case .likeProdcutCheck: "posts/likes-2/me"
+        case .likeProductUpload(query: _, postId: let postId): "/posts/\(postId)/like-2"
+        case .likeProdcutCheck: "/posts/likes-2/me"
         }
     }
     

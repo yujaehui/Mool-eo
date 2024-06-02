@@ -24,10 +24,10 @@ extension ChatService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .chatProduce: "chats"
-        case .chatListCheck: "chats"
-        case .chatHistoryCheck(let roomId, _): "chats/\(roomId)"
-        case .chatSend(_, let roomId): "chats/\(roomId)"
+        case .chatProduce: "/chats"
+        case .chatListCheck: "/chats"
+        case .chatHistoryCheck(let roomId, _): "/chats/\(roomId)"
+        case .chatSend(_, let roomId): "/chats/\(roomId)"
         }
     }
     

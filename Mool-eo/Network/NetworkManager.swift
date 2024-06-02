@@ -250,7 +250,7 @@ struct NetworkManager {
         return requestGeneric(target: ChatService.chatHistoryCheck(roomId: roomId, cursorDate: cursorDate))
     }
     
-    func chatSend(query: ChatSendQuery, roomId: String) -> Single<NetworkResult<ChatModel>> {
+    func chatSend(query: ChatSendQuery, roomId: String) -> Single<NetworkResult<Chat>> {
         return requestGeneric(target: ChatService.chatSend(query: query, roomId: roomId))
     }
 }

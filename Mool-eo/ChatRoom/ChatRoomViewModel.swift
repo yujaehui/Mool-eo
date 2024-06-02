@@ -23,12 +23,16 @@ final class ChatRoomViewModel: ViewModelType {
     struct Output {
         let chatRoom: PublishSubject<ChatRoomModel>
         let chatList: Observable<[Chat]>
+        let newChatListSubject: PublishSubject<[Chat]>
     }
     
     func transform(input: Input) -> Output {
         let chatRoom = PublishSubject<ChatRoomModel>()
         let beforChatListFetchSuccessTrigger = PublishSubject<Void>()
         let chatList = PublishSubject<[Chat]>()
+        
+        var newChatList: [Chat] = []
+        let newChatListSubject = PublishSubject<[Chat]>()
             
         input.userId
             .map { userId in
@@ -40,9 +44,9 @@ final class ChatRoomViewModel: ViewModelType {
             .debug("채팅 생성")
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let success): 
-                    chatRoom.onNext(success)
-                case .error(let error): 
+                case .success(let chatRoomModel):
+                    chatRoom.onNext(chatRoomModel)
+                case .error(let error):
                     print(error)
                 }
             }.disposed(by: disposeBag)
@@ -88,19 +92,28 @@ final class ChatRoomViewModel: ViewModelType {
             .debug("채팅 발송")
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let chatModel):
-                    print(chatModel)
+                case .success(let chat):
+                    newChatList.append(chat)
+                    newChatListSubject.onNext(newChatList)
                 case .error(let error):
                     print(error)
                 }
             }.disposed(by: disposeBag)
         
-        return Output(chatRoom: chatRoom, chatList: chatList)
+        SocketIOManager.shared.receivedChatData
+            .subscribe(with: self) { owner, chat in
+                newChatList.append(chat)
+                newChatListSubject.onNext(newChatList)
+            }.disposed(by: disposeBag)
+        
+        return Output(chatRoom: chatRoom, chatList: chatList, newChatListSubject: newChatListSubject)
     }
     
-    private func manageChatSavingToRealm(_ chatModel: ChatModel) {
-        let sender = Sender(user_id: chatModel.sender.userID, nick: chatModel.sender.nick, profileImage: chatModel.sender.profileImage)
-        let data = Chat(chat_id: chatModel.chatID, room_id: chatModel.roomID, content: chatModel.content, createdAt: chatModel.createdAt, sender: sender, filesArray: chatModel.files)
-        repository.createChat(data)
+    private func manageChatSavingToRealm(_ chat: Chat) {
+        if let chatSender = chat.sender {
+            let sender = Sender(user_id: chatSender.user_id, nick: chatSender.nick, profileImage: chatSender.profileImage)
+            let data = Chat(chat_id: chat.chat_id, room_id: chat.room_id, content: chat.content, createdAt: chat.createdAt, sender: sender, filesArray: chat.filesArray)
+            repository.createChat(data)
+        }
     }
 }

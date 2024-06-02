@@ -1068,11 +1068,11 @@
 				09138B6F2C047DA6005C84B2 /* Page */,
 				093289922BF63BD700C8F52E /* EmptyCollectionViewCell.swift */,
 				093289942BF63E3600C8F52E /* EmptySection.swift */,
-				09790D642BF913FE004829D5 /* MyViewController.swift */,
-				09138B742C070357005C84B2 /* MyViewModel.swift */,
 				09138B6D2C047C67005C84B2 /* MyView.swift */,
 				09138B652C0463CA005C84B2 /* MyInfoView.swift */,
 				09138B4D2C02263F005C84B2 /* TabbarCollectionViewCell.swift */,
+				09790D642BF913FE004829D5 /* MyViewController.swift */,
+				09138B742C070357005C84B2 /* MyViewModel.swift */,
 			);
 			path = My;
 			sourceTree = "<group>";

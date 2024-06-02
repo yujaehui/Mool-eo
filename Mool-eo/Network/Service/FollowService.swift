@@ -22,8 +22,8 @@ extension FollowService: Moya.TargetType {
     
     var path: String {
         switch self {
-        case .follow(let userId): "follow/\(userId)"
-        case .unfollow(let userId): "follow/\(userId)"
+        case .follow(let userId): "/follow/\(userId)"
+        case .unfollow(let userId): "/follow/\(userId)"
         }
     }
     
