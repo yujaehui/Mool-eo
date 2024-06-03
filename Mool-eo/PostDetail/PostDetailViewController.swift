@@ -55,10 +55,6 @@ class PostDetailViewController: BaseViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true) // 화면 터치시 키보드 내려가도록
-    }
-    
     override func setNav() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = ColorStyle.point
@@ -82,8 +78,6 @@ class PostDetailViewController: BaseViewController {
         
         let input = PostDetailViewModel.Input(
             didScroll: postDetailView.tableView.rx.didScroll.asObservable(),
-            keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
-            keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
             textViewBegin: postDetailView.writeCommentView.wirteTextView.rx.didBeginEditing.asObservable(),
             textViewEnd: postDetailView.writeCommentView.wirteTextView.rx.didEndEditing.asObservable(),
             postId: Observable.just(postId),
@@ -104,16 +98,6 @@ class PostDetailViewController: BaseViewController {
         
         output.didScroll.bind(with: self) { owner, _ in
             owner.view.endEditing(true)
-        }.disposed(by: disposeBag)
-        
-        // 키보드가 나타나는 경우
-        output.keyboardWillShow.bind(with: self) { owner, notification in
-            owner.keyboardWillShow(notification: notification)
-        }.disposed(by: disposeBag)
-        
-        // 키보드가 사라지는 경우
-        output.keyboardWillHide.bind(with: self) { owner, notification in
-            owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
         
         // 텍스트뷰 placeholder 작업
@@ -180,35 +164,6 @@ class PostDetailViewController: BaseViewController {
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.postDetailView)
         }.disposed(by: disposeBag)
-    }
-    
-    // 키보드가 나타났을 경우 tableView와 writeCommentView의 위치 조정
-    private func keyboardWillShow(notification: Notification) {
-        guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let keyboardHeight = keyboardFrame.height
-        
-        UIView.animate(withDuration: 0.3) {
-            self.postDetailView.tableView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView.writeCommentView.snp.top).offset(-10)
-            }
-            self.postDetailView.writeCommentView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView).inset(keyboardHeight)
-            }
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    // 키보드가 사라졌을 경우 tableView와 writeCommentView의 위치 조정 (초기 위치와 동일하게 설정)
-    private func keyboardWillHide(notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            self.postDetailView.tableView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView.writeCommentView.snp.top).offset(-10)
-            }
-            self.postDetailView.writeCommentView.snp.updateConstraints { make in
-                make.bottom.equalTo(self.postDetailView).inset(30)
-            }
-            self.view.layoutIfNeeded()
-        }
     }
     
     private func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostDetailSectionModel> {

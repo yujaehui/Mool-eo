@@ -76,8 +76,6 @@ class WriteProductPostViewController: BaseViewController {
     override func bind() {
         let textViewBegin = writeProductPostView.writeProductPostContentView.detailTextView.rx.didBeginEditing.asObservable()
         let textViewEnd = writeProductPostView.writeProductPostContentView.detailTextView.rx.didEndEditing.asObservable()
-        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
-        let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
         let selectedImageDataSubject = selectedImageDataSubject
         let category = selectedCategory
         let productName = writeProductPostView.writeProductPostContentView.productNameView.customTextField.rx.text.orEmpty.asObservable()
@@ -87,21 +85,13 @@ class WriteProductPostViewController: BaseViewController {
         let completeButtonTap = writeProductPostView.completeButton.rx.tap.asObservable()
         let cancelButtonTap = writeProductPostView.cancelButton.rx.tap.asObservable()
     
-        let input = WriteProductPostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, selectedImageDataSubject: selectedImageDataSubject, category: category, productName: productName, price: price, detail: detail, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
+        let input = WriteProductPostViewModel.Input(textViewBegin: textViewBegin, textViewEnd: textViewEnd, selectedImageDataSubject: selectedImageDataSubject, category: category, productName: productName, price: price, detail: detail, imageAddButtonTap: imageAddButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap)
         
         let output = viewModel.transform(input: input)
         
         output.text.drive(writeProductPostView.writeProductPostContentView.detailTextView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
             owner.writeProductPostView.writeProductPostContentView.detailTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
-        }.disposed(by: disposeBag)
-        
-        output.keyboardWillShow.bind(with: self) { owner, notification in
-            owner.keyboardWillShow(notification: notification)
-        }.disposed(by: disposeBag)
-        
-        output.keyboardWillHide.bind(with: self) { owner, notification in
-            owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
         
         output.imageAddButtonTap.drive(with: self) { owner, _ in
@@ -136,22 +126,6 @@ class WriteProductPostViewController: BaseViewController {
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.writeProductPostView)
         }.disposed(by: disposeBag)
         
-    }
-    
-    func keyboardWillShow(notification: Notification) {
-        guard let keyboardFrameValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = keyboardFrameValue.cgRectValue
-        let keyboardHeight = keyboardFrame.size.height
-        
-        var contentInset = writeProductPostView.scrollView.contentInset
-        contentInset.bottom = keyboardHeight
-        writeProductPostView.scrollView.contentInset = contentInset
-        writeProductPostView.scrollView.scrollIndicatorInsets = contentInset
-    }
-    
-    func keyboardWillHide(notification: Notification) {
-        writeProductPostView.scrollView.contentInset = .zero
-        writeProductPostView.scrollView.scrollIndicatorInsets = .zero
     }
 }
 

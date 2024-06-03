@@ -29,11 +29,6 @@ class JoinThirdViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true) // 화면 터치시 키보드 내려가도록
     }
     
     override func setNav() {

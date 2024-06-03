@@ -67,8 +67,11 @@ class ChatRoomViewController: BaseViewController {
                     let updatedItems = updatedSections[0].items + value.map { .chat($0) }
                     updatedSections[0] = ChatRoomSectionModel(items: updatedItems)
                     owner.sections.onNext(updatedSections)
-                    let indexPath = IndexPath(row: updatedItems.count - 1, section: 0)
-                    owner.chatRoomView.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                    
+                    let lastSection = owner.chatRoomView.tableView.numberOfSections - 1
+                    let lastRow = owner.chatRoomView.tableView.numberOfRows(inSection: lastSection) - 1
+                    let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
+                    owner.chatRoomView.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
                 })
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)

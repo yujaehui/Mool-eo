@@ -35,6 +35,7 @@
 		09138B842C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B832C0AE5B9005C84B2 /* MyChatImageTableViewCell.swift */; };
 		09138B862C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */; };
 		09138B882C0AE61A005C84B2 /* ChatRoomSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */; };
+		09138B8B2C0D5F0D005C84B2 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */; };
 		0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */; };
 		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
@@ -484,6 +485,7 @@
 				094BEB772BC672B000342DC3 /* RxSwift in Frameworks */,
 				09279A472BE1201800E4A65D /* Moya in Frameworks */,
 				094BEB752BC672B000342DC3 /* RxCocoa in Frameworks */,
+				09138B8B2C0D5F0D005C84B2 /* IQKeyboardManagerSwift in Frameworks */,
 				09279A492BE1201800E4A65D /* ReactiveMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1293,6 +1295,7 @@
 				09138B302BFB34AC005C84B2 /* SocketIO */,
 				09138B3B2BFB3E79005C84B2 /* Realm */,
 				09138B3D2BFB3E79005C84B2 /* RealmSwift */,
+				09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -1335,6 +1338,7 @@
 				093288FF2BEFBB7200C8F52E /* XCRemoteSwiftPackageReference "Tabman" */,
 				09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
 				09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -1825,6 +1829,14 @@
 				version = 10.47.0;
 			};
 		};
+		09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.3;
+			};
+		};
 		09279A432BE1201800E4A65D /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya.git";
@@ -1922,6 +1934,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 		09279A442BE1201800E4A65D /* CombineMoya */ = {
 			isa = XCSwiftPackageProductDependency;

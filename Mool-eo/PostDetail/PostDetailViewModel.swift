@@ -14,8 +14,6 @@ class PostDetailViewModel: ViewModelType {
     
     struct Input {
         let didScroll: Observable<Void>
-        let keyboardWillShow: Observable<Notification>
-        let keyboardWillHide: Observable<Notification>
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
         let postId: Observable<String>
@@ -31,8 +29,6 @@ class PostDetailViewModel: ViewModelType {
     
     struct Output {
         let didScroll: Observable<Void>
-        let keyboardWillShow: Observable<Notification>
-        let keyboardWillHide: Observable<Notification>
         let text: Driver<String?>
         let textColorType: Driver<Bool>
         let postDetail: PublishSubject<PostModel>
@@ -208,8 +204,6 @@ class PostDetailViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         return Output(didScroll: input.didScroll,
-                      keyboardWillShow: input.keyboardWillShow,
-                      keyboardWillHide: input.keyboardWillHide,
                       text: text.asDriver(),
                       textColorType: textColorType.asDriver(),
                       postDetail: postDetail,

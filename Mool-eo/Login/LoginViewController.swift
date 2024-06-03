@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Toast
+import IQKeyboardManagerSwift
 
 class LoginViewController: BaseViewController {
     
@@ -26,10 +27,7 @@ class LoginViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true) // 화면 터치시 키보드 내려가도록
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 0
     }
     
     override func setNav() {

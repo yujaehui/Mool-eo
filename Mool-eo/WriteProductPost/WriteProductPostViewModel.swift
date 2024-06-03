@@ -16,8 +16,6 @@ class WriteProductPostViewModel: ViewModelType {
     struct Input {
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
-        let keyboardWillShow: Observable<Notification>
-        let keyboardWillHide: Observable<Notification>
         let selectedImageDataSubject: BehaviorSubject<[Data]>
         let category: Observable<String>
         let productName: Observable<String>
@@ -31,8 +29,6 @@ class WriteProductPostViewModel: ViewModelType {
     struct Output {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
-        let keyboardWillShow: Observable<Notification>
-        let keyboardWillHide: Observable<Notification>
         let imageAddButtonTap: Driver<Void>
         let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: Driver<Void>
@@ -127,8 +123,6 @@ class WriteProductPostViewModel: ViewModelType {
         
         return Output(text: text.asDriver(onErrorJustReturn: ""),
                       textColorType: textColorType.asDriver(onErrorJustReturn: false),
-                      keyboardWillShow: input.keyboardWillShow,
-                      keyboardWillHide: input.keyboardWillHide,
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
