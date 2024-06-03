@@ -12,6 +12,7 @@ import RxCocoa
 final class ChatRoomViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     let repository = ChatRepository()
+    let socketManager = SocketIOManager.shared
     
     struct Input {
         let userId: Observable<String>
@@ -23,16 +24,14 @@ final class ChatRoomViewModel: ViewModelType {
     struct Output {
         let chatRoom: PublishSubject<ChatRoomModel>
         let chatList: Observable<[Chat]>
-        let newChatListSubject: PublishSubject<[Chat]>
+        let newChat: PublishSubject<Chat>
     }
     
     func transform(input: Input) -> Output {
         let chatRoom = PublishSubject<ChatRoomModel>()
         let beforChatListFetchSuccessTrigger = PublishSubject<Void>()
         let chatList = PublishSubject<[Chat]>()
-        
-        var newChatList: [Chat] = []
-        let newChatListSubject = PublishSubject<[Chat]>()
+        let newChat = PublishSubject<Chat>()
             
         input.userId
             .map { userId in
@@ -52,11 +51,12 @@ final class ChatRoomViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         input.roomId
-            .flatMap { roomId in
-                Observable.from(optional: self.repository.fetchLatestChatByRoom(roomId))
-                    .flatMap { chat in
-                        NetworkManager.shared.chatHistoryCheck(roomId: roomId, cursorDate: chat.createdAt)
-                    }
+            .flatMap { [weak self] roomId in
+                if let lastChat = self?.repository.fetchLatestChatByRoom(roomId) {
+                    NetworkManager.shared.chatHistoryCheck(roomId: roomId, cursorDate: lastChat.createdAt)
+                } else {
+                    NetworkManager.shared.chatHistoryCheck(roomId: roomId, cursorDate: "")
+                }
             }
             .debug("채팅 조회")
             .subscribe(with: self) { owner, value in
@@ -71,17 +71,19 @@ final class ChatRoomViewModel: ViewModelType {
                 }
             }
             .disposed(by: disposeBag)
+
         
         beforChatListFetchSuccessTrigger
             .withLatestFrom(input.roomId)
             .bind(with: self) { owner, roomId in
                 chatList.onNext(owner.repository.fetchByRoom(roomId))
-                SocketIOManager.shared.establishConnection(roomId)
+                owner.socketSetting(roomId: roomId)
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(input.newChat, input.newChatUploadButtonTap)
-            .map { value in
-                return ChatSendQuery(content: value.0, files: nil)
+        input.newChatUploadButtonTap
+            .withLatestFrom(input.newChat)
+            .map { content in
+                return ChatSendQuery(content: content, files: nil)
             }
             .withLatestFrom(input.roomId) { query, roomId in
                 return (query, roomId)
@@ -92,21 +94,17 @@ final class ChatRoomViewModel: ViewModelType {
             .debug("채팅 발송")
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let chat):
-                    newChatList.append(chat)
-                    newChatListSubject.onNext(newChatList)
-                case .error(let error):
-                    print(error)
+                case .success(let chat): print(chat)
+                case .error(let error): print(error)
                 }
             }.disposed(by: disposeBag)
         
         SocketIOManager.shared.receivedChatData
             .subscribe(with: self) { owner, chat in
-                newChatList.append(chat)
-                newChatListSubject.onNext(newChatList)
+                newChat.onNext(chat)
             }.disposed(by: disposeBag)
         
-        return Output(chatRoom: chatRoom, chatList: chatList, newChatListSubject: newChatListSubject)
+        return Output(chatRoom: chatRoom, chatList: chatList, newChat: newChat)
     }
     
     private func manageChatSavingToRealm(_ chat: Chat) {
@@ -115,5 +113,11 @@ final class ChatRoomViewModel: ViewModelType {
             let data = Chat(chat_id: chat.chat_id, room_id: chat.room_id, content: chat.content, createdAt: chat.createdAt, sender: sender, filesArray: chat.filesArray)
             repository.createChat(data)
         }
+    }
+    
+    private func socketSetting(roomId: String) {
+        socketManager.roomId = roomId
+        socketManager.initializeSocket()
+        socketManager.establishConnection()
     }
 }

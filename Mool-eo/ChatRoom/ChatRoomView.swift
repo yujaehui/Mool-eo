@@ -18,7 +18,7 @@ class ChatRoomView: BaseView {
         return tableView
     }()
     
-    let wirteTextView = WriteTextView()
+    let wirteTextView = WriteContentView()
     
     override func configureHierarchy() {
         addSubview(tableView)

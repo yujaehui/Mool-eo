@@ -9,22 +9,22 @@ import UIKit
 import SnapKit
 
 class OtherChatTableViewCell: BaseTableViewCell {
-    let chatLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        label.numberOfLines = 0
-        return label
-    }()
+    let chatView = OtherChatContentView()
     
     override func configureHierarchy() {
-        contentView.addSubview(chatLabel)
+        contentView.addSubview(chatView)
     }
     
     override func configureConstraints() {
-        chatLabel.snp.makeConstraints { make in
+        chatView.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(5)
             make.leading.equalTo(contentView).inset(10)
-            make.width.greaterThanOrEqualTo(100)
+            make.trailing.lessThanOrEqualTo(contentView).inset(50)
             make.bottom.lessThanOrEqualTo(contentView).inset(5)
         }
+    }
+    
+    func configureCell(_ chat: Chat) {
+        chatView.chatLabel.text = chat.content
     }
 }

@@ -1,5 +1,5 @@
 //
-//  WriteTextView.swift
+//  WriteContentView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/30/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class WriteTextView: BaseView {
+class WriteContentView: BaseView {
     let wirteTextView: AutoResizableTextView = {
         let textView = AutoResizableTextView(maxHeight: 120)
         textView.font = FontStyle.content

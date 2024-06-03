@@ -13,7 +13,6 @@ final class ChatRepository {
     
     // MARK: - Create
     func createChat(_ data: Chat) {
-        print(realm.configuration.fileURL)
         do {
             try realm.write {
                 realm.add(data)
@@ -30,7 +29,6 @@ final class ChatRepository {
     }
     
     func fetchLatestChatByRoom(_ room_id: String) -> Chat? {
-        let result = realm.objects(Chat.self).where { $0.room_id == room_id }.last
+        let result = realm.objects(Chat.self).where { $0.room_id == room_id }.sorted(byKeyPath: "createdAt", ascending: false).first
         return result
-    }
-}
+    }}

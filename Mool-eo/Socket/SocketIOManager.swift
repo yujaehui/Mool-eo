@@ -16,7 +16,7 @@ final class SocketIOManager {
     var manager: SocketManager!
     var socket: SocketIOClient!
     let baseURL = URL(string: APIKey.baseURL.rawValue)!
-    var roomId: String?
+    var roomId: String = ""
 
     var receivedChatData = PublishSubject<Chat>()
     
@@ -24,7 +24,10 @@ final class SocketIOManager {
         print("SOCKETIOMANAGER INIT")
         
         manager = SocketManager(socketURL: baseURL, config: [.log(true), .compress])
-        socket = manager.socket(forNamespace: "/chats-roomID")
+    }
+    
+    func initializeSocket() {
+        socket = manager.socket(forNamespace: "/chats-" + roomId)
         
         socket.on(clientEvent: .connect) { data, ack in
             print("socket connected")
@@ -45,10 +48,7 @@ final class SocketIOManager {
         }
     }
     
-    func establishConnection(_ roomId: String) {
-        self.roomId = roomId
-        let namespace = "/chats-" + roomId
-        socket = manager.socket(forNamespace: namespace)
+    func establishConnection() {
         socket.connect()
     }
     
@@ -56,3 +56,4 @@ final class SocketIOManager {
         socket.disconnect()
     }
 }
+

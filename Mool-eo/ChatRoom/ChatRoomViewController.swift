@@ -56,22 +56,23 @@ class ChatRoomViewController: BaseViewController {
         
         output.chatList.bind(with: self) { owner, value in
             owner.sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
-
+            owner.scrollToBottom(animated: false)
         }.disposed(by: disposeBag)
         
-        output.newChatListSubject.bind(with: self) { owner, value in
+        output.newChat.bind(with: self) { owner, value in
             owner.sections
                 .take(1)
                 .subscribe(onNext: { currentSections in
                     var updatedSections = currentSections
-                    let updatedItems = updatedSections[0].items + value.map { .chat($0) }
-                    updatedSections[0] = ChatRoomSectionModel(items: updatedItems)
+                    if updatedSections.isEmpty {
+                        updatedSections.append(ChatRoomSectionModel(items: [.chat(value)]))
+                    } else {
+                        var items = updatedSections[0].items
+                        items.append(.chat(value))
+                        updatedSections[0] = ChatRoomSectionModel(items: items)
+                    }
                     owner.sections.onNext(updatedSections)
-                    
-                    let lastSection = owner.chatRoomView.tableView.numberOfSections - 1
-                    let lastRow = owner.chatRoomView.tableView.numberOfRows(inSection: lastSection) - 1
-                    let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
-                    owner.chatRoomView.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+                    owner.scrollToBottom(animated: true)
                 })
                 .disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
@@ -83,15 +84,22 @@ class ChatRoomViewController: BaseViewController {
             case .chat(let chat):
                 if chat.sender?.user_id == UserDefaultsManager.userId {
                     let cell = tableView.dequeueReusableCell(withIdentifier: MyChatTableViewCell.identifier, for: indexPath) as! MyChatTableViewCell
-                    cell.chatLabel.text = chat.content
+                    cell.configureCell(chat)
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
-                    cell.chatLabel.text = chat.content
+                    cell.configureCell(chat)
                     return cell
                 }
             }
         })
         return dataSource
+    }
+    
+    private func scrollToBottom(animated: Bool) {
+        let lastSection = chatRoomView.tableView.numberOfSections - 1
+        let lastRow = chatRoomView.tableView.numberOfRows(inSection: lastSection) - 1
+        let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
+        chatRoomView.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
     }
 }
