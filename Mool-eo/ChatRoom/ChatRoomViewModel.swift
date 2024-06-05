@@ -19,12 +19,16 @@ final class ChatRoomViewModel: ViewModelType {
         let roomId: Observable<String>
         let newChat: Observable<String>
         let newChatUploadButtonTap: Observable<Void>
+        let newChatImageSelectButtonTap: Observable<Void>
+        let selectedImageDataSubject: BehaviorSubject<[Data]>
     }
     
     struct Output {
         let chatRoom: PublishSubject<ChatRoomModel>
         let chatList: Observable<[Chat]>
         let newChat: PublishSubject<Chat>
+        let newChatImageSelectButtonTap: Observable<Void>
+        let isTextEmpty: BehaviorSubject<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -32,7 +36,10 @@ final class ChatRoomViewModel: ViewModelType {
         let beforChatListFetchSuccessTrigger = PublishSubject<Void>()
         let chatList = PublishSubject<[Chat]>()
         let newChat = PublishSubject<Chat>()
-            
+        let isTextEmpty = BehaviorSubject<Bool>(value: true)
+        let filesModelSubject = PublishSubject<FilesModel>()
+
+        
         input.userId
             .map { userId in
                 return ChatProduceQuery(opponent_id: userId)
@@ -71,7 +78,7 @@ final class ChatRoomViewModel: ViewModelType {
                 }
             }
             .disposed(by: disposeBag)
-
+        
         
         beforChatListFetchSuccessTrigger
             .withLatestFrom(input.roomId)
@@ -99,12 +106,55 @@ final class ChatRoomViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
+        input.selectedImageDataSubject
+            .map { files in
+                return FilesQuery(files: files)
+            }
+            .withLatestFrom(input.roomId, resultSelector: { query, roomId in
+                return (query, roomId)
+            })
+            .flatMap { (query, roomId) in
+                NetworkManager.shared.chatImageUpload(query: query, roomId: roomId)
+            }
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let filesModel):
+                    filesModelSubject.onNext(filesModel)
+                case .error(let error): print(error)
+                }
+            }.disposed(by: disposeBag)
+        
+        filesModelSubject
+            .map { filesModel in
+                return ChatSendQuery(content: nil, files: filesModel.files)
+            }
+            .withLatestFrom(input.roomId) { query, roomId in
+                return (query, roomId)
+            }
+            .flatMap { (query, roomId) in
+                NetworkManager.shared.chatSend(query: query, roomId: roomId)
+            }
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let chat): print(chat)
+                case .error(let error): print(error)
+                }
+            }.disposed(by: disposeBag)
+        
         SocketIOManager.shared.receivedChatData
             .subscribe(with: self) { owner, chat in
                 newChat.onNext(chat)
             }.disposed(by: disposeBag)
         
-        return Output(chatRoom: chatRoom, chatList: chatList, newChat: newChat)
+        input.newChat
+            .map { $0.isEmpty }
+            .bind(with: self) { onwer, value in
+                if try! isTextEmpty.value() != value {
+                    isTextEmpty.onNext(value)
+                }
+            }.disposed(by: disposeBag)
+        
+        return Output(chatRoom: chatRoom, chatList: chatList, newChat: newChat, newChatImageSelectButtonTap: input.newChatImageSelectButtonTap, isTextEmpty: isTextEmpty)
     }
     
     private func manageChatSavingToRealm(_ chat: Chat) {

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class WriteContentView: BaseView {
-    let wirteTextView: AutoResizableTextView = {
+    let writeTextView: AutoResizableTextView = {
         let textView = AutoResizableTextView(maxHeight: 120)
         textView.font = FontStyle.content
         textView.backgroundColor = ColorStyle.subBackground
@@ -27,18 +27,18 @@ class WriteContentView: BaseView {
     }()
     
     override func configureHierarchy() {
-        addSubview(wirteTextView)
+        addSubview(writeTextView)
         addSubview(textUploadButton)
     }
     
     override func configureConstraints() {
-        wirteTextView.snp.makeConstraints { make in
+        writeTextView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
         textUploadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(wirteTextView.snp.trailing).inset(5)
-            make.bottom.equalTo(wirteTextView.snp.bottom).inset(5)
+            make.trailing.equalTo(writeTextView.snp.trailing).inset(5)
+            make.bottom.equalTo(writeTextView.snp.bottom).inset(5)
             make.size.equalTo(25)
         }
     }

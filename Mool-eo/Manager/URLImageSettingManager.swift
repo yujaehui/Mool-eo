@@ -13,7 +13,7 @@ class URLImageSettingManager {
     private init() {}
     
     func setImageWithUrl(_ imageView: UIImageView, urlString: String) {
-        guard let url = URL(string: APIKey.baseURL.rawValue + urlString) else { return }
+        guard let url = URL(string: APIKey.baseURL.rawValue + "/" + urlString) else { return }
         
         let modifier = AnyModifier { request in
             var urlRequest = request

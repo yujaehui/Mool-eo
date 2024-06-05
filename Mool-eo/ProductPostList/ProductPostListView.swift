@@ -29,7 +29,7 @@ class ProductPostListView: BaseView {
         return tableView
     }()
     
-    let postWirteButton: UIButton = {
+    let postWriteButton: UIButton = {
         let button = UIButton()
         button.configuration = .postAdd("상품 등록")
         return button
@@ -38,7 +38,7 @@ class ProductPostListView: BaseView {
     override func configureHierarchy() {
         addSubview(collectionView)
         addSubview(tableView)
-        addSubview(postWirteButton)
+        addSubview(postWriteButton)
     }
     
     override func configureConstraints() {
@@ -52,7 +52,7 @@ class ProductPostListView: BaseView {
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         
-        postWirteButton.snp.makeConstraints { make in
+        postWriteButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }

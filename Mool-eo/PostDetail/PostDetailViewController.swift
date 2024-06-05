@@ -78,12 +78,12 @@ class PostDetailViewController: BaseViewController {
         
         let input = PostDetailViewModel.Input(
             didScroll: postDetailView.tableView.rx.didScroll.asObservable(),
-            textViewBegin: postDetailView.writeCommentView.wirteTextView.rx.didBeginEditing.asObservable(),
-            textViewEnd: postDetailView.writeCommentView.wirteTextView.rx.didEndEditing.asObservable(),
+            textViewBegin: postDetailView.writeCommentView.writeTextView.rx.didBeginEditing.asObservable(),
+            textViewEnd: postDetailView.writeCommentView.writeTextView.rx.didEndEditing.asObservable(),
             postId: Observable.just(postId),
             userId: userId,
             reload: reload,
-            comment: postDetailView.writeCommentView.wirteTextView.rx.text.orEmpty.asObservable(),
+            comment: postDetailView.writeCommentView.writeTextView.rx.text.orEmpty.asObservable(),
             commentUploadButtonTap: postDetailView.writeCommentView.textUploadButton.rx.tap.asObservable(),
             likeStatus: likeStatus,
             postEditButtonTap: editButtonTap,
@@ -101,9 +101,9 @@ class PostDetailViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         // 텍스트뷰 placeholder 작업
-        output.text.drive(postDetailView.writeCommentView.wirteTextView.rx.text).disposed(by: disposeBag)
+        output.text.drive(postDetailView.writeCommentView.writeTextView.rx.text).disposed(by: disposeBag)
         output.textColorType.drive(with: self) { owner, value in
-            owner.postDetailView.writeCommentView.wirteTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
+            owner.postDetailView.writeCommentView.writeTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         
         // 특정 게시글 조회가 성공할 경우
@@ -116,7 +116,7 @@ class PostDetailViewController: BaseViewController {
         
         // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
-            owner.postDetailView.writeCommentView.wirteTextView.text = ""
+            owner.postDetailView.writeCommentView.writeTextView.text = ""
             owner.change = true
             owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
         }.disposed(by: disposeBag)

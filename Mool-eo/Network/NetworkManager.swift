@@ -250,6 +250,10 @@ struct NetworkManager {
         return requestGeneric(target: ChatService.chatHistoryCheck(roomId: roomId, cursorDate: cursorDate))
     }
     
+    func chatImageUpload(query: FilesQuery, roomId: String) -> Single<NetworkResult<FilesModel>> {
+        return requestGeneric(target: ChatService.chatImageUpload(query: query, roomId: roomId))
+    }
+    
     func chatSend(query: ChatSendQuery, roomId: String) -> Single<NetworkResult<Chat>> {
         return requestGeneric(target: ChatService.chatSend(query: query, roomId: roomId))
     }

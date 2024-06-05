@@ -74,7 +74,7 @@ final class ProductPostListViewController: BaseViewController {
     
     override func bind() {
         let reload = reload
-        let postWriteButtonTap = productPostListView.postWirteButton.rx.tap.asObservable()
+        let postWriteButtonTap = productPostListView.postWriteButton.rx.tap.asObservable()
         let categoryModelSelected = productPostListView.collectionView.rx.modelSelected(String.self).asObservable()
         let categoryItemSelected = productPostListView.collectionView.rx.itemSelected.asObservable()
         let category = category

@@ -12,26 +12,27 @@ class ChatRoomView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyChatTableViewCell.self, forCellReuseIdentifier: MyChatTableViewCell.identifier)
+        tableView.register(MyImageChatTableViewCell.self, forCellReuseIdentifier: MyImageChatTableViewCell.identifier)
         tableView.register(OtherChatTableViewCell.self, forCellReuseIdentifier: OtherChatTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView
     }()
     
-    let wirteTextView = WriteContentView()
+    let writeMessageView = WriteContentWithImageView()
     
     override func configureHierarchy() {
         addSubview(tableView)
-        addSubview(wirteTextView)
+        addSubview(writeMessageView)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(wirteTextView.snp.top).offset(-10)
+            make.bottom.equalTo(writeMessageView.snp.top).offset(-10)
         }
         
-        wirteTextView.snp.makeConstraints { make in
+        writeMessageView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }

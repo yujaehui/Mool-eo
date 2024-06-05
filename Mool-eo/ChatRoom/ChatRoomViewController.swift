@@ -9,6 +9,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import PhotosUI
+import YPImagePicker
 
 class ChatRoomViewController: BaseViewController {
     
@@ -25,6 +27,9 @@ class ChatRoomViewController: BaseViewController {
     var reload = BehaviorSubject<Void>(value: ())
     var userId: String = ""
     var roomId = PublishSubject<String>()
+    
+    private var selectedImageData: [Data] = []
+    private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
     
     override func loadView() {
         self.view = chatRoomView
@@ -45,10 +50,10 @@ class ChatRoomViewController: BaseViewController {
     override func bind() {
         let userId = Observable.just(userId)
         let roomId = roomId
-        let newChat = chatRoomView.wirteTextView.wirteTextView.rx.text.orEmpty.asObservable()
-        let newChatUploadButtonTap = chatRoomView.wirteTextView.textUploadButton.rx.tap.asObservable()
-        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap)
-        
+        let newChat = chatRoomView.writeMessageView.writeTextView.rx.text.orEmpty.asObservable()
+        let newChatUploadButtonTap = chatRoomView.writeMessageView.textUploadButton.rx.tap.asObservable()
+        let newChatImageSelectButtonTap = chatRoomView.writeMessageView.imageSelectButton.rx.tap.asObservable()
+        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap, newChatImageSelectButtonTap: newChatImageSelectButtonTap, selectedImageDataSubject: selectedImageDataSubject)
         let output = viewModel.transform(input: intput)
         output.chatRoom.bind(with: self) { owner, value in
             owner.roomId.onNext(value.roomID)
@@ -56,7 +61,9 @@ class ChatRoomViewController: BaseViewController {
         
         output.chatList.bind(with: self) { owner, value in
             owner.sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
-            owner.scrollToBottom(animated: false)
+            if !value.isEmpty {
+                owner.scrollToBottom(animated: false)
+            }
         }.disposed(by: disposeBag)
         
         output.newChat.bind(with: self) { owner, value in
@@ -75,6 +82,41 @@ class ChatRoomViewController: BaseViewController {
                     owner.scrollToBottom(animated: true)
                 })
                 .disposed(by: owner.disposeBag)
+            owner.chatRoomView.writeMessageView.writeTextView.text = ""
+        }.disposed(by: disposeBag)
+        
+        output.newChatImageSelectButtonTap.bind(with: self) { owner, _ in
+            
+            self.selectedImageData.removeAll()
+            
+            var config = YPImagePickerConfiguration()
+            config.wordings.next = "전송"
+            config.wordings.cancel = "취소"
+            config.screens = [.library]
+            config.startOnScreen = .library
+            config.library.maxNumberOfItems = 5
+            config.library.mediaType = .photo
+            config.library.skipSelectionsGallery = true
+            config.showsPhotoFilters = false
+            let picker = YPImagePicker(configuration: config)
+            picker.didFinishPicking { [unowned picker] items, cancelled in
+                for item in items {
+                    switch item {
+                    case .photo(let photo): 
+                        if let compressedImageData = owner.compressImage(photo.image, quality: 0.5) {
+                            owner.selectedImageData.append(compressedImageData)
+                        }
+                    default: print("")
+                    }
+                }
+                owner.selectedImageDataSubject.onNext(owner.selectedImageData)
+                picker.dismiss(animated: true)
+            }
+            owner.present(picker, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.isTextEmpty.bind(with: self) { owner, isTextEmpty in
+            owner.chatRoomView.writeMessageView.updateButtonVisibility(isTextEmpty: isTextEmpty)
         }.disposed(by: disposeBag)
     }
     
@@ -82,9 +124,15 @@ class ChatRoomViewController: BaseViewController {
         let dataSource = RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> (configureCell : { dataSource, tableView, indexPath, item in
             switch item {
             case .chat(let chat):
-                if chat.sender?.user_id == UserDefaultsManager.userId {
+                if chat.sender?.user_id == UserDefaultsManager.userId  && chat.filesArray.isEmpty {
                     let cell = tableView.dequeueReusableCell(withIdentifier: MyChatTableViewCell.identifier, for: indexPath) as! MyChatTableViewCell
                     cell.configureCell(chat)
+                    return cell
+                } else if chat.sender?.user_id == UserDefaultsManager.userId && !chat.filesArray.isEmpty {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
+                    Observable.just(chat.filesArray).bind(to: cell.collectionView.rx.items(cellIdentifier: MyImageChatCollectionViewCell.identifier, cellType: MyImageChatCollectionViewCell.self)) { (row, element, cell) in
+                        URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
+                    }.disposed(by: cell.disposeBag)
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
@@ -101,5 +149,12 @@ class ChatRoomViewController: BaseViewController {
         let lastRow = chatRoomView.tableView.numberOfRows(inSection: lastSection) - 1
         let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
         chatRoomView.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
+    }
+    
+    func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
+        if let imageData = image.jpegData(compressionQuality: quality) {
+            return imageData
+        }
+        return nil
     }
 }

@@ -13,6 +13,7 @@ enum ChatService {
     case chatProduce(query: ChatProduceQuery)
     case chatListCheck
     case chatHistoryCheck(roomId: String, cursorDate: String)
+    case chatImageUpload(query: FilesQuery, roomId: String)
     case chatSend(query: ChatSendQuery, roomId: String)
 }
 
@@ -27,6 +28,7 @@ extension ChatService: Moya.TargetType {
         case .chatProduce: "/chats"
         case .chatListCheck: "/chats"
         case .chatHistoryCheck(let roomId, _): "/chats/\(roomId)"
+        case .chatImageUpload(_, let roomId): "/chats/\(roomId)/files"
         case .chatSend(_, let roomId): "/chats/\(roomId)"
         }
     }
@@ -36,6 +38,7 @@ extension ChatService: Moya.TargetType {
         case .chatProduce: .post
         case .chatListCheck: .get
         case .chatHistoryCheck: .get
+        case .chatImageUpload: .post
         case .chatSend: .post
         }
     }
@@ -47,6 +50,14 @@ extension ChatService: Moya.TargetType {
         case .chatHistoryCheck(_, let cursorDate):
             let param = ["cursor_date" : cursorDate]
             return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
+        case .chatImageUpload(let query, _):
+            var formData: [MultipartFormData] = []
+            for (index, fileData) in query.files.enumerated() {
+                let multipartData = MultipartFormData(provider: .data(fileData), name: "files", fileName: "image\(index).png", mimeType: "image/png")
+                formData.append(multipartData)
+            }
+            return .uploadMultipart(formData)
+            
         case .chatSend(let query, _): return .requestJSONEncodable(query)
         }
     }
@@ -62,6 +73,10 @@ extension ChatService: Moya.TargetType {
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .chatHistoryCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
+        case .chatImageUpload:
+            [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
+             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .chatSend:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,

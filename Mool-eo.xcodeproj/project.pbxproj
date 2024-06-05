@@ -32,11 +32,11 @@
 		09138B792C086424005C84B2 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B782C086424005C84B2 /* ChatRepository.swift */; };
 		09138B802C086601005C84B2 /* WriteContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B7F2C086601005C84B2 /* WriteContentView.swift */; };
 		09138B822C0867B4005C84B2 /* ChatSendQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B812C0867B4005C84B2 /* ChatSendQuery.swift */; };
-		09138B862C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */; };
 		09138B882C0AE61A005C84B2 /* ChatRoomSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */; };
 		09138B8B2C0D5F0D005C84B2 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */; };
 		09138B8D2C0DB06C005C84B2 /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B8C2C0DB06C005C84B2 /* ChatContentView.swift */; };
 		09138B8F2C0DB195005C84B2 /* OtherChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B8E2C0DB195005C84B2 /* OtherChatContentView.swift */; };
+		09138B922C0DC408005C84B2 /* WriteContentWithImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09138B912C0DC408005C84B2 /* WriteContentWithImageView.swift */; };
 		0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */; };
 		09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A2F2BDF98C900E4A65D /* PostImageView.swift */; };
 		09279A322BDFA48000E4A65D /* URLImageSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */; };
@@ -242,6 +242,10 @@
 		09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */; };
 		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
 		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
+		09EB79A52C0F0C39001E0470 /* YPImagePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB79A42C0F0C39001E0470 /* YPImagePicker */; };
+		09EB79AA2C0F2B92001E0470 /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */; };
+		09EB79AC2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */; };
+		09EB79AE2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -267,10 +271,10 @@
 		09138B782C086424005C84B2 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
 		09138B7F2C086601005C84B2 /* WriteContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteContentView.swift; sourceTree = "<group>"; };
 		09138B812C0867B4005C84B2 /* ChatSendQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSendQuery.swift; sourceTree = "<group>"; };
-		09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherChatImageTableViewCell.swift; sourceTree = "<group>"; };
 		09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomSectionModel.swift; sourceTree = "<group>"; };
 		09138B8C2C0DB06C005C84B2 /* ChatContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatContentView.swift; sourceTree = "<group>"; };
 		09138B8E2C0DB195005C84B2 /* OtherChatContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherChatContentView.swift; sourceTree = "<group>"; };
+		09138B912C0DC408005C84B2 /* WriteContentWithImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteContentWithImageView.swift; sourceTree = "<group>"; };
 		0921717E2BEFA35C006918C8 /* NumberFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterManager.swift; sourceTree = "<group>"; };
 		09279A2F2BDF98C900E4A65D /* PostImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageView.swift; sourceTree = "<group>"; };
 		09279A312BDFA48000E4A65D /* URLImageSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageSettingManager.swift; sourceTree = "<group>"; };
@@ -463,6 +467,8 @@
 		09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdView.swift; sourceTree = "<group>"; };
 		09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewController.swift; sourceTree = "<group>"; };
 		09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewModel.swift; sourceTree = "<group>"; };
+		09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImageChatTableViewCell.swift; sourceTree = "<group>"; };
+		09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImageChatCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,12 +481,14 @@
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
+				09EB79AA2C0F2B92001E0470 /* CollectionViewPagingLayout in Frameworks */,
 				093289012BEFBB7200C8F52E /* Tabman in Frameworks */,
 				09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
 				09138B3C2BFB3E79005C84B2 /* Realm in Frameworks */,
 				09138B312BFB34AC005C84B2 /* SocketIO in Frameworks */,
+				09EB79A52C0F0C39001E0470 /* YPImagePicker in Frameworks */,
 				09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */,
 				09138B3E2BFB3E79005C84B2 /* RealmSwift in Frameworks */,
 				0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */,
@@ -574,6 +582,7 @@
 				0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */,
 				09444FB52BEE441F00086E20 /* ProductTextFieldView.swift */,
 				09138B7F2C086601005C84B2 /* WriteContentView.swift */,
+				09138B912C0DC408005C84B2 /* WriteContentWithImageView.swift */,
 				09138B8C2C0DB06C005C84B2 /* ChatContentView.swift */,
 				09138B8E2C0DB195005C84B2 /* OtherChatContentView.swift */,
 			);
@@ -602,6 +611,17 @@
 				095678E52BC67B690030F0CD /* CustomLabel.swift */,
 			);
 			path = CustomLabel;
+			sourceTree = "<group>";
+		};
+		09138B902C0DC249005C84B2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */,
+				09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */,
+				09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */,
+				09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		09279A2C2BDF89A200E4A65D /* JoinFirstStep */ = {
@@ -1099,10 +1119,8 @@
 		09790D7A2BF9F60C004829D5 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
+				09138B902C0DC249005C84B2 /* Cell */,
 				09790D7B2BF9F618004829D5 /* ChatRoomView.swift */,
-				09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */,
-				09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */,
-				09138B852C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift */,
 				09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */,
 				09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */,
 				09138B872C0AE61A005C84B2 /* ChatRoomSectionModel.swift */,
@@ -1299,6 +1317,8 @@
 				09138B3B2BFB3E79005C84B2 /* Realm */,
 				09138B3D2BFB3E79005C84B2 /* RealmSwift */,
 				09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */,
+				09EB79A42C0F0C39001E0470 /* YPImagePicker */,
+				09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -1342,6 +1362,8 @@
 				09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
 				09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */,
+				09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -1396,7 +1418,6 @@
 				09138B542C045AD2005C84B2 /* MyProductViewController.swift in Sources */,
 				09279A522BE1447100E4A65D /* ProfileService.swift in Sources */,
 				09279A562BE14B2800E4A65D /* LikePostService.swift in Sources */,
-				09138B862C0AE5C0005C84B2 /* OtherChatImageTableViewCell.swift in Sources */,
 				09602B5E2BD3AED800A6AFEA /* PostListTableViewCell.swift in Sources */,
 				095679932BC960C90030F0CD /* LoginViewModel.swift in Sources */,
 				094BEB602BC670BA00342DC3 /* AppDelegate.swift in Sources */,
@@ -1468,6 +1489,7 @@
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				09790D8C2BF9FD27004829D5 /* ChatListModel.swift in Sources */,
+				09EB79AE2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift in Sources */,
 				09138B822C0867B4005C84B2 /* ChatSendQuery.swift in Sources */,
 				09790D6A2BF914A6004829D5 /* MyPaymentViewController.swift in Sources */,
 				09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */,
@@ -1560,8 +1582,10 @@
 				09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */,
 				0921717F2BEFA35C006918C8 /* NumberFormatterManager.swift in Sources */,
 				09602B672BD3E27700A6AFEA /* PostDetailView.swift in Sources */,
+				09EB79AC2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift in Sources */,
 				09138B5B2C04607E005C84B2 /* MyPostViewController.swift in Sources */,
 				093289952BF63E3600C8F52E /* EmptySection.swift in Sources */,
+				09138B922C0DC408005C84B2 /* WriteContentWithImageView.swift in Sources */,
 				095678EF2BC67EBA0030F0CD /* BaseTableViewCell.swift in Sources */,
 				095678B92BC674CB0030F0CD /* UIColor+Extension.swift in Sources */,
 				09444FA62BEE3E6100086E20 /* ProductPostDetailView.swift in Sources */,
@@ -1921,6 +1945,22 @@
 				minimumVersion = 4.0.4;
 			};
 		};
+		09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Yummypets/YPImagePicker.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.2;
+			};
+		};
+		09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amirdew/CollectionViewPagingLayout.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2018,6 +2058,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0987A7922BE356880045D361 /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
+		};
+		09EB79A42C0F0C39001E0470 /* YPImagePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */;
+			productName = YPImagePicker;
+		};
+		09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */;
+			productName = CollectionViewPagingLayout;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

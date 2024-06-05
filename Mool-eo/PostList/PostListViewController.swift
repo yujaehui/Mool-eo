@@ -49,7 +49,7 @@ class PostListViewController: BaseViewController {
         sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
         
         let reload = reload
-        let postWriteButtonTap = postListView.postWirteButton.rx.tap.asObservable()
+        let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
         let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
         let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
         let prefetch = postListView.tableView.rx.prefetchRows.asObservable()

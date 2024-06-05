@@ -8,6 +8,6 @@
 import Foundation
 
 struct ChatSendQuery: Encodable {
-    let content: String
+    let content: String?
     let files: [String]?
 }
