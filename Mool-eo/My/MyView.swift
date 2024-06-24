@@ -9,6 +9,16 @@ import UIKit
 import SnapKit
 
 class MyView: BaseView {
+    let scrollView: UIScrollView = {
+       let view = UIScrollView()
+        return view
+    }()
+    
+    let contentView: UIView = {
+       let view = UIView()
+        return view
+    }()
+    
     let stickyHeaderView: MyInfoView = {
         let view = MyInfoView()
         view.isUserInteractionEnabled = true
@@ -32,22 +42,29 @@ class MyView: BaseView {
         let view = UIView()
         return view
     }()
-    
-    var headerViewHeightConstraint: Constraint!
-    
+        
     override func configureHierarchy() {
-        addSubview(stickyHeaderView)
-        addSubview(tabbarCollectionView)
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(stickyHeaderView)
+        contentView.addSubview(tabbarCollectionView)
         tabbarCollectionView.addSubview(selectedTabView)
-        addSubview(bottomView)
+        contentView.addSubview(bottomView)
     }
     
     override func configureConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.width.equalToSuperview()
+        }
+        
         stickyHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(contentView.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(topViewInitialHeight)
-            headerViewHeightConstraint = make.height.equalTo(topViewInitialHeight).constraint
+            make.height.equalTo(140)
         }
         
         tabbarCollectionView.snp.makeConstraints { make in
@@ -59,6 +76,7 @@ class MyView: BaseView {
         bottomView.snp.makeConstraints { make in
             make.top.equalTo(tabbarCollectionView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1200)
         }
     }
     

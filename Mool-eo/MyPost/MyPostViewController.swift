@@ -12,10 +12,7 @@ import RxDataSources
 import Toast
 
 class MyPostViewController: BaseViewController {
-    
-    weak var innerScrollDelegate: InnerScrollDelegate?
-    private var dragDirection: DragDirection = .Up
-    private var oldContentOffset = CGPoint.zero
+    weak var myScrollDelegate: MyScrollDelegate?
     
     deinit {
         print("‼️MyPostViewController Deinit‼️")
@@ -118,35 +115,6 @@ extension MyPostViewController {
 
 extension MyPostViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let delta = scrollView.contentOffset.y - oldContentOffset.y
-        let topViewCurrentHeightConst = innerScrollDelegate?.currentHeaderHeight
-        
-        if let topViewUnwrappedHeight = topViewCurrentHeightConst {
-            if delta > 0, topViewUnwrappedHeight > topViewHeightConstraintRange.lowerBound, scrollView.contentOffset.y > 0 {
-                dragDirection = .Up
-                innerScrollDelegate?.innerDidScroll(withDistance: delta)
-                scrollView.contentOffset.y -= delta
-            }
-            
-            if delta < 0, scrollView.contentOffset.y < 0 {
-                dragDirection = .Down
-                innerScrollDelegate?.innerDidScroll(withDistance: delta)
-                scrollView.contentOffset.y -= delta
-            }
-        }
-        
-        oldContentOffset = scrollView.contentOffset
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
-            innerScrollDelegate?.innerScrollEnded(withScrollDirection: dragDirection)
-        }
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if decelerate == false && scrollView.contentOffset.y <= 0 {
-            innerScrollDelegate?.innerScrollEnded(withScrollDirection: dragDirection)
-        }
+        myScrollDelegate?.didScroll(scrollView: scrollView)
     }
 }

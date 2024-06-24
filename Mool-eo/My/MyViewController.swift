@@ -10,20 +10,9 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-enum DragDirection {
-    case Up
-    case Down
+protocol MyScrollDelegate: AnyObject {
+    func didScroll(scrollView: UIScrollView)
 }
-
-protocol InnerScrollDelegate: AnyObject {
-    var currentHeaderHeight: CGFloat { get }
-    func innerDidScroll(withDistance scrollDistance: CGFloat)
-    func innerScrollEnded(withScrollDirection scrollDirection: DragDirection)
-}
-
-var topViewInitialHeight : CGFloat = 140
-let topViewFinalHeight : CGFloat = 0
-var topViewHeightConstraintRange = topViewFinalHeight..<topViewInitialHeight
 
 class MyViewController: BaseViewController {
     
@@ -35,20 +24,16 @@ class MyViewController: BaseViewController {
     var pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     var pageCollection = PageCollection()
     
-    var dragInitialY: CGFloat = 0
-    var dragPreviousY: CGFloat = 0
-    var dragDirection: DragDirection = .Up
-    
     override func loadView() {
         self.view = myView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupScrollView()
         setupTabbarCollectionView()
         setupPagingViewController()
         populateBottomView()
-        addPanGestureToTopViewAndCollectionView()
     }
     
     override func bind() {
@@ -73,6 +58,10 @@ class MyViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
+    func setupScrollView() {
+        myView.scrollView.delegate = self
+    }
+    
     func setupTabbarCollectionView() {
         myView.tabbarCollectionView.dataSource = self
         myView.tabbarCollectionView.delegate = self
@@ -85,17 +74,17 @@ class MyViewController: BaseViewController {
     
     func populateBottomView() {
         let postVC = MyPostViewController()
-        postVC.innerScrollDelegate = self
+        postVC.myScrollDelegate = self
         let postPage = Page(with: "게시글", _vc: postVC)
         pageCollection.pages.append(postPage)
         
         let productVC = MyProductViewController()
-        productVC.innerScrollDelegate = self
+        productVC.myScrollDelegate = self
         let productPage = Page(with: "상품", _vc: productVC)
         pageCollection.pages.append(productPage)
         
         let paymentVC = MyPaymentViewController()
-        paymentVC.innerScrollDelegate = self
+        paymentVC.myScrollDelegate = self
         let paymentPage = Page(with: "결제", _vc: paymentVC)
         pageCollection.pages.append(paymentPage)
         
@@ -112,36 +101,12 @@ class MyViewController: BaseViewController {
         }
     }
     
-    func addPanGestureToTopViewAndCollectionView() {
-        let topViewPanGesture = UIPanGestureRecognizer(target: self, action: #selector(topViewMoved))
-        myView.stickyHeaderView.addGestureRecognizer(topViewPanGesture)
-    }
-    
-    @objc func topViewMoved(_ gesture: UIPanGestureRecognizer) {
-        var dragYDiff: CGFloat
-        
-        switch gesture.state {
-        case .began:
-            dragInitialY = gesture.location(in: self.view).y
-            dragPreviousY = dragInitialY
-        case .changed:
-            let dragCurrentY = gesture.location(in: self.view).y
-            dragYDiff = dragPreviousY - dragCurrentY
-            dragPreviousY = dragCurrentY
-            dragDirection = dragYDiff < 0 ? .Down : .Up
-            innerDidScroll(withDistance: dragYDiff)
-        case .ended:
-            innerScrollEnded(withScrollDirection: dragDirection)
-        default: return
-        }
-    }
-    
     func setBottomPagingView(toPageWithAtIndex index: Int, andNavigationDirection navigationDirection: UIPageViewController.NavigationDirection) {
         pageViewController.setViewControllers([pageCollection.pages[index].vc], direction: navigationDirection, animated: true, completion: nil)
     }
     
     func scrollSelectedTabView(toIndexPath indexPath: IndexPath, shouldAnimate: Bool = true) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             if let cell = self.myView.tabbarCollectionView.cellForItem(at: indexPath) {
                 self.myView.selectedTabView.frame.size.width = cell.frame.width
                 self.myView.selectedTabView.frame.origin.x = cell.frame.origin.x
@@ -164,6 +129,7 @@ extension MyViewController: UICollectionViewDataSource {
 
 extension MyViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(#function)
         if indexPath.item == pageCollection.selectedPageIndex {
             return
         }
@@ -190,8 +156,10 @@ extension MyViewController: UICollectionViewDelegateFlowLayout {
 
 extension MyViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        print(#function)
         if let currentViewControllerIndex = pageCollection.pages.firstIndex(where: { $0.vc == viewController }) {
             if (1..<pageCollection.pages.count).contains(currentViewControllerIndex) {
+                pageCollection.selectedPageIndex = currentViewControllerIndex - 1
                 return pageCollection.pages[currentViewControllerIndex - 1].vc
             }
         }
@@ -199,8 +167,10 @@ extension MyViewController: UIPageViewControllerDataSource {
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        print(#function)
         if let currentViewControllerIndex = pageCollection.pages.firstIndex(where: { $0.vc == viewController }) {
             if (0..<(pageCollection.pages.count - 1)).contains(currentViewControllerIndex) {
+                pageCollection.selectedPageIndex = currentViewControllerIndex + 1
                 return pageCollection.pages[currentViewControllerIndex + 1].vc
             }
         }
@@ -220,61 +190,58 @@ extension MyViewController: UIPageViewControllerDelegate {
     }
 }
 
-extension MyViewController: InnerScrollDelegate {
-    var currentHeaderHeight: CGFloat {
-        return myView.headerViewHeightConstraint.layoutConstraints[0].constant
-    }
-    
-    func innerDidScroll(withDistance scrollDistance: CGFloat) {
-        myView.headerViewHeightConstraint.update(offset: myView.headerViewHeightConstraint.layoutConstraints[0].constant - scrollDistance)
+extension MyViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let tabbarCollectionViewFrame = myView.tabbarCollectionView.convert(myView.tabbarCollectionView.bounds, to: self.view)
+        let topLimit = myView.safeAreaInsets.top
         
-        if myView.headerViewHeightConstraint.layoutConstraints[0].constant < topViewFinalHeight {
-            myView.headerViewHeightConstraint.update(offset: topViewFinalHeight)
-        }
-    }
-    
-    func innerScrollEnded(withScrollDirection scrollDirection: DragDirection) {
-        let topViewHeight = myView.headerViewHeightConstraint.layoutConstraints[0].constant
-        
-        if topViewHeight <= topViewFinalHeight + 20 {
-            scrollToFinalView()
-        } else if topViewHeight <= topViewInitialHeight - 20 {
-            switch scrollDirection {
-            case .Down: scrollToInitialView()
-            case .Up: scrollToFinalView()
+        if tabbarCollectionViewFrame.origin.y <= topLimit {
+            scrollView.contentOffset.y = myView.stickyHeaderView.frame.height
+            myView.scrollView.isScrollEnabled = false
+            if let postVC = pageCollection.pages[0].vc as? MyPostViewController {
+                postVC.myPostView.collectionView.isScrollEnabled = true
+            }
+            if let productVC = pageCollection.pages[1].vc as? MyProductViewController {
+                productVC.myProductView.collectionView.isScrollEnabled = true
+            }
+            if let paymentVC = pageCollection.pages[2].vc as? MyPaymentViewController {
+                paymentVC.myPaymentView.collectionView.isScrollEnabled = true
             }
         } else {
-            scrollToInitialView()
+            myView.scrollView.isScrollEnabled = true
+            if let postVC = pageCollection.pages[0].vc as? MyPostViewController {
+                postVC.myPostView.collectionView.isScrollEnabled = false
+            }
+            if let productVC = pageCollection.pages[1].vc as? MyProductViewController {
+                productVC.myProductView.collectionView.isScrollEnabled = false
+            }
+            if let paymentVC = pageCollection.pages[2].vc as? MyPaymentViewController {
+                paymentVC.myPaymentView.collectionView.isScrollEnabled = false
+            }
         }
     }
-    
-    func scrollToInitialView() {
-        let topViewCurrentHeight = myView.stickyHeaderView.frame.height
-        let distanceToBeMoved = abs(topViewCurrentHeight - topViewInitialHeight)
-        var time = distanceToBeMoved / 500
-        if time < 0.25 {
-            time = 0.25
+}
+
+
+extension MyViewController: MyScrollDelegate {
+    func didScroll(scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        if offsetY <= 0 {
+            scrollView.contentOffset.y = 0
+            myView.scrollView.isScrollEnabled = true
+            if let postVC = pageCollection.pages[0].vc as? MyPostViewController {
+                postVC.myPostView.collectionView.contentOffset.y = 0
+                postVC.myPostView.collectionView.isScrollEnabled = false
+            }
+            if let productVC = pageCollection.pages[1].vc as? MyProductViewController {
+                productVC.myProductView.collectionView.contentOffset.y = 0
+                productVC.myProductView.collectionView.isScrollEnabled = false
+            }
+            if let paymentVC = pageCollection.pages[2].vc as? MyPaymentViewController {
+                paymentVC.myPaymentView.collectionView.contentOffset.y = 0
+                paymentVC.myPaymentView.collectionView.isScrollEnabled = false
+            }
         }
-        
-        myView.headerViewHeightConstraint.update(offset: topViewInitialHeight)
-        UIView.animate(withDuration: TimeInterval(time), animations: {
-            self.view.layoutIfNeeded()
-        })
-    }
-    
-    func scrollToFinalView() {
-        let topViewCurrentHeight = myView.stickyHeaderView.frame.height
-        let distanceToBeMoved = abs(topViewCurrentHeight - topViewFinalHeight)
-        var time = distanceToBeMoved / 500
-        if time < 0.25 {
-            time = 0.25
-        }
-        
-        myView.headerViewHeightConstraint.update(offset: topViewFinalHeight)
-        
-        UIView.animate(withDuration: TimeInterval(time), animations: {
-            self.view.layoutIfNeeded()
-        })
     }
 }
 

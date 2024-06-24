@@ -33,7 +33,7 @@ class ProductCollectionViewCell: BaseCollectionViewCell {
     
     override func configureConstraints() {
         productImageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(10)
+            make.top.equalTo(contentView)
             make.horizontalEdges.equalTo(contentView)
             make.height.equalTo(productImageView.snp.width)
         }
@@ -48,7 +48,7 @@ class ProductCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(productNameLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(contentView).inset(10)
             make.height.equalTo(20)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.bottom.lessThanOrEqualTo(contentView)
         }
     }
     

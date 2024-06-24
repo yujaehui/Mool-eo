@@ -18,7 +18,7 @@ struct ProductSection: Section {
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.contentInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
         
         return section
     }

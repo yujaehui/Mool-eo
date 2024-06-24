@@ -37,7 +37,7 @@ class LikeProductListView: BaseView {
         let spacing: CGFloat = 10
         let cellWidth = UIScreen.main.bounds.width - (spacing * 4)
         layout.itemSize = CGSize(width: cellWidth / 3, height: cellWidth / 3 + 60)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
+        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
         layout.minimumInteritemSpacing = spacing
         return layout
     }
