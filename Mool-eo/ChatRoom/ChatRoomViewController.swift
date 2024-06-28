@@ -94,7 +94,7 @@ class ChatRoomViewController: BaseViewController {
             config.wordings.cancel = "취소"
             config.screens = [.library]
             config.startOnScreen = .library
-            config.library.maxNumberOfItems = 5
+            config.library.maxNumberOfItems = 1
             config.library.mediaType = .photo
             config.library.skipSelectionsGallery = true
             config.showsPhotoFilters = false
@@ -130,9 +130,7 @@ class ChatRoomViewController: BaseViewController {
                     return cell
                 } else if chat.sender?.user_id == UserDefaultsManager.userId && !chat.filesArray.isEmpty {
                     let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
-                    Observable.just(chat.filesArray).bind(to: cell.collectionView.rx.items(cellIdentifier: MyImageChatCollectionViewCell.identifier, cellType: MyImageChatCollectionViewCell.self)) { (row, element, cell) in
-                        URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
-                    }.disposed(by: cell.disposeBag)
+                    URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: chat.filesArray.first!)
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell

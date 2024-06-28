@@ -243,9 +243,7 @@
 		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
 		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
 		09EB79A52C0F0C39001E0470 /* YPImagePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB79A42C0F0C39001E0470 /* YPImagePicker */; };
-		09EB79AA2C0F2B92001E0470 /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */; };
 		09EB79AC2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */; };
-		09EB79AE2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -468,7 +466,6 @@
 		09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewController.swift; sourceTree = "<group>"; };
 		09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinThirdViewModel.swift; sourceTree = "<group>"; };
 		09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImageChatTableViewCell.swift; sourceTree = "<group>"; };
-		09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImageChatCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -481,7 +478,6 @@
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
-				09EB79AA2C0F2B92001E0470 /* CollectionViewPagingLayout in Frameworks */,
 				093289012BEFBB7200C8F52E /* Tabman in Frameworks */,
 				09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */,
 				094BEB7D2BC672D200342DC3 /* Kingfisher in Frameworks */,
@@ -618,7 +614,6 @@
 			children = (
 				09790D812BF9F692004829D5 /* MyChatTableViewCell.swift */,
 				09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */,
-				09EB79AD2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift */,
 				09790D832BF9F6D8004829D5 /* OtherChatTableViewCell.swift */,
 			);
 			path = Cell;
@@ -1318,7 +1313,6 @@
 				09138B3D2BFB3E79005C84B2 /* RealmSwift */,
 				09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */,
 				09EB79A42C0F0C39001E0470 /* YPImagePicker */,
-				09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -1363,7 +1357,6 @@
 				09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */,
-				09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -1489,7 +1482,6 @@
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				09790D8C2BF9FD27004829D5 /* ChatListModel.swift in Sources */,
-				09EB79AE2C0F2E98001E0470 /* MyImageChatCollectionViewCell.swift in Sources */,
 				09138B822C0867B4005C84B2 /* ChatSendQuery.swift in Sources */,
 				09790D6A2BF914A6004829D5 /* MyPaymentViewController.swift in Sources */,
 				09444F9C2BEE363600086E20 /* ProductPostListCollectionViewCell.swift in Sources */,
@@ -1953,14 +1945,6 @@
 				minimumVersion = 5.2.2;
 			};
 		};
-		09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/amirdew/CollectionViewPagingLayout.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2063,11 +2047,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */;
 			productName = YPImagePicker;
-		};
-		09EB79A92C0F2B92001E0470 /* CollectionViewPagingLayout */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 09EB79A82C0F2B92001E0470 /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */;
-			productName = CollectionViewPagingLayout;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
