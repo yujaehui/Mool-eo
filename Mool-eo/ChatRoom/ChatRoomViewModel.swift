@@ -21,6 +21,8 @@ final class ChatRoomViewModel: ViewModelType {
         let newChatUploadButtonTap: Observable<Void>
         let newChatImageSelectButtonTap: Observable<Void>
         let selectedImageDataSubject: BehaviorSubject<[Data]>
+        let modelSelected: Observable<ChatRoomSectionItem>
+        let itemSelected: Observable<IndexPath>
     }
     
     struct Output {
@@ -29,6 +31,7 @@ final class ChatRoomViewModel: ViewModelType {
         let newChat: PublishSubject<Chat>
         let newChatImageSelectButtonTap: Observable<Void>
         let isTextEmpty: BehaviorSubject<Bool>
+        let chatImageTapTrigger: PublishSubject<[String]>
     }
     
     func transform(input: Input) -> Output {
@@ -38,7 +41,7 @@ final class ChatRoomViewModel: ViewModelType {
         let newChat = PublishSubject<Chat>()
         let isTextEmpty = BehaviorSubject<Bool>(value: true)
         let filesModelSubject = PublishSubject<FilesModel>()
-
+        let chatImageTapTrigger = PublishSubject<[String]>()
         
         input.userId
             .map { userId in
@@ -154,7 +157,19 @@ final class ChatRoomViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(chatRoom: chatRoom, chatList: chatList, newChat: newChat, newChatImageSelectButtonTap: input.newChatImageSelectButtonTap, isTextEmpty: isTextEmpty)
+        Observable.zip(input.modelSelected, input.itemSelected)
+            .bind(with: self) { owner, value in
+                let (selectedItem, _) = value
+                switch selectedItem {
+                case .chat(let chat):
+                    if !chat.filesArray.isEmpty {
+                        chatImageTapTrigger.onNext(chat.filesArray)
+                    }
+                }
+            }.disposed(by: disposeBag)
+        
+        
+        return Output(chatRoom: chatRoom, chatList: chatList, newChat: newChat, newChatImageSelectButtonTap: input.newChatImageSelectButtonTap, isTextEmpty: isTextEmpty, chatImageTapTrigger: chatImageTapTrigger)
     }
     
     private func manageChatSavingToRealm(_ chat: Chat) {

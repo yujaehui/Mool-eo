@@ -1,19 +1,18 @@
 //
-//  MyImageChatTableViewCell.swift
+//  OtherImageChatTableViewCell.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 6/4/24.
+//  Created by Jaehui Yu on 6/30/24.
 //
 
 import UIKit
 import SnapKit
 
-class MyImageChatTableViewCell: BaseTableViewCell {
+class OtherImageChatTableViewCell: BaseTableViewCell {
     let chatImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
-        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -24,8 +23,8 @@ class MyImageChatTableViewCell: BaseTableViewCell {
     override func configureConstraints() {
         chatImageView.snp.makeConstraints { make in
             make.verticalEdges.equalTo(contentView).inset(10)
-            make.trailing.equalTo(contentView).inset(10)
-            make.size.equalTo(180)
+            make.leading.equalTo(contentView).inset(10)
+            make.size.equalTo(200)
         }
     }
     

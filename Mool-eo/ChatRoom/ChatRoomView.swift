@@ -14,6 +14,7 @@ class ChatRoomView: BaseView {
         tableView.register(MyChatTableViewCell.self, forCellReuseIdentifier: MyChatTableViewCell.identifier)
         tableView.register(MyImageChatTableViewCell.self, forCellReuseIdentifier: MyImageChatTableViewCell.identifier)
         tableView.register(OtherChatTableViewCell.self, forCellReuseIdentifier: OtherChatTableViewCell.identifier)
+        tableView.register(OtherImageChatTableViewCell.self, forCellReuseIdentifier: OtherImageChatTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

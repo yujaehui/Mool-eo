@@ -71,9 +71,25 @@ class ChatListTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ chat: ChatRoomModel) {
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: chat.participants[1].profileImage)
-        nicknameLabel.text = chat.participants[1].nick
-        lastChatLabel.text = chat.lastChat.content
-        lastChatTimeLabel.text = chat.lastChat.createdAt
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: findOtherParticipant(chat).profileImage)
+        nicknameLabel.text = findOtherParticipant(chat).nick
+        lastChatLabel.text = lastMessageIsImage(chat)
+        lastChatTimeLabel.text = DateFormatterManager.shared.formatDateToString(dateString: chat.lastChat.createdAt)
+    }
+    
+    func findOtherParticipant(_ chat: ChatRoomModel) -> Sender {
+        var otherParticipant = Sender()
+        for participant in chat.participants {
+            if participant.user_id == UserDefaultsManager.userId {
+                continue
+            } else {
+                otherParticipant = participant
+            }
+        }
+        return otherParticipant
+    }
+
+    func lastMessageIsImage(_ chat: ChatRoomModel) -> String {
+        return chat.lastChat.files.isEmpty ? chat.lastChat.content : "이미지"
     }
 }

@@ -53,7 +53,9 @@ class ChatRoomViewController: BaseViewController {
         let newChat = chatRoomView.writeMessageView.writeTextView.rx.text.orEmpty.asObservable()
         let newChatUploadButtonTap = chatRoomView.writeMessageView.textUploadButton.rx.tap.asObservable()
         let newChatImageSelectButtonTap = chatRoomView.writeMessageView.imageSelectButton.rx.tap.asObservable()
-        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap, newChatImageSelectButtonTap: newChatImageSelectButtonTap, selectedImageDataSubject: selectedImageDataSubject)
+        let modelSelected = chatRoomView.tableView.rx.modelSelected(ChatRoomSectionItem.self).asObservable()
+        let itemSelected = chatRoomView.tableView.rx.itemSelected.asObservable()
+        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap, newChatImageSelectButtonTap: newChatImageSelectButtonTap, selectedImageDataSubject: selectedImageDataSubject, modelSelected: modelSelected, itemSelected: itemSelected)
         let output = viewModel.transform(input: intput)
         output.chatRoom.bind(with: self) { owner, value in
             owner.roomId.onNext(value.roomID)
@@ -94,29 +96,40 @@ class ChatRoomViewController: BaseViewController {
             config.wordings.cancel = "취소"
             config.screens = [.library]
             config.startOnScreen = .library
-            config.library.maxNumberOfItems = 1
+            config.library.maxNumberOfItems = 3
             config.library.mediaType = .photo
             config.library.skipSelectionsGallery = true
             config.showsPhotoFilters = false
             let picker = YPImagePicker(configuration: config)
             picker.didFinishPicking { [unowned picker] items, cancelled in
-                for item in items {
-                    switch item {
-                    case .photo(let photo): 
-                        if let compressedImageData = owner.compressImage(photo.image, quality: 0.5) {
-                            owner.selectedImageData.append(compressedImageData)
+                if cancelled {
+                    picker.dismiss(animated: true)
+                } else {
+                    for item in items {
+                        switch item {
+                        case .photo(let photo):
+                            if let compressedImageData = owner.compressImage(photo.image, quality: 0.5) {
+                                owner.selectedImageData.append(compressedImageData)
+                            }
+                        default: print("")
                         }
-                    default: print("")
                     }
+                    owner.selectedImageDataSubject.onNext(owner.selectedImageData)
+                    picker.dismiss(animated: true)
                 }
-                owner.selectedImageDataSubject.onNext(owner.selectedImageData)
-                picker.dismiss(animated: true)
             }
             owner.present(picker, animated: true)
         }.disposed(by: disposeBag)
         
         output.isTextEmpty.bind(with: self) { owner, isTextEmpty in
             owner.chatRoomView.writeMessageView.updateButtonVisibility(isTextEmpty: isTextEmpty)
+        }.disposed(by: disposeBag)
+        
+        output.chatImageTapTrigger.bind(with: self) { owner, fileArray in
+            let vc = ImageChatViewController()
+            vc.filesArray = fileArray
+            vc.hidesBottomBarWhenPushed = true
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     
@@ -130,10 +143,14 @@ class ChatRoomViewController: BaseViewController {
                     return cell
                 } else if chat.sender?.user_id == UserDefaultsManager.userId && !chat.filesArray.isEmpty {
                     let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
-                    URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: chat.filesArray.first!)
+                    cell.configureCell(chat)
+                    return cell
+                } else if chat.sender?.user_id != UserDefaultsManager.userId && chat.filesArray.isEmpty {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
+                    cell.configureCell(chat)
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
                     cell.configureCell(chat)
                     return cell
                 }
