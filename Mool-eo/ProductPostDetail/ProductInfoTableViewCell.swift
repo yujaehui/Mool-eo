@@ -80,6 +80,6 @@ class ProductInfoTableViewCell: BaseTableViewCell {
     func configureCell(_ postModel: PostModel) {
         nickNameLabel.text = postModel.creator.nick
         productNameLabel.text = postModel.title
-        priceLabel.text = NumberFormatterManager.shared.formatCurrency(postModel.content1)
+        priceLabel.text = NumberFormatterManager.shared.formatCurrencyString(postModel.content1)
     }
 }

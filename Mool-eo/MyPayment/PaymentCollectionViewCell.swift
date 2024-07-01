@@ -53,7 +53,7 @@ class PaymentCollectionViewCell: BaseCollectionViewCell {
     
     func configureCell(_ data: Datum) {
         productNameLabel.text = data.productName
-        priceLabel.text = "\(data.price)"
-        dateLabel.text = data.paidAt
+        priceLabel.text = NumberFormatterManager.shared.formatCurrency(data.price)
+        dateLabel.text = DateFormatterManager.shared.formatDateToString(dateString: data.paidAt)
     }
 }

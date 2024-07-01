@@ -142,17 +142,39 @@ class ChatRoomViewController: BaseViewController {
                     cell.configureCell(chat)
                     return cell
                 } else if chat.sender?.user_id == UserDefaultsManager.userId && !chat.filesArray.isEmpty {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
-                    cell.configureCell(chat)
-                    return cell
+                    switch chat.filesArray.count {
+                    case 2:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: MyTwoImageChatTableViewCell.identifier, for: indexPath) as! MyTwoImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    case 3:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: MyThreeImageChatTableViewCell.identifier, for: indexPath) as! MyThreeImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    default:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    }
                 } else if chat.sender?.user_id != UserDefaultsManager.userId && chat.filesArray.isEmpty {
                     let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
                     cell.configureCell(chat)
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
-                    cell.configureCell(chat)
-                    return cell
+                    switch chat.filesArray.count {
+                    case 2:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherTwoImageChatTableViewCell.identifier, for: indexPath) as! OtherTwoImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    case 3:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherThreeImageChatTableViewCell.identifier, for: indexPath) as! OtherThreeImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    default:
+                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
+                        cell.configureCell(chat)
+                        return cell
+                    }
                 }
             }
         })

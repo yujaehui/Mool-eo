@@ -55,6 +55,6 @@ class ProductCollectionViewCell: BaseCollectionViewCell {
     func configureCell(item: PostListSectionModel.Item) {
         URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: item.files.first!)
         productNameLabel.text = item.title
-        priceLabel.text = NumberFormatterManager.shared.formatCurrency(item.content1)
+        priceLabel.text = NumberFormatterManager.shared.formatCurrencyString(item.content1)
     }
 }

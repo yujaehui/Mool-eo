@@ -13,8 +13,12 @@ class ChatRoomView: BaseView {
         let tableView = UITableView()
         tableView.register(MyChatTableViewCell.self, forCellReuseIdentifier: MyChatTableViewCell.identifier)
         tableView.register(MyImageChatTableViewCell.self, forCellReuseIdentifier: MyImageChatTableViewCell.identifier)
+        tableView.register(MyTwoImageChatTableViewCell.self, forCellReuseIdentifier: MyTwoImageChatTableViewCell.identifier)
+        tableView.register(MyThreeImageChatTableViewCell.self, forCellReuseIdentifier: MyThreeImageChatTableViewCell.identifier)
         tableView.register(OtherChatTableViewCell.self, forCellReuseIdentifier: OtherChatTableViewCell.identifier)
         tableView.register(OtherImageChatTableViewCell.self, forCellReuseIdentifier: OtherImageChatTableViewCell.identifier)
+        tableView.register(OtherTwoImageChatTableViewCell.self, forCellReuseIdentifier: OtherTwoImageChatTableViewCell.identifier)
+        tableView.register(OtherThreeImageChatTableViewCell.self, forCellReuseIdentifier: OtherThreeImageChatTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         return tableView

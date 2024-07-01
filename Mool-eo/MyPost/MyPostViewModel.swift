@@ -37,7 +37,7 @@ class MyPostViewModel: ViewModelType {
                 return UserDefaultsManager.userId!
             }
             .flatMap { userId in
-                NetworkManager.shared.postCheckUser(userId: userId, productId: ProductIdentifier.market.rawValue, limit: "20", next: "").asObservable()
+                NetworkManager.shared.postCheckUser(userId: userId, productId: ProductIdentifier.postBoard.rawValue, limit: "20", next: "").asObservable()
             }
             .debug("내 상품 조회")
             .subscribe(with: self) { owner, value in

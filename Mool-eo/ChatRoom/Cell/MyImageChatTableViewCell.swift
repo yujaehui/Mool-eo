@@ -25,11 +25,12 @@ class MyImageChatTableViewCell: BaseTableViewCell {
         chatImageView.snp.makeConstraints { make in
             make.verticalEdges.equalTo(contentView).inset(10)
             make.trailing.equalTo(contentView).inset(10)
-            make.size.equalTo(180)
+            make.size.equalTo(200)
         }
     }
     
     func configureCell(_ chat: Chat) {
         URLImageSettingManager.shared.setImageWithUrl(chatImageView, urlString: chat.filesArray.first!)
+        
     }
 }
