@@ -18,14 +18,10 @@ class OtherUserProfileViewModel: ViewModelType {
         let itemSelected: Observable<IndexPath>
         let userId: String
         let followStatus: PublishSubject<Bool>
-        let lastRow: PublishSubject<Int>
-        let prefetch: Observable<[IndexPath]>
-        let nextCursor: PublishSubject<String>
     }
     
     struct Output {
         let result: PublishSubject<(OtherUserProfileModel, PostListModel, PostListModel)>
-        let nextPostList: PublishSubject<PostListModel>
         let post: PublishSubject<PostModel>
         let followOrUnfollowSuccessTrigger: Driver<Void>
         let notFoundErr: Driver<Void>
@@ -34,8 +30,6 @@ class OtherUserProfileViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let result = PublishSubject<(OtherUserProfileModel, PostListModel, PostListModel)>()
-        let nextPostList = PublishSubject<PostListModel>()
-        let prefetch = PublishSubject<Void>()
         let post = PublishSubject<PostModel>()
         let followOrUnfollowSuccessTrigger = PublishSubject<Void>()
         let notFoundErr = PublishSubject<Void>()
@@ -45,8 +39,8 @@ class OtherUserProfileViewModel: ViewModelType {
             .flatMap {
                 Observable.zip(
                     NetworkManager.shared.otherUserProfileCheck(userId: input.userId).asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.postBoard.rawValue, limit: "9", next: "").asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: "").asObservable()
+                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: "").asObservable(),
+                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.postBoard.rawValue, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult, productPostResult -> (NetworkResult<OtherUserProfileModel>, NetworkResult<PostListModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult, productPostResult)
                 }
@@ -54,50 +48,22 @@ class OtherUserProfileViewModel: ViewModelType {
             .debug("다른 유저 프로필 및 포스트 조회")
             .subscribe(with: self) { owner, value in
                 switch (value.0, value.1, value.2) {
-                case (.success(let profileModel), .success(let postListModel), .success(let productPostListModel)):
-                    result.onNext((profileModel, postListModel, productPostListModel))
+                case (.success(let profileModel), .success(let productModel), .success(let postModel)):
+                    result.onNext((profileModel, productModel, postModel))
                 case (.error(let profileError), _, _):
                     switch profileError {
                     case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(profileError)⚠️")
                     }
-                case (_, .error(let postError), _):
+                case (_, .error(let productError), _):
+                    switch productError {
+                    case .networkFail: networkFail.onNext(())
+                    default: print("⚠️OTHER ERROR : \(productError)⚠️")
+                    }
+                case (_, _, .error(let postError)):
                     switch postError {
                     case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(postError)⚠️")
-                    }
-                case (_, _, .error(let productPostError)):
-                    switch productPostError {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(productPostError)⚠️")
-                    }
-                }
-            }.disposed(by: disposeBag)
-        
-        // Pagination
-        let prefetchObservable = Observable.combineLatest(input.prefetch.compactMap(\.last?.item), input.lastRow)
-        
-        prefetchObservable
-            .bind(with: self) { owner, value in
-                guard value.0 == value.1 else { return }
-                prefetch.onNext(())
-            }.disposed(by: disposeBag)
-        
-        let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
-        
-        nextPrefetch
-            .flatMap { (next, _) in
-                NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: next)
-            }
-            .debug("🔥Pagination🔥")
-            .subscribe(with: self) { owner, value in
-                switch value {
-                case .success(let postListModel):
-                    nextPostList.onNext(postListModel)
-                case .error(let error):
-                    switch error {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
                 }
             }.disposed(by: disposeBag)
@@ -128,7 +94,6 @@ class OtherUserProfileViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         return Output(result: result, 
-                      nextPostList: nextPostList,
                       post: post,
                       followOrUnfollowSuccessTrigger: followOrUnfollowSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),

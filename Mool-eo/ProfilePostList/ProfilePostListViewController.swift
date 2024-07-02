@@ -108,7 +108,7 @@ class ProfilePostListViewController: BaseViewController {
                         vc.userId = item.creator.userId
                         owner.navigationController?.pushViewController(vc, animated: true)
                     } else {
-                        let vc = MyViewController()
+                        let vc = UserProfileViewController()
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }
                 }.disposed(by: cell.disposeBag)

@@ -1,14 +1,14 @@
 //
-//  LikeMyPostTableViewCell.swift
+//  UserProfilePostCollectionViewCell.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 4/17/24.
+//  Created by Jaehui Yu on 5/15/24.
 //
 
 import UIKit
 import SnapKit
 
-class LikePostTableViewCell: BaseTableViewCell {
+class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -18,7 +18,7 @@ class LikePostTableViewCell: BaseTableViewCell {
     
     let postContentLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
-        label.numberOfLines = 4
+        label.numberOfLines = 2
         return label
     }()
     
@@ -44,6 +44,21 @@ class LikePostTableViewCell: BaseTableViewCell {
     
     let lineView = LineView()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.borderColor = ColorStyle.subBackground.cgColor
+        layer.borderWidth = 1
+        layer.cornerRadius = 10
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        postImageView.image = nil
+    }
+    
     override func configureHierarchy() {
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
@@ -68,16 +83,17 @@ class LikePostTableViewCell: BaseTableViewCell {
         }
         
         postImageView.snp.makeConstraints { make in
-            make.top.equalTo(postTitleLabel.snp.top)
+            make.top.equalTo(postContentLabel.snp.top)
             make.leading.equalTo(postContentLabel.snp.trailing).offset(10)
             make.trailing.equalTo(contentView).inset(20)
-            make.size.equalTo(80)
+            make.size.equalTo(60)
         }
         
         likeIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageView.snp.bottom).offset(10)
             make.leading.equalTo(contentView).inset(20)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -86,28 +102,22 @@ class LikePostTableViewCell: BaseTableViewCell {
         }
         
         commentIconImageView.snp.makeConstraints { make in
-            make.top.equalTo(postImageView.snp.bottom).offset(20)
+            make.top.equalTo(postImageView.snp.bottom).offset(10)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
         }
-        
-        lineView.snp.makeConstraints { make in
-            make.top.equalTo(likeIconImageView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(1)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
-        }
     }
     
     func configureCell(myPost: PostModel) {
         if let firstFile = myPost.files.first {
             URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
-        }
+        }        
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content
         likeCountLabel.text = "\(myPost.likePost.count)"

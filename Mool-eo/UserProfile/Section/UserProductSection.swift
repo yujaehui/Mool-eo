@@ -1,0 +1,35 @@
+//
+//  UserProductSection.swift
+//  Mool-eo
+//
+//  Created by Jaehui Yu on 7/1/24.
+//
+
+import UIKit
+
+struct UserProductSection: Section {
+    func layoutSection() -> NSCollectionLayoutSection? {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .estimated(300))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
+        section.orthogonalScrollingBehavior = .groupPagingCentered
+        
+        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(55))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerFooterSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
+}

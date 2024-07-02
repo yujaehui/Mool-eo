@@ -11,7 +11,7 @@ import SnapKit
 class LikeProductListView: BaseView {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
-        collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.identifier)
+        collectionView.register(LikeProductCollectionViewCell.self, forCellWithReuseIdentifier: LikeProductCollectionViewCell.identifier)
         return collectionView
     }()
     

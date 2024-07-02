@@ -1,8 +1,8 @@
 //
-//  OtherUserProfileViewController.swift
+//  UserProfileViewController.swift
 //  Mool-eo
 //
-//  Created by Jaehui Yu on 5/2/24.
+//  Created by Jaehui Yu on 7/1/24.
 //
 
 import UIKit
@@ -11,25 +11,25 @@ import RxCocoa
 import RxDataSources
 import Toast
 
-class OtherUserProfileViewController: BaseViewController {
+class UserProfileViewController: BaseViewController {
     
     deinit {
-        print("‼️OtherUserProfileViewController Deinit‼️")
+        print("‼️UserProfileViewController Deinit‼️")
     }
     
-    let viewModel = OtherUserProfileViewModel()
-    let otherUserProfileView = OtherUserProfileView()
-    
+    let viewModel = UserProfileViewModel()
+    let userProfileView = UserProfileView()
+        
     var reload = BehaviorSubject(value: ())
-    var followStatus = PublishSubject<Bool>()
+    var profileImageData = PublishSubject<Data?>()
+    var profileEditButtonTap = PublishSubject<Void>()
     
-    private var sections = BehaviorSubject<[OtherUserProfileSectionModel]>(value: [])
+    private var sections = BehaviorSubject<[UserProfileSectionModel]>(value: [])
     
     private var nickname: String = ""
-    var userId: String = ""
     
     override func loadView() {
-        self.view = otherUserProfileView
+        self.view = userProfileView
     }
 
     override func viewDidLoad() {
@@ -43,84 +43,100 @@ class OtherUserProfileViewController: BaseViewController {
     }
     
     override func bind() {
-        sections.bind(to: otherUserProfileView.collectionView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
+        sections.bind(to: userProfileView.collectionView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
         
-        let modelSelected = otherUserProfileView.collectionView.rx.modelSelected(OtherUserProfileSectionItem.self).asObservable()
-        let itemSelected =  otherUserProfileView.collectionView.rx.itemSelected.asObservable()
-        let input = OtherUserProfileViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, userId: userId, followStatus: followStatus)
+        let modelSelected = userProfileView.collectionView.rx.modelSelected(UserProfileSectionItem.self).asObservable()
+        let itemSelected =  userProfileView.collectionView.rx.itemSelected.asObservable()
+        let input = UserProfileViewModel.Input(reload: reload, profileImageData: profileImageData, profileEditButtonTap: profileEditButtonTap, modelSelected: modelSelected, itemSelected: itemSelected)
         
         let output = viewModel.transform(input: input)
         output.result.bind(with: self) { owner, value in
             owner.nickname = value.0.nick
             
-            var sectionModels: [OtherUserProfileSectionModel] = []
+            var sectionModels: [UserProfileSectionModel] = []
             
-            sectionModels.append(OtherUserProfileSectionModel(title: nil, items: [.infoItem(value.0)]))
+            sectionModels.append(UserProfileSectionModel(title: nil, items: [.infoItem(value.0)]))
             
             if !value.1.data.isEmpty {
-                owner.otherUserProfileView.sections.insert(.product, at: 1)
-                let productSection = OtherUserProfileSectionModel(title: "판매 중인 상품", items: value.1.data.map { .product($0) })
+                owner.userProfileView.sections.insert(.product, at: 1)
+                let productSection = UserProfileSectionModel(title: "판매 중인 상품", items: value.1.data.map { .product($0) })
                 sectionModels.append(productSection)
             } else {
-                owner.otherUserProfileView.sections.insert(.empty, at: 1)
-                sectionModels.append(OtherUserProfileSectionModel(title: "판매 중인 상품", items: [.noProduct]))
+                owner.userProfileView.sections.insert(.empty, at: 1)
+                sectionModels.append(UserProfileSectionModel(title: "판매 중인 상품", items: [.noProduct]))
             }
             
             if !value.2.data.isEmpty {
-                owner.otherUserProfileView.sections.insert(.post, at: 2)
-                let postSection = OtherUserProfileSectionModel(title: "작성한 게시글", items: value.2.data.map { .post($0) })
+                owner.userProfileView.sections.insert(.post, at: 2)
+                let postSection = UserProfileSectionModel(title: "작성한 게시글", items: value.2.data.map { .post($0) })
                 sectionModels.append(postSection)
             } else {
-                owner.otherUserProfileView.sections.insert(.empty, at: 2)
-                sectionModels.append(OtherUserProfileSectionModel(title: "작성한 게시글", items: [.noPost]))
+                owner.userProfileView.sections.insert(.empty, at: 2)
+                sectionModels.append(UserProfileSectionModel(title: "작성한 게시글", items: [.noPost]))
             }
             
+            owner.userProfileView.sections.insert(.more, at: 3)
+            let moreSection = UserProfileSectionModel(title: nil, items: MoreType.allCases.map { .more($0) })
+            sectionModels.append(moreSection)
+            
             owner.sections.onNext(sectionModels)
+            
         }.disposed(by: disposeBag)
         
-        output.post.bind(with: self) { owner, value in
-            let vc = PostDetailViewController()
-            vc.postBoard = ProductIdentifier.postBoard
+        output.profileEditButtonTap.bind(with: self) { owner, profile in
+            let vc = ProfileEditViewController()
+            vc.profileImageData = profile.1
+            vc.profileImage = profile.0.profileImage
+            vc.nickname = profile.0.nick
+            vc.introduction = profile.0.introduction
+            owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
+                
+        output.productDetail.bind(with: self) { owner, value in
+            let vc = ProductPostDetailViewController()
             vc.postId = value.postId
-            vc.userId = UserDefaultsManager.userId!
+            vc.accessType = UserDefaultsManager.userId == value.creator.userId ? .me : .other
+            vc.hidesBottomBarWhenPushed = true
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
-        output.followOrUnfollowSuccessTrigger.drive(with: self) { owner, _ in
-            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
-            NotificationCenter.default.post(name: Notification.Name(Noti.changeProfile.rawValue), object: nil)
+        output.postDetail.bind(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postId = value.postId
+            vc.userId = value.creator.userId
+            vc.accessType = UserDefaultsManager.userId! == value.creator.userId ? .me : .other
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
+        output.moreDetail.bind(with: self) { owner, value in
+            switch value {
+            case .like:
+                let vc = LikeListViewController()
+                owner.navigationController?.pushViewController(vc, animated: true)
+            case .payment:
+                let vc = ProfilePaymentListViewController()
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+        }.disposed(by: disposeBag)
+                
         output.notFoundErr.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .notFoundErrFollow, in: owner.otherUserProfileView)
+            ToastManager.shared.showErrorToast(title: .notFoundErrFollow, in: owner.userProfileView)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.otherUserProfileView)
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.userProfileView)
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<OtherUserProfileSectionModel> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<OtherUserProfileSectionModel>(configureCell: { dataSource, collectionView, indexPath, item in
+    func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<UserProfileSectionModel> {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<UserProfileSectionModel>(configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
             case .infoItem(let info):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherUserProfileInfoCollectionViewCell.identifier, for: indexPath) as! OtherUserProfileInfoCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileInfoCollectionViewCell.identifier, for: indexPath) as! UserProfileInfoCollectionViewCell
                 cell.configureCell(info)
-                if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {
-                    cell.followButton.configuration = .check("팔로잉")
-                    cell.followButton.rx.tap.bind(with: self) { owner, _ in
-                        owner.followStatus.onNext(true)
-                    }.disposed(by: cell.disposeBag)
-                } else {
-                    cell.followButton.configuration = .check2("팔로우")
-                    cell.followButton.rx.tap.bind(with: self) { owner, _ in
-                        owner.followStatus.onNext(false)
-                    }.disposed(by: cell.disposeBag)
-                }
-                cell.chatButton.rx.tap.bind(with: self) { owner, _ in
-                    let vc = ChatRoomViewController()
-                    vc.userId = info.user_id
-                    owner.navigationController?.pushViewController(vc, animated: true)
+                cell.profileEditButton.rx.tap.bind(with: self) { owner, _ in
+                    owner.profileImageData.onNext(cell.profileImageView.image?.pngData())
+                    owner.profileEditButtonTap.onNext(())
                 }.disposed(by: cell.disposeBag)
                 return cell
             case .product(let product):
@@ -138,6 +154,10 @@ class OtherUserProfileViewController: BaseViewController {
             case .noPost:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
                 cell.emptyLabel.text = "게시글이 없습니다"
+                return cell
+            case .more(let more):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileMoreCollectionViewCell.identifier, for: indexPath) as! UserProfileMoreCollectionViewCell
+                cell.configureCell(more)
                 return cell
             }
         },configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -170,6 +190,7 @@ class OtherUserProfileViewController: BaseViewController {
         return dataSource
     }
     
+    // TODO: 프로필 수정 관련 로직 처리 필요
     private func registerObserver() {
         Observable.of(
             NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue)),
