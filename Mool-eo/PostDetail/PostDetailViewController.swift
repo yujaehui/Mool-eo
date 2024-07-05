@@ -27,7 +27,7 @@ class PostDetailViewController: BaseViewController {
     let postDetailView = PostDetailView()
     
     var accessType: postDetailAccessType = .me
-    var postBoard: ProductIdentifier = .postBoard
+    var postBoard: ProductIdentifier = .post
     var postId: String = ""
     var userId: String = ""
     

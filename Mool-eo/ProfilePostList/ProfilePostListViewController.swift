@@ -23,7 +23,7 @@ class ProfilePostListViewController: BaseViewController {
     
     var nickname = ""
     var userId = ""
-    var postBoard: ProductIdentifier = .postBoard
+    var postBoard: ProductIdentifier = .post
     lazy var reload = BehaviorSubject<ProductIdentifier>(value: postBoard)
     
     private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])

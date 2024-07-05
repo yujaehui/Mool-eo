@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProductDetailTableViewCell: BaseTableViewCell {
+final class ProductDetailTableViewCell: BaseTableViewCell {
         
     let detailLabel: CustomLabel = {
         let label = CustomLabel(type: .content)

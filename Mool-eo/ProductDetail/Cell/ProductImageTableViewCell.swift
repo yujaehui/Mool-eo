@@ -10,11 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class ProductImageTableViewCell: BaseTableViewCell {
+final class ProductImageTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
-    let postImageCollectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
         collectionView.isPagingEnabled = true
@@ -27,18 +27,18 @@ class ProductImageTableViewCell: BaseTableViewCell {
     }
     
     override func configureHierarchy() {
-        contentView.addSubview(postImageCollectionView)
+        contentView.addSubview(collectionView)
     }
     
     override func configureConstraints() {
-        postImageCollectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView)
-            make.height.equalTo(postImageCollectionView.snp.width)
+            make.height.equalTo(collectionView.snp.width)
             make.bottom.lessThanOrEqualTo(contentView)
         }
     }
     
-    private static func configureCollectionViewLayout() -> UICollectionViewLayout {
+    private func configureCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
         layout.minimumLineSpacing = 0
@@ -49,7 +49,7 @@ class ProductImageTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ postModel: PostModel) {
-        Observable.just(postModel.files).bind(to: postImageCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
+        Observable.just(postModel.files).bind(to: collectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.postImageView, urlString: element)
             cell.postImageCountLabel.text = "\(row+1)/\(postModel.files.count)"
         }.disposed(by: disposeBag)

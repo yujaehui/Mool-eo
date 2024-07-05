@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProductCategoryView: BaseView {
+final class ProductCategoryView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ProductCategoryTableViewCell.self, forCellReuseIdentifier: ProductCategoryTableViewCell.identifier)

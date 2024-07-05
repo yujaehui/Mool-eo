@@ -21,7 +21,7 @@ class PostListViewController: BaseViewController {
     let viewModel = PostListViewModel()
     let postListView = PostListView()
     
-    var postBoard: ProductIdentifier = .postBoard
+    var postBoard: ProductIdentifier = .post
     lazy var reload = BehaviorSubject<ProductIdentifier>(value: postBoard)
     
     private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])

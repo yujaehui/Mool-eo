@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class ProductInfoTableViewCell: BaseTableViewCell {
+final class ProductInfoTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -27,15 +27,9 @@ class ProductInfoTableViewCell: BaseTableViewCell {
     
     let nickNameLabel = CustomLabel(type: .descriptionBold)
     
-    let productNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .titleBold)
-        return label
-    }()
+    let productNameLabel = CustomLabel(type: .titleBold)
     
-    let priceLabel: CustomLabel = {
-        let label = CustomLabel(type: .titleBold)
-        return label
-    }()
+    let productPriceLabel = CustomLabel(type: .titleBold)
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -47,7 +41,7 @@ class ProductInfoTableViewCell: BaseTableViewCell {
         profileStackView.addArrangedSubview(profileImageView)
         profileStackView.addArrangedSubview(nickNameLabel)
         contentView.addSubview(productNameLabel)
-        contentView.addSubview(priceLabel)
+        contentView.addSubview(productPriceLabel)
     }
     
     override func configureConstraints() {
@@ -70,7 +64,7 @@ class ProductInfoTableViewCell: BaseTableViewCell {
             make.horizontalEdges.equalTo(contentView).inset(20)
         }
         
-        priceLabel.snp.makeConstraints { make in
+        productPriceLabel.snp.makeConstraints { make in
             make.top.equalTo(productNameLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
@@ -80,6 +74,6 @@ class ProductInfoTableViewCell: BaseTableViewCell {
     func configureCell(_ postModel: PostModel) {
         nickNameLabel.text = postModel.creator.nick
         productNameLabel.text = postModel.title
-        priceLabel.text = NumberFormatterManager.shared.formatCurrencyString(postModel.content1)
+        productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(postModel.content1)
     }
 }

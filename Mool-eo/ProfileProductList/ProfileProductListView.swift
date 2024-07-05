@@ -11,7 +11,7 @@ import SnapKit
 class ProfileProductListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ProdcutPostListTableViewCell.self, forCellReuseIdentifier: ProdcutPostListTableViewCell.identifier)
+        tableView.register(ProdcutListTableViewCell.self, forCellReuseIdentifier: ProdcutListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()

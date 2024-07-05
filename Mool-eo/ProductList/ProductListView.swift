@@ -1,5 +1,5 @@
 //
-//  ProductPostListView.swift
+//  ProductListView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/10/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProductPostListView: BaseView {
+final class ProductListView: BaseView {
     
     lazy var collectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -17,6 +17,7 @@ class ProductPostListView: BaseView {
         return layout
     }()
     
+    // category
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.register(ProductCategoryCollectionViewCell.self, forCellWithReuseIdentifier: ProductCategoryCollectionViewCell.identifier)
@@ -25,11 +26,11 @@ class ProductPostListView: BaseView {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ProdcutPostListTableViewCell.self, forCellReuseIdentifier: ProdcutPostListTableViewCell.identifier)
+        tableView.register(ProdcutListTableViewCell.self, forCellReuseIdentifier: ProdcutListTableViewCell.identifier)
         return tableView
     }()
     
-    let postWriteButton: UIButton = {
+    let productWriteButton: UIButton = {
         let button = UIButton()
         button.configuration = .postAdd("상품 등록")
         return button
@@ -38,7 +39,7 @@ class ProductPostListView: BaseView {
     override func configureHierarchy() {
         addSubview(collectionView)
         addSubview(tableView)
-        addSubview(postWriteButton)
+        addSubview(productWriteButton)
     }
     
     override func configureConstraints() {
@@ -52,9 +53,9 @@ class ProductPostListView: BaseView {
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         
-        postWriteButton.snp.makeConstraints { make in
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+        productWriteButton.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
         }
     }
 }

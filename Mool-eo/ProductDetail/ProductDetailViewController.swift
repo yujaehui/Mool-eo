@@ -1,5 +1,5 @@
 //
-//  ProductPostDetailViewController.swift
+//  ProductDetailViewController.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/10/24.
@@ -13,27 +13,25 @@ import iamport_ios
 import WebKit
 import Toast
 
-class ProductPostDetailViewController: BaseViewController {
+final class ProductDetailViewController: BaseViewController {
     
-    deinit {
-        print("‼️ProductPostDetailViewController Deinit‼️")
-    }
+    deinit { print("‼️ProductDetailViewController Deinit‼️") }
     
-    let viewModel = ProductPostDetailViewModel()
-    let productPostDetailView = ProductPostDetailView()
+    private let viewModel = ProductDetailViewModel()
+    private let productDetailView = ProductDetailView()
+    
+    private var reload = BehaviorSubject(value: ())
+    
+    private var sections = BehaviorSubject<[ProductDetailSectionModel]>(value: [])
+    private lazy var dataSource = configureDataSource()
+    
+    private var deleteButtonTap = PublishSubject<Void>()
     
     var postId: String = ""
     var accessType: postDetailAccessType = .me
     
-    var reload = BehaviorSubject(value: ())
-    var postModel = PublishSubject<PostModel>()
-    var deleteButtonTap = PublishSubject<Void>()
-    
-    private var sections = BehaviorSubject<[ProductPostDetailSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
-    
     override func loadView() {
-        self.view = productPostDetailView
+        self.view = productDetailView
     }
     
     override func viewDidLoad() {
@@ -48,8 +46,7 @@ class ProductPostDetailViewController: BaseViewController {
             let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
                 self.deleteButtonTap.onNext(())
             })
-            let Items = [delete]
-            return Items
+            return [delete]
         }
         let menu = UIMenu(title: "", children: items)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
@@ -57,26 +54,30 @@ class ProductPostDetailViewController: BaseViewController {
     }
     
     override func configureView() {
-        sections.bind(to: productPostDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        sections
+            .bind(to: productDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
     
     override func bind() {
-        let postId = Observable.just(postId)
-        let reload = reload
-        let likeButtonTap = productPostDetailView.likeButton.rx.tap.asObservable()
-        let buyButtonTap = productPostDetailView.buyButton.rx.tap.asObservable()
-        let deleteButtonTap = deleteButtonTap
-        let postModel = postModel
-        let input = ProductPostDetailViewModel.Input(postId: postId, reload: reload, likeButtonTap: likeButtonTap, buyButtonTap: buyButtonTap, deleteButtonTap: deleteButtonTap, postModel: postModel)
+        let input = ProductDetailViewModel.Input(
+            postId: postId,
+            reload: reload,
+            likeButtonTap: productDetailView.likeButton.rx.tap.asObservable(),
+            buyButtonTap: productDetailView.buyButton.rx.tap.asObservable(),
+            deleteButtonTap: deleteButtonTap
+        )
         
         let output = viewModel.transform(input: input)
         
-        output.postDetail.bind(with: self) { owner, value in
-            owner.sections.onNext([ProductPostDetailSectionModel(title: nil, items: [.image(value)])]
-                                  + [ProductPostDetailSectionModel(title: nil, items: [.info(value)])]
-                                  + [ProductPostDetailSectionModel(title: "상세 정보", items: [.detail(value)])])
-            owner.postModel.onNext(value)
-            owner.productPostDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
+        output.productDetail.bind(with: self) { owner, value in
+            owner.sections.onNext([ProductDetailSectionModel(title: nil, items: [.image(value)])]
+                                  + [ProductDetailSectionModel(title: nil, items: [.info(value)])]
+                                  + [ProductDetailSectionModel(title: "상세 정보", items: [.detail(value)])])
+            owner.productDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.productDetailView)
         }.disposed(by: disposeBag)
         
         output.likeButtonTapResult.bind(with: self) { owner, value in
@@ -96,8 +97,8 @@ class ProductPostDetailViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProductPostDetailSectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<ProductPostDetailSectionModel> (configureCell : { dataSource, tableView, indexPath, item in
+    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ProductDetailSectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<ProductDetailSectionModel> (configureCell : { dataSource, tableView, indexPath, item in
             switch item {
             case .image(let postModel):
                 let cell = tableView.dequeueReusableCell(withIdentifier: ProductImageTableViewCell.identifier, for: indexPath) as! ProductImageTableViewCell
@@ -140,7 +141,7 @@ class ProductPostDetailViewController: BaseViewController {
         .subscribe(with: self) { owner, noti in
             owner.reload.onNext(())
             if (noti.object as? Bool) != nil {
-                ToastManager.shared.showToast(title: "결제가 완료되었습니다", in: owner.productPostDetailView)
+                ToastManager.shared.showToast(title: "결제가 완료되었습니다", in: owner.productDetailView)
             }
         }
         .disposed(by: disposeBag)

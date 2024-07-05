@@ -10,13 +10,13 @@ import RxSwift
 import RxCocoa
 import iamport_ios
 
-class ProductWebViewModel: ViewModelType {
+final class ProductWebViewModel: ViewModelType {
     
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
         let postModel: Observable<PostModel?>
-        let iamportResponseSubject: PublishSubject<IamportResponse?>
+        let iamportResponse: PublishSubject<IamportResponse?>
     }
     
     struct Output {
@@ -26,10 +26,8 @@ class ProductWebViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let paymentValidationSuccessTrigger = PublishSubject<Void>()
-        
-        let paymentObsevable = Observable.combineLatest(input.postModel, input.iamportResponseSubject)
-        
-        paymentObsevable
+
+        Observable.combineLatest(input.postModel, input.iamportResponse)
             .map { (postModel, response) in
                 guard let postModel = postModel,
                       let response = response,
@@ -49,6 +47,7 @@ class ProductWebViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(postModel: input.postModel, paymentValidationSuccessTrigger: paymentValidationSuccessTrigger)
+        return Output(postModel: input.postModel, 
+                      paymentValidationSuccessTrigger: paymentValidationSuccessTrigger)
     }
 }

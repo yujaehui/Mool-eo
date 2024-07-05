@@ -8,12 +8,9 @@
 import UIKit
 import SnapKit
 
-class ProductCategoryCollectionViewCell: BaseCollectionViewCell {
+final class ProductCategoryCollectionViewCell: BaseCollectionViewCell {
     
-    let categoryLabel: CustomLabel = {
-        let label = CustomLabel(type: .description)
-        return label
-    }()
+    let categoryLabel = CustomLabel(type: .description)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

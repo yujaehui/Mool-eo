@@ -93,7 +93,7 @@ class UserProfileViewController: BaseViewController {
         }.disposed(by: disposeBag)
                 
         output.productDetail.bind(with: self) { owner, value in
-            let vc = ProductPostDetailViewController()
+            let vc = ProductDetailViewController()
             vc.postId = value.postId
             vc.accessType = UserDefaultsManager.userId == value.creator.userId ? .me : .other
             vc.hidesBottomBarWhenPushed = true

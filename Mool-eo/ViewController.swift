@@ -18,7 +18,7 @@ class ViewController: UITabBarController {
     
     private func addVC() {
         
-        let productPostListVC = UINavigationController(rootViewController: ProductPostListViewController())
+        let productPostListVC = UINavigationController(rootViewController: ProductListViewController())
         productPostListVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house"))
         
         let postBoardVC = UINavigationController(rootViewController: PostListViewController())

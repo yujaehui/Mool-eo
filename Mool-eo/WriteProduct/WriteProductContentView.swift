@@ -1,5 +1,5 @@
 //
-//  WriteProductPostContentView.swift
+//  WriteProductContentView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/10/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class WriteProductPostContentView: BaseView {
+final class WriteProductContentView: BaseView {
     let imageAddButton: UIButton = {
         let button = UIButton()
         button.configuration = .imageAdd()
@@ -57,19 +57,19 @@ class WriteProductPostContentView: BaseView {
         return view
     }()
     
-    let priceView: ProductTextFieldView =  {
+    let productPriceView: ProductTextFieldView =  {
         let view = ProductTextFieldView(frame: .zero, textFieldType: .price)
         view.customTextField.keyboardType = .numberPad
         return view
     }()
     
-    let detailLabel: CustomLabel = {
+    let productDetailLabel: CustomLabel = {
         let label = CustomLabel(type: .colorContentBold)
         label.text = "상세 정보"
         return label
     }()
     
-    let detailTextView: AutoResizableTextView = {
+    let productDetailTextView: AutoResizableTextView = {
         let textView = AutoResizableTextView(maxHeight: nil)
         textView.layer.borderColor = ColorStyle.placeholder.cgColor
         textView.layer.borderWidth = 1
@@ -86,9 +86,9 @@ class WriteProductPostContentView: BaseView {
         categoryStackView.addArrangedSubview(categoryLabel)
         categoryStackView.addArrangedSubview(categoryImage)
         addSubview(productNameView)
-        addSubview(priceView)
-        addSubview(detailLabel)
-        addSubview(detailTextView)
+        addSubview(productPriceView)
+        addSubview(productDetailLabel)
+        addSubview(productDetailTextView)
     }
     
     override func configureConstraints() {
@@ -110,25 +110,24 @@ class WriteProductPostContentView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
-        
         productNameView.snp.makeConstraints { make in
             make.top.equalTo(categoryImage.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
-        priceView.snp.makeConstraints { make in
+        productPriceView.snp.makeConstraints { make in
             make.top.equalTo(productNameView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
-        detailLabel.snp.makeConstraints { make in
-            make.top.equalTo(priceView.snp.bottom).offset(20)
+        productDetailLabel.snp.makeConstraints { make in
+            make.top.equalTo(productPriceView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(20)
         }
         
-        detailTextView.snp.makeConstraints { make in
-            make.top.equalTo(detailLabel.snp.bottom).offset(5)
+        productDetailTextView.snp.makeConstraints { make in
+            make.top.equalTo(productDetailLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }

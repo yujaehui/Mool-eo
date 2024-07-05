@@ -69,7 +69,7 @@ final class ProfileProductListViewModel: ViewModelType {
         
         nextPrefetch
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "12", next: next)
+                NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.product.rawValue, limit: "12", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in

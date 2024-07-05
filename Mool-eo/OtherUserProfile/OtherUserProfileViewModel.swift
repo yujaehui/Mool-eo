@@ -39,8 +39,8 @@ class OtherUserProfileViewModel: ViewModelType {
             .flatMap {
                 Observable.zip(
                     NetworkManager.shared.otherUserProfileCheck(userId: input.userId).asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.market.rawValue, limit: "10", next: "").asObservable(),
-                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.postBoard.rawValue, limit: "10", next: "").asObservable()
+                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.product.rawValue, limit: "10", next: "").asObservable(),
+                    NetworkManager.shared.postCheckUser(userId: input.userId, productId: ProductIdentifier.post.rawValue, limit: "10", next: "").asObservable()
                 ).map { profileResult, postResult, productPostResult -> (NetworkResult<OtherUserProfileModel>, NetworkResult<PostListModel>, NetworkResult<PostListModel>) in
                     return (profileResult, postResult, productPostResult)
                 }

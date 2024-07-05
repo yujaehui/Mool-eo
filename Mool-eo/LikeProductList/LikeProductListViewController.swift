@@ -86,7 +86,7 @@ class LikeProductListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.post.drive(with: self) { owner, value in
-            let vc = ProductPostDetailViewController()
+            let vc = ProductDetailViewController()
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

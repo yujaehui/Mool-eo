@@ -11,14 +11,14 @@ import iamport_ios
 import RxSwift
 import RxCocoa
 
-class ProductWebViewController: BaseViewController {
+final class ProductWebViewController: BaseViewController {
     
     let viewModel = ProductWebViewModel()
     let productWebView = ProductWebView()
     
     var postModel: PostModel!
     
-    var iamportResponseSubject = PublishSubject<IamportResponse?>()
+    var iamportResponse = PublishSubject<IamportResponse?>()
     
     override func loadView() {
         self.view = productWebView
@@ -26,14 +26,13 @@ class ProductWebViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
     override func bind() {
-        let postModel = Observable.just(postModel)
-        let iamportResponseSubject = iamportResponseSubject
-        
-        let input = ProductWebViewModel.Input(postModel: postModel, iamportResponseSubject: iamportResponseSubject)
+        let input = ProductWebViewModel.Input(
+            postModel: Observable.just(postModel),
+            iamportResponse: iamportResponse
+        )
         
         let output = viewModel.transform(input: input)
         
@@ -53,7 +52,7 @@ class ProductWebViewController: BaseViewController {
                 webViewMode: self.productWebView.wkWebView,
                 userCode: "imp57573124",
                 payment: payment) { iamportResponse in
-                    self.iamportResponseSubject.onNext(iamportResponse)
+                    self.iamportResponse.onNext(iamportResponse)
                 }
         }.disposed(by: disposeBag)
         

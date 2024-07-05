@@ -27,7 +27,7 @@ final class WritePostViewController: BaseViewController {
     let writePostView = WritePostView()
     
     var type: PostInteractionType = .upload
-    var postBoard: ProductIdentifier = .postBoard
+    var postBoard: ProductIdentifier = .post
     var postTitle: String = ""
     var postContent: String = ""
     var postFiles: [String] = []

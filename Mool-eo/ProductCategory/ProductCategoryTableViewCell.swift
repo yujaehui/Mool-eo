@@ -8,11 +8,8 @@
 import UIKit
 import SnapKit
 
-class ProductCategoryTableViewCell: BaseTableViewCell {
-    let categoryLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        return label
-    }()
+final class ProductCategoryTableViewCell: BaseTableViewCell {
+    let categoryLabel = CustomLabel(type: .contentBold)
     
     override func configureHierarchy() {
         contentView.addSubview(categoryLabel)

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import WebKit
 
-class ProductWebView: BaseView {
+final class ProductWebView: BaseView {
     
     lazy var wkWebView: WKWebView = {
         var view = WKWebView()

@@ -1,5 +1,5 @@
 //
-//  WriteProductPostViewModel.swift
+//  WriteProductViewModel.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/10/24.
@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class WriteProductPostViewModel: ViewModelType {
+final class WriteProductViewModel: ViewModelType {
     
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -17,31 +17,34 @@ class WriteProductPostViewModel: ViewModelType {
         let textViewBegin: Observable<Void>
         let textViewEnd: Observable<Void>
         let selectedImageDataSubject: BehaviorSubject<[Data]>
-        let category: Observable<String>
+        let productCategory: Observable<String>
         let productName: Observable<String>
-        let price: Observable<String>
-        let detail: Observable<String>
+        let productPrice: Observable<String>
+        let productDetail: Observable<String>
         let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
-        let cancelButtonTap: Observable<Void>
     }
     
     struct Output {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
-        let imageAddButtonTap: Driver<Void>
-        let completeButtonValidation: Driver<Bool>
-        let uploadSuccessTrigger: Driver<Void>
+        let imageAddButtonTap: Observable<Void>
+        let convertedProductPrice: PublishSubject<String>
+        let completeButtonValidation: BehaviorSubject<Bool>
+        let uploadSuccessTrigger: PublishSubject<Void>
         let badRequest: Driver<Void>
         let notFoundErr: Driver<Void>
         let networkFail: Driver<Void>
-        let cancelButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
+        let categoryText = "카테고리를 선택해주세요"
         let placeholderText = "내용을 입력해주세요"
+        
         let text = BehaviorRelay<String?>(value: placeholderText)
         let textColorType = BehaviorRelay<Bool>(value: false)
+        let originalProductPrice = PublishSubject<String>()
+        let convertedProductPrice = PublishSubject<String>()
         let completeButtonValidation = BehaviorSubject(value: false)
         let uploadSuccessTrigger = PublishSubject<Void>()
         let badRequest = PublishSubject<Void>()
@@ -49,7 +52,7 @@ class WriteProductPostViewModel: ViewModelType {
         let networkFail = PublishSubject<Void>()
         
         input.textViewBegin
-            .withLatestFrom(input.detail)
+            .withLatestFrom(input.productDetail)
             .bind(with: self) { owner, value in
                 if value == placeholderText {
                     text.accept(nil)
@@ -58,7 +61,7 @@ class WriteProductPostViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         input.textViewEnd
-            .withLatestFrom(input.detail)
+            .withLatestFrom(input.productDetail)
             .bind(with: self) { owner, value in
                 if value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     text.accept(placeholderText)
@@ -66,9 +69,18 @@ class WriteProductPostViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(input.category, input.productName, input.price, input.detail, input.selectedImageDataSubject)
+        input.productPrice
+            .do { price in
+                let originalValue = self.extractNumericString(from: price)
+                originalProductPrice.onNext(originalValue)
+            }
+            .bind(with: self) { owner, priceString in
+                convertedProductPrice.onNext(NumberFormatterManager.shared.formatCurrencyString(priceString))
+            }.disposed(by: disposeBag)
+        
+        Observable.combineLatest(input.productCategory, input.productName, originalProductPrice, input.productDetail, input.selectedImageDataSubject)
             .map { (category, productName, price, detail, imageData) in
-                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty && detail != placeholderText && category != "카테고리를 선택해주세요"
+                return !productName.isEmpty && !price.isEmpty && !detail.isEmpty && !imageData.isEmpty && detail != placeholderText && category != categoryText
             }
             .bind(with: self) { owner, value in
                 completeButtonValidation.onNext(value)
@@ -86,11 +98,11 @@ class WriteProductPostViewModel: ViewModelType {
             .flatMapLatest { result -> Observable<PostQuery> in
                 switch result {
                 case .success(let filesModel):
-                    return Observable.combineLatest(input.category, input.productName, input.price, input.detail).map { (category ,productName, price, detail) in
+                    return Observable.combineLatest(input.productCategory, input.productName, input.productPrice, input.productDetail).map { (category ,productName, price, detail) in
                         return PostQuery(title: productName,
                                          content: detail + HashtagManager.shared.convertToHashtagsAndUnderscore(category),
                                          content1: price,
-                                         product_id: ProductIdentifier.market.rawValue,
+                                         product_id: ProductIdentifier.product.rawValue,
                                          files: filesModel.files)
                     }
                 case .error(let error):
@@ -99,15 +111,14 @@ class WriteProductPostViewModel: ViewModelType {
                     case .networkFail: networkFail.onNext(())
                     default: print("⚠️OTHER ERROR : \(error)⚠️")
                     }
-                    return Observable.combineLatest(input.productName, input.price, input.detail).map { (productName, price, detail) in
-                        return PostQuery(title: productName, content: detail, content1: price, product_id: ProductIdentifier.market.rawValue, files: nil)
+                    return Observable.combineLatest(input.productName, input.productPrice, input.productDetail).map { (productName, price, detail) in
+                        return PostQuery(title: productName, content: detail, content1: price, product_id: ProductIdentifier.product.rawValue, files: nil)
                     }
                 }
             }
             .flatMap { query in
                 NetworkManager.shared.postUpload(query: query)
             }
-            .debug("게시글 업로드")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): uploadSuccessTrigger.onNext(())
@@ -123,12 +134,16 @@ class WriteProductPostViewModel: ViewModelType {
         
         return Output(text: text.asDriver(onErrorJustReturn: ""),
                       textColorType: textColorType.asDriver(onErrorJustReturn: false),
-                      imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
-                      completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
-                      uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      imageAddButtonTap: input.imageAddButtonTap,
+                      convertedProductPrice: convertedProductPrice,
+                      completeButtonValidation: completeButtonValidation,
+                      uploadSuccessTrigger: uploadSuccessTrigger,
                       badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()),
-                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func extractNumericString(from input: String) -> String {
+        return input.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
     }
 }

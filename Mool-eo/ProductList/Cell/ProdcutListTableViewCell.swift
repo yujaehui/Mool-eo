@@ -1,5 +1,5 @@
 //
-//  ProdcutPostListTableViewCell.swift
+//  ProdcutListTableViewCell.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/12/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProdcutPostListTableViewCell: BaseTableViewCell {
+final class ProdcutListTableViewCell: BaseTableViewCell {
     
     let productImageView: PostImageView = {
         let imageView = PostImageView(frame: .zero)
@@ -30,13 +30,13 @@ class ProdcutPostListTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let priceLabel: CustomLabel = {
+    let productPriceLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
         label.numberOfLines = 1
         return label
     }()
     
-    let detailLabel: CustomLabel = {
+    let productDetailLabel: CustomLabel = {
         let label = CustomLabel(type: .subContent)
         label.numberOfLines = 0
         return label
@@ -46,8 +46,8 @@ class ProdcutPostListTableViewCell: BaseTableViewCell {
         contentView.addSubview(productImageView)
         contentView.addSubview(labelStackView)
         labelStackView.addArrangedSubview(productNameLabel)
-        labelStackView.addArrangedSubview(priceLabel)
-        labelStackView.addArrangedSubview(detailLabel)
+        labelStackView.addArrangedSubview(productPriceLabel)
+        labelStackView.addArrangedSubview(productDetailLabel)
     }
     
     override func configureConstraints() {
@@ -68,7 +68,7 @@ class ProdcutPostListTableViewCell: BaseTableViewCell {
     func configureCell(_ product: PostModel) {
         URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: product.files.first!)
         productNameLabel.text = product.title
-        priceLabel.text = NumberFormatterManager.shared.formatCurrencyString(product.content1)
-        detailLabel.text = HashtagManager.shared.removingTextAfterHash(product.content)
+        productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(product.content1)
+        productDetailLabel.text = HashtagManager.shared.removingTextAfterHash(product.content)
     }
 }

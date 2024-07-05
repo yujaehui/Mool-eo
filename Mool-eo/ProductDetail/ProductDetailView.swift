@@ -1,5 +1,5 @@
 //
-//  ProductPostDetailView.swift
+//  ProductDetailView.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/10/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProductPostDetailView: BaseView {
+final class ProductDetailView: BaseView {
     
     let tableView: UITableView = {
         let tableView = UITableView()
@@ -54,9 +54,9 @@ class ProductPostDetailView: BaseView {
         }
         
         buttonStackView.snp.makeConstraints { make in
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
         
         likeButton.snp.makeConstraints { make in

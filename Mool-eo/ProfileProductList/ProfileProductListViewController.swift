@@ -17,7 +17,7 @@ final class ProfileProductListViewController: BaseViewController {
     private let viewModel = ProfileProductListViewModel()
     private let profileProductListView = ProfileProductListView()
     
-    private let reload = BehaviorSubject<ProductIdentifier>(value: (.market))
+    private let reload = BehaviorSubject<ProductIdentifier>(value: (.product))
     private let lastItem = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
     
@@ -82,7 +82,7 @@ final class ProfileProductListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.productPost.bind(with: self) { owner, value in
-            let vc = ProductPostDetailViewController()
+            let vc = ProductDetailViewController()
             vc.postId = value.postId
             vc.accessType = UserDefaultsManager.userId == value.creator.userId ? .me : .other
             vc.hidesBottomBarWhenPushed = true
@@ -96,7 +96,7 @@ final class ProfileProductListViewController: BaseViewController {
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<PostListSectionModel> { dataSource, tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(withIdentifier: ProdcutPostListTableViewCell.identifier, for: indexPath) as! ProdcutPostListTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ProdcutListTableViewCell.identifier, for: indexPath) as! ProdcutListTableViewCell
             cell.configureCell(item)
             return cell
         }
@@ -111,7 +111,7 @@ final class ProfileProductListViewController: BaseViewController {
         .merge()
         .take(until: self.rx.deallocated)
         .subscribe(with: self) { owner, noti in
-            owner.reload.onNext(ProductIdentifier.market)
+            owner.reload.onNext(ProductIdentifier.product)
         }
         .disposed(by: disposeBag)
     }
