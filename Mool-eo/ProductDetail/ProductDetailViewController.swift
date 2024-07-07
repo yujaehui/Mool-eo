@@ -40,8 +40,6 @@ final class ProductDetailViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
         var items: [UIAction] {
             let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
                 self.deleteButtonTap.onNext(())

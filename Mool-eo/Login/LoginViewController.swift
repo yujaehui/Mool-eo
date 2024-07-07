@@ -12,11 +12,9 @@ import RxCocoa
 import Toast
 import IQKeyboardManagerSwift
 
-class LoginViewController: BaseViewController {
+final class LoginViewController: BaseViewController {
     
-    deinit {
-        print("‼️LoginViewController Deinit‼️")
-    }
+    deinit { print("‼️LoginViewController Deinit‼️") }
     
     let viewModel = LoginViewModel()
     let loginView = LoginView()
@@ -30,45 +28,33 @@ class LoginViewController: BaseViewController {
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 0
     }
     
-    override func setNav() {
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
-    }
-    
     override func bind() {
-        let keyboardWillShow = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification) // 키보드가 나타나는 시점
-        let keyboardWillHide = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification) // 키보드가 사라지는 시점
-        let id = loginView.loginBoxView.idTextField.rx.text.orEmpty.asObservable()
-        let password = loginView.loginBoxView.passwordTextField.rx.text.orEmpty.asObservable()
-        let loginButtonTap = loginView.loginBoxView.loginButton.rx.tap.asObservable()
-        let joinButtonTap = loginView.joinButton.rx.tap.asObservable()
-        let input = LoginViewModel.Input(keyboardWillShow: keyboardWillShow, keyboardWillHide: keyboardWillHide, id: id, password: password, loginButtonTap: loginButtonTap, joinButtonTap: joinButtonTap)
+        let input = LoginViewModel.Input(
+            keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
+            keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
+            id: loginView.loginBoxView.idTextField.rx.text.orEmpty.asObservable(),
+            password: loginView.loginBoxView.passwordTextField.rx.text.orEmpty.asObservable(),
+            loginButtonTap: loginView.loginBoxView.loginButton.rx.tap.asObservable(),
+            joinButtonTap: loginView.joinButton.rx.tap.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
         
-        // 키보드가 나타났을 경우
         output.keyboardWillShow.bind(with: self) { owner, notification in
             owner.keyboardWillShow(notification: notification)
         }.disposed(by: disposeBag)
         
-        // 키보드가 사라졌을 경우
         output.keyboardWillHide.bind(with: self) { owner, notification in
             owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
         
         output.loginValidation.drive(loginView.loginBoxView.loginButton.rx.isEnabled).disposed(by: disposeBag)
         
-        // 로그인 네트워크 통신 성공 -> 앱의 첫 화면을 변경 (로그인 화면이 계속 남아있지 않도록)
         output.loginSuccessTrigger.drive(with: self) { owner, _ in
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            let sceneDelegate = windowScene?.delegate as? SceneDelegate
-            sceneDelegate?.window?.rootViewController = ViewController()
-            sceneDelegate?.window?.makeKeyAndVisible()
+            TransitionManager.shared.setInitialViewController(ViewController())
         }.disposed(by: disposeBag)
         
-        // 회원가입 버튼을 클릭했을 경우, 회원가입 화면으로 이동
         output.joinButtonTap.drive(with: self) { owner, _ in
-            print("...")
             owner.navigationController?.pushViewController(JoinViewController(), animated: true)
         }.disposed(by: disposeBag)
         
@@ -85,7 +71,6 @@ class LoginViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    // 키보드가 나타났을 경우 loginBoxView의 위치 조정
     private func keyboardWillShow(notification: Notification) {
         guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardHeight = keyboardFrame.height
@@ -98,7 +83,6 @@ class LoginViewController: BaseViewController {
         }
     }
     
-    // 키보드가 사라졌을 경우 loginBoxView의 위치 조정 (초기 위치와 동일하게 설정)
     private func keyboardWillHide(notification: Notification) {
         UIView.animate(withDuration: 0.3) {
             self.loginView.loginBoxView.snp.updateConstraints { make in

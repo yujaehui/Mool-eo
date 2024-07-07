@@ -58,8 +58,6 @@ final class ProductListViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "Mool-eo!"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func configureView() {

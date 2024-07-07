@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class LoginViewModel: ViewModelType {
+final class LoginViewModel: ViewModelType {
     
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -52,19 +52,15 @@ class LoginViewModel: ViewModelType {
             }
         }.disposed(by: disposeBag)
         
-        // 로그인 네트워크 통신 진행
         input.loginButtonTap
             .withLatestFrom(loginQuery)
             .flatMap { loginQuery in
                 NetworkManager.shared.login(query: loginQuery)
             }
-            .debug("로그인")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let loginModel):
-                    UserDefaultsManager.userId = loginModel.user_id
-                    UserDefaultsManager.accessToken = loginModel.accessToken
-                    UserDefaultsManager.refreshToken = loginModel.refreshToken
+                    owner.loginSetting(loginModel)
                     loginSuccessTrigger.onNext(())
                 case .error(let error):
                     switch error {
@@ -86,6 +82,12 @@ class LoginViewModel: ViewModelType {
                       authenticationErr: authenticationErr.asDriver(onErrorJustReturn: ()),
                       badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func loginSetting(_ loginModel: LoginModel) {
+        UserDefaultsManager.userId = loginModel.user_id
+        UserDefaultsManager.accessToken = loginModel.accessToken
+        UserDefaultsManager.refreshToken = loginModel.refreshToken
     }
 }
 

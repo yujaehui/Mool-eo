@@ -39,8 +39,6 @@ final class WriteProductViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "상품 등록"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
     }
@@ -104,7 +102,7 @@ final class WriteProductViewController: BaseViewController {
             owner.writeProductView.writeProductPostContentView.productDetailTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         
-        output.imageAddButtonTap.bind(with: self) { owner, _ in
+        output.imageAddButtonTap.drive(with: self) { owner, _ in
             var configuration = PHPickerConfiguration()
             configuration.selectionLimit = 5
             configuration.filter = .images
@@ -113,11 +111,11 @@ final class WriteProductViewController: BaseViewController {
             owner.present(picker, animated: true)
         }.disposed(by: disposeBag)
         
-        output.convertedProductPrice.bind(with: self) { owner, value in
+        output.convertedProductPrice.drive(with: self) { owner, value in
             owner.writeProductView.writeProductPostContentView.productPriceView.customTextField.text = value
         }.disposed(by: disposeBag)
                 
-        output.completeButtonValidation.bind(with: self) { owner, value in
+        output.completeButtonValidation.drive(with: self) { owner, value in
             owner.navigationItem.rightBarButtonItem?.isEnabled = value
         }.disposed(by: disposeBag)
         

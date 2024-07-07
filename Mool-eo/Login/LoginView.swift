@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LoginView: BaseView {
+final class LoginView: BaseView {
     
     let loginBoxView = LoginBoxView()
     

@@ -28,9 +28,9 @@ final class WriteProductViewModel: ViewModelType {
     struct Output {
         let text: Driver<String?>
         let textColorType: Driver<Bool>
-        let imageAddButtonTap: Observable<Void>
-        let convertedProductPrice: PublishSubject<String>
-        let completeButtonValidation: BehaviorSubject<Bool>
+        let imageAddButtonTap: Driver<Void>
+        let convertedProductPrice: Driver<String>
+        let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: PublishSubject<Void>
         let badRequest: Driver<Void>
         let notFoundErr: Driver<Void>
@@ -134,9 +134,9 @@ final class WriteProductViewModel: ViewModelType {
         
         return Output(text: text.asDriver(onErrorJustReturn: ""),
                       textColorType: textColorType.asDriver(onErrorJustReturn: false),
-                      imageAddButtonTap: input.imageAddButtonTap,
-                      convertedProductPrice: convertedProductPrice,
-                      completeButtonValidation: completeButtonValidation,
+                      imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
+                      convertedProductPrice: convertedProductPrice.asDriver(onErrorJustReturn: ""),
+                      completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger,
                       badRequest: badRequest.asDriver(onErrorJustReturn: ()),
                       notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),

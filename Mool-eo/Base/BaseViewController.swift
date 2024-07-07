@@ -24,6 +24,9 @@ class BaseViewController: UIViewController {
     
     func configureView() {}
     func bind() {}
-    func setNav() {}
+    func setNav() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = ColorStyle.point
+    }
     func setToolBar() {}
 }
