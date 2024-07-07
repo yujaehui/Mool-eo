@@ -46,9 +46,9 @@ final class JoinViewController: BaseViewController {
         
         output.nextButtonValidation.drive(joinView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
-        output.nextButtonTap.drive(with: self) { owner, _ in
+        output.nextButtonTap.drive(with: self) { owner, id in
             let vc = JoinSecondViewController()
-            vc.id = owner.joinView.idView.customTextField.text ?? ""
+            vc.id = id
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         

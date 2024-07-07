@@ -22,15 +22,15 @@ final class JoinViewModel: ViewModelType {
         let idValidation: Driver<Bool>
         let idCheckSuccessValidation: Driver<Bool?>
         let nextButtonValidation: Driver<Bool>
-        let nextButtonTap: Driver<Void>
+        let nextButtonTap: Driver<String>
         let networkFail: Driver<Void>
-
     }
     
     func transform(input: Input) -> Output {
         let idValidation = BehaviorSubject<Bool>(value: false)
         let idCheckSuccessValidation = BehaviorSubject<Bool?>(value: false) // true일 경우 사용 가능, false일 경우 중복, 사용 불가능, nil일 경우 중복 확인 안 함
         let nextButtonValidation = BehaviorSubject<Bool>(value: false)
+        let nextButtonTap = PublishSubject<String>()
         let networkFail = PublishSubject<Void>()
         
         input.id
@@ -73,11 +73,17 @@ final class JoinViewModel: ViewModelType {
                 nextButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
         
+        input.nextButtonTap
+            .withLatestFrom(input.id)
+            .bind(with: self) { owner, id in
+                nextButtonTap.onNext(id)
+            }.disposed(by: disposeBag)
+        
         
         return Output(idValidation: idValidation.asDriver(onErrorJustReturn: false),
                       idCheckSuccessValidation: idCheckSuccessValidation.asDriver(onErrorJustReturn: nil),
                       nextButtonValidation: nextButtonValidation.asDriver(onErrorJustReturn: false),
-                      nextButtonTap: input.nextButtonTap.asDriver(onErrorJustReturn: ()),
+                      nextButtonTap: nextButtonTap.asDriver(onErrorJustReturn: ""),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

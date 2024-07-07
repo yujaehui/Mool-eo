@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class JoinSecondView: BaseView {
+final class JoinSecondView: BaseView {
     
     let titleLabel: CustomLabel = {
         let label = CustomLabel(type: .colorTitleBold)

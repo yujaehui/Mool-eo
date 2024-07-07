@@ -9,12 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-// 회원가입 두번째 로직 : 비밀번호 입력
-class JoinSecondViewController: BaseViewController {
+final class JoinSecondViewController: BaseViewController {
     
-    deinit {
-        print("‼️JoinSecondViewController Deinit‼️")
-    }
+    deinit { print("‼️JoinSecondViewController Deinit‼️") }
     
     let viewModel = JoinSecondViewModel()
     let joinSecondView = JoinSecondView()
@@ -29,19 +26,14 @@ class JoinSecondViewController: BaseViewController {
         super.viewDidLoad()
     }
     
-    override func setNav() {
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
-    }
-    
     override func bind() {
-        let password = joinSecondView.passwordView.customTextField.rx.text.orEmpty.asObservable()
-        let nextButtonTap = joinSecondView.nextButton.rx.tap.asObservable()
-        let input = JoinSecondViewModel.Input(password: password, nextButtonTap: nextButtonTap)
+        let input = JoinSecondViewModel.Input(
+            password: joinSecondView.passwordView.customTextField.rx.text.orEmpty.asObservable(),
+            nextButtonTap: joinSecondView.nextButton.rx.tap.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
         
-        // 비밀번호 기본 조건
         output.passwordValidation.drive(with: self) { owner, value in
             owner.joinSecondView.passwordView.descriptionLabel.textColor = value ? ColorStyle.available : ColorStyle.caution
             owner.joinSecondView.passwordView.descriptionLabel.text = value ? "사용 가능한 비밀번호입니다." : TextFieldType.password.description
@@ -49,11 +41,10 @@ class JoinSecondViewController: BaseViewController {
         
         output.nextButtonValidation.drive(joinSecondView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
-        // 다음 버튼을 클릭했을 경우, 회원가입 세번째 로직으로 이동
-        output.nextButtonTap.drive(with: self) { owner, _ in
+        output.nextButtonTap.drive(with: self) { owner, password in
             let vc = JoinThirdViewController()
             vc.id = owner.id
-            vc.password = owner.joinSecondView.passwordView.customTextField.text ?? ""
+            vc.password = password
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
 
