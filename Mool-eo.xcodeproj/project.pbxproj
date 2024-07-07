@@ -248,6 +248,9 @@
 		09EB7A032C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A022C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift */; };
 		09EB7A052C341110001E0470 /* PaymentListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A042C341110001E0470 /* PaymentListSectionModel.swift */; };
 		09EB7A092C3A7262001E0470 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A082C3A7262001E0470 /* TransitionManager.swift */; };
+		09EB7A0F2C3A7E1B001E0470 /* JoinSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A0E2C3A7E1B001E0470 /* JoinSuccessView.swift */; };
+		09EB7A142C3A826D001E0470 /* JoinSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */; };
+		09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +477,9 @@
 		09EB7A022C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePaymentListTableViewCell.swift; sourceTree = "<group>"; };
 		09EB7A042C341110001E0470 /* PaymentListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListSectionModel.swift; sourceTree = "<group>"; };
 		09EB7A082C3A7262001E0470 /* TransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionManager.swift; sourceTree = "<group>"; };
+		09EB7A0E2C3A7E1B001E0470 /* JoinSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessView.swift; sourceTree = "<group>"; };
+		09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewController.swift; sourceTree = "<group>"; };
+		09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1132,6 +1138,7 @@
 				09279A2C2BDF89A200E4A65D /* JoinFirstStep */,
 				09279A2D2BDF89B000E4A65D /* JoinSecondStep */,
 				09279A2E2BDF89BC00E4A65D /* JoinThirdStep */,
+				09EB7A102C3A8017001E0470 /* JoinSuccess */,
 			);
 			path = Join;
 			sourceTree = "<group>";
@@ -1310,6 +1317,16 @@
 				09444FC42BEF49FA00086E20 /* ProductDetailSectionModel.swift */,
 			);
 			path = Section;
+			sourceTree = "<group>";
+		};
+		09EB7A102C3A8017001E0470 /* JoinSuccess */ = {
+			isa = PBXGroup;
+			children = (
+				09EB7A0E2C3A7E1B001E0470 /* JoinSuccessView.swift */,
+				09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */,
+				09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */,
+			);
+			path = JoinSuccess;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1528,6 +1545,7 @@
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
 				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
 				09EB79E32C3279C0001E0470 /* UserInfoSection.swift in Sources */,
+				09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */,
 				093289252BF0DDC700C8F52E /* SettingManagementTableViewCell.swift in Sources */,
 				09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */,
 				093289142BF0BF0900C8F52E /* PaymentQuery.swift in Sources */,
@@ -1547,6 +1565,7 @@
 				09279A5E2BE202DE00E4A65D /* LikeProductModel.swift in Sources */,
 				09138B802C086601005C84B2 /* WriteContentView.swift in Sources */,
 				09279A5B2BE202B200E4A65D /* LikeProductQuery.swift in Sources */,
+				09EB7A142C3A826D001E0470 /* JoinSuccessViewController.swift in Sources */,
 				09EB79E52C3279C9001E0470 /* UserPostSection.swift in Sources */,
 				093289D32BF764A200C8F52E /* ProductCategoryViewController.swift in Sources */,
 				093289272BF0DED400C8F52E /* SettingSectionModel.swift in Sources */,
@@ -1624,6 +1643,7 @@
 				09444FA62BEE3E6100086E20 /* ProductDetailView.swift in Sources */,
 				0999EB092BCA97F3004B6D1F /* JoinSecondViewModel.swift in Sources */,
 				0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */,
+				09EB7A0F2C3A7E1B001E0470 /* JoinSuccessView.swift in Sources */,
 				0932891D2BF0DA4D00C8F52E /* SettingViewModel.swift in Sources */,
 				09444F962BEE327000086E20 /* ProductListViewController.swift in Sources */,
 				09444FB62BEE441F00086E20 /* ProductTextFieldView.swift in Sources */,

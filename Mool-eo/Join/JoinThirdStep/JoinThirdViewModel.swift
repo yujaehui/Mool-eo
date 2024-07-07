@@ -22,14 +22,14 @@ final class JoinThirdViewModel: ViewModelType {
     struct Output {
         let nicknameValidation: Driver<Bool>
         let joinButtonValidation: Driver<Bool>
-        let joinSuccessTrigger: Driver<Void>
+        let joinSuccessTrigger: Driver<JoinModel>
         let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let nicknameValidation = BehaviorSubject<Bool>(value: false)
         let joinButtonValidation = BehaviorSubject<Bool>(value: false)
-        let joinSuccessTrigger = PublishSubject<Void>()
+        let joinSuccessTrigger = PublishSubject<JoinModel>()
         let networkFail = PublishSubject<Void>()
 
         input.nickname
@@ -59,7 +59,7 @@ final class JoinThirdViewModel: ViewModelType {
             }
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(_): joinSuccessTrigger.onNext(())
+                case .success(let joinModel): joinSuccessTrigger.onNext(joinModel)
                 case .error(let error):
                     switch error {
                     case .networkFail: networkFail.onNext(())
@@ -70,7 +70,7 @@ final class JoinThirdViewModel: ViewModelType {
         
         return Output(nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
                       joinButtonValidation: joinButtonValidation.asDriver(onErrorJustReturn: false),
-                      joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      joinSuccessTrigger: joinSuccessTrigger.asDriver(onErrorJustReturn: JoinModel(user_id: "", email: "", nick: "")),
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

@@ -45,8 +45,11 @@ final class JoinThirdViewController: BaseViewController {
         
         output.joinButtonValidation.drive(joinThirdView.joinButton.rx.isEnabled).disposed(by: disposeBag)
         
-        output.joinSuccessTrigger.drive(with: self) { owner, _ in
-            TransitionManager.shared.setInitialViewController(LoginViewController(), navigation: true)
+        output.joinSuccessTrigger.drive(with: self) { owner, value in
+            let vc = JoinSuccessViewController()
+            vc.id = value.email
+            vc.nickname = value.nick
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in
