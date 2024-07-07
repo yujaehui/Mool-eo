@@ -14,7 +14,11 @@ final class TransitionManager {
     func setInitialViewController(_ rootViewController: UIViewController, navigation: Bool) {
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let sceneDelegate = windowScene?.delegate as? SceneDelegate
-        sceneDelegate?.window?.rootViewController = navigation ? rootViewController : UINavigationController(rootViewController: rootViewController)
+        if navigation {
+            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: rootViewController)
+        } else {
+            sceneDelegate?.window?.rootViewController = rootViewController
+        }
         sceneDelegate?.window?.makeKeyAndVisible()
     }
 }

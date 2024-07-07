@@ -10,8 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-// 이미지가 있는 게시글일 경우 사용할 Cell
-class PostDetailTableViewCell: BaseTableViewCell {
+final class PostDetailTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -40,7 +39,7 @@ class PostDetailTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let postImageCollectionView: UICollectionView = {
+    lazy var postImageCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
         collectionView.isPagingEnabled = true
@@ -110,12 +109,12 @@ class PostDetailTableViewCell: BaseTableViewCell {
             make.top.equalTo(likeButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(1)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
+            make.bottom.lessThanOrEqualTo(contentView)
 
         }
     }
     
-    private static func configureCollectionViewLayout() -> UICollectionViewLayout {
+    private func configureCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
         layout.minimumLineSpacing = 0

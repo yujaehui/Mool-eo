@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class CommentTableViewCell: BaseTableViewCell {
+final class CommentTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -72,7 +72,7 @@ class CommentTableViewCell: BaseTableViewCell {
             make.top.equalTo(commentLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(1)
-            make.bottom.lessThanOrEqualTo(contentView).inset(20)
+            make.bottom.lessThanOrEqualTo(contentView)
         }
     }
     

@@ -12,17 +12,14 @@ import RxDataSources
 import RxGesture
 import Toast
 
-class PostListViewController: BaseViewController {
+final class PostListViewController: BaseViewController {
     
-    deinit {
-        print("‼️PostListViewController Deinit‼️")
-    }
+    deinit { print("‼️PostListViewController Deinit‼️") }
     
     let viewModel = PostListViewModel()
     let postListView = PostListView()
     
-    var postBoard: ProductIdentifier = .post
-    lazy var reload = BehaviorSubject<ProductIdentifier>(value: postBoard)
+    lazy var reload = BehaviorSubject<Void>(value: ())
     
     private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
@@ -40,30 +37,30 @@ class PostListViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.title = "게시판"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
+        navigationItem.title = "게시글"
+    }
+    
+    override func configureView() {
+        sections
+            .bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
     
     override func bind() {
-        sections.bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        
-        let reload = reload
-        let postWriteButtonTap = postListView.postWriteButton.rx.tap.asObservable()
-        let modelSelected = postListView.tableView.rx.modelSelected(PostModel.self).asObservable()
-        let itemSelected = postListView.tableView.rx.itemSelected.asObservable()
-        let prefetch = postListView.tableView.rx.prefetchRows.asObservable()
-        let input = PostListViewModel.Input(reload: reload, postWriteButtonTap: postWriteButtonTap, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, postBoard: postBoard, nextCursor: nextCursor)
+        let input = PostListViewModel.Input(
+            reload: reload,
+            lastRow: lastRow,
+            nextCursor: nextCursor,
+            prefetch: postListView.tableView.rx.prefetchRows.asObservable(),
+            modelSelected: postListView.tableView.rx.modelSelected(PostModel.self).asObservable(),
+            itemSelected: postListView.tableView.rx.itemSelected.asObservable(),
+            postWriteButtonTap: postListView.postWriteButton.rx.tap.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
         
         output.postList.bind(with: self) { owner, value in
             owner.sections.onNext([PostListSectionModel(items: value.data)])
-            guard value.nextCursor != "0" else { return }
-            owner.nextCursor.onNext(value.nextCursor)
-            let lastSection = owner.postListView.tableView.numberOfSections - 1
-            let lastRow = owner.postListView.tableView.numberOfRows(inSection: lastSection) - 1
-            owner.lastRow.onNext(lastRow)
+            owner.updatePagination(value)
         }.disposed(by: disposeBag)
         
         output.nextPostList.bind(with: self) { owner, value in
@@ -73,30 +70,26 @@ class PostListViewController: BaseViewController {
                     var updatedSections = currentSections
                     updatedSections.append(PostListSectionModel(items: value.data))
                     owner.sections.onNext(updatedSections)
-                    owner.postListView.tableView.reloadData()
-                    guard value.nextCursor != "0" else { return }
-                    owner.nextCursor.onNext(value.nextCursor)
+                    owner.updatePagination(value)
                 })
                 .disposed(by: owner.disposeBag)
+        }.disposed(by: disposeBag)
+        
+        output.postDetail.bind(with: self) { owner, value in
+            let vc = PostDetailViewController()
+            vc.postId = value.postId
+            vc.userId = value.creator.userId
+            vc.accessType = UserDefaultsManager.userId! == value.creator.userId ? .me : .other
+            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
         output.postWriteButtonTap.drive(with: self) { owner, _ in
             let vc = WritePostViewController()
             vc.type = .upload
-            vc.postBoard = owner.postBoard
+            vc.postBoard = ProductIdentifier.post
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
-        }.disposed(by: disposeBag)
-        
-        // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
-        output.post.bind(with: self) { owner, value in
-            let vc = PostDetailViewController()
-            vc.postBoard = owner.postBoard
-            vc.postId = value.postId
-            vc.userId = value.creator.userId
-            vc.accessType = UserDefaultsManager.userId! == value.creator.userId ? .me : .other
-            owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in
@@ -134,10 +127,18 @@ class PostListViewController: BaseViewController {
         .take(until: self.rx.deallocated)
         .subscribe(with: self) { owner, noti in
             if let postBoard = noti.object as? ProductIdentifier {
-                owner.reload.onNext(postBoard)
+                owner.reload.onNext(())
             }
         }
         .disposed(by: disposeBag)
+    }
+    
+    private func updatePagination(_ postList: PostListModel) {
+        guard postList.nextCursor != "0" else { return }
+        nextCursor.onNext(postList.nextCursor)
+        let lastNumberSection = postListView.tableView.numberOfSections - 1
+        let lastNumberRow = postListView.tableView.numberOfRows(inSection: lastNumberSection) - 1
+        lastRow.onNext(lastNumberRow)
     }
 }
 

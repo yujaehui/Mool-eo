@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PostImageCollectionViewCell: BaseCollectionViewCell {
+final class PostImageCollectionViewCell: BaseCollectionViewCell {
     
     let postImageView = LargePostImageView(frame: .zero)
     

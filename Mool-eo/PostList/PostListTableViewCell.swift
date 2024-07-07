@@ -11,8 +11,7 @@ import Kingfisher
 import RxSwift
 import RxCocoa
 
-// 이미지가 있는 게시글일 경우 사용할 Cell
-class PostListTableViewCell: BaseTableViewCell {
+final class PostListTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -60,9 +59,7 @@ class PostListTableViewCell: BaseTableViewCell {
     }()
     
     let commentCountLabel = CustomLabel(type: .description)
-    
-    let lineView = LineView()
-    
+        
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -80,7 +77,6 @@ class PostListTableViewCell: BaseTableViewCell {
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
         contentView.addSubview(commentCountLabel)
-        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {
@@ -135,12 +131,6 @@ class PostListTableViewCell: BaseTableViewCell {
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
-        }
-        
-        lineView.snp.makeConstraints { make in
-            make.top.equalTo(likeIconImageView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(1)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
     }

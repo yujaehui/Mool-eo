@@ -17,24 +17,24 @@ enum postDetailAccessType {
     case other
 }
 
-class PostDetailViewController: BaseViewController {
+final class PostDetailViewController: BaseViewController {
     
-    deinit {
-        print("‼️PostDetailViewController Deinit‼️")
-    }
+    deinit { print("‼️PostDetailViewController Deinit‼️") }
     
     let viewModel = PostDetailViewModel()
     let postDetailView = PostDetailView()
     
     var accessType: postDetailAccessType = .me
-    var postBoard: ProductIdentifier = .post
     var postId: String = ""
     var userId: String = ""
     
     var reload = BehaviorSubject(value: ())
+    
     var likeStatus = PublishSubject<Bool>()
+    
     var editButtonTap = PublishSubject<Void>()
     var deleteButtonTap = PublishSubject<Void>()
+    
     var change = false
     
     private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
@@ -51,13 +51,11 @@ class PostDetailViewController: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if change {
-            NotificationCenter.default.post(name: Notification.Name(Noti.changePost.rawValue), object: postBoard)
+            NotificationCenter.default.post(name: Notification.Name(Noti.changePost.rawValue), object: ProductIdentifier.post)
         }
     }
     
     override func setNav() {
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
         var items: [UIAction] {
             let edit = UIAction(title: "수정", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
                 self.editButtonTap.onNext(())
@@ -65,29 +63,29 @@ class PostDetailViewController: BaseViewController {
             let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
                 self.deleteButtonTap.onNext(())
             })
-            let Items = [edit, delete]
-            return Items
+            return [edit, delete]
         }
         let menu = UIMenu(title: "", children: items)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
         navigationItem.rightBarButtonItem?.isHidden = accessType == .me ? false : true
     }
     
+    override func configureView() {
+        sections
+            .bind(to: postDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+    }
+    
     override func bind() {
-        sections.bind(to: postDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        
         let input = PostDetailViewModel.Input(
-            didScroll: postDetailView.tableView.rx.didScroll.asObservable(),
-            textViewBegin: postDetailView.writeCommentView.writeTextView.rx.didBeginEditing.asObservable(),
-            textViewEnd: postDetailView.writeCommentView.writeTextView.rx.didEndEditing.asObservable(),
             postId: Observable.just(postId),
-            userId: userId,
             reload: reload,
-            comment: postDetailView.writeCommentView.writeTextView.rx.text.orEmpty.asObservable(),
-            commentUploadButtonTap: postDetailView.writeCommentView.textUploadButton.rx.tap.asObservable(),
-            likeStatus: likeStatus,
             postEditButtonTap: editButtonTap,
             postDeleteButtonTap: deleteButtonTap,
+            likeStatus: likeStatus,
+            commentTextViewBegin: postDetailView.writeCommentView.writeTextView.rx.didBeginEditing.asObservable(),
+            commentTextViewEnd: postDetailView.writeCommentView.writeTextView.rx.didEndEditing.asObservable(),
+            comment: postDetailView.writeCommentView.writeTextView.rx.text.orEmpty.asObservable(),
+            commentUploadButtonTap: postDetailView.writeCommentView.textUploadButton.rx.tap.asObservable(),
             itemDeletedWithCommentId: postDetailView.tableView.rx.itemDeleted.flatMap { [weak self] indexPath -> Observable<(IndexPath, String)> in
                 guard let sections = try? self?.sections.value(),
                       case let .comment(comment) = sections[indexPath.section].items[indexPath.row] else { return Observable.empty() }
@@ -96,17 +94,12 @@ class PostDetailViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.didScroll.bind(with: self) { owner, _ in
-            owner.view.endEditing(true)
-        }.disposed(by: disposeBag)
+        output.commentText.drive(postDetailView.writeCommentView.writeTextView.rx.text).disposed(by: disposeBag)
         
-        // 텍스트뷰 placeholder 작업
-        output.text.drive(postDetailView.writeCommentView.writeTextView.rx.text).disposed(by: disposeBag)
-        output.textColorType.drive(with: self) { owner, value in
+        output.commentTextColorType.drive(with: self) { owner, value in
             owner.postDetailView.writeCommentView.writeTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         
-        // 특정 게시글 조회가 성공할 경우
         output.postDetail.bind(with: self) { owner, value in
             owner.sections.onNext([PostDetailSectionModel(title: nil, items: [.post(value)])]
                                   + [PostDetailSectionModel(title: "댓글", items: value.comments.map { .comment($0) })])
@@ -114,26 +107,22 @@ class PostDetailViewController: BaseViewController {
         
         output.commentButtonValidation.drive(postDetailView.writeCommentView.textUploadButton.rx.isEnabled).disposed(by: disposeBag)
         
-        // 댓글 업로드가 성공할 경우
         output.commentUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.postDetailView.writeCommentView.writeTextView.text = ""
             owner.change = true
-            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+            owner.reload.onNext(())
         }.disposed(by: disposeBag)
         
-        // 좋아요 업로드가 성공할 경우
         output.likeUploadSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
-            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+            owner.reload.onNext(())
         }.disposed(by: disposeBag)
         
-        // 자신의 게시물 -> 삭제
         output.postDeleteSuccessTrigger.drive(with: self) { owner, _ in
             owner.change = true
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         
-        // 댓글 삭제가 성공할 경우
         output.commentDeleteSuccessTrigger.drive(with: self) { owner, indexPath in
             owner.change = true
             
@@ -143,7 +132,7 @@ class PostDetailViewController: BaseViewController {
             sections[indexPath.section] = PostDetailSectionModel(original: sections[indexPath.section], items: items)
             owner.sections.onNext(sections)
             
-            owner.reload.onNext(()) // 새롭게 특정 게시글 조회 네트워크 통신 진행 (시점 전달)
+            owner.reload.onNext(())
             
             ToastManager.shared.showToast(title: "댓글이 삭제되었습니다", in: owner.postDetailView)
         }.disposed(by: disposeBag)
@@ -151,7 +140,7 @@ class PostDetailViewController: BaseViewController {
         output.editPostDetail.bind(with: self) { owner, value in
             let vc = WritePostViewController()
             vc.type = .edit
-            vc.postBoard = owner.postBoard
+            vc.postBoard = ProductIdentifier.post
             vc.postTitle = value.title
             vc.postContent = value.content
             vc.postFiles = value.files

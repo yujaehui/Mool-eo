@@ -40,7 +40,7 @@ final class ProductListViewController: BaseViewController {
     
     private let reload = BehaviorSubject<Void>(value: ())
     
-    private let lastItem = PublishSubject<Int>()
+    private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
     
     private let categoryList = BehaviorSubject<[String]>(value: Category.allCases.map { $0.rawValue })
@@ -75,7 +75,7 @@ final class ProductListViewController: BaseViewController {
             categoryModelSelected: productListView.collectionView.rx.modelSelected(String.self).asObservable(),
             categoryItemSelected: productListView.collectionView.rx.itemSelected.asObservable(),
             reload: reload,
-            lastItem: lastItem,
+            lastRow: lastRow,
             nextCursor: nextCursor,
             prefetch: productListView.tableView.rx.prefetchRows.asObservable(),
             modelSelected: productListView.tableView.rx.modelSelected(PostModel.self).asObservable(),
@@ -105,10 +105,6 @@ final class ProductListViewController: BaseViewController {
                 }.disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
-        output.networkFail.drive(with: self) { owner, _ in
-            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.productListView)
-        }.disposed(by: disposeBag)
-        
         output.productDetail.bind(with: self) { owner, value in
             let vc = ProductDetailViewController()
             vc.postId = value.postId
@@ -122,6 +118,10 @@ final class ProductListViewController: BaseViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.productListView)
         }.disposed(by: disposeBag)
     }
     
@@ -152,6 +152,6 @@ final class ProductListViewController: BaseViewController {
         nextCursor.onNext(productList.nextCursor)
         let lastNumberSection = productListView.tableView.numberOfSections - 1
         let lastNumberRow = productListView.tableView.numberOfRows(inSection: lastNumberSection) - 1
-        lastItem.onNext(lastNumberRow)
+        lastRow.onNext(lastNumberRow)
     }
 }

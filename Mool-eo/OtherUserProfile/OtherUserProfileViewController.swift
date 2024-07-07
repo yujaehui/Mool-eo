@@ -80,7 +80,6 @@ class OtherUserProfileViewController: BaseViewController {
         
         output.post.bind(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.postBoard = ProductIdentifier.post
             vc.postId = value.postId
             vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)

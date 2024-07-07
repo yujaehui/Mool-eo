@@ -10,8 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-// 이미지가 없는 게시글일 경우 사용할 Cell
-class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
+final class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -96,8 +95,7 @@ class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
             make.top.equalTo(likeButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.height.equalTo(1)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
-
+            make.bottom.lessThanOrEqualTo(contentView)
         }
     }
     

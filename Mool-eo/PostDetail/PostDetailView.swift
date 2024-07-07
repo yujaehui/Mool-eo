@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PostDetailView: BaseView {
+final class PostDetailView: BaseView {
     
     let tableView: UITableView = {
         let tableView = UITableView()

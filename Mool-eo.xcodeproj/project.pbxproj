@@ -196,11 +196,7 @@
 		0999EB0D2BCA9815004B6D1F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */; };
 		0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */; };
 		0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */; };
-		0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB162BCAA01E004B6D1F /* PostBoardView.swift */; };
-		0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB182BCAA028004B6D1F /* PostBoardViewController.swift */; };
-		0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB1A2BCAA262004B6D1F /* PostBoardViewModel.swift */; };
 		0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB1C2BCAA2DD004B6D1F /* UIView+Extension.swift */; };
-		0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB1E2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift */; };
 		0999EB282BCBAE2A004B6D1F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0999EB272BCBAE2A004B6D1F /* .gitignore */; };
 		0999EB2B2BCBAE56004B6D1F /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB2A2BCBAE56004B6D1F /* APIKey.swift */; };
 		0999EB2D2BCBAE8D004B6D1F /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */; };
@@ -426,11 +422,7 @@
 		0999EB0C2BCA9815004B6D1F /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		0999EB0E2BCA981B004B6D1F /* ProfileTextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTextFieldView.swift; sourceTree = "<group>"; };
 		0999EB102BCA9842004B6D1F /* DateFormatterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
-		0999EB162BCAA01E004B6D1F /* PostBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardView.swift; sourceTree = "<group>"; };
-		0999EB182BCAA028004B6D1F /* PostBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardViewController.swift; sourceTree = "<group>"; };
-		0999EB1A2BCAA262004B6D1F /* PostBoardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardViewModel.swift; sourceTree = "<group>"; };
 		0999EB1C2BCAA2DD004B6D1F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
-		0999EB1E2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBoardCollectionViewCell.swift; sourceTree = "<group>"; };
 		0999EB272BCBAE2A004B6D1F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0999EB2A2BCBAE56004B6D1F /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0999EB2C2BCBAE8D004B6D1F /* HTTPHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
@@ -839,7 +831,6 @@
 				093289CF2BF7648100C8F52E /* ProductCategory */,
 				095679892BC931290030F0CD /* Login */,
 				0999EAFF2BCA97F3004B6D1F /* Join */,
-				0999EB152BCA9FA4004B6D1F /* PostBoard */,
 				09602B462BD3A5BA00A6AFEA /* PostList */,
 				09602B652BD3E26100A6AFEA /* PostDetail */,
 				095678F72BC681560030F0CD /* WritePost */,
@@ -1141,17 +1132,6 @@
 				09EB7A102C3A8017001E0470 /* JoinSuccess */,
 			);
 			path = Join;
-			sourceTree = "<group>";
-		};
-		0999EB152BCA9FA4004B6D1F /* PostBoard */ = {
-			isa = PBXGroup;
-			children = (
-				0999EB162BCAA01E004B6D1F /* PostBoardView.swift */,
-				0999EB1E2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift */,
-				0999EB182BCAA028004B6D1F /* PostBoardViewController.swift */,
-				0999EB1A2BCAA262004B6D1F /* PostBoardViewModel.swift */,
-			);
-			path = PostBoard;
 			sourceTree = "<group>";
 		};
 		0999EB292BCBAE4B004B6D1F /* Network */ = {
@@ -1495,7 +1475,6 @@
 				093289292BF0E9CB00C8F52E /* ProdcutListTableViewCell.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				09EB79CD2C324E5F001E0470 /* MyTwoImageChatTableViewCell.swift in Sources */,
-				0999EB1B2BCAA262004B6D1F /* PostBoardViewModel.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				0932898B2BF60B6600C8F52E /* ProfilePostListViewController.swift in Sources */,
 				09444FA82BEE3E6700086E20 /* ProductDetailViewController.swift in Sources */,
@@ -1530,7 +1509,6 @@
 				09602B482BD3A5D300A6AFEA /* PostListView.swift in Sources */,
 				09138B882C0AE61A005C84B2 /* ChatRoomSectionModel.swift in Sources */,
 				0999EB362BCBAF35004B6D1F /* LoginQuery.swift in Sources */,
-				0999EB192BCAA028004B6D1F /* PostBoardViewController.swift in Sources */,
 				0999EB0A2BCA97F3004B6D1F /* JoinSecondView.swift in Sources */,
 				0999EB112BCA9842004B6D1F /* DateFormatterManager.swift in Sources */,
 				09EB79FF2C340D8F001E0470 /* ProfilePaymentListViewController.swift in Sources */,
@@ -1591,7 +1569,6 @@
 				099E92882BCD506800311329 /* EmailModel.swift in Sources */,
 				095678F42BC680100030F0CD /* ViewModelType.swift in Sources */,
 				0956798B2BC938290030F0CD /* LoginView.swift in Sources */,
-				0999EB172BCAA01E004B6D1F /* PostBoardView.swift in Sources */,
 				0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */,
 				0999EB082BCA97F3004B6D1F /* JoinSecondViewController.swift in Sources */,
 				09279A302BDF98C900E4A65D /* PostImageView.swift in Sources */,
@@ -1655,7 +1632,6 @@
 				093289212BF0DA8A00C8F52E /* SettingViewController.swift in Sources */,
 				09EB7A012C340DC1001E0470 /* ProfilePaymentListViewModel.swift in Sources */,
 				09EB79CF2C3250A4001E0470 /* ManyImageChatCollectionViewCell.swift in Sources */,
-				0999EB1F2BCAA317004B6D1F /* PostBoardCollectionViewCell.swift in Sources */,
 				09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */,
 				09EB79F02C33F269001E0470 /* UserProfileProductCollectionViewCell.swift in Sources */,
 				09602B582BD3AC1C00A6AFEA /* FilesModel.swift in Sources */,

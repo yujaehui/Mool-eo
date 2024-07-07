@@ -17,7 +17,7 @@ final class ProductListViewModel: ViewModelType {
         let categoryModelSelected: Observable<String>
         let categoryItemSelected: Observable<IndexPath>
         let reload: BehaviorSubject<Void>
-        let lastItem: PublishSubject<Int>
+        let lastRow: PublishSubject<Int>
         let nextCursor: PublishSubject<String>
         let prefetch: Observable<[IndexPath]>
         let modelSelected: Observable<PostModel>
@@ -29,9 +29,9 @@ final class ProductListViewModel: ViewModelType {
         let selectedCategory: BehaviorSubject<String>
         let productList: PublishSubject<PostListModel>
         let nextProductList: PublishSubject<PostListModel>
-        let networkFail: Driver<Void>
         let productDetail: PublishSubject<PostModel>
         let productWriteButtonTap: Driver<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -39,8 +39,8 @@ final class ProductListViewModel: ViewModelType {
         let productList = PublishSubject<PostListModel>()
         let nextProductList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
-        let networkFail = PublishSubject<Void>()
         let productDetail = PublishSubject<PostModel>()
+        let networkFail = PublishSubject<Void>()
         
         Observable.zip(input.categoryModelSelected, input.categoryItemSelected)
             .map { $0.0 }
@@ -69,7 +69,7 @@ final class ProductListViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastItem)
+        Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
             .bind(with: self) { owner, value in
                 guard value.0 >= value.1 - 1 else { return }
                 prefetch.onNext(())
@@ -107,8 +107,8 @@ final class ProductListViewModel: ViewModelType {
         return Output(selectedCategory: selectedCategory,
                       productList: productList,
                       nextProductList: nextProductList,
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()),
                       productDetail: productDetail,
-                      productWriteButtonTap: input.productWriteButtonTap.asDriver(onErrorJustReturn: ()))
+                      productWriteButtonTap: input.productWriteButtonTap.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }

@@ -85,7 +85,6 @@ class ProfilePostListViewController: BaseViewController {
         // 특정 게시글 셀을 선택하면, 해당 게시글로 이동
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
-            vc.postBoard = owner.postBoard
             vc.postId = value
             vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)

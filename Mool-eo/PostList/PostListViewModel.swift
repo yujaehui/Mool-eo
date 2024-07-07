@@ -9,25 +9,24 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class PostListViewModel: ViewModelType {
+final class PostListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let reload: BehaviorSubject<ProductIdentifier>
-        let postWriteButtonTap: Observable<Void>
+        let reload: BehaviorSubject<Void>
+        let lastRow: PublishSubject<Int>
+        let nextCursor: PublishSubject<String>
+        let prefetch: Observable<[IndexPath]>
         let modelSelected: Observable<PostModel>
         let itemSelected: Observable<IndexPath>
-        let lastRow: PublishSubject<Int>
-        let prefetch: Observable<[IndexPath]>
-        let postBoard: ProductIdentifier
-        let nextCursor: PublishSubject<String>
+        let postWriteButtonTap: Observable<Void>
     }
     
     struct Output {
         let postList: PublishSubject<PostListModel>
         let nextPostList: PublishSubject<PostListModel>
+        let postDetail: PublishSubject<PostModel>
         let postWriteButtonTap: Driver<Void>
-        let post: PublishSubject<PostModel>
         let networkFail: Driver<Void>
     }
     
@@ -35,15 +34,13 @@ class PostListViewModel: ViewModelType {
         let postList = PublishSubject<PostListModel>()
         let nextPostList = PublishSubject<PostListModel>()
         let prefetch = PublishSubject<Void>()
-        let post = PublishSubject<PostModel>()
+        let postDetail = PublishSubject<PostModel>()
         let networkFail = PublishSubject<Void>()
         
-        // 게시글 조회 네트워크 통신 진행
         input.reload
             .flatMap { value in
-                NetworkManager.shared.postCheck(productId: value.rawValue, limit: "10", next: "")
+                NetworkManager.shared.postCheck(productId: ProductIdentifier.post.rawValue, limit: "10", next: "")
             }
-            .debug("게시글 조회")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let postListModel): 
@@ -56,20 +53,16 @@ class PostListViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        // Pagination
-        let prefetchObservable = Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
         
-        prefetchObservable
+        Observable.combineLatest(input.prefetch.compactMap(\.last?.row), input.lastRow)
             .bind(with: self) { owner, value in
                 guard value.0 == value.1 else { return }
                 prefetch.onNext(())
             }.disposed(by: disposeBag)
-        
-        let nextPrefetch = Observable.zip(input.nextCursor, prefetch)
-        
-        nextPrefetch
+                
+        Observable.zip(input.nextCursor, prefetch)
             .flatMap { (next, _) in
-                NetworkManager.shared.postCheck(productId: input.postBoard.rawValue, limit: "10", next: next)
+                NetworkManager.shared.postCheck(productId: ProductIdentifier.post.rawValue, limit: "10", next: next)
             }
             .debug("🔥Pagination🔥")
             .subscribe(with: self) { owner, value in
@@ -87,13 +80,13 @@ class PostListViewModel: ViewModelType {
         Observable.zip(input.modelSelected, input.itemSelected)
             .map { $0.0 }
             .bind(with: self) { owner, value in
-                post.onNext(value)
+                postDetail.onNext(value)
             }.disposed(by: disposeBag)
         
         return Output(postList: postList,
                       nextPostList: nextPostList,
+                      postDetail: postDetail,
                       postWriteButtonTap: input.postWriteButtonTap.asDriver(onErrorJustReturn: ()),
-                      post: post,
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
 }
