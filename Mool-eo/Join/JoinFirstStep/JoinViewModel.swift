@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class JoinViewModel: ViewModelType {
+final class JoinViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -28,9 +28,8 @@ class JoinViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        // 아이디의 기본 조건 충족 -> 아이디 중복 확인 조건 충족 -> 다음 버튼 활성화
         let idValidation = BehaviorSubject<Bool>(value: false)
-        let idCheckSuccessValidation = BehaviorSubject<Bool?>(value: false)
+        let idCheckSuccessValidation = BehaviorSubject<Bool?>(value: false) // true일 경우 사용 가능, false일 경우 중복, 사용 불가능, nil일 경우 중복 확인 안 함
         let nextButtonValidation = BehaviorSubject<Bool>(value: false)
         let networkFail = PublishSubject<Void>()
         
@@ -42,7 +41,7 @@ class JoinViewModel: ViewModelType {
             }
             .bind(with: self) { owner, value in
                 idValidation.onNext(value)
-                idCheckSuccessValidation.onNext(nil) // 값이 변경되면 중복 확인을 진행하지 않은 상태로!
+                idCheckSuccessValidation.onNext(nil) // 값이 변경되면 중복 확인을 진행하지 않은 상태로
             }.disposed(by: disposeBag)
         
         input.idCheckButtonTap
@@ -53,7 +52,6 @@ class JoinViewModel: ViewModelType {
             .flatMap { query in
                 NetworkManager.shared.emailCheck(query: query)
             }
-            .debug("아이디 중복 확인")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): idCheckSuccessValidation.onNext(true)

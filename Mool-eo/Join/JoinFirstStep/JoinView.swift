@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class JoinView: BaseView {
+final class JoinView: BaseView {
     
     let titleLabel: CustomLabel = {
         let label = CustomLabel(type: .colorTitleBold)
@@ -17,10 +17,7 @@ class JoinView: BaseView {
         return label
     }()
     
-    let idView: ProfileTextFieldView = {
-        let view = ProfileTextFieldView(frame: .zero, textFieldType: .id)
-        return view
-    }()
+    let idView = ProfileTextFieldView(frame: .zero, textFieldType: .id)
     
     let idCheckButton: UIButton = {
         let button = UIButton()
