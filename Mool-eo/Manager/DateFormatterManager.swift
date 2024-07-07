@@ -13,12 +13,6 @@ class DateFormatterManager {
     
     private let formatter = DateFormatter()
     
-//    func formatDateToString(date: Date) -> String {
-//        formatter.dateFormat = "yyyyMMdd"
-//        formatter.locale = Locale(identifier: "ko_KR")
-//        return formatter.string(from: date)
-//    }
-    
     func formatDateToString(dateString: String) -> String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"

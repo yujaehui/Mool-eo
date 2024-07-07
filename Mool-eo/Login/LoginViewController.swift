@@ -51,7 +51,7 @@ final class LoginViewController: BaseViewController {
         output.loginValidation.drive(loginView.loginBoxView.loginButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.loginSuccessTrigger.drive(with: self) { owner, _ in
-            TransitionManager.shared.setInitialViewController(ViewController())
+            TransitionManager.shared.setInitialViewController(ViewController(), navigation: false)
         }.disposed(by: disposeBag)
         
         output.joinButtonTap.drive(with: self) { owner, _ in

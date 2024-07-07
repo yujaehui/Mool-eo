@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class JoinThirdViewModel: ViewModelType {
+final class JoinThirdViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -24,7 +24,6 @@ class JoinThirdViewModel: ViewModelType {
         let joinButtonValidation: Driver<Bool>
         let joinSuccessTrigger: Driver<Void>
         let networkFail: Driver<Void>
-
     }
     
     func transform(input: Input) -> Output {
@@ -53,13 +52,11 @@ class JoinThirdViewModel: ViewModelType {
                 return JoinQuery(email: id, password: password, nick: nickname)
             }
         
-        // 회원가입 네트워크 통신 진행
         input.joinButtonTap
             .withLatestFrom(joinQuery)
             .flatMap { query in
                 NetworkManager.shared.join(query: query)
             }
-            .debug("회원가입")
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(_): joinSuccessTrigger.onNext(())

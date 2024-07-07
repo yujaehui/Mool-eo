@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class JoinThirdView: BaseView {
+final class JoinThirdView: BaseView {
     let titleLabel: CustomLabel = {
         let label = CustomLabel(type: .colorTitleBold)
         label.text = "STEP 3\n사용하실 닉네임을 입력해주세요."
@@ -16,10 +16,7 @@ class JoinThirdView: BaseView {
         return label
     }()
     
-    let nicknameView: ProfileTextFieldView = {
-        let view = ProfileTextFieldView(frame: .zero, textFieldType: .nickname)
-        return view
-    }()
+    let nicknameView = ProfileTextFieldView(frame: .zero, textFieldType: .nickname)
     
     let joinButton: UIButton = {
         let button = UIButton()
