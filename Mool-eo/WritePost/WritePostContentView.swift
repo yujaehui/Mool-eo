@@ -8,25 +8,42 @@
 import UIKit
 import SnapKit
 
-class WritePostContentView: BaseView {
-    let titleTextField: UITextField = {
+final class WritePostContentView: BaseView {
+    
+    let imageAddButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.image = UIImage(systemName: "camera")
+        button.tintColor = ColorStyle.point
+        return button
+    }()
+        
+    lazy var toolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.items = [imageAddButton]
+        toolbar.sizeToFit()
+        return toolbar
+    }()
+    
+    lazy var titleTextField: UITextField = {
         let textField = UITextField()
         textField.addLeftPadding()
         textField.font = FontStyle.titleBold
         textField.placeholder = "제목"
+        textField.inputAccessoryView = toolbar
         return textField
     }()
     
     let lineView = LineView()
     
-    let contentTextView: AutoResizableTextView = {
+    lazy var contentTextView: AutoResizableTextView = {
         let textView = AutoResizableTextView(maxHeight: nil)
         textView.font = FontStyle.content
         textView.isScrollEnabled = false
+        textView.inputAccessoryView = toolbar
         return textView
     }()
     
-    let collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(WritePostImageCollectionViewCell.self, forCellWithReuseIdentifier: WritePostImageCollectionViewCell.identifier)
         collectionView.register(WritePostImageEditCollectionViewCell.self, forCellWithReuseIdentifier: WritePostImageEditCollectionViewCell.identifier)
@@ -42,6 +59,7 @@ class WritePostContentView: BaseView {
     }
     
     override func configureConstraints() {
+        
         titleTextField.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
@@ -63,11 +81,11 @@ class WritePostContentView: BaseView {
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(100)
+            make.height.equalTo(120)
         }
     }
     
-    private static func configureCollectionViewLayout() -> UICollectionViewLayout {
+    private func configureCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         let spacing: CGFloat = 20
         let cellWidth = UIScreen.main.bounds.width - (spacing * 4)

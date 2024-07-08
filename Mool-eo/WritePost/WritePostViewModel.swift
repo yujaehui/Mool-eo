@@ -9,21 +9,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class WritePostViewModel: ViewModelType {
+final class WritePostViewModel: ViewModelType {
     
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
-        let textViewBegin: Observable<Void>
-        let textViewEnd: Observable<Void>
-        let postBoard: ProductIdentifier
+        let contentTextViewBegin: Observable<Void>
+        let contentTextViewEnd: Observable<Void>
         let title: Observable<String>
         let content: Observable<String>
         let selectedImageDataSubject: BehaviorSubject<[Data]>
-        let imageSelectedSubject: BehaviorSubject<Bool>
         let imageAddButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
-        let cancelButtonTap: Observable<Void>
         let type: PostInteractionType
         let postId: Observable<String>
     }
@@ -35,10 +32,7 @@ class WritePostViewModel: ViewModelType {
         let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: Driver<Void>
         let editSuccessTrigger: Driver<Void>
-        let badRequest: Driver<Void>
-        let notFoundErr: Driver<Void>
         let networkFail: Driver<Void>
-        let cancelButtonTap: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -46,116 +40,17 @@ class WritePostViewModel: ViewModelType {
         let text = PublishRelay<String?>()
         let textColorType = PublishRelay<Bool>()
         let completeButtonValidation = BehaviorSubject(value: false)
+        let filesModelSubject = PublishSubject<FilesModel>()
         let uploadSuccessTrigger = PublishSubject<Void>()
         let editSuccessTrigger = PublishSubject<Void>()
-        let badRequest = PublishSubject<Void>()
-        let notFoundErr = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
-        input.textViewBegin
-            .withLatestFrom(input.content)
-            .bind(with: self) { owner, value in
-                if value == placeholderText {
-                    text.accept(nil)
-                    textColorType.accept(true)
-                }
-            }.disposed(by: disposeBag)
-        
-        input.textViewEnd
-            .withLatestFrom(input.content)
-            .bind(with: self) { owner, value in
-                if value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    text.accept(placeholderText)
-                    textColorType.accept(false)
-                }
-            }.disposed(by: disposeBag)
-        
-        Observable.combineLatest(input.title, input.content)
-            .map { (title, content) in
-                return title != "" && content != "" && content != placeholderText
-            }
-            .bind(with: self) { owner, value in
-                completeButtonValidation.onNext(value)
-            }.disposed(by: disposeBag)
-        
-        
-        let filesQuery = input.selectedImageDataSubject.map { files in
-            return FilesQuery(files: files)
-        }
-        
-        let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
-            return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
-        }
-        
-        let editPostObservable = Observable.combineLatest(postQuery, input.postId)
+        handleContentTextView(input: input, text: text, textColorType: textColorType, placeholderText: placeholderText)
+        validateCompleteButton(input: input, placeholderText: placeholderText, completeButtonValidation: completeButtonValidation)
         
         switch input.type {
-        case .upload:
-            input.completeButtonTap
-                .withLatestFrom(input.imageSelectedSubject)
-                .flatMap { imageSelected -> Observable<PostQuery> in
-                    if imageSelected {
-                        return filesQuery
-                            .flatMapLatest { filesQuery in
-                                NetworkManager.shared.imageUpload(query: filesQuery)
-                            }
-                            .flatMapLatest { result -> Observable<PostQuery> in
-                                switch result {
-                                case .success(let filesModel):
-                                    return Observable.combineLatest(input.title, input.content).map { (title, content) in
-                                        return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: filesModel.files)
-                                    }
-                                case .error(let error):
-                                    switch error {
-                                    case .badRequest: badRequest.onNext(())
-                                    case .networkFail: networkFail.onNext(())
-                                    default: print("⚠️OTHER ERROR : \(error)⚠️")
-                                    }
-                                    return Observable.combineLatest(input.title, input.content).map { (title, content) in
-                                        return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
-                                    }
-                                }
-                            }
-                    } else {
-                        let postQuery = Observable.combineLatest(input.title, input.content).map { (title, content) in
-                            return PostQuery(title: title, content: content, content1: nil, product_id: input.postBoard.rawValue, files: nil)
-                        }
-                        return postQuery
-                    }
-                }
-                .flatMap { query in
-                    NetworkManager.shared.postUpload(query: query)
-                }
-                .debug("게시글 업로드")
-                .subscribe(with: self) { owner, value in
-                    switch value {
-                    case .success(_): uploadSuccessTrigger.onNext(())
-                    case .error(let error):
-                        switch error {
-                        case .notFoundErr: notFoundErr.onNext(())
-                        case .networkFail: networkFail.onNext(())
-                        default: print("⚠️OTHER ERROR : \(error)⚠️")
-                        }
-                    }
-                }.disposed(by: disposeBag)
-            
-        case .edit:
-            input.completeButtonTap
-                .withLatestFrom(editPostObservable)
-                .flatMap { query, postId in
-                    NetworkManager.shared.postEdit(query: query, postId: postId)
-                }
-                .debug("게시글 수정")
-                .subscribe(with: self) { owner, value in
-                    switch value {
-                    case .success(_): editSuccessTrigger.onNext(())
-                    case .error(let error):
-                        switch error {
-                        case .networkFail: networkFail.onNext(())
-                        default: print("⚠️OTHER ERROR : \(error)⚠️")
-                        }
-                    }
-                }.disposed(by: disposeBag)
+        case .upload: handleUpload(input: input, filesModelSubject: filesModelSubject, uploadSuccessTrigger: uploadSuccessTrigger, networkFail: networkFail)
+        case .edit: handleEdit(input: input, editSuccessTrigger: editSuccessTrigger, networkFail: networkFail)
         }
         
         return Output(text: text.asDriver(onErrorJustReturn: ""),
@@ -164,9 +59,115 @@ class WritePostViewModel: ViewModelType {
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       editSuccessTrigger: editSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      badRequest: badRequest.asDriver(onErrorJustReturn: ()),
-                      notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()),
-                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()))
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func handleContentTextView(input: Input, text: PublishRelay<String?>, textColorType: PublishRelay<Bool>, placeholderText: String) {
+        input.contentTextViewBegin
+            .withLatestFrom(input.content)
+            .bind { value in
+                if value == placeholderText {
+                    text.accept(nil)
+                    textColorType.accept(true)
+                }
+            }.disposed(by: disposeBag)
+        
+        input.contentTextViewEnd
+            .withLatestFrom(input.content)
+            .bind { value in
+                if value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    text.accept(placeholderText)
+                    textColorType.accept(false)
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func validateCompleteButton(input: Input, placeholderText: String, completeButtonValidation: BehaviorSubject<Bool>) {
+        Observable.combineLatest(input.title, input.content)
+            .map { !$0.isEmpty && !$1.isEmpty && $1 != placeholderText }
+            .bind(to: completeButtonValidation)
+            .disposed(by: disposeBag)
+    }
+    
+    private func postUploadWithoutImage(input: Input, uploadSuccessTrigger: PublishSubject<Void>, networkFail: PublishSubject<Void>) {
+        Observable.combineLatest(input.title, input.content)
+            .map { PostQuery(title: $0.0, content: $0.1, content1: nil, product_id: ProductIdentifier.post.rawValue, files: nil) }
+            .flatMap { NetworkManager.shared.postUpload(query: $0) }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(_): uploadSuccessTrigger.onNext(())
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func imageUpload(input: Input, filesModelSubject: PublishSubject<FilesModel>, networkFail: PublishSubject<Void>) {
+        input.selectedImageDataSubject
+            .filter { !$0.isEmpty }
+            .map { FilesQuery(files: $0) }
+            .flatMap { NetworkManager.shared.imageUpload(query: $0) }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let filesModel): filesModelSubject.onNext(filesModel)
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func postUpload(input: Input, filesModelSubject: PublishSubject<FilesModel>, uploadSuccessTrigger: PublishSubject<Void>, networkFail: PublishSubject<Void>) {
+        filesModelSubject
+            .withLatestFrom(Observable.combineLatest(input.title, input.content)) { filesModel, post in
+                return PostQuery(title: post.0, content: post.1, content1: nil, product_id: ProductIdentifier.post.rawValue, files: filesModel.files)
+            }
+            .flatMap { NetworkManager.shared.postUpload(query: $0) }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(_): uploadSuccessTrigger.onNext(())
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleUpload(input: Input, filesModelSubject: PublishSubject<FilesModel>, uploadSuccessTrigger: PublishSubject<Void>, networkFail: PublishSubject<Void>) {
+        input.completeButtonTap
+            .withLatestFrom(input.selectedImageDataSubject)
+            .map { $0.isEmpty }
+            .bind(with: self) { owner, value in
+                if value {
+                    owner.postUploadWithoutImage(input: input, uploadSuccessTrigger: uploadSuccessTrigger, networkFail: networkFail)
+                } else {
+                    owner.imageUpload(input: input, filesModelSubject: filesModelSubject, networkFail: networkFail)
+                    owner.postUpload(input: input, filesModelSubject: filesModelSubject, uploadSuccessTrigger: uploadSuccessTrigger, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleEdit(input: Input, editSuccessTrigger: PublishSubject<Void>, networkFail: PublishSubject<Void>) {
+        input.completeButtonTap
+            .withLatestFrom(Observable.combineLatest(input.title, input.content))
+            .map { PostQuery(title: $0.0, content: $0.1, content1: nil, product_id: ProductIdentifier.post.rawValue, files: nil) }
+            .withLatestFrom(input.postId) { query, postId in
+                return (query, postId)
+            }
+            .flatMap { NetworkManager.shared.postEdit(query: $0.0, postId: $0.1) }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(_): editSuccessTrigger.onNext(())
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+    }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
     }
 }

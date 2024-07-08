@@ -8,9 +8,10 @@
 import UIKit
 import SnapKit
 
-class WritePostImageEditCollectionViewCell: BaseCollectionViewCell {
+final class WritePostImageEditCollectionViewCell: BaseCollectionViewCell {
     
     let selectImageView = PostImageView(frame: .zero)
+    
     let overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = ColorStyle.subBackground.withAlphaComponent(0.8)

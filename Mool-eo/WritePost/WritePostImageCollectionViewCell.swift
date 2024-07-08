@@ -10,11 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class WritePostImageCollectionViewCell: BaseCollectionViewCell {
+final class WritePostImageCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
     
     let selectImageView = PostImageView(frame: .zero)
+    
     let deleteButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)

@@ -140,7 +140,6 @@ final class PostDetailViewController: BaseViewController {
         output.editPostDetail.bind(with: self) { owner, value in
             let vc = WritePostViewController()
             vc.type = .edit
-            vc.postBoard = ProductIdentifier.post
             vc.postTitle = value.title
             vc.postContent = value.content
             vc.postFiles = value.files

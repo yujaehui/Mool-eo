@@ -86,7 +86,6 @@ final class PostListViewController: BaseViewController {
         output.postWriteButtonTap.drive(with: self) { owner, _ in
             let vc = WritePostViewController()
             vc.type = .upload
-            vc.postBoard = ProductIdentifier.post
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             owner.present(nav, animated: true)
