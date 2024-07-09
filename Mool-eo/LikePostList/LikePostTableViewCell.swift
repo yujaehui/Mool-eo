@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LikePostTableViewCell: BaseTableViewCell {
+final class LikePostTableViewCell: BaseTableViewCell {
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -18,7 +18,7 @@ class LikePostTableViewCell: BaseTableViewCell {
     
     let postContentLabel: CustomLabel = {
         let label = CustomLabel(type: .content)
-        label.numberOfLines = 4
+        label.numberOfLines = 3
         return label
     }()
     
@@ -41,9 +41,7 @@ class LikePostTableViewCell: BaseTableViewCell {
     }()
     
     let commentCountLabel = CustomLabel(type: .description)
-    
-    let lineView = LineView()
-    
+        
     override func configureHierarchy() {
         contentView.addSubview(postTitleLabel)
         contentView.addSubview(postContentLabel)
@@ -52,7 +50,6 @@ class LikePostTableViewCell: BaseTableViewCell {
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
         contentView.addSubview(commentCountLabel)
-        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {
@@ -94,13 +91,8 @@ class LikePostTableViewCell: BaseTableViewCell {
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
-        }
-        
-        lineView.snp.makeConstraints { make in
-            make.top.equalTo(likeIconImageView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(contentView).inset(20)
-            make.height.equalTo(1)
             make.bottom.lessThanOrEqualTo(contentView).inset(10)
+
         }
     }
     

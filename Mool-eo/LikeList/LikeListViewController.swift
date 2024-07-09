@@ -9,11 +9,11 @@ import UIKit
 import Tabman
 import Pageboy
 
-class LikeListViewController: TabmanViewController {
+final class LikeListViewController: TabmanViewController {
     
-    let likeProductVC = LikeProductListViewController()
-    let likePostVC = LikePostListViewController()
-    lazy var viewControllers = [likeProductVC, likePostVC]
+    private let likeProductVC = LikeProductListViewController()
+    private let likePostVC = LikePostListViewController()
+    private lazy var viewControllers = [likeProductVC, likePostVC]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,10 +21,8 @@ class LikeListViewController: TabmanViewController {
         setButtonBar()
     }
     
-    func setNav() {
+    private func setNav() {
         navigationItem.title = "좋아요"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
         
     private func setButtonBar() {
@@ -37,7 +35,7 @@ class LikeListViewController: TabmanViewController {
         bar.layout.contentMode = .fit
         addBar(bar, dataSource: self, at: .top)
         
-        bar.buttons.customize { (button) in
+        bar.buttons.customize { button in
             button.tintColor = ColorStyle.subText
             button.selectedTintColor = ColorStyle.point
         }

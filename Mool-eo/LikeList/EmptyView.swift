@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class EmptyView: BaseView {
+final class EmptyView: BaseView {
     let emptyLabel: CustomLabel = {
         let label = CustomLabel(type: .titleBold)
         return label

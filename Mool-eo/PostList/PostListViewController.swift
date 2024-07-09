@@ -66,19 +66,17 @@ final class PostListViewController: BaseViewController {
         output.nextPostList.bind(with: self) { owner, value in
             owner.sections
                 .take(1)
-                .subscribe(onNext: { currentSections in
+                .subscribe(with: self) { owner, currentSections in
                     var updatedSections = currentSections
                     updatedSections.append(PostListSectionModel(items: value.data))
                     owner.sections.onNext(updatedSections)
                     owner.updatePagination(value)
-                })
-                .disposed(by: owner.disposeBag)
+                }.disposed(by: owner.disposeBag)
         }.disposed(by: disposeBag)
         
         output.postDetail.bind(with: self) { owner, value in
             let vc = PostDetailViewController()
             vc.postId = value.postId
-            vc.userId = value.creator.userId
             vc.accessType = UserDefaultsManager.userId! == value.creator.userId ? .me : .other
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

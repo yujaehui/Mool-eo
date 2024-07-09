@@ -26,8 +26,8 @@ final class WritePostViewModel: ViewModelType {
     }
     
     struct Output {
-        let text: Driver<String?>
-        let textColorType: Driver<Bool>
+        let contentText: Driver<String?>
+        let contentTextColorType: Driver<Bool>
         let imageAddButtonTap: Driver<Void>
         let completeButtonValidation: Driver<Bool>
         let uploadSuccessTrigger: Driver<Void>
@@ -37,15 +37,15 @@ final class WritePostViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let placeholderText = "내용을 입력해주세요"
-        let text = PublishRelay<String?>()
-        let textColorType = PublishRelay<Bool>()
+        let contentText = PublishRelay<String?>()
+        let contentTextColorType = PublishRelay<Bool>()
         let completeButtonValidation = BehaviorSubject(value: false)
         let filesModelSubject = PublishSubject<FilesModel>()
         let uploadSuccessTrigger = PublishSubject<Void>()
         let editSuccessTrigger = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
         
-        handleContentTextView(input: input, text: text, textColorType: textColorType, placeholderText: placeholderText)
+        handleContentTextView(input: input, text: contentText, textColorType: contentTextColorType, placeholderText: placeholderText)
         validateCompleteButton(input: input, placeholderText: placeholderText, completeButtonValidation: completeButtonValidation)
         
         switch input.type {
@@ -53,8 +53,8 @@ final class WritePostViewModel: ViewModelType {
         case .edit: handleEdit(input: input, editSuccessTrigger: editSuccessTrigger, networkFail: networkFail)
         }
         
-        return Output(text: text.asDriver(onErrorJustReturn: ""),
-                      textColorType: textColorType.asDriver(onErrorJustReturn: false),
+        return Output(contentText: contentText.asDriver(onErrorJustReturn: ""),
+                      contentTextColorType: contentTextColorType.asDriver(onErrorJustReturn: false),
                       imageAddButtonTap: input.imageAddButtonTap.asDriver(onErrorJustReturn: ()),
                       completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
                       uploadSuccessTrigger: uploadSuccessTrigger.asDriver(onErrorJustReturn: ()),

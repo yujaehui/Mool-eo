@@ -86,7 +86,6 @@ class ProfilePostListViewController: BaseViewController {
         output.post.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
             vc.postId = value
-            vc.userId = UserDefaultsManager.userId!
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
         

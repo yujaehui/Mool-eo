@@ -11,20 +11,17 @@ import RxCocoa
 import RxDataSources
 import Toast
 
-class LikePostListViewController: BaseViewController {
+final class LikePostListViewController: BaseViewController {
     
-    deinit {
-        print("‼️LikeProdcutListViewController Deinit‼️")
-    }
+    deinit { print("‼️LikeProdcutListViewController Deinit‼️") }
     
     let viewModel = LikePostListViewModel()
     let likePostListView = LikePostListView()
     
-    var reload = BehaviorSubject(value: ())
+    private var reload = BehaviorSubject(value: ())
     
     private var sections = BehaviorSubject<[LikeListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
-    
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
     
@@ -37,56 +34,32 @@ class LikePostListViewController: BaseViewController {
         registerObserver()
     }
     
-    override func bind() {
+    override func configureView() {
         sections.bind(to: likePostListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        
-        let reload = reload
-        let modelSelected = likePostListView.tableView.rx.modelSelected(PostModel.self).asObservable()
-        let itemSelected = likePostListView.tableView.rx.itemSelected.asObservable()
-        let prefetch = likePostListView.tableView.rx.prefetchRows.asObservable()
-        let input = LikePostListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected, lastRow: lastRow, prefetch: prefetch, nextCursor: nextCursor)
+    }
+    
+    override func bind() {
+        let input = LikePostListViewModel.Input(
+            reload: reload, 
+            modelSelected: likePostListView.tableView.rx.modelSelected(PostModel.self).asObservable(),
+            itemSelected: likePostListView.tableView.rx.itemSelected.asObservable(),
+            lastRow: lastRow,
+            nextCursor: nextCursor,
+            prefetch: likePostListView.tableView.rx.prefetchRows.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
         
-        output.likePostList.bind(with: self) { owner, value in
-            
-            var sectionModels: [LikeListSectionModel] = []
-            
-            if !value.data.isEmpty {
-                owner.likePostListView.tableView.isHidden = false
-                owner.likePostListView.emptyView.isHidden = true
-                let postSection = LikeListSectionModel(items: value.data)
-                sectionModels.append(postSection)
-            } else {
-                owner.likePostListView.tableView.isHidden = true
-                owner.likePostListView.emptyView.isHidden = false
-                owner.likePostListView.emptyView.emptyLabel.text = "좋아요한 게시글이 없습니다"
-            }
-            
-            owner.sections.onNext(sectionModels)
-            
-            guard value.nextCursor != "0" else { return }
-            owner.nextCursor.onNext(value.nextCursor)
-            let lastSection = owner.likePostListView.tableView.numberOfSections - 1
-            let lastRow = owner.likePostListView.tableView.numberOfRows(inSection: lastSection) - 1
-            owner.lastRow.onNext(lastRow)
+        output.likePostList.bind(with: self) { owner, postList in
+            owner.configureSection(postList)
+            owner.updatePagination(postList)
         }.disposed(by: disposeBag)
         
-        output.nextLikePostList.bind(with: self) { owner, value in
-            owner.sections
-                .take(1)
-                .subscribe(onNext: { currentSections in
-                    var updatedSections = currentSections
-                    updatedSections.append(LikeListSectionModel(items: value.data))
-                    owner.sections.onNext(updatedSections)
-                    owner.likePostListView.tableView.reloadData()
-                    guard value.nextCursor != "0" else { return }
-                    owner.nextCursor.onNext(value.nextCursor)
-                })
-                .disposed(by: owner.disposeBag)
+        output.nextLikePostList.bind(with: self) { owner, postList in
+            owner.updateSection(postList)
         }.disposed(by: disposeBag)
         
-        output.post.drive(with: self) { owner, value in
+        output.postDetail.drive(with: self) { owner, value in
             let vc = PostDetailViewController()
             vc.postId = value
             owner.navigationController?.pushViewController(vc, animated: true)
@@ -97,7 +70,7 @@ class LikePostListViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<LikeListSectionModel> {
+    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<LikeListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<LikeListSectionModel> { dataSource, tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: LikePostTableViewCell.identifier, for: indexPath) as! LikePostTableViewCell
             cell.configureCell(myPost: item)
@@ -113,5 +86,42 @@ class LikePostListViewController: BaseViewController {
                 owner.reload.onNext(())
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func configureSection(_ postList: PostListModel) {
+        var sectionModels: [LikeListSectionModel] = []
+        
+        if !postList.data.isEmpty {
+            likePostListView.tableView.isHidden = false
+            likePostListView.emptyView.isHidden = true
+            let postSection = LikeListSectionModel(items: postList.data)
+            sectionModels.append(postSection)
+        } else {
+            likePostListView.tableView.isHidden = true
+            likePostListView.emptyView.isHidden = false
+            likePostListView.emptyView.emptyLabel.text = "좋아요한 게시글이 없습니다"
+        }
+        
+        sections.onNext(sectionModels)
+    }
+    
+    private func updateSection(_ postList: PostListModel) {
+        sections
+            .take(1)
+            .subscribe(with: self) { owner, currentSections in
+                var updateSections = currentSections
+                updateSections.append(LikeListSectionModel(items: postList.data))
+                owner.sections.onNext(updateSections)
+                owner.updatePagination(postList)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updatePagination(_ postList: PostListModel) {
+        guard postList.nextCursor != "0" else { return }
+        nextCursor.onNext(postList.nextCursor)
+        let lastNumberSection = likePostListView.tableView.numberOfSections - 1
+        let lastNumberRow = likePostListView.tableView.numberOfRows(inSection: lastNumberSection) - 1
+        lastRow.onNext(lastNumberRow)
     }
 }

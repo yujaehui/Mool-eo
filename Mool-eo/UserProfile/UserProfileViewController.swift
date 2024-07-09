@@ -103,7 +103,6 @@ class UserProfileViewController: BaseViewController {
         output.postDetail.bind(with: self) { owner, value in
             let vc = PostDetailViewController()
             vc.postId = value.postId
-            vc.userId = value.creator.userId
             vc.accessType = UserDefaultsManager.userId! == value.creator.userId ? .me : .other
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)

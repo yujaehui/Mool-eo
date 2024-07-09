@@ -26,7 +26,6 @@ final class PostDetailViewController: BaseViewController {
     
     var accessType: postDetailAccessType = .me
     var postId: String = ""
-    var userId: String = ""
     
     var reload = BehaviorSubject(value: ())
     

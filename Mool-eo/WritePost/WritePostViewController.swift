@@ -110,9 +110,9 @@ final class WritePostViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.text.drive(writePostView.writePostContentView.contentTextView.rx.text).disposed(by: disposeBag)
+        output.contentText.drive(writePostView.writePostContentView.contentTextView.rx.text).disposed(by: disposeBag)
         
-        output.textColorType.drive(with: self) { owner, value in
+        output.contentTextColorType.drive(with: self) { owner, value in
             owner.writePostView.writePostContentView.contentTextView.textColor = value ? ColorStyle.mainText : ColorStyle.placeholder
         }.disposed(by: disposeBag)
         

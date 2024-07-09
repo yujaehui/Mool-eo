@@ -8,12 +8,11 @@
 import UIKit
 import SnapKit
 
-class LikePostListView: BaseView {
+final class LikePostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(LikePostTableViewCell.self, forCellReuseIdentifier: LikePostTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
         return tableView
     }()
     
