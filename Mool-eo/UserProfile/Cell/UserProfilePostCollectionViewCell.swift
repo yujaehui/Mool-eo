@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
+final class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
     
     let postTitleLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -41,9 +41,7 @@ class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
     }()
     
     let commentCountLabel = CustomLabel(type: .description)
-    
-    let lineView = LineView()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.borderColor = ColorStyle.subBackground.cgColor
@@ -67,7 +65,6 @@ class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(likeCountLabel)
         contentView.addSubview(commentIconImageView)
         contentView.addSubview(commentCountLabel)
-        contentView.addSubview(lineView)
     }
     
     override func configureConstraints() {

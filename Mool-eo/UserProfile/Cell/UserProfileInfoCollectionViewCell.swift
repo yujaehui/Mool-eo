@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class UserProfileInfoCollectionViewCell: BaseCollectionViewCell {
+final class UserProfileInfoCollectionViewCell: BaseCollectionViewCell {
     var disposeBag = DisposeBag()
     
     let profileImageView = ProfileImageView(frame: .zero)
@@ -30,10 +30,7 @@ class UserProfileInfoCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let followLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        return label
-    }()
+    let followLabel = CustomLabel(type: .content)
     
     let profileEditButton: UIButton = {
         let button = UIButton()

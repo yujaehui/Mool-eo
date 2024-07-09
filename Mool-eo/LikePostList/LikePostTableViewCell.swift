@@ -75,6 +75,7 @@ final class LikePostTableViewCell: BaseTableViewCell {
             make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(contentView).inset(20)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         likeCountLabel.snp.makeConstraints { make in
@@ -86,13 +87,12 @@ final class LikePostTableViewCell: BaseTableViewCell {
             make.top.equalTo(postImageView.snp.bottom).offset(20)
             make.leading.equalTo(likeCountLabel.snp.trailing).offset(20)
             make.size.equalTo(20)
+            make.bottom.lessThanOrEqualTo(contentView).inset(10)
         }
         
         commentCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentIconImageView.snp.centerY)
             make.leading.equalTo(commentIconImageView.snp.trailing).offset(5)
-            make.bottom.lessThanOrEqualTo(contentView).inset(10)
-
         }
     }
     

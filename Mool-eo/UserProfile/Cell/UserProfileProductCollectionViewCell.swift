@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class UserProfileProductCollectionViewCell: BaseCollectionViewCell {
+final class UserProfileProductCollectionViewCell: BaseCollectionViewCell {
     
     let productImageView: UIImageView = {
         let imageView = UIImageView()
@@ -19,15 +19,9 @@ class UserProfileProductCollectionViewCell: BaseCollectionViewCell {
         return imageView
     }()
     
-    let productNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        return label
-    }()
+    let productNameLabel = CustomLabel(type: .contentBold)
     
-    let priceLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        return label
-    }()
+    let priceLabel = CustomLabel(type: .content)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

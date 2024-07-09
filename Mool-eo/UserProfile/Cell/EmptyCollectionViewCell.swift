@@ -8,11 +8,8 @@
 import UIKit
 import SnapKit
 
-class EmptyCollectionViewCell: BaseCollectionViewCell {
-    let emptyLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        return label
-    }()
+final class EmptyCollectionViewCell: BaseCollectionViewCell {
+    let emptyLabel = CustomLabel(type: .contentBold)
     
     override func configureHierarchy() {
         contentView.addSubview(emptyLabel)

@@ -26,7 +26,7 @@ enum UserProfileSectionType: CaseIterable {
     }
 }
 
-class UserProfileView: BaseView {
+final class UserProfileView: BaseView {
     var sections: [UserProfileSectionType] = [.info]
     
     lazy var collectionViewLayout = {

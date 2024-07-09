@@ -171,7 +171,8 @@ class OtherUserProfileViewController: BaseViewController {
     private func registerObserver() {
         Observable.of(
             NotificationCenter.default.rx.notification(Notification.Name(Noti.writePost.rawValue)),
-            NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue))
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changePost.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changeProfile.rawValue))
         )
         .merge()
         .take(until: self.rx.deallocated)

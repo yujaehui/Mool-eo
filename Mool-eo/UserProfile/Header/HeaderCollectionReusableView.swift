@@ -10,14 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class HeaderCollectionReusableView: BaseCollectionReusableView {
+final class HeaderCollectionReusableView: BaseCollectionReusableView {
     
     var disposeBag = DisposeBag()
     
-    let headerLabel: CustomLabel = {
-        let label = CustomLabel(type: .titleBold)
-        return label
-    }()
+    let headerLabel = CustomLabel(type: .titleBold)
     
     let seeMoreButton: UIButton = {
         let button = UIButton()

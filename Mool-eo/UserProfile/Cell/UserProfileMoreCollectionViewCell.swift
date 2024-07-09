@@ -22,7 +22,7 @@ enum MoreType: String, CaseIterable {
     }
 }
 
-class UserProfileMoreCollectionViewCell: BaseCollectionViewCell {
+final class UserProfileMoreCollectionViewCell: BaseCollectionViewCell {
     var disposeBag = DisposeBag()
     
     let moreImageView: UIImageView = {

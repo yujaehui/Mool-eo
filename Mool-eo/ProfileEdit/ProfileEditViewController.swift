@@ -22,10 +22,8 @@ class ProfileEditViewController: BaseViewController {
     let profileEditView = ProfileEditView()
     
     var nickname: String = ""
-    var introduction: String = ""
-    var profileImageData: Data?
     var profileImage: String = ""
-    
+    var profileImageData: Data?
     private lazy var selectedImageSubject = BehaviorSubject<Data?>(value: profileImageData)
     
     override func loadView() {

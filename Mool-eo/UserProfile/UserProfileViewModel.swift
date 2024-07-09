@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class UserProfileViewModel: ViewModelType {
+final class UserProfileViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -26,7 +26,6 @@ class UserProfileViewModel: ViewModelType {
         let productDetail: PublishSubject<PostModel>
         let postDetail: PublishSubject<PostModel>
         let moreDetail: PublishSubject<MoreType>
-        let notFoundErr: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -36,13 +35,23 @@ class UserProfileViewModel: ViewModelType {
         let productDetail = PublishSubject<PostModel>()
         let postDetail = PublishSubject<PostModel>()
         let moreDetail = PublishSubject<MoreType>()
-        let notFoundErr = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
-        
+    
+        handleReload(input: input, result: result, networkFail: networkFail)
+        handleProfileEdit(input: input, profileEditButtonTap: profileEditButtonTap, networkFail: networkFail)
+        handleDetail(input: input, productDetail: productDetail, postDetail: postDetail, moreDetail: moreDetail)
+
+        return Output(result: result,
+                      profileEditButtonTap: profileEditButtonTap,
+                      productDetail: productDetail,
+                      postDetail: postDetail,
+                      moreDetail: moreDetail,
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func handleReload(input: Input, result: PublishSubject<(ProfileModel, PostListModel, PostListModel)>, networkFail: PublishSubject<Void>) {
         input.reload
-            .map {
-                UserDefaultsManager.userId!
-            }
+            .map { UserDefaultsManager.userId! }
             .flatMap { userId in
                 Observable.zip(
                     NetworkManager.shared.profileCheck().asObservable(),
@@ -52,47 +61,33 @@ class UserProfileViewModel: ViewModelType {
                     return (profileResult, productResult, postResult)
                 }
             }
-            .debug("유저 프로필 및 포스트 조회")
             .subscribe(with: self) { owner, value in
                 switch (value.0, value.1, value.2) {
-                case (.success(let profileModel), .success(let productModel), .success(let postModel)):
-                    result.onNext((profileModel, productModel, postModel))
-                case (.error(let profileError), _, _):
-                    switch profileError {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(profileError)⚠️")
-                    }
-                case (_, .error(let productError), _):
-                    switch productError {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(productError)⚠️")
-                    }
-                case (_, _, .error(let postError)):
-                    switch postError {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(postError)⚠️")
-                    }
+                case (.success(let profileModel), .success(let productModel), .success(let postModel)): result.onNext((profileModel, productModel, postModel))
+                case (.error(let profileError), _, _): owner.handleNetworkError(error: profileError, networkFail: networkFail)
+                case (_, .error(let productError), _): owner.handleNetworkError(error: productError, networkFail: networkFail)
+                case (_, _, .error(let postError)): owner.handleNetworkError(error: postError, networkFail: networkFail)
                 }
-            }.disposed(by: disposeBag)
-        
-        
-        input.profileEditButtonTap
-            .flatMap { _ in
-                NetworkManager.shared.profileCheck()
             }
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleProfileEdit(input: Input, profileEditButtonTap: PublishSubject<(ProfileModel, Data?)>, networkFail: PublishSubject<Void>) {
+        input.profileEditButtonTap
+            .flatMap { NetworkManager.shared.profileCheck() }
             .withLatestFrom(input.profileImageData) { profileModel, profileImageData in
                 return (profileModel, profileImageData)
             }
-            .debug("프로필 조회")
             .subscribe(with: self) { owner, value in
                 switch value.0 {
-                case .success(let profileModel):
-                    profileEditButtonTap.onNext((profileModel, value.1))
-                case .error(let error):
-                    print(error)
+                case .success(let profileModel): profileEditButtonTap.onNext((profileModel, value.1))
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
-            }.disposed(by: disposeBag)
-        
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleDetail(input: Input, productDetail: PublishSubject<PostModel>, postDetail: PublishSubject<PostModel>, moreDetail: PublishSubject<MoreType>) {
         Observable.zip(input.modelSelected, input.itemSelected)
             .bind(with: self) { owner, value in
                 switch value.0 {
@@ -102,14 +97,13 @@ class UserProfileViewModel: ViewModelType {
                 default: break
                 }
             }.disposed(by: disposeBag)
-        
-        return Output(result: result,
-                      profileEditButtonTap: profileEditButtonTap,
-                      productDetail: productDetail,
-                      postDetail: postDetail,
-                      moreDetail: moreDetail,
-                      notFoundErr: notFoundErr.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
     }
 }
 
