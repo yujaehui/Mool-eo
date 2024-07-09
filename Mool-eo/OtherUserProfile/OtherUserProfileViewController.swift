@@ -128,7 +128,10 @@ final class OtherUserProfileViewController: BaseViewController {
             case UICollectionView.elementKindSectionHeader:
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.identifier, for: indexPath) as! HeaderCollectionReusableView
                 headerView.headerLabel.text = dataSource[indexPath.section].title
-                setupHeaderButton(for: headerView, with: dataSource[indexPath.section].items[indexPath.item])
+                switch dataSource[indexPath.section].items[indexPath.item] {
+                case .noProduct, .noPost: headerView.seeMoreButton.isHidden = true
+                default: setupHeaderButton(for: headerView, with: dataSource[indexPath.section].items[indexPath.item])
+                }
                 return headerView
             default:
                 fatalError("Unexpected element kind")
