@@ -16,19 +16,12 @@ final class ProfileProductListView: BaseView {
         return tableView
     }()
     
-    let emptyView = EmptyView()
-    
     override func configureHierarchy() {
         addSubview(tableView)
-        addSubview(emptyView)
     }
     
     override func configureConstraints() {
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide)
-        }
-        
-        emptyView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
     }

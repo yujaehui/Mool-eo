@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProfilePostListView: BaseView {
+final class ProfilePostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(LikePostTableViewCell.self, forCellReuseIdentifier: LikePostTableViewCell.identifier)
