@@ -148,20 +148,6 @@ final class UserProfileViewController: BaseViewController {
             }
         }
     
-    private func navigateToProductList(_ creator: Creator) {
-        let vc = ProfileProductListViewController()
-        vc.userId = creator.userId
-        vc.nickname = creator.nick
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func navigateToPostList(_ creator: Creator) {
-        let vc = ProfilePostListViewController()
-        vc.userId = creator.userId
-        vc.nickname = creator.nick
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
     private func configureSections(_ value: (ProfileModel, PostListModel, PostListModel)) {
         var sectionModels: [UserProfileSectionModel] = []
         
@@ -224,6 +210,20 @@ final class UserProfileViewController: BaseViewController {
             let vc = ProfilePaymentListViewController()
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    private func navigateToProductList(_ creator: Creator) {
+        let vc = ProfileProductListViewController()
+        vc.userId = creator.userId
+        vc.nickname = creator.nick
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func navigateToPostList(_ creator: Creator) {
+        let vc = ProfilePostListViewController()
+        vc.userId = creator.userId
+        vc.nickname = creator.nick
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func registerObserver() {

@@ -165,6 +165,7 @@ final class PostDetailViewController: BaseViewController {
                         .bind(with: self) { owner, value in
                             if post.creator.userId != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
+                                vc.nickname = post.creator.nick
                                 vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
@@ -186,6 +187,7 @@ final class PostDetailViewController: BaseViewController {
                         .bind(with: self) { owner, value in
                             if post.creator.userId != UserDefaultsManager.userId {
                                 let vc = OtherUserProfileViewController()
+                                vc.nickname = post.creator.nick
                                 vc.userId = post.creator.userId
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             } else {
@@ -208,6 +210,7 @@ final class PostDetailViewController: BaseViewController {
                     .bind(with: self) { owner, value in
                         if comment.creator.userId != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
+                            vc.nickname = comment.creator.nick
                             vc.userId = comment.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {

@@ -96,20 +96,8 @@ class ProfilePostListViewController: BaseViewController {
     
     func configureDataSource() -> RxTableViewSectionedReloadDataSource<PostListSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<PostListSectionModel> { dataSource, tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(withIdentifier: PostListTableViewCell.identifier, for: indexPath) as! PostListTableViewCell
-            cell.configureCell(item: item)
-            cell.profileStackView.rx.tapGesture()
-                .when(.recognized)
-                .bind(with: self) { owner, value in
-                    if item.creator.userId != UserDefaultsManager.userId {
-                        let vc = OtherUserProfileViewController()
-                        vc.userId = item.creator.userId
-                        owner.navigationController?.pushViewController(vc, animated: true)
-                    } else {
-                        let vc = UserProfileViewController()
-                        owner.navigationController?.pushViewController(vc, animated: true)
-                    }
-                }.disposed(by: cell.disposeBag)
+            let cell = tableView.dequeueReusableCell(withIdentifier: LikePostTableViewCell.identifier, for: indexPath) as! LikePostTableViewCell
+            cell.configureCell(myPost: item)
             return cell
         }
         return dataSource

@@ -110,6 +110,7 @@ final class ProductDetailViewController: BaseViewController {
                     .bind(with: self) { owner, value in
                         if postModel.creator.userId != UserDefaultsManager.userId {
                             let vc = OtherUserProfileViewController()
+                            vc.nickname = postModel.creator.nick
                             vc.userId = postModel.creator.userId
                             owner.navigationController?.pushViewController(vc, animated: true)
                         } else {

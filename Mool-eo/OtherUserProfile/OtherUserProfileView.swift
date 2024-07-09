@@ -24,7 +24,7 @@ enum OtherUserProfileSectionType: CaseIterable {
     }
 }
 
-class OtherUserProfileView: BaseView {
+final class OtherUserProfileView: BaseView {
     
     var sections: [OtherUserProfileSectionType] = [.info]
     

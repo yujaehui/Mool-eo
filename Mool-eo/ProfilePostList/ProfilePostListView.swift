@@ -11,7 +11,7 @@ import SnapKit
 class ProfilePostListView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(PostListTableViewCell.self, forCellReuseIdentifier: PostListTableViewCell.identifier)
+        tableView.register(LikePostTableViewCell.self, forCellReuseIdentifier: LikePostTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()

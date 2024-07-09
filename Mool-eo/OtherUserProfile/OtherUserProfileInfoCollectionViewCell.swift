@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class OtherUserProfileInfoCollectionViewCell: BaseCollectionViewCell {
+final class OtherUserProfileInfoCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
     
@@ -31,10 +31,7 @@ class OtherUserProfileInfoCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    let followLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        return label
-    }()
+    let followLabel = CustomLabel(type: .content)
     
     let buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -97,5 +94,10 @@ class OtherUserProfileInfoCollectionViewCell: BaseCollectionViewCell {
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage)
         nicknameLabel.text = info.nick
         followLabel.text = "팔로워 \(info.followers.count) | 팔로잉 \(info.following.count)"
+        if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {
+            followButton.configuration = .check("팔로잉")
+        } else {
+            followButton.configuration = .check2("팔로우")
+        }
     }
 }
