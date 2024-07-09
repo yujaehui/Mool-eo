@@ -12,11 +12,9 @@ import Kingfisher
 import PhotosUI
 import Toast
 
-class ProfileEditViewController: BaseViewController {
+final class ProfileEditViewController: BaseViewController {
     
-    deinit {
-        print("‼️ProfileEditViewController Deinit‼️")
-    }
+    deinit { print("‼️ProfileEditViewController Deinit‼️") }
     
     let viewModel = ProfileEditViewModel()
     let profileEditView = ProfileEditView()
@@ -24,7 +22,8 @@ class ProfileEditViewController: BaseViewController {
     var nickname: String = ""
     var profileImage: String = ""
     var profileImageData: Data?
-    private lazy var selectedImageSubject = BehaviorSubject<Data?>(value: profileImageData)
+    private lazy var selectedImageDataSubject = BehaviorSubject<Data?>(value: profileImageData)
+    private let completeButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = profileEditView
@@ -35,11 +34,17 @@ class ProfileEditViewController: BaseViewController {
     }
     
     override func setNav() {
-        navigationItem.title = "프로필 수정하기"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
-        navigationItem.rightBarButtonItem = profileEditView.completeButton
-        navigationItem.leftBarButtonItem = profileEditView.cancelButton
+        navigationItem.title = "프로필 수정"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(rightBarButtonTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
+    }
+    
+    @objc func rightBarButtonTapped() {
+        completeButtonTap.onNext(())
+    }
+    
+    @objc func leftBarButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     override func configureView() {
@@ -48,36 +53,31 @@ class ProfileEditViewController: BaseViewController {
     }
     
     override func bind() {
-        let profileImageEditButtonTap = profileEditView.profileImageEditButton.rx.tap.asObservable()
-        let completeButtonTap = profileEditView.completeButton.rx.tap.asObservable()
-        let cancelButtonTap = profileEditView.cancelButton.rx.tap.asObservable()
-        let afterNickname = profileEditView.nicknameView.customTextField.rx.text.orEmpty.asObservable()
-        let afterProfileImageData = selectedImageSubject
-        let input = ProfileEditViewModel.Input(profileImageEditButtonTap: profileImageEditButtonTap, completeButtonTap: completeButtonTap, cancelButtonTap: cancelButtonTap, beforeNickname: nickname, afterNickname: afterNickname, beforeProfileImageData: profileImageData, afterProfileImageData: afterProfileImageData)
+        let input = ProfileEditViewModel.Input(
+            profileImageEditButtonTap: profileEditView.profileImageEditButton.rx.tap.asObservable(),
+            completeButtonTap: completeButtonTap,
+            beforeNickname: nickname,
+            afterNickname: profileEditView.nicknameView.customTextField.rx.text.orEmpty.asObservable(),
+            beforeProfileImageData: profileImageData,
+            afterProfileImageData: selectedImageDataSubject
+        )
         
         let output = viewModel.transform(input: input)
         
         output.profileImageEditButtonTap.drive(with: self) { owner, _ in
-            var configuration = PHPickerConfiguration()
-            configuration.selectionLimit = 1
-            configuration.filter = .images
-            let picker = PHPickerViewController(configuration: configuration)
-            picker.delegate = self
-            owner.present(picker, animated: true)
+            owner.presentPHPicker(delegate: owner, selectionLimit: 1)
         }.disposed(by: disposeBag)
         
         output.nicknameValidation.drive(with: self) { owner, value in
             owner.profileEditView.nicknameView.descriptionLabel.textColor = value ? ColorStyle.subText : ColorStyle.caution
         }.disposed(by: disposeBag)
         
-        output.completeButtonValidation.drive(profileEditView.completeButton.rx.isEnabled).disposed(by: disposeBag)
+        output.completeButtonValidation.drive(with: self) { owner, value in
+            owner.navigationItem.rightBarButtonItem?.isEnabled = value
+        }.disposed(by: disposeBag)
         
         output.profileEditSuccessTrigger.drive(with: self) { owner, _ in
             NotificationCenter.default.post(name: Notification.Name(Noti.changeProfile.rawValue), object: true)
-            owner.navigationController?.popViewController(animated: true)
-        }.disposed(by: disposeBag)
-        
-        output.cancelButtonTap.drive(with: self) { owner, _ in
             owner.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         
@@ -96,7 +96,7 @@ extension ProfileEditViewController: PHPickerViewControllerDelegate {
             itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                 DispatchQueue.main.async {
                     self.profileEditView.profileImageView.image = image as? UIImage
-                    self.selectedImageSubject.onNext((image as? UIImage)?.pngData())
+                    self.selectedImageDataSubject.onNext((image as? UIImage)?.pngData())
                 }
             }
         }

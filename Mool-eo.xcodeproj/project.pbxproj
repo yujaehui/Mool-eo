@@ -247,6 +247,7 @@
 		09EB7A0F2C3A7E1B001E0470 /* JoinSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A0E2C3A7E1B001E0470 /* JoinSuccessView.swift */; };
 		09EB7A142C3A826D001E0470 /* JoinSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */; };
 		09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */; };
+		09EB7A182C3D6A68001E0470 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -472,6 +473,7 @@
 		09EB7A0E2C3A7E1B001E0470 /* JoinSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessView.swift; sourceTree = "<group>"; };
 		09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewController.swift; sourceTree = "<group>"; };
 		09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewModel.swift; sourceTree = "<group>"; };
+		09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -909,6 +911,7 @@
 				095679902BC9501D0030F0CD /* UIButton.Configuration+Extension.swift */,
 				0999EB1C2BCAA2DD004B6D1F /* UIView+Extension.swift */,
 				093289152BF0C31100C8F52E /* String+Extension.swift */,
+				09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1430,6 +1433,7 @@
 				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
+				09EB7A182C3D6A68001E0470 /* UIViewController+Extension.swift in Sources */,
 				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				09EB79D52C32604A001E0470 /* OtherThreeImageChatTableViewCell.swift in Sources */,

@@ -8,20 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProfileEditView: BaseView {
-    // Navigation
-    let completeButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.title = "완료"
-        return button
-    }()
-    
-    // Navigation
-    let cancelButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.image = UIImage(systemName: "xmark")
-        return button
-    }()
+final class ProfileEditView: BaseView {
     
     let profileImageView = ProfileImageView(frame: .zero)
     

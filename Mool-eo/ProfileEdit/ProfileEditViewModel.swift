@@ -9,13 +9,12 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ProfileEditViewModel: ViewModelType {
+final class ProfileEditViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
         let profileImageEditButtonTap: Observable<Void>
         let completeButtonTap: Observable<Void>
-        let cancelButtonTap: Observable<Void>
         let beforeNickname: String
         let afterNickname: Observable<String>
         let beforeProfileImageData: Data?
@@ -27,7 +26,6 @@ class ProfileEditViewModel: ViewModelType {
         let nicknameValidation: Driver<Bool>
         let completeButtonValidation: Driver<Bool>
         let profileEditSuccessTrigger: Driver<Void>
-        let cancelButtonTap: Driver<Void>
         let networkFail: Driver<Void>
     }
     
@@ -35,9 +33,22 @@ class ProfileEditViewModel: ViewModelType {
         let nicknameValidation = BehaviorSubject(value: false)
         let changeValidation = BehaviorSubject(value: false)
         let completeButtonValidation = BehaviorSubject(value: false)
-        let profileSuccessTrigger = PublishSubject<Void>()
+        let profileEditSuccessTrigger = PublishSubject<Void>()
         let networkFail = PublishSubject<Void>()
-        
+
+        validateNickname(input: input, nicknameValidation: nicknameValidation)
+        validateChange(input: input, changeValidation: changeValidation)
+        validateCompleteButton(input: input, nicknameValidation: nicknameValidation, changeValidation: changeValidation, completeButtonValidation: completeButtonValidation)
+        handleProfileEdit(input: input, profileEditSuccessTrigger: profileEditSuccessTrigger, networkFail: networkFail)
+
+        return Output(profileImageEditButtonTap: input.profileImageEditButtonTap.asDriver(onErrorJustReturn: ()),
+                      nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
+                      completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
+                      profileEditSuccessTrigger: profileEditSuccessTrigger.asDriver(onErrorJustReturn: ()),
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func validateNickname(input: Input, nicknameValidation: BehaviorSubject<Bool>) {
         input.afterNickname
             .map { value in
                 let nicknameRegex = "^[^\\s]{2,10}$"
@@ -47,51 +58,42 @@ class ProfileEditViewModel: ViewModelType {
             .bind(with: self) { owner, value in
                 nicknameValidation.onNext(value)
             }.disposed(by: disposeBag)
-        
+    }
+    
+    private func validateChange(input: Input, changeValidation: BehaviorSubject<Bool>) {
         Observable.combineLatest(input.afterNickname, input.afterProfileImageData)
-            .map { (nick, image) in
-                return nick != input.beforeNickname || image != input.beforeProfileImageData
-            }
+            .map { $0.0 != input.beforeNickname || $0.1 != input.beforeProfileImageData }
             .bind(with: self) { owner, value in
                 changeValidation.onNext(value)
             }.disposed(by: disposeBag)
-        
+    }
+    
+    private func validateCompleteButton(input: Input, nicknameValidation: BehaviorSubject<Bool>, changeValidation: BehaviorSubject<Bool>, completeButtonValidation: BehaviorSubject<Bool>) {
         Observable.combineLatest(nicknameValidation, changeValidation)
-            .map { (nickValid, changeValid) in
-                return nickValid && changeValid
-            }
+            .map { $0.0 && $0.1 }
             .bind(with: self) { owner, value in
                 completeButtonValidation.onNext(value)
             }.disposed(by: disposeBag)
-        
-        let profileEditObservable = Observable.combineLatest(input.afterNickname, input.afterProfileImageData)
-            .map { (nick, image) in
-                return ProfileEditQuery(nick: nick, profile: image ?? Data())
-            }
-        
-        // 프로필 수정 네트워크 통신
+    }
+    
+    private func handleProfileEdit(input: Input, profileEditSuccessTrigger: PublishSubject<Void>, networkFail: PublishSubject<Void>) {
         input.completeButtonTap
-            .withLatestFrom(profileEditObservable)
-            .flatMap { query in
-                NetworkManager.shared.profileEdit(query: query)
-            }
-            .debug("프로필 수정")
-            .subscribe(with: self) { owenr, value in
+            .withLatestFrom(Observable.combineLatest(input.afterNickname, input.afterProfileImageData))
+            .map { ProfileEditQuery(nick: $0.0, profile: $0.1 ?? Data()) }
+            .flatMap { NetworkManager.shared.profileEdit(query: $0) }
+            .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(_): profileSuccessTrigger.onNext(())
-                case .error(let error):
-                    switch error {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(error)⚠️")
-                    }
+                case .success(_): profileEditSuccessTrigger.onNext(())
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
             }.disposed(by: disposeBag)
-        
-        return Output(profileImageEditButtonTap: input.profileImageEditButtonTap.asDriver(onErrorJustReturn: ()),
-                      nicknameValidation: nicknameValidation.asDriver(onErrorJustReturn: false),
-                      completeButtonValidation: completeButtonValidation.asDriver(onErrorJustReturn: false),
-                      profileEditSuccessTrigger: profileSuccessTrigger.asDriver(onErrorJustReturn: ()),
-                      cancelButtonTap: input.cancelButtonTap.asDriver(onErrorJustReturn: ()),
-                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
+    }
+
 }

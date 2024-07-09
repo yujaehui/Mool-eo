@@ -117,12 +117,7 @@ final class WritePostViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.imageAddButtonTap.drive(with: self) { owner, _ in
-            var configuration = PHPickerConfiguration()
-            configuration.selectionLimit = 3
-            configuration.filter = .images
-            let picker = PHPickerViewController(configuration: configuration)
-            picker.delegate = self
-            owner.present(picker, animated: true)
+            owner.presentPHPicker(delegate: owner, selectionLimit: 3)
         }.disposed(by: disposeBag)
         
         output.completeButtonValidation.drive(with: self) { owner, value in
