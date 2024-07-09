@@ -1272,10 +1272,10 @@
 		09EB79FB2C340D44001E0470 /* ProfilePaymentList */ = {
 			isa = PBXGroup;
 			children = (
+				09EB7A022C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift */,
 				09EB79FC2C340D7B001E0470 /* ProfilePaymentListView.swift */,
 				09EB79FE2C340D8F001E0470 /* ProfilePaymentListViewController.swift */,
 				09EB7A002C340DC1001E0470 /* ProfilePaymentListViewModel.swift */,
-				09EB7A022C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift */,
 				09EB7A042C341110001E0470 /* PaymentListSectionModel.swift */,
 			);
 			path = ProfilePaymentList;

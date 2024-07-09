@@ -18,7 +18,6 @@ final class ProfilePaymentListViewController: BaseViewController {
     private let profilePaymentView = ProfilePaymentListView()
     
     private let reload = BehaviorSubject<Void>(value: ())
-    
     private var sections = BehaviorSubject<[PaymentListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
     
@@ -32,8 +31,6 @@ final class ProfilePaymentListViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "결제 내역"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func configureView() {
@@ -46,7 +43,6 @@ final class ProfilePaymentListViewController: BaseViewController {
 
         output.result.bind(with: self) { owner, value in
             owner.sections.onNext([PaymentListSectionModel(items: value.data)])
-            owner.profilePaymentView.tableView.reloadData()
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in

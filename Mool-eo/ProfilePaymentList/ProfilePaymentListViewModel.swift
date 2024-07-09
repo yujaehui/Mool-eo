@@ -26,21 +26,11 @@ final class ProfilePaymentListViewModel: ViewModelType {
         let networkFail = PublishSubject<Void>()
         
         input.reload
-            .map {
-                return UserDefaultsManager.userId!
-            }
-            .flatMap { userId in
-                NetworkManager.shared.paymentCheck().asObservable()
-            }
+            .flatMap { NetworkManager.shared.paymentCheck().asObservable() }
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let paymentModel):
-                    result.onNext(paymentModel)
-                case .error(let paymentError):
-                    switch paymentError {
-                    case .networkFail: networkFail.onNext(())
-                    default: print("⚠️OTHER ERROR : \(paymentError)⚠️")
-                    }
+                case .success(let paymentModel): result.onNext(paymentModel)
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
             }.disposed(by: disposeBag)
 
@@ -48,5 +38,13 @@ final class ProfilePaymentListViewModel: ViewModelType {
         return Output(result: result,
                       networkFail: networkFail.asDriver(onErrorJustReturn: ()))
     }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
+    }
+
 }
 

@@ -14,15 +14,9 @@ final class ProfilePaymentListTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let priceLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        return label
-    }()
+    let priceLabel = CustomLabel(type: .contentBold)
     
-    let dateLabel: CustomLabel = {
-        let label = CustomLabel(type: .subDescription)
-        return label
-    }()
+    let dateLabel = CustomLabel(type: .subDescription)
     
     override func configureHierarchy() {
         contentView.addSubview(productNameLabel)
