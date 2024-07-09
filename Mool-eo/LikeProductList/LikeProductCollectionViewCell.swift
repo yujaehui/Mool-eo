@@ -8,27 +8,18 @@
 import UIKit
 import SnapKit
 
-class LikeProductCollectionViewCell: BaseCollectionViewCell {
+final class LikeProductCollectionViewCell: BaseCollectionViewCell {
     
-    let productImageView: PostImageView = {
-        let imageView = PostImageView(frame: .zero)
-        return imageView
-    }()
+    let productImageView = PostImageView(frame: .zero)
     
-    let productNameLabel: CustomLabel = {
-        let label = CustomLabel(type: .contentBold)
-        return label
-    }()
+    let productNameLabel = CustomLabel(type: .contentBold)
     
-    let priceLabel: CustomLabel = {
-        let label = CustomLabel(type: .content)
-        return label
-    }()
+    let productPriceLabel = CustomLabel(type: .content)
     
     override func configureHierarchy() {
         contentView.addSubview(productImageView)
         contentView.addSubview(productNameLabel)
-        contentView.addSubview(priceLabel)
+        contentView.addSubview(productPriceLabel)
     }
     
     override func configureConstraints() {
@@ -43,7 +34,7 @@ class LikeProductCollectionViewCell: BaseCollectionViewCell {
             make.height.equalTo(20)
         }
         
-        priceLabel.snp.makeConstraints { make in
+        productPriceLabel.snp.makeConstraints { make in
             make.top.equalTo(productNameLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(contentView).inset(10)
             make.height.equalTo(20)
@@ -54,6 +45,6 @@ class LikeProductCollectionViewCell: BaseCollectionViewCell {
     func configureCell(item: PostListSectionModel.Item) {
         URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: item.files.first!)
         productNameLabel.text = item.title
-        priceLabel.text = NumberFormatterManager.shared.formatCurrencyString(item.content1)
+        productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(item.content1)
     }
 }

@@ -19,7 +19,6 @@ final class LikePostListViewController: BaseViewController {
     let likePostListView = LikePostListView()
     
     private var reload = BehaviorSubject(value: ())
-    
     private var sections = BehaviorSubject<[LikeListSectionModel]>(value: [])
     private lazy var dataSource = configureDataSource()
     private let lastRow = PublishSubject<Int>()

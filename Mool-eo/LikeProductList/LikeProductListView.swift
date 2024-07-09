@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LikeProductListView: BaseView {
+final class LikeProductListView: BaseView {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(LikeProductCollectionViewCell.self, forCellWithReuseIdentifier: LikeProductCollectionViewCell.identifier)
