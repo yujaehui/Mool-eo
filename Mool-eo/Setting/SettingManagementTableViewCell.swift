@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SettingManagementTableViewCell: BaseTableViewCell {
+final class SettingManagementTableViewCell: BaseTableViewCell {
     
     let managementLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -33,5 +33,4 @@ class SettingManagementTableViewCell: BaseTableViewCell {
     func configureCell(_ text: String) {
         managementLabel.text = text
     }
-
 }

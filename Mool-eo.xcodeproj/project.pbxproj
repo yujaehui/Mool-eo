@@ -248,6 +248,7 @@
 		09EB7A142C3A826D001E0470 /* JoinSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */; };
 		09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */; };
 		09EB7A182C3D6A68001E0470 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */; };
+		09EB7A1A2C3FB61C001E0470 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A192C3FB61C001E0470 /* AlertManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +475,7 @@
 		09EB7A132C3A826D001E0470 /* JoinSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewController.swift; sourceTree = "<group>"; };
 		09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewModel.swift; sourceTree = "<group>"; };
 		09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		09EB7A192C3FB61C001E0470 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -702,12 +704,12 @@
 		0932891B2BF0DA2E00C8F52E /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */,
-				0932891E2BF0DA7700C8F52E /* SettingView.swift */,
-				093289202BF0DA8A00C8F52E /* SettingViewController.swift */,
+				093289262BF0DED400C8F52E /* SettingSectionModel.swift */,
 				093289222BF0DBA700C8F52E /* SettingInfoTableViewCell.swift */,
 				093289242BF0DDC700C8F52E /* SettingManagementTableViewCell.swift */,
-				093289262BF0DED400C8F52E /* SettingSectionModel.swift */,
+				0932891E2BF0DA7700C8F52E /* SettingView.swift */,
+				093289202BF0DA8A00C8F52E /* SettingViewController.swift */,
+				0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1122,6 +1124,7 @@
 				0987A7DD2BE790610045D361 /* ToastManager.swift */,
 				093289CB2BF7410500C8F52E /* HashtagManager.swift */,
 				09EB7A082C3A7262001E0470 /* TransitionManager.swift */,
+				09EB7A192C3FB61C001E0470 /* AlertManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1540,6 +1543,7 @@
 				0999EB4E2BCBC273004B6D1F /* LoginModel.swift in Sources */,
 				09279A6A2BE25A5200E4A65D /* PostImageCollectionViewCell.swift in Sources */,
 				0987A7D42BE6B1870045D361 /* OtherUserProfileSectionModel.swift in Sources */,
+				09EB7A1A2C3FB61C001E0470 /* AlertManager.swift in Sources */,
 				09138B772C086091005C84B2 /* Chat.swift in Sources */,
 				09602B4C2BD3A5E500A6AFEA /* PostListViewModel.swift in Sources */,
 				09EB79BE2C314723001E0470 /* ImageChatViewController.swift in Sources */,

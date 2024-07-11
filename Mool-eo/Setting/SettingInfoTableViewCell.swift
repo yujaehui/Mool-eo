@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SettingInfoTableViewCell: BaseTableViewCell {
+final class SettingInfoTableViewCell: BaseTableViewCell {
     
     let userInfoLabel: CustomLabel = {
         let label = CustomLabel(type: .contentBold)
@@ -31,10 +31,7 @@ class SettingInfoTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let idLabel: CustomLabel = {
-        let label = CustomLabel(type: .subContent)
-        return label
-    }()
+    let idLabel = CustomLabel(type: .subContent)
     
     let nicknameStackView: UIStackView = {
         let stackView = UIStackView()
@@ -51,10 +48,7 @@ class SettingInfoTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let nicknameLabel: CustomLabel = {
-        let label = CustomLabel(type: .subContent)
-        return label
-    }()
+    let nicknameLabel = CustomLabel(type: .subContent)
     
     override func configureHierarchy() {
         contentView.addSubview(userInfoLabel)

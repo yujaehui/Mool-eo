@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class SettingViewModel: ViewModelType {
+final class SettingViewModel: ViewModelType {
     
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -17,45 +17,62 @@ class SettingViewModel: ViewModelType {
         let reload: BehaviorSubject<Void>
         let modelSelected: Observable<SettingSectionItem>
         let itemSelected: Observable<IndexPath>
+        let withdrawButtonTap: PublishSubject<Void>
     }
     
     struct Output {
         let profile: PublishSubject<ProfileModel>
+        let withdrawCheck: PublishSubject<Void>
         let withdrawSuccessTrigger: PublishSubject<Void>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let profile = PublishSubject<ProfileModel>()
-        let withdraw = PublishSubject<Void>()
+        let withdrawCheck = PublishSubject<Void>()
         let withdrawSuccessTrigger = PublishSubject<Void>()
+        let networkFail = PublishSubject<Void>()
         
         input.reload
-            .flatMap { _ in
-                NetworkManager.shared.profileCheck()
-            }
+            .flatMap { NetworkManager.shared.profileCheck() }
             .subscribe(with: self) { owner, value in
                 switch value {
                 case .success(let success): profile.onNext(success)
-                case .error(let error): print(error)
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
+            .map { $0.0 }
             .bind(with: self) { owner, value in
-                switch value.0 {
+                switch value {
                 case .info(_): break
-                case .management(let management): withdraw.onNext(())
+                case .management(_): withdrawCheck.onNext(())
                 }
-            }.disposed(by: disposeBag)
-        
-        withdraw
-            .flatMap { _ in
-                NetworkManager.shared.withdraw()
             }
-            .subscribe(with: self) { owner, value in
-                withdrawSuccessTrigger.onNext(())
-            }.disposed(by: disposeBag)
+            .disposed(by: disposeBag)
         
-        return Output(profile: profile, withdrawSuccessTrigger: withdrawSuccessTrigger)
+        input.withdrawButtonTap
+            .flatMap { NetworkManager.shared.withdraw() }
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(_): withdrawSuccessTrigger.onNext(())
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(profile: profile,
+                      withdrawCheck: withdrawCheck,
+                      withdrawSuccessTrigger: withdrawSuccessTrigger,
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
     }
 }

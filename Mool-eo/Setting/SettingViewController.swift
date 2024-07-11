@@ -10,15 +10,14 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class SettingViewController: BaseViewController {
+final class SettingViewController: BaseViewController {
     
     let viewModel = SettingViewModel()
     let settingView = SettingView()
     
+    private var reload = BehaviorSubject(value: ())
     private var sections = BehaviorSubject<[SettingSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
-    
-    var reload = BehaviorSubject(value: ())
+    private var withdrawButtonTap = PublishSubject<Void>()
     
     override func loadView() {
         self.view = settingView
@@ -30,19 +29,19 @@ class SettingViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "설정"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func configureView() {
-        sections.bind(to: settingView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        sections.bind(to: settingView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {
-        let reload = reload
-        let modelSelected = settingView.tableView.rx.modelSelected(SettingSectionItem.self).asObservable()
-        let itemSelected = settingView.tableView.rx.itemSelected.asObservable()
-        let input = SettingViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected)
+        let input = SettingViewModel.Input(
+            reload: reload,
+            modelSelected: settingView.tableView.rx.modelSelected(SettingSectionItem.self).asObservable(),
+            itemSelected: settingView.tableView.rx.itemSelected.asObservable(),
+            withdrawButtonTap: withdrawButtonTap
+        )
         
         let output = viewModel.transform(input: input)
         
@@ -51,15 +50,23 @@ class SettingViewController: BaseViewController {
                                   + [SettingSectionModel(items: [.management("탈퇴")])])
         }.disposed(by: disposeBag)
         
+        output.withdrawCheck.bind(with: self) { owner, _ in
+            let alert = AlertManager.shared.showWithdrawAlert { _ in
+                owner.withdrawButtonTap.onNext(())
+            }
+            owner.present(alert, animated: true)
+        }.disposed(by: disposeBag)
+        
         output.withdrawSuccessTrigger.bind(with: self) { owner, _ in
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            let sceneDelegate = windowScene?.delegate as? SceneDelegate
-            sceneDelegate?.window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
-            sceneDelegate?.window?.makeKeyAndVisible()
+            TransitionManager.shared.setInitialViewController(LoginViewController(), navigation: true)
+        }.disposed(by: disposeBag)
+        
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.settingView)
         }.disposed(by: disposeBag)
     }
     
-    func configureDataSource() -> RxTableViewSectionedReloadDataSource<SettingSectionModel> {
+    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<SettingSectionModel> {
         let dataSource = RxTableViewSectionedReloadDataSource<SettingSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
             switch item {
             case .info(let info):

@@ -19,9 +19,9 @@ final class UserProfileViewController: BaseViewController {
     let userProfileView = UserProfileView()
     
     private var reload = BehaviorSubject(value: ())
+    private var sections = BehaviorSubject<[UserProfileSectionModel]>(value: [])
     private var profileImageData = PublishSubject<Data?>()
     private var profileEditButtonTap = PublishSubject<Void>()
-    private var sections = BehaviorSubject<[UserProfileSectionModel]>(value: [])
     
     override func loadView() {
         self.view = userProfileView
@@ -34,6 +34,11 @@ final class UserProfileViewController: BaseViewController {
     
     override func setNav() {
         navigationItem.title = "프로필"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
+    }
+    
+    @objc func rightBarButtonTapped() {
+        navigationController?.pushViewController(SettingViewController(), animated: true)
     }
     
     override func configureView() {
