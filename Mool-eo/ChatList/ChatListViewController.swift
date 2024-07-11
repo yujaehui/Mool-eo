@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ChatListViewController: BaseViewController {
+final class ChatListViewController: BaseViewController {
     
     let viewModel = ChatListViewModel()
     let chatListView = ChatListView()
@@ -30,12 +30,14 @@ class ChatListViewController: BaseViewController {
     }
     
     override func bind() {
-        let reload = reload
-        let modelSelected = chatListView.tableView.rx.modelSelected(ChatRoomModel.self).asObservable()
-        let itemSelected = chatListView.tableView.rx.itemSelected.asObservable()
-        let input = ChatListViewModel.Input(reload: reload, modelSelected: modelSelected, itemSelected: itemSelected)
+        let input = ChatListViewModel.Input(
+            reload: reload,
+            modelSelected: chatListView.tableView.rx.modelSelected(ChatRoomModel.self).asObservable(),
+            itemSelected: chatListView.tableView.rx.itemSelected.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
+        
         output.chatList.bind(to: chatListView.tableView.rx.items(cellIdentifier: ChatListTableViewCell.identifier, cellType: ChatListTableViewCell.self)) { (row, element, cell) in
             cell.configureCell(element)
         }.disposed(by: disposeBag)
@@ -49,5 +51,8 @@ class ChatListViewController: BaseViewController {
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
 
+        output.networkFail.drive(with: self) { owner, _ in
+            ToastManager.shared.showErrorToast(title: .networkFail, in: owner.chatListView)
+        }.disposed(by: disposeBag)
     }
 }

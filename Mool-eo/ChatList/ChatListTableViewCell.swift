@@ -8,12 +8,9 @@
 import UIKit
 import SnapKit
 
-class ChatListTableViewCell: BaseTableViewCell {
+final class ChatListTableViewCell: BaseTableViewCell {
     
-    let profileImageView: ProfileImageView = {
-        let imageView = ProfileImageView(frame: .zero)
-        return imageView
-    }()
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let stackView: UIStackView = {
         let stackView = UIStackView()

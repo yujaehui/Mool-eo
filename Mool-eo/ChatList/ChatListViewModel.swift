@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ChatListViewModel: ViewModelType {
+final class ChatListViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -21,30 +21,40 @@ class ChatListViewModel: ViewModelType {
     struct Output {
         let chatList: PublishSubject<[ChatRoomModel]>
         let selectedChatRoom: PublishSubject<ChatRoomModel>
+        let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let chatList = PublishSubject<[ChatRoomModel]>()
         let selectedChatRoom = PublishSubject<ChatRoomModel>()
+        let networkFail = PublishSubject<Void>()
         
         input.reload
-            .flatMap { _ in
-                NetworkManager.shared.chatListCheck()
-            }
-            .debug("채탱 내역 조회")
+            .flatMap { NetworkManager.shared.chatListCheck() }
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let success): chatList.onNext(success.data)
-                case .error(let error): print(error)
+                case .success(let chatListModel): chatList.onNext(chatListModel.data)
+                case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         Observable.zip(input.modelSelected, input.itemSelected)
             .map { $0.0 }
             .bind(with: self) { owner, value in
                 selectedChatRoom.onNext(value)
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
         
-        return Output(chatList: chatList, selectedChatRoom: selectedChatRoom)
+        return Output(chatList: chatList,
+                      selectedChatRoom: selectedChatRoom,
+                      networkFail: networkFail.asDriver(onErrorJustReturn: ()))
+    }
+    
+    private func handleNetworkError(error: NetworkError, networkFail: PublishSubject<Void>) {
+        switch error {
+        case .networkFail: networkFail.onNext(())
+        default: print("⚠️OTHER ERROR : \(error)⚠️")
+        }
     }
 }
