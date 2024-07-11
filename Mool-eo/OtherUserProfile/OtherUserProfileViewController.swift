@@ -34,6 +34,7 @@ final class OtherUserProfileViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "\(nickname)의 프로필"
     }
     

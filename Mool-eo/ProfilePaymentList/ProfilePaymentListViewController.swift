@@ -30,6 +30,7 @@ final class ProfilePaymentListViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "결제 내역"
     }
     

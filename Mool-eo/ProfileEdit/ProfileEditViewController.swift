@@ -34,6 +34,7 @@ final class ProfileEditViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "프로필 수정"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(leftBarButtonTapped))

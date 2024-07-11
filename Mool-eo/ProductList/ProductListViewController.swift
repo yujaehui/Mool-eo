@@ -57,6 +57,7 @@ final class ProductListViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "Mool-eo!"
     }
     

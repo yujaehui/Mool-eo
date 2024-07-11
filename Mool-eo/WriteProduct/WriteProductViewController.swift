@@ -38,6 +38,7 @@ final class WriteProductViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "상품 등록"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(leftBarButtonTapped))

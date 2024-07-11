@@ -36,6 +36,7 @@ final class ProfileProductListViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "\(nickname)님의 상품"
     }
     

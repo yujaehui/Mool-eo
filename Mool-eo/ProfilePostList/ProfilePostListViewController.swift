@@ -38,6 +38,7 @@ final class ProfilePostListViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "\(nickname)의 게시글"
     }
     

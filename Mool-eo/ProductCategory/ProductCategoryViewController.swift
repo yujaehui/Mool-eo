@@ -25,9 +25,8 @@ final class ProductCategoryViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "카테고리"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func configureView() {

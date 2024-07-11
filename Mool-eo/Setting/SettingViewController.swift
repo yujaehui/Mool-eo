@@ -28,6 +28,7 @@ final class SettingViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "설정"
     }
     

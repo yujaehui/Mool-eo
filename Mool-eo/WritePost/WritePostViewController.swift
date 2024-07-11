@@ -46,6 +46,7 @@ final class WritePostViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "글쓰기"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: type == .upload ? "완료" : "수정", style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(leftBarButtonTapped))

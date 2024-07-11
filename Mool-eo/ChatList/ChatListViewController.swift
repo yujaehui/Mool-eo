@@ -25,9 +25,8 @@ class ChatListViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         navigationItem.title = "채팅"
-        navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = ColorStyle.point
     }
     
     override func bind() {

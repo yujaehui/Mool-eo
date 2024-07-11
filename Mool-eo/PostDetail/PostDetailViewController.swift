@@ -55,6 +55,7 @@ final class PostDetailViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         var items: [UIAction] {
             let edit = UIAction(title: "수정", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
                 self.editButtonTap.onNext(())

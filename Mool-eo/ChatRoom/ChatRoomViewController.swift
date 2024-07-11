@@ -40,7 +40,7 @@ class ChatRoomViewController: BaseViewController {
     }
     
     override func setNav() {
-        
+        super.setNav()
     }
     
     override func configureView() {

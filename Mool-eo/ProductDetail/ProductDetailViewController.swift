@@ -40,6 +40,7 @@ final class ProductDetailViewController: BaseViewController {
     }
     
     override func setNav() {
+        super.setNav()
         var items: [UIAction] {
             let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
                 self.deleteButtonTap.onNext(())
