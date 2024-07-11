@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyChatTableViewCell: BaseTableViewCell {
+final class MyChatTableViewCell: BaseTableViewCell {
     let chatView = ChatContentView()
     
     override func configureHierarchy() {

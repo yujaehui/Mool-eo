@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ChatRoomView: BaseView {
+final class ChatRoomView: BaseView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyChatTableViewCell.self, forCellReuseIdentifier: MyChatTableViewCell.identifier)
@@ -38,7 +38,7 @@ class ChatRoomView: BaseView {
         }
         
         writeMessageView.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
     }

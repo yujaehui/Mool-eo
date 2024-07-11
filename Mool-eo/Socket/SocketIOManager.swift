@@ -22,7 +22,6 @@ final class SocketIOManager {
     
     private init() {
         print("SOCKETIOMANAGER INIT")
-        
         manager = SocketManager(socketURL: baseURL, config: [.log(true), .compress])
     }
     

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ManyImageChatCollectionViewCell: BaseCollectionViewCell {
+final class ManyImageChatCollectionViewCell: BaseCollectionViewCell {
     let chatImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true

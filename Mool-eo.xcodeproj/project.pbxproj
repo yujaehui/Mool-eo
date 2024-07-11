@@ -1208,9 +1208,9 @@
 		09EB79BC2C314666001E0470 /* ImageChat */ = {
 			isa = PBXGroup;
 			children = (
+				09EB79C12C3147AC001E0470 /* ImageChatCollectionViewCell.swift */,
 				09EB79BA2C314662001E0470 /* ImageChatView.swift */,
 				09EB79BD2C314723001E0470 /* ImageChatViewController.swift */,
-				09EB79C12C3147AC001E0470 /* ImageChatCollectionViewCell.swift */,
 				09EB79BF2C314767001E0470 /* ImageChatViewModel.swift */,
 			);
 			path = ImageChat;

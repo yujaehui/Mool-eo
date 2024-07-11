@@ -12,7 +12,7 @@ import RxDataSources
 import PhotosUI
 import YPImagePicker
 
-class ChatRoomViewController: BaseViewController {
+final class ChatRoomViewController: BaseViewController {
     
     deinit {
         SocketIOManager.shared.leaveConnection()
@@ -21,15 +21,15 @@ class ChatRoomViewController: BaseViewController {
     
     let viewModel = ChatRoomViewModel()
     let chatRoomView = ChatRoomView()
-    private var sections = BehaviorSubject<[ChatRoomSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
     
-    var reload = BehaviorSubject<Void>(value: ())
-    var userId: String = ""
-    var roomId = PublishSubject<String>()
+    private var reload = BehaviorSubject<Void>(value: ())
+    private var sections = BehaviorSubject<[ChatRoomSectionModel]>(value: [])
     
     private var selectedImageData: [Data] = []
     private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
+    
+    var userId: String = ""
+    var nickname: String = ""
     
     override func loadView() {
         self.view = chatRoomView
@@ -41,144 +41,143 @@ class ChatRoomViewController: BaseViewController {
     
     override func setNav() {
         super.setNav()
+        navigationItem.title = nickname
     }
     
     override func configureView() {
-        sections.bind(to: chatRoomView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        sections.bind(to: chatRoomView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {
-        let userId = Observable.just(userId)
-        let roomId = roomId
-        let newChat = chatRoomView.writeMessageView.writeTextView.rx.text.orEmpty.asObservable()
-        let newChatUploadButtonTap = chatRoomView.writeMessageView.textUploadButton.rx.tap.asObservable()
-        let newChatImageSelectButtonTap = chatRoomView.writeMessageView.imageSelectButton.rx.tap.asObservable()
-        let modelSelected = chatRoomView.tableView.rx.modelSelected(ChatRoomSectionItem.self).asObservable()
-        let itemSelected = chatRoomView.tableView.rx.itemSelected.asObservable()
-        let intput = ChatRoomViewModel.Input(userId: userId, roomId: roomId, newChat: newChat, newChatUploadButtonTap: newChatUploadButtonTap, newChatImageSelectButtonTap: newChatImageSelectButtonTap, selectedImageDataSubject: selectedImageDataSubject, modelSelected: modelSelected, itemSelected: itemSelected)
+        let intput = ChatRoomViewModel.Input(
+            userId: Observable.just(userId),
+            newChat: chatRoomView.writeMessageView.writeTextView.rx.text.orEmpty.asObservable(),
+            newChatUploadButtonTap: chatRoomView.writeMessageView.textUploadButton.rx.tap.asObservable(),
+            newChatImageSelectButtonTap: chatRoomView.writeMessageView.imageSelectButton.rx.tap.asObservable(),
+            selectedImageDataSubject: selectedImageDataSubject,
+            modelSelected: chatRoomView.tableView.rx.modelSelected(ChatRoomSectionItem.self).asObservable(),
+            itemSelected: chatRoomView.tableView.rx.itemSelected.asObservable()
+        )
+        
         let output = viewModel.transform(input: intput)
-        output.chatRoom.bind(with: self) { owner, value in
-            owner.roomId.onNext(value.roomID)
-        }.disposed(by: disposeBag)
         
         output.chatList.bind(with: self) { owner, value in
-            owner.sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
-            if !value.isEmpty {
-                owner.scrollToBottom(animated: false)
-            }
+            owner.configureSection(value)
         }.disposed(by: disposeBag)
         
         output.newChat.bind(with: self) { owner, value in
-            owner.sections
-                .take(1)
-                .subscribe(onNext: { currentSections in
-                    var updatedSections = currentSections
-                    if updatedSections.isEmpty {
-                        updatedSections.append(ChatRoomSectionModel(items: [.chat(value)]))
-                    } else {
-                        var items = updatedSections[0].items
-                        items.append(.chat(value))
-                        updatedSections[0] = ChatRoomSectionModel(items: items)
-                    }
-                    owner.sections.onNext(updatedSections)
-                    owner.scrollToBottom(animated: true)
-                })
-                .disposed(by: owner.disposeBag)
+            owner.updateSection(value)
             owner.chatRoomView.writeMessageView.writeTextView.text = ""
         }.disposed(by: disposeBag)
         
         output.newChatImageSelectButtonTap.bind(with: self) { owner, _ in
-            
-            self.selectedImageData.removeAll()
-            
-            var config = YPImagePickerConfiguration()
-            config.wordings.next = "전송"
-            config.wordings.cancel = "취소"
-            config.screens = [.library]
-            config.startOnScreen = .library
-            config.library.maxNumberOfItems = 3
-            config.library.mediaType = .photo
-            config.library.skipSelectionsGallery = true
-            config.showsPhotoFilters = false
-            let picker = YPImagePicker(configuration: config)
-            picker.didFinishPicking { [unowned picker] items, cancelled in
-                if cancelled {
-                    picker.dismiss(animated: true)
-                } else {
-                    for item in items {
-                        switch item {
-                        case .photo(let photo):
-                            if let compressedImageData = owner.compressImage(photo.image, quality: 0.5) {
-                                owner.selectedImageData.append(compressedImageData)
-                            }
-                        default: print("")
-                        }
-                    }
-                    owner.selectedImageDataSubject.onNext(owner.selectedImageData)
-                    picker.dismiss(animated: true)
-                }
-            }
-            owner.present(picker, animated: true)
+            owner.presentImagePicker()
         }.disposed(by: disposeBag)
         
         output.isTextEmpty.bind(with: self) { owner, isTextEmpty in
             owner.chatRoomView.writeMessageView.updateButtonVisibility(isTextEmpty: isTextEmpty)
         }.disposed(by: disposeBag)
         
-        output.chatImageTapTrigger.bind(with: self) { owner, fileArray in
-            let vc = ImageChatViewController()
-            vc.filesArray = fileArray
-            vc.hidesBottomBarWhenPushed = true
-            owner.navigationController?.pushViewController(vc, animated: true)
+        output.chatImageTapTrigger.bind(with: self) { owner, filesArray in
+            owner.navigateToImageChat(filesArray)
         }.disposed(by: disposeBag)
     }
-    
+}
+
+extension ChatRoomViewController {
     private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> {
-        let dataSource = RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> (configureCell : { dataSource, tableView, indexPath, item in
-            switch item {
-            case .chat(let chat):
-                if chat.sender?.user_id == UserDefaultsManager.userId  && chat.filesArray.isEmpty {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: MyChatTableViewCell.identifier, for: indexPath) as! MyChatTableViewCell
-                    cell.configureCell(chat)
-                    return cell
-                } else if chat.sender?.user_id == UserDefaultsManager.userId && !chat.filesArray.isEmpty {
-                    switch chat.filesArray.count {
-                    case 2:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: MyTwoImageChatTableViewCell.identifier, for: indexPath) as! MyTwoImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    case 3:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: MyThreeImageChatTableViewCell.identifier, for: indexPath) as! MyThreeImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    default:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    }
-                } else if chat.sender?.user_id != UserDefaultsManager.userId && chat.filesArray.isEmpty {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
-                    cell.configureCell(chat)
-                    return cell
+        return RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> { dataSource, tableView, indexPath, item in
+            return self.configureCell(dataSource, tableView: tableView, indexPath: indexPath, item: item)
+        }
+    }
+    
+    private func configureCell(_ dataSource: TableViewSectionedDataSource<ChatRoomSectionModel>, tableView: UITableView, indexPath: IndexPath, item: ChatRoomSectionItem) -> UITableViewCell {
+        switch item {
+        case .chat(let chat):
+            return chat.sender?.user_id == UserDefaultsManager.userId
+                ? self.configureMyChatCell(chat, tableView: tableView, indexPath: indexPath)
+                : self.configureOtherChatCell(chat, tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    private func configureMyChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        if chat.filesArray.isEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyChatTableViewCell.identifier, for: indexPath) as! MyChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        } else {
+            return self.configureMyImageChatCell(chat, tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    private func configureOtherChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        if chat.filesArray.isEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        } else {
+            return self.configureOtherImageChatCell(chat, tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    private func configureMyImageChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        switch chat.filesArray.count {
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyTwoImageChatTableViewCell.identifier, for: indexPath) as! MyTwoImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyThreeImageChatTableViewCell.identifier, for: indexPath) as! MyThreeImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        }
+    }
+    
+    private func configureOtherImageChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        switch chat.filesArray.count {
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OtherTwoImageChatTableViewCell.identifier, for: indexPath) as! OtherTwoImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OtherThreeImageChatTableViewCell.identifier, for: indexPath) as! OtherThreeImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
+            cell.configureCell(chat)
+            return cell
+        }
+    }
+}
+
+extension ChatRoomViewController {
+    private func configureSection(_ value: [Chat]) {
+        sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
+        guard value.isEmpty else { return scrollToBottom(animated: false) }
+    }
+    
+    private func updateSection(_ value: Chat) {
+        sections
+            .take(1)
+            .subscribe(with: self) { owner, currentSections in
+                var updatedSections = currentSections
+                if updatedSections.isEmpty {
+                    updatedSections.append(ChatRoomSectionModel(items: [.chat(value)]))
                 } else {
-                    switch chat.filesArray.count {
-                    case 2:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherTwoImageChatTableViewCell.identifier, for: indexPath) as! OtherTwoImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    case 3:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherThreeImageChatTableViewCell.identifier, for: indexPath) as! OtherThreeImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    default:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
-                        cell.configureCell(chat)
-                        return cell
-                    }
+                    var items = updatedSections[0].items
+                    items.append(.chat(value))
+                    updatedSections[0] = ChatRoomSectionModel(items: items)
                 }
+                self.sections.onNext(updatedSections)
+                self.scrollToBottom(animated: true)
             }
-        })
-        return dataSource
+            .disposed(by: disposeBag)
+        chatRoomView.writeMessageView.writeTextView.text = ""
     }
     
     private func scrollToBottom(animated: Bool) {
@@ -187,11 +186,45 @@ class ChatRoomViewController: BaseViewController {
         let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
         chatRoomView.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
     }
+}
+
+extension ChatRoomViewController {
+    private func presentImagePicker() {
+        selectedImageData.removeAll()
+        presentYPImagePicker { [weak self] picker, items, cancelled in
+            guard let self = self else { return }
+            if cancelled {
+                picker.dismiss(animated: true)
+            } else {
+                self.handleImagePickerItems(items)
+                picker.dismiss(animated: true)
+            }
+        }
+    }
     
-    func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
+    private func handleImagePickerItems(_ items: [YPMediaItem]) {
+        for item in items {
+            if case let .photo(photo) = item, let compressedImageData = compressImage(photo.image, quality: 0.5) {
+                selectedImageData.append(compressedImageData)
+            }
+        }
+        selectedImageDataSubject.onNext(selectedImageData)
+    }
+    
+    private func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
         if let imageData = image.jpegData(compressionQuality: quality) {
             return imageData
+        } else {
+            return nil
         }
-        return nil
+    }
+}
+
+extension ChatRoomViewController {
+    private func navigateToImageChat(_ filesArray: [String]) {
+        let vc = ImageChatViewController()
+        vc.filesArray = filesArray
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

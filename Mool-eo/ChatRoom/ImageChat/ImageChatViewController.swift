@@ -9,11 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ImageChatViewController: BaseViewController {
+final class ImageChatViewController: BaseViewController {
     
-    deinit {
-        print("‼️ImageChatViewController Deinit‼️")
-    }
+    deinit { print("‼️ImageChatViewController Deinit‼️") }
     
     let viewModel = ImageChatViewModel()
     let imageChatView = ImageChatView()
@@ -29,9 +27,10 @@ class ImageChatViewController: BaseViewController {
     }
     
     override func bind() {
-        let filesArray = Observable.just(filesArray)
-        let changePage = imageChatView.collectionView.rx.didEndDecelerating.asObservable()
-        let input = ImageChatViewModel.Input(filesArray: filesArray, changePage: changePage)
+        let input = ImageChatViewModel.Input(
+            filesArray: Observable.just(filesArray),
+            changePage: imageChatView.collectionView.rx.didEndDecelerating.asObservable()
+        )
         
         let output = viewModel.transform(input: input)
         
@@ -39,12 +38,10 @@ class ImageChatViewController: BaseViewController {
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)
         
-        output.filesArray
-            .map { $0.count }
-            .bind(to: imageChatView.pageControl.rx.numberOfPages)
-            .disposed(by: disposeBag)
+        output.pageCount.bind(to: imageChatView.pageControl.rx.numberOfPages).disposed(by: disposeBag)
         
-        output.changePage.bind(with: self) { owner, _ in
+        output.changePage
+            .bind(with: self) { owner, _ in
             let pageWidth = owner.imageChatView.collectionView.frame.width
             let currentPage = Int(owner.imageChatView.collectionView.contentOffset.x / pageWidth)
             owner.imageChatView.pageControl.currentPage = currentPage

@@ -8,7 +8,8 @@
 import UIKit
 import SnapKit
 
-class ImageChatCollectionViewCell: BaseCollectionViewCell {
+final class ImageChatCollectionViewCell: BaseCollectionViewCell {
+    
     let chatImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit

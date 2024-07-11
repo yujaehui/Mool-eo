@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ImageChatView: BaseView {
+final class ImageChatView: BaseView {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.isPagingEnabled = true

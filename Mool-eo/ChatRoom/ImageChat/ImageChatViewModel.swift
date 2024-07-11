@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ImageChatViewModel: ViewModelType {
+final class ImageChatViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
@@ -19,10 +19,22 @@ class ImageChatViewModel: ViewModelType {
     
     struct Output {
         let filesArray: Observable<[String]>
+        let pageCount: PublishSubject<Int>
         let changePage: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
-        return Output(filesArray: input.filesArray, changePage: input.changePage)
+        let pageCount = PublishSubject<Int>()
+        
+        input.filesArray
+            .map { $0.count }
+            .bind(with: self) { owner, count in
+                pageCount.onNext(count)
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(filesArray: input.filesArray,
+                      pageCount: pageCount,
+                      changePage: input.changePage)
     }
 }

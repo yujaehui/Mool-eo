@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyImageChatTableViewCell: BaseTableViewCell {
+final class MyImageChatTableViewCell: BaseTableViewCell {
     let chatImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
@@ -31,6 +31,5 @@ class MyImageChatTableViewCell: BaseTableViewCell {
     
     func configureCell(_ chat: Chat) {
         URLImageSettingManager.shared.setImageWithUrl(chatImageView, urlString: chat.filesArray.first!)
-        
     }
 }

@@ -13,6 +13,14 @@ import RxCocoa
 final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
     var disposeBag = DisposeBag()
     
+    let profileImageView = ProfileImageView(frame: .zero)
+    
+    let nicknameLabel: CustomLabel = {
+        let label = CustomLabel(type: .subDescription)
+        label.numberOfLines = 1
+        return label
+    }()
+    
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.isUserInteractionEnabled = false
@@ -25,15 +33,31 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
     }
     
     override func configureHierarchy() {
+        contentView.addSubview(profileImageView)
+        contentView.addSubview(nicknameLabel)
         contentView.addSubview(collectionView)
     }
     
     override func configureConstraints() {
-        collectionView.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(contentView).inset(10)
+        profileImageView.snp.makeConstraints { make in
+            make.top.equalTo(contentView).inset(5)
             make.leading.equalTo(contentView).inset(10)
+            make.size.equalTo(40)
+        }
+        
+        nicknameLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView).inset(5)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(5)
+            make.trailing.lessThanOrEqualTo(contentView).inset(50)
+            make.height.equalTo(10)
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(5)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(5)
             make.width.equalTo(300)
             make.height.equalTo(100)
+            make.bottom.equalTo(contentView).inset(5)
         }
     }
     
@@ -49,6 +73,10 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ chat: Chat) {
+        if let sender = chat.sender {
+            URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
+            nicknameLabel.text = sender.nick
+        }
         Observable.just(chat.filesArray).bind(to: collectionView.rx.items(cellIdentifier: ManyImageChatCollectionViewCell.identifier, cellType: ManyImageChatCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)

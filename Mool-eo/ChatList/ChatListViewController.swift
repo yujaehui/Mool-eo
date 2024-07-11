@@ -46,6 +46,7 @@ final class ChatListViewController: BaseViewController {
             let vc = ChatRoomViewController()
             if let otherParticipant = value.participants.first(where: { $0.user_id != UserDefaultsManager.userId }) {
                 vc.userId = otherParticipant.user_id
+                vc.nickname = otherParticipant.nick
             }
             vc.hidesBottomBarWhenPushed = true
             owner.navigationController?.pushViewController(vc, animated: true)
