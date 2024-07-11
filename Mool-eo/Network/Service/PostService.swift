@@ -39,11 +39,8 @@ extension PostService: Moya.TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .imageUpload: .post
-        case .postUpload: .post
-        case .postCheck: .get
-        case .postCheckSpecific: .get
-        case .postCheckUser: .get
+        case .imageUpload, .postUpload: .post
+        case .postCheck, .postCheckSpecific, .postCheckUser: .get
         case .postDelete: .delete
         case .postEdit: .put
         }
@@ -89,16 +86,7 @@ extension PostService: Moya.TargetType {
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .postCheck:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .postCheckSpecific:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .postCheckUser:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .postDelete:
+        case .postCheck, .postCheckSpecific, .postCheckUser, .postDelete:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .postEdit:

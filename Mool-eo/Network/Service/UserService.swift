@@ -35,33 +35,29 @@ extension UserService: Moya.TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .join: .post
-        case .email: .post
-        case .login: .post
-        case .refresh: .get
-        case .withdraw: .get
+        case .join, .email, .login: .post
+        case .refresh, .withdraw: .get
         }
     }
     
     var task: Task {
         switch self {
-        case .join(let query): return .requestJSONEncodable(query)
-        case .email(let query): return .requestJSONEncodable(query)
-        case .login(let query): return .requestJSONEncodable(query)
-        case .refresh: return .requestPlain
-        case .withdraw: return .requestPlain
+        case .join(let query): 
+            return .requestJSONEncodable(query)
+        case .email(let query): 
+            return .requestJSONEncodable(query)
+        case .login(let query): 
+            return .requestJSONEncodable(query)
+        case .refresh:
+            return .requestPlain
+        case .withdraw: 
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .join:
-            [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
-             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue]
-        case .email:
-            [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
-             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue]
-        case .login:
+        case .join, .email, .login:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue]
         case .refresh:

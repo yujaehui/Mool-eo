@@ -17,12 +17,12 @@ final class ProfilePaymentListViewModel: ViewModelType {
     }
     
     struct Output {
-        let result: PublishSubject<PaymentModel>
+        let result: PublishSubject<PaymentListModel>
         let networkFail: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let result = PublishSubject<PaymentModel>()
+        let result = PublishSubject<PaymentListModel>()
         let networkFail = PublishSubject<Void>()
         
         input.reload

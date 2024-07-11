@@ -23,6 +23,7 @@ enum NetworkError: Int, Error {
     case conflict = 409
     case notFoundErr = 410
     case unauthorized = 445
+    case refreshTokenExpired = 418
     
     case missingKey = 420
     case overRequestLimit = 429
@@ -36,7 +37,7 @@ struct NetworkManager {
     static let shared = NetworkManager()
     private init() {}
     
-    func requestGeneric<T: Decodable, U: TargetType>(target: U) -> Single<NetworkResult<T>> where U: TargetType {
+    private func performRequest<T: Decodable, U: TargetType>(target: U) -> Single<NetworkResult<T>> where U: TargetType {
         return Single.create { single in
             let provider = MoyaProvider<U>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
             
@@ -66,195 +67,160 @@ struct NetworkManager {
         }
     }
     
+    private func performVoidRequest<U: TargetType>(target: U) -> Single<NetworkResult<Void>> {
+        return Single.create { single in
+            let provider = MoyaProvider<U>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
+            let request = provider.request(target) { result in
+                switch result {
+                case .success:
+                    single(.success(.success(())))
+                case .failure(let error):
+                    if let statusCode = error.response?.statusCode {
+                        if let networkError = NetworkError(rawValue: statusCode) {
+                            single(.success(.error(networkError)))
+                        }
+                    } else {
+                        single(.failure(error))
+                    }
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+    
     //MARK: - User
     func join(query: JoinQuery) -> Single<NetworkResult<JoinModel>> {
-        return requestGeneric(target: UserService.join(query: query))
+        return performRequest(target: UserService.join(query: query))
     }
     
     func emailCheck(query: EmailQuery) -> Single<NetworkResult<EmailModel>> {
-        return requestGeneric(target: UserService.email(query: query))
+        return performRequest(target: UserService.email(query: query))
     }
     
     func login(query: LoginQuery) -> Single<NetworkResult<LoginModel>> {
-        return requestGeneric(target: UserService.login(query: query))
+        return performRequest(target: UserService.login(query: query))
     }
     
     func withdraw() -> Single<NetworkResult<WithdrawModel>> {
-        return requestGeneric(target: UserService.withdraw)
+        return performRequest(target: UserService.withdraw)
     }
     
     func refresh() -> Single<NetworkResult<TokenModel>> {
-        return requestGeneric(target: UserService.refresh)
+        return performRequest(target: UserService.refresh)
     }
     
     //MARK: - Profile
     func profileCheck() -> Single<NetworkResult<ProfileModel>> {
-        return requestGeneric(target: ProfileService.profileCheck)
+        return performRequest(target: ProfileService.profileCheck)
     }
     
     func profileEdit(query: ProfileEditQuery) -> Single<NetworkResult<ProfileModel>> {
-        return requestGeneric(target: ProfileService.profileEdit(query: query))
+        return performRequest(target: ProfileService.profileEdit(query: query))
     }
     
     func otherUserProfileCheck(userId: String) -> Single<NetworkResult<OtherUserProfileModel>> {
-        return requestGeneric(target: ProfileService.otherUserProfileCheck(userId: userId))
+        return performRequest(target: ProfileService.otherUserProfileCheck(userId: userId))
     }
     
     // MARK: - Post
     func imageUpload(query: FilesQuery) -> Single<NetworkResult<FilesModel>> {
-        return requestGeneric(target: PostService.imageUpload(query: query))
+        return performRequest(target: PostService.imageUpload(query: query))
     }
     
     func postUpload(query: PostQuery) -> Single<NetworkResult<PostModel>> {
-        return requestGeneric(target: PostService.postUpload(query: query))
+        return performRequest(target: PostService.postUpload(query: query))
     }
     
     func postCheck(productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: PostService.postCheck(productId: productId, limit: limit, next: next))
+        return performRequest(target: PostService.postCheck(productId: productId, limit: limit, next: next))
     }
     
     func postCheckSpecific(postId: String) -> Single<NetworkResult<PostModel>> {
-        return requestGeneric(target: PostService.postCheckSpecific(postId: postId))
+        return performRequest(target: PostService.postCheckSpecific(postId: postId))
     }
     
     func postCheckUser(userId: String, productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: PostService.postCheckUser(userId: userId, productId: productId, limit: limit, next: next))
+        return performRequest(target: PostService.postCheckUser(userId: userId, productId: productId, limit: limit, next: next))
     }
     
     func postDelete(postId: String) -> Single<NetworkResult<Void>> {
-        return Single.create { single in
-            let provider = MoyaProvider<PostService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-            let request = provider.request(.postDelete(postID: postId)) { result in
-                switch result {
-                case .success:
-                    single(.success(.success(())))
-                case .failure(let error):
-                    if let statusCode = error.response?.statusCode {
-                        if let networkError = NetworkError(rawValue: statusCode) {
-                            single(.success(.error(networkError)))
-                        }
-                    } else {
-                        single(.failure(error))
-                    }
-                }
-            }
-            return Disposables.create {
-                request.cancel()
-            }
-        }
+        return performVoidRequest(target: PostService.postDelete(postID: postId))
     }
-
     
     func postEdit(query: PostQuery, postId: String) -> Single<NetworkResult<PostModel>> {
-        return requestGeneric(target: PostService.postEdit(query: query, postId: postId))
+        return performRequest(target: PostService.postEdit(query: query, postId: postId))
     }
     
     // MARK: - Comment
     func commentUpload(query: CommentQuery, postId: String) -> Single<NetworkResult<CommentModel>> {
-        return requestGeneric(target: CommentService.commentUpload(query: query, postId: postId))
+        return performRequest(target: CommentService.commentUpload(query: query, postId: postId))
     }
     
     func commentDelete(postId: String, commentId: String) -> Single<NetworkResult<Void>> {
-        return Single.create { single in
-            let provider = MoyaProvider<CommentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-            let request = provider.request(.commentDelete(postId: postId, commentId: commentId)) { result in
-                switch result {
-                case .success:
-                    single(.success(.success(())))
-                case .failure(let error):
-                    if let statusCode = error.response?.statusCode {
-                        if let networkError = NetworkError(rawValue: statusCode) {
-                            single(.success(.error(networkError)))
-                        }
-                    } else {
-                        single(.failure(error))
-                    }
-                }
-            }
-            return Disposables.create {
-                request.cancel()
-            }
-        }
-    }
-    
-    //MARK: - LikePost
-    func likePostUpload(query: LikePostQuery, postId: String) -> Single<NetworkResult<LikePostModel>> {
-        return requestGeneric(target: LikePostService.likePostUpload(query: query, postId: postId))
-    }
-    
-    func likePostCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: LikePostService.likePostCheck(limit: limit, next: next))
+        return performVoidRequest(target: CommentService.commentDelete(postId: postId, commentId: commentId))
     }
     
     //MARK: - LikeProduct
     func likeProductUpload(query: LikeProductQuery, postId: String) -> Single<NetworkResult<LikeProductModel>> {
-        return requestGeneric(target: LikeProductService.likeProductUpload(query: query, postId: postId))
+        return performRequest(target: LikeProductService.likeProductUpload(query: query, postId: postId))
     }
     
     func likeProdcutCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: LikeProductService.likeProdcutCheck(limit: limit, next: next))
+        return performRequest(target: LikeProductService.likeProdcutCheck(limit: limit, next: next))
+    }
+    
+    //MARK: - LikePost
+    func likePostUpload(query: LikePostQuery, postId: String) -> Single<NetworkResult<LikePostModel>> {
+        return performRequest(target: LikePostService.likePostUpload(query: query, postId: postId))
+    }
+    
+    func likePostCheck(limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
+        return performRequest(target: LikePostService.likePostCheck(limit: limit, next: next))
     }
     
     //MARK: - Follow
     func follow(userId: String) -> Single<NetworkResult<FollowModel>> {
-        return requestGeneric(target: FollowService.follow(userId: userId))
+        return performRequest(target: FollowService.follow(userId: userId))
     }
     
     func unfollow(userId: String) -> Single<NetworkResult<FollowModel>> {
-        return requestGeneric(target: FollowService.unfollow(userId: userId))
+        return performRequest(target: FollowService.unfollow(userId: userId))
     }
     
     //MARK: - Payment
     func paymentValidation(query: PaymentQuery) -> Single<NetworkResult<Void>> {
-        return Single.create { single in
-            let provider = MoyaProvider<PaymentService>(session: Moya.Session(interceptor: AuthInterceptor.shared), plugins: [NetworkLoggerPlugin()])
-            let request = provider.request(.paymentValidation(query: query)) { result in
-                switch result {
-                case .success:
-                    single(.success(.success(())))
-                case .failure(let error):
-                    if let statusCode = error.response?.statusCode {
-                        if let networkError = NetworkError(rawValue: statusCode) {
-                            single(.success(.error(networkError)))
-                        }
-                    } else {
-                        single(.failure(error))
-                    }
-                }
-            }
-            return Disposables.create {
-                request.cancel()
-            }
-        }
+        return performVoidRequest(target: PaymentService.paymentValidation(query: query))
     }
     
-    func paymentCheck() -> Single<NetworkResult<PaymentModel>> {
-        return requestGeneric(target: PaymentService.paymentCheck)
+    func paymentCheck() -> Single<NetworkResult<PaymentListModel>> {
+        return performRequest(target: PaymentService.paymentCheck)
     }
     
     //MARK: - Hashtag
     func hashtag(hashtag: String, productId: String, limit: String, next: String) -> Single<NetworkResult<PostListModel>> {
-        return requestGeneric(target: HashtagService.hashtag(hashtag: hashtag, productId: productId, limit: limit, next: next))
+        return performRequest(target: HashtagService.hashtag(hashtag: hashtag, productId: productId, limit: limit, next: next))
     }
     
     //MARK: - Chat
     func chatProduce(query: ChatProduceQuery) -> Single<NetworkResult<ChatRoomModel>> {
-        return requestGeneric(target: ChatService.chatProduce(query: query))
+        return performRequest(target: ChatService.chatProduce(query: query))
     }
     
     func chatListCheck() -> Single<NetworkResult<ChatListModel>> {
-        return requestGeneric(target: ChatService.chatListCheck)
+        return performRequest(target: ChatService.chatListCheck)
     }
     
     func chatHistoryCheck(roomId: String, cursorDate: String) -> Single<NetworkResult<ChatHistoryModel>> {
-        return requestGeneric(target: ChatService.chatHistoryCheck(roomId: roomId, cursorDate: cursorDate))
+        return performRequest(target: ChatService.chatHistoryCheck(roomId: roomId, cursorDate: cursorDate))
     }
     
     func chatImageUpload(query: FilesQuery, roomId: String) -> Single<NetworkResult<FilesModel>> {
-        return requestGeneric(target: ChatService.chatImageUpload(query: query, roomId: roomId))
+        return performRequest(target: ChatService.chatImageUpload(query: query, roomId: roomId))
     }
     
     func chatSend(query: ChatSendQuery, roomId: String) -> Single<NetworkResult<Chat>> {
-        return requestGeneric(target: ChatService.chatSend(query: query, roomId: roomId))
+        return performRequest(target: ChatService.chatSend(query: query, roomId: roomId))
     }
 }

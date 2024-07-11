@@ -26,8 +26,8 @@ struct PostModel: Decodable {
     let files: [String]
     let likePost: [String]
     let likesProduct: [String]
-    let comments: [Comment]
-    let creator: Creator
+    let comments: [CommentModel]
+    let creator: CreatorModel
     
     enum CodingKeys: String, CodingKey {
         case postId = "post_id"
@@ -52,31 +52,12 @@ struct PostModel: Decodable {
         self.files = try container.decodeIfPresent([String].self, forKey: .files) ?? []
         self.likePost = try container.decodeIfPresent([String].self, forKey: .likePost) ?? []
         self.likesProduct = try container.decodeIfPresent([String].self, forKey: .likesProduct) ?? []
-        self.comments = try container.decodeIfPresent([Comment].self, forKey: .comments) ?? []
-        self.creator = try container.decodeIfPresent(Creator.self, forKey: .creator) ?? Creator(from: decoder)
+        self.comments = try container.decodeIfPresent([CommentModel].self, forKey: .comments) ?? []
+        self.creator = try container.decodeIfPresent(CreatorModel.self, forKey: .creator) ?? CreatorModel(from: decoder)
     }
 }
 
-struct Comment: Decodable {
-    let commentId: String
-    let content: String
-    let creator: Creator
-    
-    enum CodingKeys: String, CodingKey {
-        case commentId = "comment_id"
-        case content
-        case creator
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.commentId = try container.decodeIfPresent(String.self, forKey: .commentId) ?? ""
-        self.content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
-        self.creator = try container.decodeIfPresent(Creator.self, forKey: .creator) ?? Creator(from: decoder)
-    }
-}
-
-struct Creator: Decodable {
+struct CreatorModel: Decodable {
     let userId: String
     let nick: String
     let profileImage: String

@@ -41,6 +41,7 @@ struct ProfileModel: Decodable {
     }
 }
 
+// FollowModel하고 다름!
 struct Follow: Decodable {
     let user_id: String
     let nick: String

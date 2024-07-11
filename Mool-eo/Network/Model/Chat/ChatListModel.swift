@@ -64,21 +64,3 @@ struct LastChatModel: Decodable {
         self.files = try container.decodeIfPresent([String].self, forKey: .files) ?? []
     }
 }
-
-// MARK: - SenderModel
-//struct SenderModel: Decodable {
-//    let userID, nick: String
-//    let profileImage: String
-//
-//    enum CodingKeys: String, CodingKey {
-//        case userID = "user_id"
-//        case nick, profileImage
-//    }
-//    
-//    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        self.userID = try container.decodeIfPresent(String.self, forKey: .userID) ?? ""
-//        self.nick = try container.decodeIfPresent(String.self, forKey: .nick) ?? ""
-//        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
-//    }
-//}

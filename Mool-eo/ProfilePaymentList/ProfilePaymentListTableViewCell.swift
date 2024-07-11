@@ -45,7 +45,7 @@ final class ProfilePaymentListTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configureCell(_ data: Datum) {
+    func configureCell(_ data: PaymentModel) {
         productNameLabel.text = data.productName
         priceLabel.text = NumberFormatterManager.shared.formatCurrency(data.price)
         dateLabel.text = DateFormatterManager.shared.formatDateToString(dateString: data.paidAt)

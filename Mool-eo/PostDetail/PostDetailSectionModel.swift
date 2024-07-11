@@ -10,7 +10,7 @@ import RxDataSources
 
 enum PostDetailSectionItem {
     case post(PostModel)
-    case comment(Comment)
+    case comment(CommentModel)
 }
 
 struct PostDetailSectionModel {

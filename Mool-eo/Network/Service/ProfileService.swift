@@ -39,27 +39,26 @@ extension ProfileService: Moya.TargetType {
     
     var task: Task {
         switch self {
-        case .profileCheck: return .requestPlain
+        case .profileCheck: 
+            return .requestPlain
         case .profileEdit(let query):
             var formData: [MultipartFormData] = []
             formData.append(MultipartFormData(provider: .data("\(query.nick)".data(using: .utf8)!), name: "nick"))
             formData.append(MultipartFormData(provider: .data(query.profile), name: "profile", fileName: "image.png", mimeType: "image/png"))
             return .uploadMultipart(formData)
-        case .otherUserProfileCheck: return .requestPlain
+        case .otherUserProfileCheck:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .profileCheck:
+        case .profileCheck, .otherUserProfileCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .profileEdit:
             [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .otherUserProfileCheck:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }
     }

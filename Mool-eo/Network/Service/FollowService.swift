@@ -36,20 +36,16 @@ extension FollowService: Moya.TargetType {
     
     var task: Task {
         switch self {
-        case .follow: return .requestPlain
-        case .unfollow: return .requestPlain
+        case .follow: 
+            return .requestPlain
+        case .unfollow: 
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .follow:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .unfollow:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        }
+        [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+         HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
     }
     
     var validationType: ValidationType {

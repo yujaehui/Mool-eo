@@ -1,5 +1,5 @@
 //
-//  PaymentModel.swift
+//  PaymentListModel.swift
 //  Mool-eo
 //
 //  Created by Jaehui Yu on 5/12/24.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-// MARK: - PaymentModel
-struct PaymentModel: Decodable {
-    let data: [Datum]
+// MARK: - PaymentListModel
+struct PaymentListModel: Decodable {
+    let data: [PaymentModel]
 }
 
-// MARK: - Datum
-struct Datum: Decodable {
+// MARK: - PaymentModel
+struct PaymentModel: Decodable {
     let paymentID, buyerID, postID, merchantUid: String
     let productName: String
     let price: Int

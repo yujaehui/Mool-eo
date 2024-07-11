@@ -49,7 +49,7 @@
 		093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289102BF0BE7300C8F52E /* PaymentService.swift */; };
 		093289142BF0BF0900C8F52E /* PaymentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289132BF0BF0900C8F52E /* PaymentQuery.swift */; };
 		093289162BF0C31100C8F52E /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289152BF0C31100C8F52E /* String+Extension.swift */; };
-		093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289182BF0D5E000C8F52E /* PaymentModel.swift */; };
+		093289192BF0D5E000C8F52E /* PaymentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289182BF0D5E000C8F52E /* PaymentListModel.swift */; };
 		0932891D2BF0DA4D00C8F52E /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */; };
 		0932891F2BF0DA7700C8F52E /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932891E2BF0DA7700C8F52E /* SettingView.swift */; };
 		093289212BF0DA8A00C8F52E /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289202BF0DA8A00C8F52E /* SettingViewController.swift */; };
@@ -156,7 +156,7 @@
 		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
 		09602BD12BDE562D00A6AFEA /* LikePostQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */; };
-		09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikeModel.swift */; };
+		09602BD42BDE565F00A6AFEA /* LikePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BD32BDE565F00A6AFEA /* LikePostModel.swift */; };
 		09790D7C2BF9F618004829D5 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7B2BF9F618004829D5 /* ChatRoomView.swift */; };
 		09790D7E2BF9F620004829D5 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */; };
 		09790D802BF9F628004829D5 /* ChatRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */; };
@@ -178,7 +178,6 @@
 		0987A79B2BE3783E0045D361 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79A2BE3783E0045D361 /* FollowService.swift */; };
 		0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */; };
 		0987A7A02BE4010C0045D361 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */; };
-		0987A7C22BE663A80045D361 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7C12BE663A80045D361 /* Empty.swift */; };
 		0987A7CC2BE6B0040045D361 /* PostListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CB2BE6B0040045D361 /* PostListSectionModel.swift */; };
 		0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */; };
 		0987A7D02BE6B0B30045D361 /* Noti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0987A7CF2BE6B0B30045D361 /* Noti.swift */; };
@@ -285,7 +284,7 @@
 		093289102BF0BE7300C8F52E /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		093289132BF0BF0900C8F52E /* PaymentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentQuery.swift; sourceTree = "<group>"; };
 		093289152BF0C31100C8F52E /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
-		093289182BF0D5E000C8F52E /* PaymentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModel.swift; sourceTree = "<group>"; };
+		093289182BF0D5E000C8F52E /* PaymentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListModel.swift; sourceTree = "<group>"; };
 		0932891C2BF0DA4D00C8F52E /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		0932891E2BF0DA7700C8F52E /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		093289202BF0DA8A00C8F52E /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -385,7 +384,7 @@
 		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		09602BD02BDE562D00A6AFEA /* LikePostQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostQuery.swift; sourceTree = "<group>"; };
-		09602BD32BDE565F00A6AFEA /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
+		09602BD32BDE565F00A6AFEA /* LikePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostModel.swift; sourceTree = "<group>"; };
 		09790D7B2BF9F618004829D5 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
 		09790D7D2BF9F620004829D5 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		09790D7F2BF9F628004829D5 /* ChatRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewModel.swift; sourceTree = "<group>"; };
@@ -406,7 +405,6 @@
 		0987A79A2BE3783E0045D361 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowService.swift; sourceTree = "<group>"; };
 		0987A79D2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostImageEditCollectionViewCell.swift; sourceTree = "<group>"; };
 		0987A79F2BE4010C0045D361 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
-		0987A7C12BE663A80045D361 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		0987A7CB2BE6B0040045D361 /* PostListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListSectionModel.swift; sourceTree = "<group>"; };
 		0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailSectionModel.swift; sourceTree = "<group>"; };
 		0987A7CF2BE6B0B30045D361 /* Noti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noti.swift; sourceTree = "<group>"; };
@@ -696,7 +694,7 @@
 		093289172BF0D5D900C8F52E /* Payment */ = {
 			isa = PBXGroup;
 			children = (
-				093289182BF0D5E000C8F52E /* PaymentModel.swift */,
+				093289182BF0D5E000C8F52E /* PaymentListModel.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -1047,7 +1045,7 @@
 		09602BD22BDE565A00A6AFEA /* LikePost */ = {
 			isa = PBXGroup;
 			children = (
-				09602BD32BDE565F00A6AFEA /* LikeModel.swift */,
+				09602BD32BDE565F00A6AFEA /* LikePostModel.swift */,
 			);
 			path = LikePost;
 			sourceTree = "<group>";
@@ -1160,8 +1158,8 @@
 				0999EB3D2BCBBAE7004B6D1F /* User */,
 				09602B512BD3ABA800A6AFEA /* Post */,
 				09602BC62BDBD2DC00A6AFEA /* Comment */,
-				09602BCF2BDE562300A6AFEA /* LikePost */,
 				09279A592BE2029B00E4A65D /* LikeProduct */,
+				09602BCF2BDE562300A6AFEA /* LikePost */,
 				0952A6F82BD0FD4F00F71C76 /* Profile */,
 				093289122BF0BEF100C8F52E /* Payment */,
 				09790D872BF9FB3E004829D5 /* Chat */,
@@ -1182,14 +1180,13 @@
 		0999EB4A2BCBC262004B6D1F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0987A7C12BE663A80045D361 /* Empty.swift */,
 				0999EB532BCBC2C4004B6D1F /* User */,
 				09602B562BD3AC0800A6AFEA /* Post */,
 				09602BC92BDBD32100A6AFEA /* Comment */,
-				09602BD22BDE565A00A6AFEA /* LikePost */,
 				09279A5C2BE202D200E4A65D /* LikeProduct */,
-				0987A7972BE377FB0045D361 /* Follow */,
+				09602BD22BDE565A00A6AFEA /* LikePost */,
 				0952A6E52BD0094A00F71C76 /* Profile */,
+				0987A7972BE377FB0045D361 /* Follow */,
 				093289172BF0D5D900C8F52E /* Payment */,
 				09790D8A2BF9FCEF004829D5 /* Chat */,
 			);
@@ -1433,11 +1430,10 @@
 				093289C32BF73E8700C8F52E /* HashtagService.swift in Sources */,
 				0932897E2BF4EEF600C8F52E /* UserProfilePostCollectionViewCell.swift in Sources */,
 				09790D952BFA042D004829D5 /* ChatListTableViewCell.swift in Sources */,
-				093289192BF0D5E000C8F52E /* PaymentModel.swift in Sources */,
+				093289192BF0D5E000C8F52E /* PaymentListModel.swift in Sources */,
 				09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */,
 				09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */,
 				09EB7A182C3D6A68001E0470 /* UIViewController+Extension.swift in Sources */,
-				0987A7C22BE663A80045D361 /* Empty.swift in Sources */,
 				095679032BC6AB920030F0CD /* WritePostViewModel.swift in Sources */,
 				09EB79D52C32604A001E0470 /* OtherThreeImageChatTableViewCell.swift in Sources */,
 				09790D7E2BF9F620004829D5 /* ChatRoomViewController.swift in Sources */,
@@ -1583,7 +1579,7 @@
 				0987A78B2BE351870045D361 /* OtherUserProfileView.swift in Sources */,
 				09138B8F2C0DB195005C84B2 /* OtherChatContentView.swift in Sources */,
 				0952A7032BD100CE00F71C76 /* ProfileEditViewModel.swift in Sources */,
-				09602BD42BDE565F00A6AFEA /* LikeModel.swift in Sources */,
+				09602BD42BDE565F00A6AFEA /* LikePostModel.swift in Sources */,
 				09279A632BE2171600E4A65D /* LikeProductListView.swift in Sources */,
 				09444FAC2BEE3F1600086E20 /* WriteProductContentView.swift in Sources */,
 				0956798F2BC94E6A0030F0CD /* LoginBoxView.swift in Sources */,

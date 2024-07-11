@@ -24,7 +24,6 @@ final class ChatRepository {
     
     // MARK: - Fetch
     func fetchByRoom(_ room_id: String) -> [Chat] {
-//        print(realm.configuration.fileURL)
         let result = realm.objects(Chat.self).where { $0.room_id == room_id }
         return Array(result)
     }

@@ -29,14 +29,15 @@ extension LikeProductService: Moya.TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .likeProductUpload(query: _, postId: _): .post
-        case .likeProdcutCheck : .get
+        case .likeProductUpload: .post
+        case .likeProdcutCheck: .get
         }
     }
     
     var task: Task {
         switch self {
-        case .likeProductUpload(let query, _): return .requestJSONEncodable(query)
+        case .likeProductUpload(let query, _): 
+            return .requestJSONEncodable(query)
         case .likeProdcutCheck(let limit, let next):
             let param = ["limit" : limit,
                          "next" : next]
@@ -45,14 +46,8 @@ extension LikeProductService: Moya.TargetType {
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .likeProductUpload(query: _, postId: _):
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .likeProdcutCheck:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        }
+        [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+         HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
     }
     
     var validationType: ValidationType {

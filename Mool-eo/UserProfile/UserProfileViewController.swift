@@ -220,14 +220,14 @@ final class UserProfileViewController: BaseViewController {
         }
     }
     
-    private func navigateToProductList(_ creator: Creator) {
+    private func navigateToProductList(_ creator: CreatorModel) {
         let vc = ProfileProductListViewController()
         vc.userId = creator.userId
         vc.nickname = creator.nick
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func navigateToPostList(_ creator: Creator) {
+    private func navigateToPostList(_ creator: CreatorModel) {
         let vc = ProfilePostListViewController()
         vc.userId = creator.userId
         vc.nickname = creator.nick

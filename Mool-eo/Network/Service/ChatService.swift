@@ -35,18 +35,17 @@ extension ChatService: Moya.TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .chatProduce: .post
-        case .chatListCheck: .get
-        case .chatHistoryCheck: .get
-        case .chatImageUpload: .post
-        case .chatSend: .post
+        case .chatProduce, .chatImageUpload, .chatSend: .post
+        case .chatListCheck, .chatHistoryCheck: .get
         }
     }
     
     var task: Task {
         switch self {
-        case .chatProduce(let query): return .requestJSONEncodable(query)
-        case .chatListCheck: return .requestPlain
+        case .chatProduce(let query): 
+            return .requestJSONEncodable(query)
+        case .chatListCheck: 
+            return .requestPlain
         case .chatHistoryCheck(_, let cursorDate):
             let param = ["cursor_date" : cursorDate]
             return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
@@ -57,29 +56,22 @@ extension ChatService: Moya.TargetType {
                 formData.append(multipartData)
             }
             return .uploadMultipart(formData)
-            
-        case .chatSend(let query, _): return .requestJSONEncodable(query)
+        case .chatSend(let query, _): 
+            return .requestJSONEncodable(query)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .chatProduce:
+        case .chatProduce, .chatSend:
             [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .chatListCheck:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .chatHistoryCheck:
+        case .chatListCheck, .chatHistoryCheck:
             [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         case .chatImageUpload:
             [HTTPHeader.contentType.rawValue : HTTPHeader.multipart.rawValue,
-             HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .chatSend:
-            [HTTPHeader.contentType.rawValue : HTTPHeader.json.rawValue,
              HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
              HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
         }

@@ -9,13 +9,13 @@ import Foundation
 import RxDataSources
 
 struct PaymentListSectionModel {
-    var items: [Datum]
+    var items: [PaymentModel]
 }
 
 extension PaymentListSectionModel: SectionModelType {
-    typealias Item = Datum
+    typealias Item = PaymentModel
     
-    init(original: PaymentListSectionModel, items: [Datum]) {
+    init(original: PaymentListSectionModel, items: [PaymentModel]) {
         self = original
         self.items = items
     }

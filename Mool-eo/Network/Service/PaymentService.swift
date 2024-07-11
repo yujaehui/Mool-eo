@@ -36,8 +36,10 @@ extension PaymentService: Moya.TargetType {
     
     var task: Task {
         switch self {
-        case .paymentValidation(let query): return .requestJSONEncodable(query)
-        case .paymentCheck: return .requestPlain
+        case .paymentValidation(let query): 
+            return .requestJSONEncodable(query)
+        case .paymentCheck: 
+            return .requestPlain
         }
     }
     

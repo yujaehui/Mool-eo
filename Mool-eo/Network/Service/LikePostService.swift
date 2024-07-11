@@ -29,14 +29,15 @@ extension LikePostService: Moya.TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .likePostUpload(query: _, postId: _): .post
-        case .likePostCheck : .get
+        case .likePostUpload: .post
+        case .likePostCheck: .get
         }
     }
     
     var task: Task {
         switch self {
-        case .likePostUpload(let query, _): return .requestJSONEncodable(query)
+        case .likePostUpload(let query, _): 
+            return .requestJSONEncodable(query)
         case .likePostCheck(let limit, let next):
             let param = ["limit" : limit,
                          "next" : next]
@@ -45,14 +46,8 @@ extension LikePostService: Moya.TargetType {
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .likePostUpload(query: _, postId: _):
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        case .likePostCheck:
-            [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
-             HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
-        }
+        [HTTPHeader.sesacKey.rawValue : APIKey.secretKey.rawValue,
+         HTTPHeader.authorization.rawValue : UserDefaultsManager.accessToken!]
     }
     
     var validationType: ValidationType {
