@@ -21,6 +21,7 @@ final class OtherImageChatTableViewCell: BaseTableViewCell {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
