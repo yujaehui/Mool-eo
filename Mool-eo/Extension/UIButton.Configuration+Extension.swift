@@ -76,7 +76,7 @@ extension UIButton.Configuration {
         return config
     }
     
-    static func heart(_ imageName: String) -> UIButton.Configuration {
+    static func image(_ imageName: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)

@@ -28,6 +28,8 @@ final class ChatRoomViewController: BaseViewController {
     private var selectedImageData: [Data] = []
     private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
     
+    private var lastSender: Sender?
+        
     var userId: String = ""
     var nickname: String = ""
     
@@ -68,6 +70,7 @@ final class ChatRoomViewController: BaseViewController {
         output.newChat.bind(with: self) { owner, value in
             owner.updateSection(value)
             owner.chatRoomView.writeMessageView.writeTextView.text = ""
+            NotificationCenter.default.post(name: Notification.Name(Noti.newChat.rawValue), object: nil)
         }.disposed(by: disposeBag)
         
         output.newChatImageSelectButtonTap.bind(with: self) { owner, _ in
@@ -86,12 +89,24 @@ final class ChatRoomViewController: BaseViewController {
 
 extension ChatRoomViewController {
     private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> {
-        return RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> { dataSource, tableView, indexPath, item in
-            return self.configureCell(dataSource, tableView: tableView, indexPath: indexPath, item: item)
-        }
+        return RxTableViewSectionedReloadDataSource<ChatRoomSectionModel>(
+            configureCell: { dataSource, tableView, indexPath, item in
+                if indexPath.row == 0 {
+                    return self.configureHeaderCell(dataSource, tableView: tableView, indexPath: indexPath)
+                } else {
+                    return self.configureChatCell(dataSource, tableView: tableView, indexPath: indexPath, item: item)
+                }
+            }
+        )
+    }
+
+    private func configureHeaderCell(_ dataSource: TableViewSectionedDataSource<ChatRoomSectionModel>, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ChatDateTableViewCell.identifier, for: indexPath) as! ChatDateTableViewCell
+        cell.configureCell(dataSource.sectionModels[indexPath.section].date)
+        return cell
     }
     
-    private func configureCell(_ dataSource: TableViewSectionedDataSource<ChatRoomSectionModel>, tableView: UITableView, indexPath: IndexPath, item: ChatRoomSectionItem) -> UITableViewCell {
+    private func configureChatCell(_ dataSource: TableViewSectionedDataSource<ChatRoomSectionModel>, tableView: UITableView, indexPath: IndexPath, item: ChatRoomSectionItem) -> UITableViewCell {
         switch item {
         case .chat(let chat):
             return chat.sender?.user_id == UserDefaultsManager.userId
@@ -113,7 +128,7 @@ extension ChatRoomViewController {
     private func configureOtherChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         if chat.filesArray.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, lastSender: lastSender)
             return cell
         } else {
             return self.configureOtherImageChatCell(chat, tableView: tableView, indexPath: indexPath)
@@ -141,15 +156,15 @@ extension ChatRoomViewController {
         switch chat.filesArray.count {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherTwoImageChatTableViewCell.identifier, for: indexPath) as! OtherTwoImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, lastSender: lastSender)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherThreeImageChatTableViewCell.identifier, for: indexPath) as! OtherThreeImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, lastSender: lastSender)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, lastSender: lastSender)
             return cell
         }
     }
@@ -157,7 +172,27 @@ extension ChatRoomViewController {
 
 extension ChatRoomViewController {
     private func configureSection(_ value: [Chat]) {
-        sections.onNext([ChatRoomSectionModel(items: value.map { .chat($0) })])
+        if let lastChat = value.last(where: { $0.sender?.user_id != UserDefaultsManager.userId }), let sender = lastChat.sender {
+            lastSender = sender
+        }
+
+        let groupedChats = Dictionary(grouping: value) { (chat) -> String in
+            return DateFormatterManager.shared.formatDateToString(dateString: chat.createdAt)
+        }
+
+        let sortedKeys = groupedChats.keys.sorted()
+        var sections: [ChatRoomSectionModel] = []
+
+        for key in sortedKeys {
+            if let chats = groupedChats[key] {
+                var items: [ChatRoomSectionItem] = [.chat(Chat(chat_id: "", room_id: "", content: "", createdAt: "", sender: Sender(user_id: "", nick: "", profileImage: ""), filesArray: []))]
+                items.append(contentsOf: chats.map { .chat($0) })
+                sections.append(ChatRoomSectionModel(date: key, items: items))
+            }
+        }
+
+        self.sections.onNext(sections)
+        
         guard value.isEmpty else { return scrollToBottom(animated: false) }
     }
     
@@ -166,19 +201,26 @@ extension ChatRoomViewController {
             .take(1)
             .subscribe(with: self) { owner, currentSections in
                 var updatedSections = currentSections
-                if updatedSections.isEmpty {
-                    updatedSections.append(ChatRoomSectionModel(items: [.chat(value)]))
-                } else {
-                    var items = updatedSections[0].items
+                let chatDate = DateFormatterManager.shared.formatDateToString(dateString: value.createdAt)
+
+                if let index = updatedSections.firstIndex(where: { $0.date == chatDate }) {
+                    var items = updatedSections[index].items
                     items.append(.chat(value))
-                    updatedSections[0] = ChatRoomSectionModel(items: items)
+                    updatedSections[index] = ChatRoomSectionModel(original: updatedSections[index], items: items)
+                } else {
+                    var items: [ChatRoomSectionItem] = [.chat(Chat(chat_id: "", room_id: "", content: "", createdAt: "", sender: Sender(user_id: "", nick: "", profileImage: ""), filesArray: []))]
+                    items.append(.chat(value))
+                    updatedSections.append(ChatRoomSectionModel(date: chatDate, items: items))
+                    updatedSections.sort { $0.date < $1.date }
                 }
-                self.sections.onNext(updatedSections)
-                self.scrollToBottom(animated: true)
+
+                owner.sections.onNext(updatedSections)
+                owner.scrollToBottom(animated: true)
             }
             .disposed(by: disposeBag)
         chatRoomView.writeMessageView.writeTextView.text = ""
     }
+
     
     private func scrollToBottom(animated: Bool) {
         let lastSection = chatRoomView.tableView.numberOfSections - 1

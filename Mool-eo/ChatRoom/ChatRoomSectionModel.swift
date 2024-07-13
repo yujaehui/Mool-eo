@@ -13,6 +13,7 @@ enum ChatRoomSectionItem {
 }
 
 struct ChatRoomSectionModel {
+    var date: String
     var items: [ChatRoomSectionItem]
 }
 

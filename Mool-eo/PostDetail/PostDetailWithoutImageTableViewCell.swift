@@ -103,7 +103,7 @@ final class PostDetailWithoutImageTableViewCell: BaseTableViewCell {
         URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
         postTitleLabel.text = post.title
         postContentLabel.text = post.content
-        likeButton.configuration = post.likePost.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
+        likeButton.configuration = post.likePost.contains(UserDefaultsManager.userId!) ? .image("heart.fill") : .image("heart")
         nickNameLabel.text = post.creator.nick
     }
 }

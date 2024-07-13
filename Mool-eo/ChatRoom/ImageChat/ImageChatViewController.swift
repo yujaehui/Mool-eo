@@ -37,8 +37,11 @@ final class ImageChatViewController: BaseViewController {
         output.filesArray.bind(to: imageChatView.collectionView.rx.items(cellIdentifier: ImageChatCollectionViewCell.identifier, cellType: ImageChatCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)
-        
-        output.pageCount.bind(to: imageChatView.pageControl.rx.numberOfPages).disposed(by: disposeBag)
+                
+        output.filesArray
+            .map { $0.count }
+            .bind(to: imageChatView.pageControl.rx.numberOfPages)
+            .disposed(by: disposeBag)
         
         output.changePage
             .bind(with: self) { owner, _ in

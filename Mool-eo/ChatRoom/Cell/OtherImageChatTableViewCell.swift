@@ -24,10 +24,13 @@ final class OtherImageChatTableViewCell: BaseTableViewCell {
         return imageView
     }()
     
+    let chatTimeLabel = CustomLabel(type: .subDescription)
+    
     override func configureHierarchy() {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nicknameLabel)
         contentView.addSubview(chatImageView)
+        contentView.addSubview(chatTimeLabel)
     }
     
     override func configureConstraints() {
@@ -47,16 +50,22 @@ final class OtherImageChatTableViewCell: BaseTableViewCell {
         chatImageView.snp.makeConstraints { make in
             make.top.equalTo(nicknameLabel.snp.bottom).offset(5)
             make.leading.equalTo(profileImageView.snp.trailing).offset(5)
-            make.size.equalTo(200)
+            make.size.equalTo(180)
             make.bottom.equalTo(contentView).inset(5)
+        }
+        
+        chatTimeLabel.snp.makeConstraints { make in
+            make.leading.equalTo(chatImageView.snp.trailing).offset(5)
+            make.bottom.equalTo(chatImageView.snp.bottom)
         }
     }
     
-    func configureCell(_ chat: Chat) {
-        if let sender = chat.sender {
+    func configureCell(_ chat: Chat, lastSender: Sender?) {
+        if let sender = lastSender {
             URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
             nicknameLabel.text = sender.nick
         }
         URLImageSettingManager.shared.setImageWithUrl(chatImageView, urlString: chat.filesArray.first!)
+        chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
     }
 }

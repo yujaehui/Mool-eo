@@ -33,7 +33,7 @@ final class ChatListViewModel: ViewModelType {
             .flatMap { NetworkManager.shared.chatListCheck() }
             .subscribe(with: self) { owner, value in
                 switch value {
-                case .success(let chatListModel): chatList.onNext(chatListModel.data)
+                case .success(let chatListModel): chatList.onNext(chatListModel.data.filter { $0.lastChat.chatID != "" })
                 case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
             }

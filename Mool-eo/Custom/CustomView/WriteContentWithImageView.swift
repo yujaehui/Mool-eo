@@ -21,25 +21,15 @@ class WriteContentWithImageView: BaseView {
     
     let imageSelectButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "photo"), for: .normal)
-        button.tintColor = ColorStyle.mainBackground
-        button.backgroundColor = ColorStyle.point
+        button.configuration = .image("photo.badge.plus")
         return button
     }()
     
     let textUploadButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "paperplane"), for: .normal)
-        button.tintColor = ColorStyle.mainBackground
-        button.backgroundColor = ColorStyle.point
+        button.configuration = .image("paperplane")
         return button
     }()
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageSelectButton.layer.cornerRadius = imageSelectButton.bounds.width / 2
-        textUploadButton.layer.cornerRadius = textUploadButton.bounds.width / 2
-    }
     
     override func configureHierarchy() {
         addSubview(writeTextView)
@@ -56,7 +46,7 @@ class WriteContentWithImageView: BaseView {
         imageSelectButton.snp.makeConstraints { make in
             make.trailing.equalTo(writeTextView.snp.trailing).inset(5)
             make.bottom.equalTo(writeTextView.snp.bottom).inset(5)
-            make.size.equalTo(25)
+            make.size.equalTo(30)
         }
         
         textUploadButton.snp.makeConstraints { make in
@@ -68,7 +58,7 @@ class WriteContentWithImageView: BaseView {
     
     func updateButtonVisibility(isTextEmpty: Bool) {
         let animationDuration = 0.3
-        let rotationAngle: CGFloat = .pi / 2 // 90-degree rotation
+        let rotationAngle: CGFloat = .pi / 2
         
         if isTextEmpty {
             UIView.animate(withDuration: animationDuration, animations: {
@@ -76,9 +66,9 @@ class WriteContentWithImageView: BaseView {
                 self.textUploadButton.alpha = 0.0
             }, completion: { _ in
                 self.textUploadButton.isHidden = true
-                self.textUploadButton.transform = .identity // Restore to original state
+                self.textUploadButton.transform = .identity
             })
-            self.imageSelectButton.transform = CGAffineTransform(rotationAngle: -rotationAngle).scaledBy(x: 0.1, y: 0.1) // Set initial state
+            self.imageSelectButton.transform = CGAffineTransform(rotationAngle: -rotationAngle).scaledBy(x: 0.1, y: 0.1)
             UIView.animate(withDuration: animationDuration, animations: {
                 self.imageSelectButton.transform = .identity
                 self.imageSelectButton.alpha = 1.0
@@ -91,9 +81,9 @@ class WriteContentWithImageView: BaseView {
                 self.imageSelectButton.alpha = 0.0
             }, completion: { _ in
                 self.imageSelectButton.isHidden = true
-                self.imageSelectButton.transform = .identity // Restore to original state
+                self.imageSelectButton.transform = .identity
             })
-            self.textUploadButton.transform = CGAffineTransform(rotationAngle: rotationAngle).scaledBy(x: 0.1, y: 0.1) // Set initial state
+            self.textUploadButton.transform = CGAffineTransform(rotationAngle: rotationAngle).scaledBy(x: 0.1, y: 0.1)
             UIView.animate(withDuration: animationDuration, animations: {
                 self.textUploadButton.transform = .identity
                 self.textUploadButton.alpha = 1.0

@@ -25,4 +25,19 @@ class DateFormatterManager {
         let formattedDateString = outputFormatter.string(from: date)
         return formattedDateString
     }
+    
+    func formatTimeToString(timeString: String) -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        
+        guard let date = inputFormatter.date(from: timeString) else { return "" }
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "a h:mm"
+        outputFormatter.amSymbol = "오전"
+        outputFormatter.pmSymbol = "오후"
+        
+        let formattedDateString = outputFormatter.string(from: date)
+        return formattedDateString
+    }
 }

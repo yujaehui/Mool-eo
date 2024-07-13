@@ -20,7 +20,7 @@ class AutoResizableTextView: UITextView {
     override var intrinsicContentSize: CGSize {
         let size = CGSize(width: self.contentSize.width, height: CGFloat.greatestFiniteMagnitude)
         let newSize = self.sizeThatFits(size)
-        var height = newSize.height
+        var height = max(40, newSize.height)
         if let maxHeight = maxHeight {
             height = min(height, maxHeight)
             isScrollEnabled = newSize.height > maxHeight

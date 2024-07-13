@@ -15,4 +15,5 @@ enum Noti: String {
     case changeProfile
     case sessionExpiration
     case payment
+    case newChat
 }

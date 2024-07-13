@@ -19,22 +19,10 @@ final class ImageChatViewModel: ViewModelType {
     
     struct Output {
         let filesArray: Observable<[String]>
-        let pageCount: PublishSubject<Int>
         let changePage: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
-        let pageCount = PublishSubject<Int>()
-        
-        input.filesArray
-            .map { $0.count }
-            .bind(with: self) { owner, count in
-                pageCount.onNext(count)
-            }
-            .disposed(by: disposeBag)
-        
-        return Output(filesArray: input.filesArray,
-                      pageCount: pageCount,
-                      changePage: input.changePage)
+        return Output(filesArray: input.filesArray, changePage: input.changePage)
     }
 }

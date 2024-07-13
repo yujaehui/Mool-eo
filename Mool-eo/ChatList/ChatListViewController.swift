@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 final class ChatListViewController: BaseViewController {
     
@@ -15,6 +16,7 @@ final class ChatListViewController: BaseViewController {
     let chatListView = ChatListView()
     
     private var reload = BehaviorSubject<Void>(value: ())
+    private var sections = BehaviorSubject<[ChatListSectionModel]>(value: [])
     
     override func loadView() {
         self.view = chatListView
@@ -22,11 +24,16 @@ final class ChatListViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObserver()
     }
     
     override func setNav() {
         super.setNav()
         navigationItem.title = "채팅"
+    }
+    
+    override func configureView() {
+        sections.bind(to: chatListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {
@@ -38,8 +45,8 @@ final class ChatListViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.chatList.bind(to: chatListView.tableView.rx.items(cellIdentifier: ChatListTableViewCell.identifier, cellType: ChatListTableViewCell.self)) { (row, element, cell) in
-            cell.configureCell(element)
+        output.chatList.bind(with: self) { owner, value in
+            owner.sections.onNext([ChatListSectionModel(items: value)])
         }.disposed(by: disposeBag)
         
         output.selectedChatRoom.bind(with: self) { owner, value in
@@ -55,5 +62,27 @@ final class ChatListViewController: BaseViewController {
         output.networkFail.drive(with: self) { owner, _ in
             ToastManager.shared.showErrorToast(title: .networkFail, in: owner.chatListView)
         }.disposed(by: disposeBag)
+    }
+    
+    private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ChatListSectionModel> {
+        let dataSource = RxTableViewSectionedReloadDataSource<ChatListSectionModel> { dataSource, tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: ChatListTableViewCell.identifier, for: indexPath) as! ChatListTableViewCell
+            cell.configureCell(item)
+            return cell
+        }
+        return dataSource
+    }
+    
+    private func registerObserver() {
+        Observable.of(
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.newChat.rawValue)),
+            NotificationCenter.default.rx.notification(Notification.Name(Noti.changeProfile.rawValue))
+        )
+        .merge()
+        .take(until: self.rx.deallocated)
+        .subscribe(with: self) { owner, noti in
+            owner.reload.onNext(())
+        }
+        .disposed(by: disposeBag)
     }
 }

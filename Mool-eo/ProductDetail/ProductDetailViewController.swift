@@ -72,7 +72,7 @@ final class ProductDetailViewController: BaseViewController {
             owner.sections.onNext([ProductDetailSectionModel(title: nil, items: [.image(value)])]
                                   + [ProductDetailSectionModel(title: nil, items: [.info(value)])]
                                   + [ProductDetailSectionModel(title: "상세 정보", items: [.detail(value)])])
-            owner.productDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .heart("heart.fill") : .heart("heart")
+            owner.productDetailView.likeButton.configuration = value.likesProduct.contains(UserDefaultsManager.userId!) ? .image("heart.fill") : .image("heart")
         }.disposed(by: disposeBag)
         
         output.networkFail.drive(with: self) { owner, _ in

@@ -248,6 +248,8 @@
 		09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */; };
 		09EB7A182C3D6A68001E0470 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */; };
 		09EB7A1A2C3FB61C001E0470 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A192C3FB61C001E0470 /* AlertManager.swift */; };
+		09EB7A1C2C427317001E0470 /* ChatListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */; };
+		09EB7A222C42914E001E0470 /* ChatDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +476,8 @@
 		09EB7A152C3A828E001E0470 /* JoinSuccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSuccessViewModel.swift; sourceTree = "<group>"; };
 		09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		09EB7A192C3FB61C001E0470 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListSectionModel.swift; sourceTree = "<group>"; };
+		09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -584,6 +588,7 @@
 				09EB79D22C32603C001E0470 /* OtherTwoImageChatTableViewCell.swift */,
 				09EB79D42C32604A001E0470 /* OtherThreeImageChatTableViewCell.swift */,
 				09EB79CE2C3250A4001E0470 /* ManyImageChatCollectionViewCell.swift */,
+				09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1088,6 +1093,7 @@
 				09790D942BFA042D004829D5 /* ChatListTableViewCell.swift */,
 				09790D902BFA03D0004829D5 /* ChatListViewController.swift */,
 				09790D922BFA03D6004829D5 /* ChatListViewModel.swift */,
+				09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */,
 			);
 			path = ChatList;
 			sourceTree = "<group>";
@@ -1453,6 +1459,7 @@
 				0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */,
 				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
 				09444FCB2BEF6E3C00086E20 /* ProductWebViewController.swift in Sources */,
+				09EB7A1C2C427317001E0470 /* ChatListSectionModel.swift in Sources */,
 				09138B792C086424005C84B2 /* ChatRepository.swift in Sources */,
 				09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */,
 				0999EB072BCA97F3004B6D1F /* JoinView.swift in Sources */,
@@ -1484,6 +1491,7 @@
 				095679052BC6BCFE0030F0CD /* WritePostView.swift in Sources */,
 				093289D52BF764B500C8F52E /* ProductCategoryViewModel.swift in Sources */,
 				09790D842BF9F6D8004829D5 /* OtherChatTableViewCell.swift in Sources */,
+				09EB7A222C42914E001E0470 /* ChatDateTableViewCell.swift in Sources */,
 				09444FB02BEE3FEA00086E20 /* Section.swift in Sources */,
 				093289932BF63BD700C8F52E /* EmptyCollectionViewCell.swift in Sources */,
 				0987A7D82BE765990045D361 /* ProfileImageView.swift in Sources */,

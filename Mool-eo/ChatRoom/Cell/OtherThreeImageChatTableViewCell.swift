@@ -28,7 +28,10 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
         return collectionView
     }()
     
+    let chatTimeLabel = CustomLabel(type: .subDescription)
+    
     override func prepareForReuse() {
+        super.prepareForReuse()
         disposeBag = DisposeBag()
     }
     
@@ -36,6 +39,7 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nicknameLabel)
         contentView.addSubview(collectionView)
+        contentView.addSubview(chatTimeLabel)
     }
     
     override func configureConstraints() {
@@ -55,16 +59,20 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(nicknameLabel.snp.bottom).offset(5)
             make.leading.equalTo(profileImageView.snp.trailing).offset(5)
-            make.width.equalTo(300)
-            make.height.equalTo(100)
+            make.width.equalTo(240)
+            make.height.equalTo(80)
             make.bottom.equalTo(contentView).inset(5)
+        }
+        
+        chatTimeLabel.snp.makeConstraints { make in
+            make.leading.equalTo(collectionView.snp.trailing).offset(5)
+            make.bottom.equalTo(collectionView.snp.bottom)
         }
     }
     
     private func configureCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let size = 100
-        layout.itemSize = CGSize(width: size, height: size)
+        layout.itemSize = CGSize(width: 80, height: 80)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -72,14 +80,15 @@ final class OtherThreeImageChatTableViewCell: BaseTableViewCell {
         return layout
     }
     
-    func configureCell(_ chat: Chat) {
-        if let sender = chat.sender {
+    func configureCell(_ chat: Chat, lastSender: Sender?) {
+        if let sender = lastSender {
             URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
             nicknameLabel.text = sender.nick
         }
         Observable.just(chat.filesArray).bind(to: collectionView.rx.items(cellIdentifier: ManyImageChatCollectionViewCell.identifier, cellType: ManyImageChatCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)
+        chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
     }
 }
 
