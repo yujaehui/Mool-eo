@@ -35,7 +35,7 @@ final class ChatRoomViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let roomId = PublishSubject<String>()
-        let beforChatListFetchSuccessTrigger = PublishSubject<Void>()
+        let beforeChatListFetchSuccessTrigger = PublishSubject<Void>()
         let chatList = PublishSubject<[Chat]>()
         let newChat = PublishSubject<Chat>()
         let isTextEmpty = BehaviorSubject<Bool>(value: true)
@@ -45,8 +45,8 @@ final class ChatRoomViewModel: ViewModelType {
         
         // 채팅방 생성 및 과거 채팅 내역 불러오기
         produceChatRoom(input: input, roomId: roomId, networkFail: networkFail)
-        fetchAndSaveChatHistory(roomId: roomId, beforChatListFetchSuccessTrigger: beforChatListFetchSuccessTrigger, chatList: chatList, networkFail: networkFail)
-        updateChatListAndSetupSocket(beforChatListFetchSuccessTrigger: beforChatListFetchSuccessTrigger, roomId: roomId, chatList: chatList)
+        fetchAndSaveChatHistory(roomId: roomId, beforeChatListFetchSuccessTrigger: beforeChatListFetchSuccessTrigger, chatList: chatList, networkFail: networkFail)
+        updateChatListAndSetupSocket(beforeChatListFetchSuccessTrigger: beforeChatListFetchSuccessTrigger, roomId: roomId, chatList: chatList)
         
         checkAndUpdateTextEmptyState(input: input, isTextEmpty: isTextEmpty)
         
@@ -80,7 +80,7 @@ final class ChatRoomViewModel: ViewModelType {
             .disposed(by: disposeBag)
     }
     
-    private func fetchAndSaveChatHistory(roomId: PublishSubject<String>, beforChatListFetchSuccessTrigger: PublishSubject<Void>, chatList: PublishSubject<[Chat]>, networkFail: PublishSubject<Void>) {
+    private func fetchAndSaveChatHistory(roomId: PublishSubject<String>, beforeChatListFetchSuccessTrigger: PublishSubject<Void>, chatList: PublishSubject<[Chat]>, networkFail: PublishSubject<Void>) {
         roomId
             .flatMap { [weak self] roomId in
                 if let lastChat = self?.repository.fetchLatestChatByRoom(roomId) {
@@ -95,15 +95,15 @@ final class ChatRoomViewModel: ViewModelType {
                     chatHistoryModel.data.forEach { chatModel in
                         owner.manageChatSavingToRealm(chatModel)
                     }
-                    beforChatListFetchSuccessTrigger.onNext(())
+                    beforeChatListFetchSuccessTrigger.onNext(())
                 case .error(let error): owner.handleNetworkError(error: error, networkFail: networkFail)
                 }
             }
             .disposed(by: disposeBag)
     }
     
-    private func updateChatListAndSetupSocket(beforChatListFetchSuccessTrigger: PublishSubject<Void>, roomId: PublishSubject<String>, chatList: PublishSubject<[Chat]>) {
-        beforChatListFetchSuccessTrigger
+    private func updateChatListAndSetupSocket(beforeChatListFetchSuccessTrigger: PublishSubject<Void>, roomId: PublishSubject<String>, chatList: PublishSubject<[Chat]>) {
+        beforeChatListFetchSuccessTrigger
             .withLatestFrom(roomId)
             .bind(with: self) { owner, roomId in
                 chatList.onNext(owner.repository.fetchByRoom(roomId))
