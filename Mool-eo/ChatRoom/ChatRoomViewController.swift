@@ -116,9 +116,10 @@ extension ChatRoomViewController {
     }
     
     private func configureMyChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let isLastInSequence = checkIfLastInSequence(for: chat, at: indexPath, in: tableView)
         if chat.filesArray.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: MyChatTableViewCell.identifier, for: indexPath) as! MyChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, showTime: isLastInSequence)
             return cell
         } else {
             return self.configureMyImageChatCell(chat, tableView: tableView, indexPath: indexPath)
@@ -126,45 +127,62 @@ extension ChatRoomViewController {
     }
     
     private func configureOtherChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let isLastInSequence = checkIfLastInSequence(for: chat, at: indexPath, in: tableView)
         if chat.filesArray.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherChatTableViewCell.identifier, for: indexPath) as! OtherChatTableViewCell
-            cell.configureCell(chat, lastSender: lastSender)
+            cell.configureCell(chat, lastSender: lastSender, showTime: isLastInSequence)
             return cell
         } else {
             return self.configureOtherImageChatCell(chat, tableView: tableView, indexPath: indexPath)
         }
     }
     
+    private func checkIfLastInSequence(for chat: Chat, at indexPath: IndexPath, in tableView: UITableView) -> Bool {
+        let sectionItems = try? sections.value()[indexPath.section].items
+        guard let items = sectionItems else { return true }
+        
+        if indexPath.row == items.count - 1 {
+            return true
+        } else {
+            if case let .chat(nextChat) = items[indexPath.row + 1] {
+                return DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt) != DateFormatterManager.shared.formatTimeToString(timeString: nextChat.createdAt)
+            }
+            return true
+        }
+    }
+    
     private func configureMyImageChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let isLastInSequence = checkIfLastInSequence(for: chat, at: indexPath, in: tableView)
         switch chat.filesArray.count {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: MyTwoImageChatTableViewCell.identifier, for: indexPath) as! MyTwoImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, showTime: isLastInSequence)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: MyThreeImageChatTableViewCell.identifier, for: indexPath) as! MyThreeImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, showTime: isLastInSequence)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MyImageChatTableViewCell.identifier, for: indexPath) as! MyImageChatTableViewCell
-            cell.configureCell(chat)
+            cell.configureCell(chat, showTime: isLastInSequence)
             return cell
         }
     }
     
     private func configureOtherImageChatCell(_ chat: Chat, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let isLastInSequence = checkIfLastInSequence(for: chat, at: indexPath, in: tableView)
         switch chat.filesArray.count {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherTwoImageChatTableViewCell.identifier, for: indexPath) as! OtherTwoImageChatTableViewCell
-            cell.configureCell(chat, lastSender: lastSender)
+            cell.configureCell(chat, lastSender: lastSender, showTime: isLastInSequence)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherThreeImageChatTableViewCell.identifier, for: indexPath) as! OtherThreeImageChatTableViewCell
-            cell.configureCell(chat, lastSender: lastSender)
+            cell.configureCell(chat, lastSender: lastSender, showTime: isLastInSequence)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: OtherImageChatTableViewCell.identifier, for: indexPath) as! OtherImageChatTableViewCell
-            cell.configureCell(chat, lastSender: lastSender)
+            cell.configureCell(chat, lastSender: lastSender, showTime: isLastInSequence)
             return cell
         }
     }

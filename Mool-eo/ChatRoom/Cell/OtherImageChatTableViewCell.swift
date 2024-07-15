@@ -61,12 +61,13 @@ final class OtherImageChatTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configureCell(_ chat: Chat, lastSender: Sender?) {
+    func configureCell(_ chat: Chat, lastSender: Sender?, showTime: Bool) {
         if let sender = lastSender {
             URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
             nicknameLabel.text = sender.nick
         }
         URLImageSettingManager.shared.setImageWithUrl(chatImageView, urlString: chat.filesArray.first!)
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
+        chatTimeLabel.isHidden = !showTime
     }
 }

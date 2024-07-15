@@ -32,8 +32,9 @@ final class MyChatTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configureCell(_ chat: Chat) {
+    func configureCell(_ chat: Chat, showTime: Bool) {
         chatView.chatLabel.text = chat.content
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
+        chatTimeLabel.isHidden = !showTime
     }
 }

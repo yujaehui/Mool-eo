@@ -56,11 +56,12 @@ final class MyThreeImageChatTableViewCell: BaseTableViewCell {
         return layout
     }
     
-    func configureCell(_ chat: Chat) {
+    func configureCell(_ chat: Chat, showTime: Bool) {
         Observable.just(chat.filesArray).bind(to: collectionView.rx.items(cellIdentifier: ManyImageChatCollectionViewCell.identifier, cellType: ManyImageChatCollectionViewCell.self)) { (row, element, cell) in
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
+        chatTimeLabel.isHidden = !showTime
     }
 }
 

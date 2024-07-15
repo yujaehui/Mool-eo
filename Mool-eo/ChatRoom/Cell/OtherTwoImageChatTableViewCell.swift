@@ -80,7 +80,7 @@ final class OtherTwoImageChatTableViewCell: BaseTableViewCell {
         return layout
     }
     
-    func configureCell(_ chat: Chat, lastSender: Sender?) {
+    func configureCell(_ chat: Chat, lastSender: Sender?, showTime: Bool) {
         if let sender = lastSender {
             URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
             nicknameLabel.text = sender.nick
@@ -89,5 +89,6 @@ final class OtherTwoImageChatTableViewCell: BaseTableViewCell {
             URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
         }.disposed(by: disposeBag)
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
+        chatTimeLabel.isHidden = !showTime
     }
 }

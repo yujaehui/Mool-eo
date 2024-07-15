@@ -37,8 +37,9 @@ final class MyImageChatTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configureCell(_ chat: Chat) {
+    func configureCell(_ chat: Chat, showTime: Bool) {
         URLImageSettingManager.shared.setImageWithUrl(chatImageView, urlString: chat.filesArray.first!)
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
+        chatTimeLabel.isHidden = !showTime
     }
 }
