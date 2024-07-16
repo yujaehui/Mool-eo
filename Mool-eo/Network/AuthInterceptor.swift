@@ -32,48 +32,52 @@ final class AuthInterceptor: RequestInterceptor {
         completion(.success(urlRequest))
     }
     
-    
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        guard let response = request.task?.response as? HTTPURLResponse,
-              response.statusCode == 419 || // accessToken 만료
-              response.statusCode == 418 // refreshToken 만료
-        else {
-            // 토큰 만료와 관련된 에러가 아닌 경우에는 관련 에러를 반환하고, 재시도는 하지 않음
+        guard let response = request.task?.response as? HTTPURLResponse else {
             completion(.doNotRetryWithError(error))
             return
         }
         
-        // 토큰 만료와 관련된 에러의 경우...
         switch response.statusCode {
-        case 419:  // accessToken 만료
-            print("accessToken 만료: refreshToken으로 교체")
-            NetworkManager.shared.refresh()
-                .subscribe(with: self) { owner, value in
-                    switch value {
-                    case .success(let tokenModel):
-                        // refreshToken으로 교체 이후 재시도
-                        UserDefaultsManager.accessToken = tokenModel.accessToken
-                        completion(.retry)
-                    case .error(let error):
-                        switch error {
-                        case .refreshTokenExpired: // refreshToken 만료
-                            print("refreshToken 만료: 로그인 화면으로 이동")
-                            DispatchQueue.main.async {
-                                TransitionManager.shared.setInitialViewController(LoginViewController(), navigation: true)
-                            }
-                            completion(.doNotRetry) // 로그인 화면으로 이동했기 때문에 재시도 X
-                        default: completion(.doNotRetryWithError(error))
-                        }
-                    }
-                }.disposed(by: disposeBag)
-        case 418:  // refreshToken 만료
-            print("refreshToken 만료: 로그인 화면으로 이동")
+        case 419:
+            handleAccessTokenExpiry(completion: completion)
+        case 418:
+            handleRefreshTokenExpiry(completion: completion)
+        default:
+            completion(.doNotRetryWithError(error))
+        }
+    }
+    
+    private func handleAccessTokenExpiry(completion: @escaping (RetryResult) -> Void) {
+        NetworkManager.shared.refresh()
+            .subscribe(with: self) { owner, value in
+                switch value {
+                case .success(let tokenModel):
+                    UserDefaultsManager.accessToken = tokenModel.accessToken
+                    completion(.retry)
+                case .error(let error):
+                    owner.handleTokenRefreshError(error, completion: completion)
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func handleRefreshTokenExpiry(completion: @escaping (RetryResult) -> Void) {
+        DispatchQueue.main.async {
+            TransitionManager.shared.setInitialViewController(LoginViewController(), navigation: true)
+        }
+        completion(.doNotRetry)
+    }
+    
+    private func handleTokenRefreshError(_ error: NetworkError, completion: @escaping (RetryResult) -> Void) {
+        switch error {
+        case .refreshTokenExpired:
             DispatchQueue.main.async {
                 TransitionManager.shared.setInitialViewController(LoginViewController(), navigation: true)
             }
-            completion(.doNotRetry) // 로그인 화면으로 이동했기 때문에 재시도 X
+            completion(.doNotRetry)
         default:
             completion(.doNotRetryWithError(error))
         }
     }
 }
+
