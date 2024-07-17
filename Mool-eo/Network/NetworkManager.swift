@@ -87,7 +87,6 @@ struct NetworkManager {
         }
     }
     
-    
     //MARK: - User
     func join(query: JoinQuery) -> Single<NetworkResult<JoinModel>> {
         return performDecodableRequest(target: UserService.join(query: query))

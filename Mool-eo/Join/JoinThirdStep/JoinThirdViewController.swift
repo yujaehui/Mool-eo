@@ -17,8 +17,18 @@ final class JoinThirdViewController: BaseViewController {
     let viewModel = JoinThirdViewModel()
     let joinThirdView = JoinThirdView()
     
-    var id: String = ""
-    var password: String = ""
+    private var id: String
+    private var password: String
+    
+    init(id: String, password: String) {
+        self.id = id
+        self.password = password
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = joinThirdView

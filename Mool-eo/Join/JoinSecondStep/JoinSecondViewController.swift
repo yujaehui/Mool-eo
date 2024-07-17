@@ -16,7 +16,16 @@ final class JoinSecondViewController: BaseViewController {
     let viewModel = JoinSecondViewModel()
     let joinSecondView = JoinSecondView()
     
-    var id: String = ""
+    private var id: String
+    
+    init(id: String) {
+        self.id = id
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = joinSecondView
@@ -42,9 +51,7 @@ final class JoinSecondViewController: BaseViewController {
         output.nextButtonValidation.drive(joinSecondView.nextButton.rx.isEnabled).disposed(by: disposeBag)
         
         output.nextButtonTap.drive(with: self) { owner, password in
-            let vc = JoinThirdViewController()
-            vc.id = owner.id
-            vc.password = password
+            let vc = JoinThirdViewController(id: owner.id, password: password)
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
 

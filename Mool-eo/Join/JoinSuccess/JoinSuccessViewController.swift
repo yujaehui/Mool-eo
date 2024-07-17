@@ -25,6 +25,10 @@ final class JoinSuccessViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func setNav() {
+        navigationItem.hidesBackButton = true
+    }
+    
     override func configureView() {
         joinSuccessView.idLabel.text = id
         joinSuccessView.nicknameLabel.text = nickname

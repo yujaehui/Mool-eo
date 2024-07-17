@@ -124,7 +124,7 @@ final class ProfilePostListViewController: BaseViewController {
         .merge()
         .take(until: self.rx.deallocated)
         .subscribe(with: self) { owner, noti in
-            if let postBoard = noti.object as? ProductIdentifier {
+            if noti.object is ProductIdentifier {
                 owner.reload.onNext(())
             }
         }
