@@ -41,6 +41,11 @@ final class LikePostTableViewCell: BaseTableViewCell {
     }()
     
     let commentCountLabel = CustomLabel(type: .description)
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        postImageView.image = nil
+    }
         
     override func configureHierarchy() {
         contentView.addSubview(postTitleLabel)
@@ -98,7 +103,7 @@ final class LikePostTableViewCell: BaseTableViewCell {
     
     func configureCell(myPost: PostModel) {
         if let firstFile = myPost.files.first {
-            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile, imageViewSize: .medium)
         }
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content

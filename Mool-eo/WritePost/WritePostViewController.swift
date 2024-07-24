@@ -69,7 +69,7 @@ final class WritePostViewController: BaseViewController {
         switch type {
         case .upload:
             selectedImageSubject.bind(to: writePostView.writePostContentView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
-                cell.selectImageView.image = element
+                cell.selectImageView.image = element.downsample(to: .large)
                 cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
                     // 이미지 삭제
                     guard row < owner.selectedImage.count else { return }
@@ -88,7 +88,7 @@ final class WritePostViewController: BaseViewController {
             
         case .edit:
             Observable.just(postFiles).bind(to: writePostView.writePostContentView.collectionView.rx.items(cellIdentifier: WritePostImageEditCollectionViewCell.identifier, cellType: WritePostImageEditCollectionViewCell.self)) { (row, element, cell) in
-                URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element)
+                URLImageSettingManager.shared.setImageWithUrl(cell.selectImageView, urlString: element, imageViewSize: .large)
             }.disposed(by: disposeBag)
             
             writePostView.writePostContentView.titleTextField.text = postTitle
@@ -143,37 +143,61 @@ final class WritePostViewController: BaseViewController {
 
 extension WritePostViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        // 기존 선택 초기화
-        self.selectedImage.removeAll()
-        self.selectedImageData.removeAll()
-        
-        for result in results {
-            let itemProvider = result.itemProvider
-            if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                    if let image = image as? UIImage {
-                        DispatchQueue.main.async {
-                            self.selectedImage.append(image)
-                            self.selectedImageSubject.onNext(self.selectedImage)
-                            
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+
+            // 기존 선택 초기화
+            self.selectedImage.removeAll()
+            self.selectedImageData.removeAll()
+
+            let group = DispatchGroup()
+
+            for result in results {
+                group.enter()
+                let itemProvider = result.itemProvider
+                if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                        defer { group.leave() }
+
+                        guard let self = self, let image = image as? UIImage else { return }
+
+                        // 이미지 다운샘플링
+                        autoreleasepool {
+                            if let downsampledImage = image.downsample(to: .large) {
+                                DispatchQueue.main.async {
+                                    self.selectedImage.append(downsampledImage)
+                                    self.selectedImageSubject.onNext(self.selectedImage)
+                                }
+                            }
+
                             // 이미지를 압축하여 이미지 데이터에 추가
                             if let compressedImageData = self.compressImage(image, quality: 0.5) {
-                                self.selectedImageData.append(compressedImageData)
-                                self.selectedImageDataSubject.onNext(self.selectedImageData)
+                                DispatchQueue.main.async {
+                                    self.selectedImageData.append(compressedImageData)
+                                    self.selectedImageDataSubject.onNext(self.selectedImageData)
+                                }
                             }
                         }
+
                     }
+                } else {
+                    group.leave()
                 }
             }
+
+            group.notify(queue: .main) {
+                picker.dismiss(animated: true)
+            }
         }
-        picker.dismiss(animated: true)
     }
-    
+
     func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
         if let imageData = image.jpegData(compressionQuality: quality) {
             return imageData
+        } else {
+            return nil
         }
-        return nil
     }
 }
+
 

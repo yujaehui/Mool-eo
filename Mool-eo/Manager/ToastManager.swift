@@ -18,7 +18,7 @@ enum ErrorToastTitle: String {
     case notFoundErrFollow = "해당 유저를 찾을 수 없습니다"
 }
 
-class ToastManager {
+final class ToastManager {
     static let shared = ToastManager()
     
     private init() {}

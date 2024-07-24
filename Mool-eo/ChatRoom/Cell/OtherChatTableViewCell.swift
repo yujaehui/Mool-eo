@@ -57,7 +57,7 @@ final class OtherChatTableViewCell: BaseTableViewCell {
     
     func configureCell(_ chat: Chat, lastSender: Sender?, showTime: Bool) {
         if let sender = lastSender {
-            URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
+            URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage, imageViewSize: .small)
             nicknameLabel.text = sender.nick
         }
         chatView.chatLabel.text = chat.content

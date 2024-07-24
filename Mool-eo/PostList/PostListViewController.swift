@@ -19,11 +19,8 @@ final class PostListViewController: BaseViewController {
     let viewModel = PostListViewModel()
     let postListView = PostListView()
     
-    lazy var reload = BehaviorSubject<Void>(value: ())
-    
-    private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
-    
+    private let reload = BehaviorSubject<Void>(value: ())
+    private let sections = BehaviorSubject<[PostListSectionModel]>(value: [])
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
     
@@ -43,7 +40,7 @@ final class PostListViewController: BaseViewController {
     
     override func configureView() {
         sections
-            .bind(to: postListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+            .bind(to: postListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {

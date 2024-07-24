@@ -82,11 +82,11 @@ final class OtherTwoImageChatTableViewCell: BaseTableViewCell {
     
     func configureCell(_ chat: Chat, lastSender: Sender?, showTime: Bool) {
         if let sender = lastSender {
-            URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage)
+            URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: sender.profileImage, imageViewSize: .small)
             nicknameLabel.text = sender.nick
         }
         Observable.just(chat.filesArray).bind(to: collectionView.rx.items(cellIdentifier: ManyImageChatCollectionViewCell.identifier, cellType: ManyImageChatCollectionViewCell.self)) { (row, element, cell) in
-            URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element)
+            URLImageSettingManager.shared.setImageWithUrl(cell.chatImageView, urlString: element, imageViewSize: .large)
         }.disposed(by: disposeBag)
         chatTimeLabel.text = DateFormatterManager.shared.formatTimeToString(timeString: chat.createdAt)
         chatTimeLabel.isHidden = !showTime

@@ -68,7 +68,7 @@ final class ChatListTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ chat: ChatRoomModel) {
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: findOtherParticipant(chat).profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: findOtherParticipant(chat).profileImage, imageViewSize: .medium)
         nicknameLabel.text = findOtherParticipant(chat).nick
         lastChatLabel.text = lastMessageIsImage(chat)
         lastChatTimeLabel.text = DateFormatterManager.shared.formatDateToString(dateString: chat.lastChat.createdAt)

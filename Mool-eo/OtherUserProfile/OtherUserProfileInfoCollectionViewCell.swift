@@ -91,7 +91,7 @@ final class OtherUserProfileInfoCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureCell(_ info: OtherUserProfileModel) {
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage, imageViewSize: .medium)
         nicknameLabel.text = info.nick
         followLabel.text = "팔로워 \(info.followers.count) | 팔로잉 \(info.following.count)"
         if info.followers.contains(where: { $0.user_id == UserDefaultsManager.userId }) {

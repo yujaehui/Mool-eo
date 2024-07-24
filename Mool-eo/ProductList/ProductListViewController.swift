@@ -39,13 +39,10 @@ final class ProductListViewController: BaseViewController {
     private let productListView = ProductListView()
     
     private let reload = BehaviorSubject<Void>(value: ())
-    
+    private let categoryList = BehaviorSubject<[String]>(value: Category.allCases.map { $0.rawValue })
+    private let sections = BehaviorSubject<[PostListSectionModel]>(value: [])
     private let lastRow = PublishSubject<Int>()
     private let nextCursor = PublishSubject<String>()
-    
-    private let categoryList = BehaviorSubject<[String]>(value: Category.allCases.map { $0.rawValue })
-    private var sections = BehaviorSubject<[PostListSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = productListView
@@ -68,7 +65,7 @@ final class ProductListViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         sections
-            .bind(to: productListView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+            .bind(to: productListView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {

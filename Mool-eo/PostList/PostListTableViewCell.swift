@@ -137,9 +137,11 @@ final class PostListTableViewCell: BaseTableViewCell {
     
     func configureCell(item: PostListSectionModel.Item) {
         if let firstFile = item.files.first {
-            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile, imageViewSize: .medium)
+        } else {
+            postImageView.isHidden = true
         }
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: item.creator.profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: item.creator.profileImage, imageViewSize: .small)
         nickNameLabel.text = item.creator.nick
         postTitleLabel.text = item.title
         postContentLabel.text = item.content

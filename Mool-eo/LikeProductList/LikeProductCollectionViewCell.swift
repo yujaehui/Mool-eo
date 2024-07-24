@@ -26,6 +26,7 @@ final class LikeProductCollectionViewCell: BaseCollectionViewCell {
         productImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
             make.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(productImageView.snp.width)
         }
         
         productNameLabel.snp.makeConstraints { make in
@@ -43,7 +44,7 @@ final class LikeProductCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureCell(item: PostListSectionModel.Item) {
-        URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: item.files.first!)
+        URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: item.files.first!, imageViewSize: .large)
         productNameLabel.text = item.title
         productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(item.content1)
     }

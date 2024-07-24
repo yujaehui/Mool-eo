@@ -50,7 +50,7 @@ final class ProfileEditViewController: BaseViewController {
     
     override func configureView() {
         profileEditView.nicknameView.customTextField.text = nickname
-        URLImageSettingManager.shared.setImageWithUrl(profileEditView.profileImageView, urlString: profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileEditView.profileImageView, urlString: profileImage, imageViewSize: .medium)
     }
     
     override func bind() {

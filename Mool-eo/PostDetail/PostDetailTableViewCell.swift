@@ -129,7 +129,7 @@ final class PostDetailTableViewCell: BaseTableViewCell {
             URLImageSettingManager.shared.setImageWithUrl(cell.postImageView, urlString: element)
             cell.postImageCountLabel.text = "\(row+1)/\(post.files.count)"
         }.disposed(by: disposeBag)
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: post.creator.profileImage, imageViewSize: .small)
         postTitleLabel.text = post.title
         postContentLabel.text = post.content
         likeButton.configuration = post.likePost.contains(UserDefaultsManager.userId!) ? .image("heart.fill") : .image("heart")

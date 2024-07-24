@@ -77,7 +77,7 @@ final class CommentTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(comment: CommentModel) {
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: comment.creator.profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: comment.creator.profileImage, imageViewSize: .small)
         nicknameLabel.text = comment.creator.nick
         commentLabel.text = comment.content
     }

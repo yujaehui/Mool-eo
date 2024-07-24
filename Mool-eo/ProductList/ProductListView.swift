@@ -10,16 +10,8 @@ import SnapKit
 
 final class ProductListView: BaseView {
     
-    lazy var collectionViewLayout = {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            return ProductCategorySection().layoutSection()
-        }
-        return layout
-    }()
-    
-    // category
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         collectionView.register(ProductCategoryCollectionViewCell.self, forCellWithReuseIdentifier: ProductCategoryCollectionViewCell.identifier)
         return collectionView
     }()
@@ -57,5 +49,15 @@ final class ProductListView: BaseView {
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
         }
+    }
+    
+    private func configureCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 110, height: 40)
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.scrollDirection = .horizontal
+        return layout
     }
 }

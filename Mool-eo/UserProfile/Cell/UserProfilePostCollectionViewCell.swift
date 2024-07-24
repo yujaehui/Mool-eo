@@ -113,7 +113,7 @@ final class UserProfilePostCollectionViewCell: BaseCollectionViewCell {
     
     func configureCell(myPost: PostModel) {
         if let firstFile = myPost.files.first {
-            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile)
+            URLImageSettingManager.shared.setImageWithUrl(postImageView, urlString: firstFile, imageViewSize: .medium)
         }        
         postTitleLabel.text = myPost.title
         postContentLabel.text = myPost.content

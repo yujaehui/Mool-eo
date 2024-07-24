@@ -73,7 +73,6 @@
 		093289D32BF764A200C8F52E /* ProductCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D22BF764A200C8F52E /* ProductCategoryViewController.swift */; };
 		093289D52BF764B500C8F52E /* ProductCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D42BF764B500C8F52E /* ProductCategoryViewModel.swift */; };
 		093289D72BF7652D00C8F52E /* ProductCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289D62BF7652D00C8F52E /* ProductCategoryTableViewCell.swift */; };
-		093289E52BF77BE600C8F52E /* ProductCategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289E42BF77BE600C8F52E /* ProductCategorySection.swift */; };
 		093289E72BF77C1700C8F52E /* ProductCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093289E62BF77C1600C8F52E /* ProductCategoryCollectionViewCell.swift */; };
 		093E60D32BCFCBEC00970FAC /* LikePostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093E60D22BCFCBEC00970FAC /* LikePostTableViewCell.swift */; };
 		09444F8F2BEE2F7D00086E20 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 09444F8E2BEE2F7D00086E20 /* iamport-ios */; };
@@ -253,6 +252,7 @@
 		09EB7A642C467F0C001E0470 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB7A632C467F0C001E0470 /* Swinject */; };
 		09EB7A662C4685A3001E0470 /* NetworkManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A652C4685A3001E0470 /* NetworkManagerProtocol.swift */; };
 		09EB7A6A2C468E7E001E0470 /* AuthInterceptorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A692C468E7E001E0470 /* AuthInterceptorProtocol.swift */; };
+		09EB7AE42C50E117001E0470 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -313,7 +313,6 @@
 		093289D22BF764A200C8F52E /* ProductCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryViewController.swift; sourceTree = "<group>"; };
 		093289D42BF764B500C8F52E /* ProductCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryViewModel.swift; sourceTree = "<group>"; };
 		093289D62BF7652D00C8F52E /* ProductCategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryTableViewCell.swift; sourceTree = "<group>"; };
-		093289E42BF77BE600C8F52E /* ProductCategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategorySection.swift; sourceTree = "<group>"; };
 		093289E62BF77C1600C8F52E /* ProductCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		093E60D22BCFCBEC00970FAC /* LikePostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostTableViewCell.swift; sourceTree = "<group>"; };
 		09444F932BEE326600086E20 /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
@@ -483,6 +482,7 @@
 		09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateTableViewCell.swift; sourceTree = "<group>"; };
 		09EB7A652C4685A3001E0470 /* NetworkManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerProtocol.swift; sourceTree = "<group>"; };
 		09EB7A692C468E7E001E0470 /* AuthInterceptorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptorProtocol.swift; sourceTree = "<group>"; };
+		09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -744,14 +744,6 @@
 			path = ProductCategory;
 			sourceTree = "<group>";
 		};
-		093289E32BF77BCC00C8F52E /* Section */ = {
-			isa = PBXGroup;
-			children = (
-				093289E42BF77BE600C8F52E /* ProductCategorySection.swift */,
-			);
-			path = Section;
-			sourceTree = "<group>";
-		};
 		093289E82BF77C1D00C8F52E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -777,7 +769,6 @@
 			isa = PBXGroup;
 			children = (
 				093289E82BF77C1D00C8F52E /* Cell */,
-				093289E32BF77BCC00C8F52E /* Section */,
 				09444F932BEE326600086E20 /* ProductListView.swift */,
 				09444F952BEE327000086E20 /* ProductListViewController.swift */,
 				09444F972BEE328000086E20 /* ProductListViewModel.swift */,
@@ -923,6 +914,7 @@
 				0999EB1C2BCAA2DD004B6D1F /* UIView+Extension.swift */,
 				093289152BF0C31100C8F52E /* String+Extension.swift */,
 				09EB7A172C3D6A68001E0470 /* UIViewController+Extension.swift */,
+				09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1541,8 +1533,8 @@
 				09790D932BFA03D6004829D5 /* ChatListViewModel.swift in Sources */,
 				09EB7A092C3A7262001E0470 /* TransitionManager.swift in Sources */,
 				09790D912BFA03D0004829D5 /* ChatListViewController.swift in Sources */,
-				093289E52BF77BE600C8F52E /* ProductCategorySection.swift in Sources */,
 				0987A79E2BE3FD5B0045D361 /* WritePostImageEditCollectionViewCell.swift in Sources */,
+				09EB7AE42C50E117001E0470 /* UIImage+Extension.swift in Sources */,
 				0987A7DE2BE790610045D361 /* ToastManager.swift in Sources */,
 				09EB79E32C3279C0001E0470 /* UserInfoSection.swift in Sources */,
 				09EB7A162C3A828E001E0470 /* JoinSuccessViewModel.swift in Sources */,

@@ -73,7 +73,7 @@ final class UserProfileInfoCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureCell(_ info: ProfileModel) {
-        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage)
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: info.profileImage, imageViewSize: .medium)
         nicknameLabel.text = info.nick
         followLabel.text = "팔로워 \(info.followers.count) | 팔로잉 \(info.following.count)"
     }

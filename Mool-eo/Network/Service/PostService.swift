@@ -51,7 +51,7 @@ extension PostService: Moya.TargetType {
         case .imageUpload(let query):
             var formData: [MultipartFormData] = []
             for (index, fileData) in query.files.enumerated() {
-                let multipartData = MultipartFormData(provider: .data(fileData), name: "files", fileName: "image\(index).png", mimeType: "image/png")
+                let multipartData = MultipartFormData(provider: .data(fileData), name: "files", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
                 formData.append(multipartData)
             }
             return .uploadMultipart(formData)

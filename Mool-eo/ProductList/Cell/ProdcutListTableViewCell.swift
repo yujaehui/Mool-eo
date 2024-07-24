@@ -66,7 +66,7 @@ final class ProdcutListTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ product: PostModel) {
-        URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: product.files.first!)
+        URLImageSettingManager.shared.setImageWithUrl(productImageView, urlString: product.files.first!, imageViewSize: .large)
         productNameLabel.text = product.title
         productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(product.content1)
         productDetailLabel.text = HashtagManager.shared.removingTextAfterHash(product.content)
