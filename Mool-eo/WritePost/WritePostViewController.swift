@@ -145,59 +145,40 @@ extension WritePostViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-
+            
             // 기존 선택 초기화
             self.selectedImage.removeAll()
             self.selectedImageData.removeAll()
-
+            
             let group = DispatchGroup()
-
+            
             for result in results {
-                group.enter()
                 let itemProvider = result.itemProvider
-                if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                    itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                        defer { group.leave() }
-
-                        guard let self = self, let image = image as? UIImage else { return }
-
-                        // 이미지 다운샘플링
-                        autoreleasepool {
-                            if let downsampledImage = image.downsample(to: .large) {
-                                DispatchQueue.main.async {
-                                    self.selectedImage.append(downsampledImage)
-                                    self.selectedImageSubject.onNext(self.selectedImage)
-                                }
-                            }
-
-                            // 이미지를 압축하여 이미지 데이터에 추가
-                            if let compressedImageData = self.compressImage(image, quality: 0.5) {
-                                DispatchQueue.main.async {
-                                    self.selectedImageData.append(compressedImageData)
-                                    self.selectedImageDataSubject.onNext(self.selectedImageData)
-                                }
+                guard itemProvider.canLoadObject(ofClass: UIImage.self) else { continue }
+                
+                group.enter()
+                itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                    defer { group.leave() }
+                    
+                    guard let self = self, let image = image as? UIImage else { return }
+                    
+                    autoreleasepool {
+                        if let downsampledImage = image.downsample(to: .screenWidth),
+                           let downsampleImageData = downsampledImage.pngData() {
+                            DispatchQueue.main.async {
+                                self.selectedImage.append(downsampledImage)
+                                self.selectedImageSubject.onNext(self.selectedImage)
+                                self.selectedImageData.append(downsampleImageData)
+                                self.selectedImageDataSubject.onNext(self.selectedImageData)
                             }
                         }
-
                     }
-                } else {
-                    group.leave()
                 }
             }
-
+            
             group.notify(queue: .main) {
                 picker.dismiss(animated: true)
             }
         }
     }
-
-    func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
-        if let imageData = image.jpegData(compressionQuality: quality) {
-            return imageData
-        } else {
-            return nil
-        }
-    }
 }
-
-

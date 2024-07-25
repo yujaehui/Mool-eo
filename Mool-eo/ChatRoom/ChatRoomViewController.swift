@@ -29,7 +29,7 @@ final class ChatRoomViewController: BaseViewController {
     private var selectedImageDataSubject = BehaviorSubject<[Data]>(value: [])
     
     private var lastSender: Sender?
-        
+    
     var userId: String = ""
     var nickname: String = ""
     
@@ -99,7 +99,7 @@ extension ChatRoomViewController {
             }
         )
     }
-
+    
     private func configureHeaderCell(_ dataSource: TableViewSectionedDataSource<ChatRoomSectionModel>, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChatDateTableViewCell.identifier, for: indexPath) as! ChatDateTableViewCell
         cell.configureCell(dataSource.sectionModels[indexPath.section].date)
@@ -110,8 +110,8 @@ extension ChatRoomViewController {
         switch item {
         case .chat(let chat):
             return chat.sender?.user_id == UserDefaultsManager.userId
-                ? self.configureMyChatCell(chat, tableView: tableView, indexPath: indexPath)
-                : self.configureOtherChatCell(chat, tableView: tableView, indexPath: indexPath)
+            ? self.configureMyChatCell(chat, tableView: tableView, indexPath: indexPath)
+            : self.configureOtherChatCell(chat, tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -193,14 +193,14 @@ extension ChatRoomViewController {
         if let lastChat = value.last(where: { $0.sender?.user_id != UserDefaultsManager.userId }), let sender = lastChat.sender {
             lastSender = sender
         }
-
+        
         let groupedChats = Dictionary(grouping: value) { (chat) -> String in
             return DateFormatterManager.shared.formatDateToString(dateString: chat.createdAt)
         }
-
+        
         let sortedKeys = groupedChats.keys.sorted()
         var sections: [ChatRoomSectionModel] = []
-
+        
         for key in sortedKeys {
             if let chats = groupedChats[key] {
                 var items: [ChatRoomSectionItem] = [.chat(Chat(chat_id: "", room_id: "", content: "", createdAt: "", sender: Sender(user_id: "", nick: "", profileImage: ""), filesArray: []))]
@@ -208,7 +208,7 @@ extension ChatRoomViewController {
                 sections.append(ChatRoomSectionModel(date: key, items: items))
             }
         }
-
+        
         self.sections.onNext(sections)
         
         guard value.isEmpty else { return scrollToBottom(animated: false) }
@@ -220,7 +220,7 @@ extension ChatRoomViewController {
             .subscribe(with: self) { owner, currentSections in
                 var updatedSections = currentSections
                 let chatDate = DateFormatterManager.shared.formatDateToString(dateString: value.createdAt)
-
+                
                 if let index = updatedSections.firstIndex(where: { $0.date == chatDate }) {
                     var items = updatedSections[index].items
                     items.append(.chat(value))
@@ -231,14 +231,14 @@ extension ChatRoomViewController {
                     updatedSections.append(ChatRoomSectionModel(date: chatDate, items: items))
                     updatedSections.sort { $0.date < $1.date }
                 }
-
+                
                 owner.sections.onNext(updatedSections)
                 owner.scrollToBottom(animated: true)
             }
             .disposed(by: disposeBag)
         chatRoomView.writeMessageView.writeTextView.text = ""
     }
-
+    
     
     private func scrollToBottom(animated: Bool) {
         let lastSection = chatRoomView.tableView.numberOfSections - 1
@@ -264,19 +264,13 @@ extension ChatRoomViewController {
     
     private func handleImagePickerItems(_ items: [YPMediaItem]) {
         for item in items {
-            if case let .photo(photo) = item, let compressedImageData = compressImage(photo.image, quality: 0.5) {
-                selectedImageData.append(compressedImageData)
+            if case let .photo(photo) = item,
+               let downsampledImage = photo.image.downsample(to: .screenWidth),
+               let downsampledImageData = downsampledImage.pngData() {
+                selectedImageData.append(downsampledImageData)
             }
         }
         selectedImageDataSubject.onNext(selectedImageData)
-    }
-    
-    private func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
-        if let imageData = image.jpegData(compressionQuality: quality) {
-            return imageData
-        } else {
-            return nil
-        }
     }
 }
 

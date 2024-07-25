@@ -11,7 +11,7 @@ import SnapKit
 final class LoginBoxView: BaseView {
     let logoImageView: PostImageView = {
         let imageView = PostImageView(frame: .zero)
-        imageView.image = .logo
+        imageView.image = .logo.downsample(to: .medium)
         imageView.tintColor = ColorStyle.point
         return imageView
     }()

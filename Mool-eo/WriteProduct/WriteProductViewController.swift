@@ -136,38 +136,45 @@ final class WriteProductViewController: BaseViewController {
 
 extension WriteProductViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        // 기존 선택 초기화
-        self.selectedImage.removeAll()
-        self.selectedImageData.removeAll()
         
-        for result in results {
-            let itemProvider = result.itemProvider
-            if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                    if let image = image as? UIImage {
-                        DispatchQueue.main.async {
-                            self.selectedImage.append(image)
-                            self.selectedImageSubject.onNext(self.selectedImage)
-                            
-                            // 이미지를 압축하여 이미지 데이터에 추가
-                            if let compressedImageData = self.compressImage(image, quality: 0.5) {
-                                self.selectedImageData.append(compressedImageData)
-                                self.selectedImageDataSubject.onNext(self.selectedImageData)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            // 기존 선택 초기화
+            self.selectedImage.removeAll()
+            self.selectedImageData.removeAll()
+            
+            let group = DispatchGroup()
+            
+            for result in results {
+                group.enter()
+                let itemProvider = result.itemProvider
+                if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                        defer { group.leave() }
+                        
+                        guard let self = self, let image = image as? UIImage else { return }
+                        
+                        autoreleasepool {
+                            if let downsampledImage = image.downsample(to: .screenWidth),
+                               let downsampleImageData = downsampledImage.pngData() {
+                                DispatchQueue.main.async {
+                                    self.selectedImage.append(downsampledImage)
+                                    self.selectedImageSubject.onNext(self.selectedImage)
+                                    self.selectedImageData.append(downsampleImageData)
+                                    self.selectedImageDataSubject.onNext(self.selectedImageData)
+                                }
                             }
                         }
                     }
+                } else {
+                    group.leave()
                 }
             }
+            
+            group.notify(queue: .main) {
+                picker.dismiss(animated: true)
+            }
         }
-        picker.dismiss(animated: true)
-    }
-    
-    // 이미지 압축 메서드
-    func compressImage(_ image: UIImage, quality: CGFloat) -> Data? {
-        if let imageData = image.jpegData(compressionQuality: quality) {
-            return imageData
-        }
-        return nil
     }
 }
-

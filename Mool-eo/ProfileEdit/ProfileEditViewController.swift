@@ -90,17 +90,36 @@ final class ProfileEditViewController: BaseViewController {
 
 extension ProfileEditViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        
-        guard let result = results.first else { return }
-        let itemProvider = result.itemProvider
-        if itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                DispatchQueue.main.async {
-                    self.profileEditView.profileImageView.image = image as? UIImage
-                    self.selectedImageDataSubject.onNext((image as? UIImage)?.pngData())
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+
+            let group = DispatchGroup()
+            
+            if let result = results.first {
+                let itemProvider = result.itemProvider
+                guard itemProvider.canLoadObject(ofClass: UIImage.self) else { return }
+                
+                group.enter()
+                itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                    defer { group.leave() }
+                    
+                    guard let self = self, let image = image as? UIImage else { return }
+                    
+                    autoreleasepool {
+                        if let downsampledImage = image.downsample(to: .medium),
+                           let downsampledImageData = downsampledImage.pngData() {
+                            DispatchQueue.main.async {
+                                self.profileEditView.profileImageView.image = downsampledImage
+                                self.selectedImageDataSubject.onNext(downsampledImageData)
+                            }
+                        }
+                    }
                 }
             }
+            
+            group.notify(queue: .main) {
+                picker.dismiss(animated: true)
+            }
         }
-        picker.dismiss(animated: true)
     }
 }
