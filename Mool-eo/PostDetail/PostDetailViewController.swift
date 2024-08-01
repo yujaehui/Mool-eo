@@ -21,23 +21,21 @@ final class PostDetailViewController: BaseViewController {
     
     deinit { print("‼️PostDetailViewController Deinit‼️") }
     
-    let viewModel = PostDetailViewModel()
-    let postDetailView = PostDetailView()
+    private let viewModel = PostDetailViewModel()
+    private let postDetailView = PostDetailView()
     
     var accessType: postDetailAccessType = .me
     var postId: String = ""
     
-    var reload = BehaviorSubject(value: ())
+    private let reload = BehaviorSubject(value: ())
+    private let sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
+
+    private let likeStatus = PublishSubject<Bool>()
+    private let editButtonTap = PublishSubject<Void>()
+    private let deleteButtonTap = PublishSubject<Void>()
     
-    var likeStatus = PublishSubject<Bool>()
+    private var change = false
     
-    var editButtonTap = PublishSubject<Void>()
-    var deleteButtonTap = PublishSubject<Void>()
-    
-    var change = false
-    
-    private var sections = BehaviorSubject<[PostDetailSectionModel]>(value: [])
-    private lazy var dataSource = configureDataSource()
     
     override func loadView() {
         self.view = postDetailView
@@ -72,7 +70,7 @@ final class PostDetailViewController: BaseViewController {
     
     override func configureView() {
         sections
-            .bind(to: postDetailView.tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+            .bind(to: postDetailView.tableView.rx.items(dataSource: configureDataSource())).disposed(by: disposeBag)
     }
     
     override func bind() {

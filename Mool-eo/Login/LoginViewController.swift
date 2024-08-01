@@ -14,7 +14,9 @@ import IQKeyboardManagerSwift
 
 final class LoginViewController: BaseViewController {
     
-    deinit { print("‼️LoginViewController Deinit‼️") }
+    deinit {
+        print("‼️LoginViewController Deinit‼️")
+    }
     
     let viewModel = LoginViewModel()
     let loginView = LoginView()
@@ -48,7 +50,9 @@ final class LoginViewController: BaseViewController {
             owner.keyboardWillHide(notification: notification)
         }.disposed(by: disposeBag)
         
-        output.loginValidation.drive(loginView.loginBoxView.loginButton.rx.isEnabled).disposed(by: disposeBag)
+        output.loginValidation.drive(with: self) { owner, value in
+            owner.loginView.loginBoxView.loginButton.isEnabled = value
+        }.disposed(by: disposeBag)
         
         output.loginSuccessTrigger.drive(with: self) { owner, _ in
             TransitionManager.shared.setInitialViewController(ViewController(), navigation: false)
@@ -75,7 +79,8 @@ final class LoginViewController: BaseViewController {
         guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardHeight = keyboardFrame.height
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
             self.loginView.loginBoxView.snp.updateConstraints { make in
                 make.centerY.equalTo(self.loginView.safeAreaLayoutGuide).offset(-keyboardHeight / 2)
             }
@@ -84,7 +89,8 @@ final class LoginViewController: BaseViewController {
     }
     
     private func keyboardWillHide(notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
             self.loginView.loginBoxView.snp.updateConstraints { make in
                 make.centerY.equalTo(self.loginView.safeAreaLayoutGuide).offset(-50)
             }

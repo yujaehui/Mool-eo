@@ -210,7 +210,6 @@
 		09A7E0CE2BD241F30024EAEC /* JoinThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CD2BD241F30024EAEC /* JoinThirdView.swift */; };
 		09A7E0D02BD248C40024EAEC /* JoinThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0CF2BD248C40024EAEC /* JoinThirdViewController.swift */; };
 		09A7E0D22BD248EC0024EAEC /* JoinThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A7E0D12BD248EC0024EAEC /* JoinThirdViewModel.swift */; };
-		09EB79A52C0F0C39001E0470 /* YPImagePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB79A42C0F0C39001E0470 /* YPImagePicker */; };
 		09EB79AC2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79AB2C0F2BB0001E0470 /* MyImageChatTableViewCell.swift */; };
 		09EB79B92C313932001E0470 /* OtherImageChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79B82C313932001E0470 /* OtherImageChatTableViewCell.swift */; };
 		09EB79BB2C314662001E0470 /* ImageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB79BA2C314662001E0470 /* ImageChatView.swift */; };
@@ -249,9 +248,6 @@
 		09EB7A1A2C3FB61C001E0470 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A192C3FB61C001E0470 /* AlertManager.swift */; };
 		09EB7A1C2C427317001E0470 /* ChatListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */; };
 		09EB7A222C42914E001E0470 /* ChatDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */; };
-		09EB7A642C467F0C001E0470 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 09EB7A632C467F0C001E0470 /* Swinject */; };
-		09EB7A662C4685A3001E0470 /* NetworkManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A652C4685A3001E0470 /* NetworkManagerProtocol.swift */; };
-		09EB7A6A2C468E7E001E0470 /* AuthInterceptorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A692C468E7E001E0470 /* AuthInterceptorProtocol.swift */; };
 		09EB7AE42C50E117001E0470 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -480,8 +476,6 @@
 		09EB7A192C3FB61C001E0470 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListSectionModel.swift; sourceTree = "<group>"; };
 		09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateTableViewCell.swift; sourceTree = "<group>"; };
-		09EB7A652C4685A3001E0470 /* NetworkManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerProtocol.swift; sourceTree = "<group>"; };
-		09EB7A692C468E7E001E0470 /* AuthInterceptorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptorProtocol.swift; sourceTree = "<group>"; };
 		09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -492,7 +486,6 @@
 			files = (
 				0952A6D82BCFDD9A00F71C76 /* Differentiator in Frameworks */,
 				0987A7942BE356880045D361 /* RxGesture in Frameworks */,
-				09EB7A642C467F0C001E0470 /* Swinject in Frameworks */,
 				095678B02BC673F00030F0CD /* Toast in Frameworks */,
 				09279A452BE1201800E4A65D /* CombineMoya in Frameworks */,
 				094BEB802BC6732700342DC3 /* Alamofire in Frameworks */,
@@ -502,7 +495,6 @@
 				094BEB7A2BC672C000342DC3 /* SnapKit in Frameworks */,
 				09138B3C2BFB3E79005C84B2 /* Realm in Frameworks */,
 				09138B312BFB34AC005C84B2 /* SocketIO in Frameworks */,
-				09EB79A52C0F0C39001E0470 /* YPImagePicker in Frameworks */,
 				09279A4B2BE1201800E4A65D /* RxMoya in Frameworks */,
 				09138B3E2BFB3E79005C84B2 /* RealmSwift in Frameworks */,
 				0952A6DA2BCFDD9A00F71C76 /* RxDataSources in Frameworks */,
@@ -948,8 +940,6 @@
 			children = (
 				09444FAF2BEE3FEA00086E20 /* Section.swift */,
 				095678F32BC680100030F0CD /* ViewModelType.swift */,
-				09EB7A652C4685A3001E0470 /* NetworkManagerProtocol.swift */,
-				09EB7A692C468E7E001E0470 /* AuthInterceptorProtocol.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -1354,8 +1344,6 @@
 				09138B3B2BFB3E79005C84B2 /* Realm */,
 				09138B3D2BFB3E79005C84B2 /* RealmSwift */,
 				09138B8A2C0D5F0D005C84B2 /* IQKeyboardManagerSwift */,
-				09EB79A42C0F0C39001E0470 /* YPImagePicker */,
-				09EB7A632C467F0C001E0470 /* Swinject */,
 			);
 			productName = "Mool-eo";
 			productReference = 094BEB5C2BC670BA00342DC3 /* Mool-eo.app */;
@@ -1399,8 +1387,6 @@
 				09138B2F2BFB34AC005C84B2 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
 				09138B3A2BFB3E79005C84B2 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				09138B892C0D5F0D005C84B2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */,
-				09EB7A622C467F0C001E0470 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			productRefGroup = 094BEB5D2BC670BA00342DC3 /* Products */;
 			projectDirPath = "";
@@ -1487,7 +1473,6 @@
 				093289292BF0E9CB00C8F52E /* ProdcutListTableViewCell.swift in Sources */,
 				0999EB4C2BCBC26C004B6D1F /* JoinModel.swift in Sources */,
 				09EB79CD2C324E5F001E0470 /* MyTwoImageChatTableViewCell.swift in Sources */,
-				09EB7A6A2C468E7E001E0470 /* AuthInterceptorProtocol.swift in Sources */,
 				0999EB1D2BCAA2DD004B6D1F /* UIView+Extension.swift in Sources */,
 				0932898B2BF60B6600C8F52E /* ProfilePostListViewController.swift in Sources */,
 				09444FA82BEE3E6700086E20 /* ProductDetailViewController.swift in Sources */,
@@ -1603,7 +1588,6 @@
 				09602B692BD3E28200A6AFEA /* PostDetailViewController.swift in Sources */,
 				0952A6FA2BD0FD5F00F71C76 /* ProfileEditQuery.swift in Sources */,
 				093289112BF0BE7300C8F52E /* PaymentService.swift in Sources */,
-				09EB7A662C4685A3001E0470 /* NetworkManagerProtocol.swift in Sources */,
 				09EB7A032C340ED0001E0470 /* ProfilePaymentListTableViewCell.swift in Sources */,
 				09EB79ED2C33CF15001E0470 /* UserMoreSection.swift in Sources */,
 				0987A7CE2BE6B0890045D361 /* PostDetailSectionModel.swift in Sources */,
@@ -1989,22 +1973,6 @@
 				minimumVersion = 4.0.4;
 			};
 		};
-		09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Yummypets/YPImagePicker.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.2.2;
-			};
-		};
-		09EB7A622C467F0C001E0470 /* XCRemoteSwiftPackageReference "Swinject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Swinject/Swinject.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.9.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2102,16 +2070,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0987A7922BE356880045D361 /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
-		};
-		09EB79A42C0F0C39001E0470 /* YPImagePicker */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 09EB79A32C0F0C39001E0470 /* XCRemoteSwiftPackageReference "YPImagePicker" */;
-			productName = YPImagePicker;
-		};
-		09EB7A632C467F0C001E0470 /* Swinject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 09EB7A622C467F0C001E0470 /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = Swinject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

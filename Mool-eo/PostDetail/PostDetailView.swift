@@ -34,7 +34,7 @@ final class PostDetailView: BaseView {
         }
         
         writeCommentView.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
     }

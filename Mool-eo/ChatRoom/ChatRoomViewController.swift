@@ -74,7 +74,7 @@ final class ChatRoomViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         output.newChatImageSelectButtonTap.bind(with: self) { owner, _ in
-            owner.presentImagePicker()
+            owner.presentPHPicker(delegate: owner, selectionLimit: 5)
         }.disposed(by: disposeBag)
         
         output.isTextEmpty.bind(with: self) { owner, isTextEmpty in
@@ -239,7 +239,6 @@ extension ChatRoomViewController {
         chatRoomView.writeMessageView.writeTextView.text = ""
     }
     
-    
     private func scrollToBottom(animated: Bool) {
         let lastSection = chatRoomView.tableView.numberOfSections - 1
         let lastRow = chatRoomView.tableView.numberOfRows(inSection: lastSection) - 1
@@ -248,29 +247,43 @@ extension ChatRoomViewController {
     }
 }
 
-extension ChatRoomViewController {
-    private func presentImagePicker() {
-        selectedImageData.removeAll()
-        presentYPImagePicker { [weak self] picker, items, cancelled in
+extension ChatRoomViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            if cancelled {
-                picker.dismiss(animated: true)
-            } else {
-                self.handleImagePickerItems(items)
+            
+            // 기존 선택 초기화
+            self.selectedImageData.removeAll()
+            
+            let group = DispatchGroup()
+            
+            for result in results {
+                group.enter()
+                let itemProvider = result.itemProvider
+                if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                        defer { group.leave() }
+                        
+                        guard let self = self, let image = image as? UIImage else { return }
+                        
+                        autoreleasepool {
+                            if let downsampledImage = image.downsample(to: .screenWidth),
+                               let downsampleImageData = downsampledImage.pngData() {
+                                self.selectedImageData.append(downsampleImageData)
+                            }
+                        }
+                    }
+                } else {
+                    group.leave()
+                }
+            }
+            
+            group.notify(queue: .main) {
+                self.selectedImageDataSubject.onNext(self.selectedImageData)
                 picker.dismiss(animated: true)
             }
         }
-    }
-    
-    private func handleImagePickerItems(_ items: [YPMediaItem]) {
-        for item in items {
-            if case let .photo(photo) = item,
-               let downsampledImage = photo.image.downsample(to: .screenWidth),
-               let downsampledImageData = downsampledImage.pngData() {
-                selectedImageData.append(downsampledImageData)
-            }
-        }
-        selectedImageDataSubject.onNext(selectedImageData)
     }
 }
 

@@ -33,7 +33,8 @@ class WriteContentView: BaseView {
     
     override func configureConstraints() {
         writeTextView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.verticalEdges.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
         textUploadButton.snp.makeConstraints { make in

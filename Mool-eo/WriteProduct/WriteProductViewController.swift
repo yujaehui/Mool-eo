@@ -32,7 +32,7 @@ final class WriteProductViewController: BaseViewController {
     override func loadView() {
         self.view = writeProductView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -55,31 +55,31 @@ final class WriteProductViewController: BaseViewController {
     override func configureView() {
         selectedImageSubject
             .bind(to: writeProductView.writeProductPostContentView.collectionView.rx.items(cellIdentifier: WritePostImageCollectionViewCell.identifier, cellType: WritePostImageCollectionViewCell.self)) { (row, element, cell) in
-            cell.selectImageView.image = element
-            cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
-                
-                guard row < owner.selectedImage.count else { return }
-                owner.selectedImage.remove(at: row)
-                owner.selectedImageSubject.onNext(owner.selectedImage)
-                
-                guard row < owner.selectedImageData.count else { return }
-                owner.selectedImageData.remove(at: row)
-                owner.selectedImageDataSubject.onNext(owner.selectedImageData)
-                
-            }.disposed(by: cell.disposeBag)
-        }.disposed(by: disposeBag)
+                cell.selectImageView.image = element
+                cell.deleteButton.rx.tap.bind(with: self) { owner, _ in
+                    
+                    guard row < owner.selectedImage.count else { return }
+                    owner.selectedImage.remove(at: row)
+                    owner.selectedImageSubject.onNext(owner.selectedImage)
+                    
+                    guard row < owner.selectedImageData.count else { return }
+                    owner.selectedImageData.remove(at: row)
+                    owner.selectedImageDataSubject.onNext(owner.selectedImageData)
+                    
+                }.disposed(by: cell.disposeBag)
+            }.disposed(by: disposeBag)
         
         writeProductView.writeProductPostContentView.categoryStackView.rx.tapGesture()
             .bind(with: self) { owner, _ in
-            let vc = ProductCategoryViewController()
-            vc.selectedCategory = { value in
-                owner.selectedCategory.onNext(value)
-                owner.writeProductView.writeProductPostContentView.categoryLabel.text = value
-            }
-            let nav = UINavigationController(rootViewController: vc)
-            if let sheet = nav.sheetPresentationController { sheet.detents = [.medium()] }
-            owner.present(nav, animated: true)
-        }.disposed(by: disposeBag)
+                let vc = ProductCategoryViewController()
+                vc.selectedCategory = { value in
+                    owner.selectedCategory.onNext(value)
+                    owner.writeProductView.writeProductPostContentView.categoryLabel.text = value
+                }
+                let nav = UINavigationController(rootViewController: vc)
+                if let sheet = nav.sheetPresentationController { sheet.detents = [.medium()] }
+                owner.present(nav, animated: true)
+            }.disposed(by: disposeBag)
     }
     
     override func bind() {
@@ -110,7 +110,7 @@ final class WriteProductViewController: BaseViewController {
         output.convertedProductPrice.drive(with: self) { owner, value in
             owner.writeProductView.writeProductPostContentView.productPriceView.customTextField.text = value
         }.disposed(by: disposeBag)
-                
+        
         output.completeButtonValidation.drive(with: self) { owner, value in
             owner.navigationItem.rightBarButtonItem?.isEnabled = value
         }.disposed(by: disposeBag)
