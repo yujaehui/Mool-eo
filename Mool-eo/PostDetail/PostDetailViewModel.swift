@@ -13,6 +13,8 @@ class PostDetailViewModel: ViewModelType {
     var disposeBag: DisposeBag = DisposeBag()
     
     struct Input {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let postId: Observable<String>
         let reload: BehaviorSubject<Void>
         let postEditButtonTap: Observable<Void>
@@ -26,6 +28,8 @@ class PostDetailViewModel: ViewModelType {
     }
     
     struct Output {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let postDetail: PublishSubject<PostModel>
         let editPostDetail: PublishSubject<PostModel>
         let postDeleteSuccessTrigger: Driver<Void>
@@ -200,7 +204,9 @@ class PostDetailViewModel: ViewModelType {
                 }
             }.disposed(by: disposeBag)
         
-        return Output(postDetail: postDetail,
+        return Output(keyboardWillShow: input.keyboardWillShow,
+                      keyboardWillHide: input.keyboardWillHide,
+                      postDetail: postDetail,
                       editPostDetail: editPostDetail,
                       postDeleteSuccessTrigger: postDeleteSuccessTrigger.asDriver(onErrorJustReturn: ()),
                       likeUploadSuccessTrigger: likeUploadSuccessTrigger.asDriver(onErrorJustReturn: ()),

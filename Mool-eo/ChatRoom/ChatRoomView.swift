@@ -40,7 +40,7 @@ final class ChatRoomView: BaseView {
         
         writeMessageView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
+            make.bottom.equalToSuperview().inset(10)
         }
     }
 }

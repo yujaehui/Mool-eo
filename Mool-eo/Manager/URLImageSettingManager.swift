@@ -41,7 +41,6 @@ final class URLImageSettingManager {
             print("Invalid URL")
             return
         }
-        print("URL: \(url)")
         
         let modifier = AnyModifier { request in
             var urlRequest = request

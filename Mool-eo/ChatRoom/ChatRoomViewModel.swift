@@ -15,6 +15,8 @@ final class ChatRoomViewModel: ViewModelType {
     let socketManager = SocketIOManager.shared
     
     struct Input {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let userId: Observable<String>
         let newChat: Observable<String>
         let newChatUploadButtonTap: Observable<Void>
@@ -25,6 +27,8 @@ final class ChatRoomViewModel: ViewModelType {
     }
     
     struct Output {
+        let keyboardWillShow: Observable<Notification>
+        let keyboardWillHide: Observable<Notification>
         let chatList: Observable<[Chat]>
         let newChat: PublishSubject<Chat>
         let newChatImageSelectButtonTap: Observable<Void>
@@ -59,7 +63,9 @@ final class ChatRoomViewModel: ViewModelType {
         
         handleImageChatDetail(input: input, chatImageTapTrigger: chatImageTapTrigger)
         
-        return Output(chatList: chatList,
+        return Output(keyboardWillShow: input.keyboardWillShow,
+                      keyboardWillHide: input.keyboardWillHide,
+                      chatList: chatList,
                       newChat: newChat,
                       newChatImageSelectButtonTap: input.newChatImageSelectButtonTap,
                       isTextEmpty: isTextEmpty,

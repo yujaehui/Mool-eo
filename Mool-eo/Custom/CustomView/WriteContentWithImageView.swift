@@ -39,8 +39,9 @@ class WriteContentWithImageView: BaseView {
     
     override func configureConstraints() {
         writeTextView.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
         
         imageSelectButton.snp.makeConstraints { make in

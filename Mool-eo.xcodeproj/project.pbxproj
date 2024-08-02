@@ -150,7 +150,6 @@
 		09602B692BD3E28200A6AFEA /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */; };
 		09602B6B2BD3E28D00A6AFEA /* PostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */; };
 		09602B6E2BD3E77100A6AFEA /* PostDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */; };
-		09602B702BD3F22D00A6AFEA /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B6F2BD3F22D00A6AFEA /* CommentTableViewCell.swift */; };
 		09602B722BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */; };
 		09602BC82BDBD2EF00A6AFEA /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */; };
 		09602BCB2BDBD5DE00A6AFEA /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */; };
@@ -249,6 +248,7 @@
 		09EB7A1C2C427317001E0470 /* ChatListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */; };
 		09EB7A222C42914E001E0470 /* ChatDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */; };
 		09EB7AE42C50E117001E0470 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */; };
+		09EB7AF52C5CAB6E001E0470 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB7AF42C5CAB6E001E0470 /* CommentTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -379,7 +379,6 @@
 		09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewModel.swift; sourceTree = "<group>"; };
 		09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailTableViewCell.swift; sourceTree = "<group>"; };
-		09602B6F2BD3F22D00A6AFEA /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailWithoutImageTableViewCell.swift; sourceTree = "<group>"; };
 		09602BC72BDBD2EF00A6AFEA /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
 		09602BCA2BDBD5DE00A6AFEA /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
@@ -477,6 +476,7 @@
 		09EB7A1B2C427317001E0470 /* ChatListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListSectionModel.swift; sourceTree = "<group>"; };
 		09EB7A212C42914E001E0470 /* ChatDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateTableViewCell.swift; sourceTree = "<group>"; };
 		09EB7AE32C50E117001E0470 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		09EB7AF42C5CAB6E001E0470 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1005,10 +1005,10 @@
 				09602B6D2BD3E77100A6AFEA /* PostDetailTableViewCell.swift */,
 				09602B712BD3F3EF00A6AFEA /* PostDetailWithoutImageTableViewCell.swift */,
 				09279A692BE25A5200E4A65D /* PostImageCollectionViewCell.swift */,
-				09602B6F2BD3F22D00A6AFEA /* CommentTableViewCell.swift */,
 				0987A7CD2BE6B0890045D361 /* PostDetailSectionModel.swift */,
 				09602B682BD3E28200A6AFEA /* PostDetailViewController.swift */,
 				09602B6A2BD3E28D00A6AFEA /* PostDetailViewModel.swift */,
+				09EB7AF42C5CAB6E001E0470 /* CommentTableViewCell.swift */,
 			);
 			path = PostDetail;
 			sourceTree = "<group>";
@@ -1447,6 +1447,7 @@
 				0999EB0F2BCA981B004B6D1F /* ProfileTextFieldView.swift in Sources */,
 				0952A7012BD100B500F71C76 /* ProfileEditViewController.swift in Sources */,
 				09444FCB2BEF6E3C00086E20 /* ProductWebViewController.swift in Sources */,
+				09EB7AF52C5CAB6E001E0470 /* CommentTableViewCell.swift in Sources */,
 				09EB7A1C2C427317001E0470 /* ChatListSectionModel.swift in Sources */,
 				09138B792C086424005C84B2 /* ChatRepository.swift in Sources */,
 				09602B5C2BD3AC3300A6AFEA /* PostListModel.swift in Sources */,
@@ -1563,7 +1564,6 @@
 				09444FA22BEE3DBC00086E20 /* WriteProductViewController.swift in Sources */,
 				093289D12BF7649A00C8F52E /* ProductCategoryView.swift in Sources */,
 				095678FF2BC6A9140030F0CD /* LineView.swift in Sources */,
-				09602B702BD3F22D00A6AFEA /* CommentTableViewCell.swift in Sources */,
 				09EB79DA2C32787C001E0470 /* UserProfileViewController.swift in Sources */,
 				09EB79BB2C314662001E0470 /* ImageChatView.swift in Sources */,
 				099E92882BCD506800311329 /* EmailModel.swift in Sources */,

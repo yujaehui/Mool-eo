@@ -11,6 +11,7 @@ import RxCocoa
 import RxDataSources
 import RxGesture
 import Toast
+import IQKeyboardManagerSwift
 
 enum postDetailAccessType {
     case me
@@ -44,6 +45,7 @@ final class PostDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerObserver()
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses.append(PostDetailViewController.self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,6 +77,8 @@ final class PostDetailViewController: BaseViewController {
     
     override func bind() {
         let input = PostDetailViewModel.Input(
+            keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
+            keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
             postId: Observable.just(postId),
             reload: reload,
             postEditButtonTap: editButtonTap,
@@ -91,6 +95,14 @@ final class PostDetailViewController: BaseViewController {
             })
         
         let output = viewModel.transform(input: input)
+        
+        output.keyboardWillShow.bind(with: self) { owner, notification in
+            owner.keyboardWillShow(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        output.keyboardWillHide.bind(with: self) { owner, notification in
+            owner.keyboardWillHide(notification: notification)
+        }.disposed(by: disposeBag)
         
         output.commentText.drive(postDetailView.writeCommentView.writeTextView.rx.text).disposed(by: disposeBag)
         
@@ -238,4 +250,38 @@ final class PostDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
     }
     
+    private func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.postDetailView.tableView.snp.updateConstraints { make in
+                make.top.horizontalEdges.equalTo(self.postDetailView.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.postDetailView.writeCommentView.snp.top).offset(-10)
+            }
+            
+            self.postDetailView.writeCommentView.snp.updateConstraints { make in
+                make.horizontalEdges.equalTo(self.postDetailView.safeAreaLayoutGuide)
+                make.bottom.equalToSuperview().inset(keyboardHeight)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func keyboardWillHide(notification: Notification) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.postDetailView.tableView.snp.updateConstraints { make in
+                make.top.horizontalEdges.equalTo(self.postDetailView.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.postDetailView.writeCommentView.snp.top).offset(-10)
+            }
+            
+            self.postDetailView.writeCommentView.snp.updateConstraints { make in
+                make.horizontalEdges.equalTo(self.postDetailView.safeAreaLayoutGuide)
+                make.bottom.equalToSuperview().inset(10)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
 }

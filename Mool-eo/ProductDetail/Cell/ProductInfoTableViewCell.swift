@@ -72,6 +72,7 @@ final class ProductInfoTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ postModel: PostModel) {
+        URLImageSettingManager.shared.setImageWithUrl(profileImageView, urlString: postModel.creator.profileImage, imageViewSize: .small)
         nickNameLabel.text = postModel.creator.nick
         productNameLabel.text = postModel.title
         productPriceLabel.text = NumberFormatterManager.shared.formatCurrencyString(postModel.content1)

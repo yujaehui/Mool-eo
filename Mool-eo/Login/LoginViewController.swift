@@ -27,7 +27,7 @@ final class LoginViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        IQKeyboardManager.shared.keyboardDistanceFromTextField = 0
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses.append(LoginViewController.self)
     }
     
     override func bind() {

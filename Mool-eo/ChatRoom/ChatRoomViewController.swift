@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import PhotosUI
-import YPImagePicker
+import IQKeyboardManagerSwift
 
 final class ChatRoomViewController: BaseViewController {
     
@@ -39,6 +39,7 @@ final class ChatRoomViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses.append(ChatRoomViewController.self)
     }
     
     override func setNav() {
@@ -52,6 +53,8 @@ final class ChatRoomViewController: BaseViewController {
     
     override func bind() {
         let intput = ChatRoomViewModel.Input(
+            keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
+            keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
             userId: Observable.just(userId),
             newChat: chatRoomView.writeMessageView.writeTextView.rx.text.orEmpty.asObservable(),
             newChatUploadButtonTap: chatRoomView.writeMessageView.textUploadButton.rx.tap.asObservable(),
@@ -62,6 +65,14 @@ final class ChatRoomViewController: BaseViewController {
         )
         
         let output = viewModel.transform(input: intput)
+        
+        output.keyboardWillShow.bind(with: self) { owner, notification in
+            owner.keyboardWillShow(notification: notification)
+        }.disposed(by: disposeBag)
+        
+        output.keyboardWillHide.bind(with: self) { owner, notification in
+            owner.keyboardWillHide(notification: notification)
+        }.disposed(by: disposeBag)
         
         output.chatList.bind(with: self) { owner, value in
             owner.configureSection(value)
@@ -84,6 +95,43 @@ final class ChatRoomViewController: BaseViewController {
         output.chatImageTapTrigger.bind(with: self) { owner, filesArray in
             owner.navigateToImageChat(filesArray)
         }.disposed(by: disposeBag)
+    }
+}
+
+extension ChatRoomViewController {
+    private func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo, let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.chatRoomView.tableView.snp.updateConstraints { make in
+                make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
+            }
+            
+            self.chatRoomView.writeMessageView.snp.updateConstraints { make in
+                make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
+                make.bottom.equalToSuperview().inset(keyboardHeight)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func keyboardWillHide(notification: Notification) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.chatRoomView.tableView.snp.updateConstraints { make in
+                make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
+            }
+            
+            self.chatRoomView.writeMessageView.snp.updateConstraints { make in
+                make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
+                make.bottom.equalToSuperview().inset(10)
+            }
+            self.view.layoutIfNeeded()
+        }
     }
 }
 
