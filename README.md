@@ -107,7 +107,7 @@
 |-------------|---------------|----------------|----------------|----------------|
 | <img src="https://github.com/user-attachments/assets/8ded68a2-3946-40fc-84cb-c1197875f175" width="200"> | <img src="https://github.com/user-attachments/assets/d00095b8-79ea-407a-8cc7-4ed05769f2ad" width="200"> | <img src="https://github.com/user-attachments/assets/c311e39d-cd61-41db-b9fc-65491897db6b" width="200"> | <img src="https://github.com/user-attachments/assets/ff3325b6-4559-46b9-9869-1aa5f3ce65c9" width="200"> | <img src="https://github.com/user-attachments/assets/f82451ca-6862-4f40-ae51-cb5dae6c44b2" width="200"> |
 
-<h2 id="sign up and sign in">회원가입 및 로그인</h2>
+<h2 id="sign-up-and-sign-in">회원가입 및 로그인</h2>
 
 | 아이디 입력 전 | 아이디 입력 후 | 중복 확인 실패 | 중복 확인 성공 |
 |-------------|---------------|----------------|----------------|
