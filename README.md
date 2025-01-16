@@ -27,7 +27,6 @@
    - [테이블뷰와 키보드 충돌 해결: IQKeyboardManager 대안 구현](#tableview-keyboard-conflict-resolution)
    - [소켓 연결 안정성과 메모리 관리: 채팅 화면 최적화 사례](#socket-connection-and-memory-management)
 7. [🗂️ 파일 디렉토리 구조](#file-directory-structure)
-8. [🛣️ 향후 계획](#future-plans)
 
 ---
 
@@ -235,13 +234,6 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
         func transform(input: Input) -> Output
     }
     ```
-    
-
-### **향후 계획**
-
-- RxSwift의 더 깊은 활용을 통해 복잡한 비동기 작업도 간단히 처리할 수 있도록 확장 예정
-- ViewModel의 Output을 테스트하는 자동화된 단위 테스트 작성
-- DI(Dependency Injection)와의 결합으로 ViewModel 간 의존성 관리 개선
 
 <h2 id="singleton-pattern">싱글턴 패턴</h2>
 
@@ -1001,7 +993,3 @@ Mool-eo
  ┣ SceneDelegate.swift
  ┗ ViewController.swift
 ```
-
----
-
-<h1 id="future-plans">🛣️ 향후 계획</h1>
