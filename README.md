@@ -255,6 +255,7 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
 - **SnapKit**: Auto Layout을 코드로 간단히 구현
 - **Codebase UI**: 코드 기반으로 뷰를 설계하여 Storyboard 의존성을 제거
 - **ComposableLayout**: UICollectionView 레이아웃 설계
+- **Pagination**: 효율적인 데이터 로드 및 무한 스크롤 구현
 
 ### **비동기 처리 및 네트워크 통신**
 
@@ -262,11 +263,12 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
 - **RxSwift / RxCocoa**: 반응형 프로그래밍을 위한 주요 라이브러리
 - **RxDataSources**: RxSwift를 활용한 데이터 소스 관리
 - **RxGesture**: 제스처 이벤트를 반응형으로 처리
+- **Codable**: 네트워크 응답 데이터의 디코딩 및 인코딩을 통해 JSON 데이터 처리
 - **Alamofire**: 네트워크 요청 관리
 - **Moya**: Alamofire 기반 네트워크 계층 추상화
-- **Codable**: 네트워크 응답 데이터 디코딩 및 인코딩
 - **NetworkLoggerPlugin**: 네트워크 요청/응답 로깅
 - **AuthInterceptor**: 인증 요청 헤더 자동 추가
+- **IAMPort-iOS**: 결제 연동을 위한 라이브러리
 
 ### **데이터 관리**
 
@@ -274,7 +276,6 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
 
 ### **UI 개선 및 사용자 경험**
 
-- **IAMPort-iOS**: 결제 연동을 위한 라이브러리
 - **Kingfisher**: 네트워크 이미지를 간편하게 로드 및 캐싱
 - **Toast-Swift**: 사용자 피드백을 위한 간단한 알림 UI
 - **Tabman**: 페이지 전환이 있는 UI 구성
