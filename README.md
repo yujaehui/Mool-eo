@@ -25,9 +25,10 @@
    - [싱글턴 패턴](#singleton-pattern)
 5. [🛠️ 기술 스택](#tech-stack)
 6. [🚀 트러블 슈팅](#troubleshooting)
-   - [이미지 다운샘플링과 메모리 최적화로 서버 업로드 문제 해결](#image-downsampling-and-memory-optimization)
-   - [테이블뷰와 키보드 충돌 해결: IQKeyboardManager 대안 구현](#tableview-keyboard-conflict-resolution)
-   - [소켓 연결 안정성과 메모리 관리: 채팅 화면 최적화 사례](#socket-connection-and-memory-management)
+   - [클로저의 강한 참조로 인한 소켓 리소스 누수 해결](#troubleshooting1)
+   - [이미지 다운샘플링으로 메모리 절약 및 서버 업로드 효율 개선](#troubleshooting2)
+   - [RxSwift Single & Moya 기반 제네릭 네트워크 구조 설계](#troubleshooting3)
+   - [RxSwift zip 기반 동시 네트워크 요청과 UI 최적화](#troubleshooting4)
 7. [🗂️ 파일 디렉토리 구조](#file-directory-structure)
 
 ---
@@ -286,398 +287,89 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
 
 <h1 id="troubleshooting">🚀 트러블 슈팅</h1>
 
-<h2 id="image-downsampling-and-memory-optimization">이미지 다운샘플링과 메모리 최적화로 서버 업로드 문제 해결</h2>
+<h2 id="troubleshooting1">클로저의 강한 참조로 인한 소켓 리소스 누수 해결</h2>
 
-### **1. 문제 요약**
+### **1. 문제 정의**
 
-- **이슈 제목:** 원본 이미지 로딩 및 서버 업로드 시 메모리 사용량 증가 및 업로드 실패 문제
-- **발생 위치:** 상품 목록, 게시글 목록, 상품 업로드, 게시글 업로드, 채팅 등
-- **관련 컴포넌트:** 이미지 로딩, 이미지 서버 업로드, 메모리 관리 (`autoreleasepool`)
+- 채팅방 진입 시마다 새로운 소켓 인스턴스가 생성되며, 이전 연결이 정상적으로 해제되지 않음
+- 클로저 내부에서 self를 강하게 참조하면서 deinit이 호출되지 않아, 뷰가 메모리에서 해제되지 못하면서 발생
+- 그 결과, 중복 데이터 수신, 리소스 낭비, 다중 연결로 인한 충돌 문제가 발생
 
-### **2. 문제 상세**
+### **2. 문제 해결**
 
-- **현상 설명:**
-    - 원본 이미지를 그대로 불러와 처리할 때, 메모리 사용량이 급격히 증가하며, 서버 업로드 시 이미지 크기의 총합이 5MB를 초과할 경우 통신이 실패하는 문제가 발생.
-    - 단순히 이미지 크기를 50%로 줄이는 방법으로는 이미지 총합 5MB 제한을 초과할 가능성이 여전히 존재하며, 작은 이미지도 불필요하게 화질이 감소됨.
-- **추가 문제:**
-    - 메모리 사용량이 많은 이미지 작업 중 메모리 관리가 부족하여 앱이 메모리 부족으로 충돌할 위험이 있었음.
+- 클로저 내부에서 [weak self]를 사용하여 강한 참조 순환을 제거
+- deinit에서 소켓 연결 해제 로직을 명시적으로 추가하여 리소스 정리
+- 소켓이 더 이상 필요하지 않은 경우 명확하게 해제되도록 정리하는 프로세스 구축
 
-### **3. 기존 코드 및 원인 분석**
+### **3. 결과**
 
-- **기존 코드:**
-    
-    ```swift
-    extension WriteProductViewController: PHPickerViewControllerDelegate {
-        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            // 기존 선택 초기화
-            self.selectedImage.removeAll()
-            self.selectedImageData.removeAll()
-    
-            for result in results {
-                let itemProvider = result.itemProvider
-                if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                    itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                        if let image = image as? UIImage {
-                            DispatchQueue.main.async {
-                                self.selectedImage.append(image)
-                                self.selectedImageSubject.onNext(self.selectedImage)
-                            }
-    
-                            if let imageData = image.pngData() {
-                                print("Original image size: \\(imageData.count / 1024) KB")
-                                self.selectedImageData.append(imageData)
-                                self.selectedImageDataSubject.onNext(self.selectedImageData)
-                            }
-                        }
-                    }
-                }
-            }
-            picker.dismiss(animated: true)
-        }
-    }
-    
-    ```
-    
-- **원인 분석:**
-    - 원본 이미지를 그대로 로드하고 처리할 때 고해상도 이미지가 메모리를 과다하게 사용하게 되며, 서버로 이미지를 전송할 때 총합이 5MB를 초과할 가능성이 큼.
-    - 또한, 메모리 관리 측면에서 큰 이미지를 계속해서 메모리에 로드하면 메모리 사용량이 급격히 증가해 메모리 부족 문제를 초래할 수 있음.
+- 채팅방 뷰가 정상적으로 해제되어 소켓 리소스 누수 문제 해결
+- 중복 연결 및 데이터 수신 문제가 사라지며 네트워크 처리의 안정성 향상
+- 클로저 구조 개선을 통해 메모리 관리의 일관성과 예측 가능성 확보
 
-## **4. 해결 방법 및 수정된 코드**
+<h2 id="troubleshooting2">이미지 다운샘플링으로 메모리 절약 및 서버 업로드 효율 개선</h2>
 
-- **해결 방법:**
-    - **다운샘플링 적용 및 메모리 관리 최적화**
-        - 이미지를 원본 크기 그대로 사용하는 것이 아닌, 이미지뷰의 크기에 맞춰 다운샘플링을 적용하여 메모리 사용량을 줄임.
-        - 이미지 처리 시에 `autoreleasepool`을 적절히 사용하여 메모리 해제를 신속하게 유도하고, 메모리 누수를 방지함.
-        - 다운샘플링된 이미지를 통해 화질 저하를 최소화하면서도 업로드 시 서버의 5MB 제한을 넘지 않도록 최적화.
-- **수정된 코드:**
-    
-    ```swift
-    extension UIImage {
-        func downsample(to pointSize: ImageViewSize, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
-            let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
-            guard let imageData = self.pngData() else { return nil }
-            guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, imageSourceOptions) else { return nil }
-    
-            let maxDimensionInPixels = max(pointSize.getSize().width, pointSize.getSize().height) * scale
-            let downsampleOptions = [
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                kCGImageSourceShouldCacheImmediately: true,
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels
-            ] as CFDictionary
-    
-            guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else { return nil }
-            return UIImage(cgImage: downsampledImage)
-        }
-    }
-    ```
-    
-    ```swift
-    extension WriteProductViewController: PHPickerViewControllerDelegate {
-        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard let self = self else { return }
-    
-                // 기존 선택 초기화
-                self.selectedImage.removeAll()
-                self.selectedImageData.removeAll()
-    
-                let group = DispatchGroup()
-    
-                for result in results {
-                    group.enter()
-                    let itemProvider = result.itemProvider
-                    if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                        itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                            defer { group.leave() }
-    
-                            guard let self = self, let image = image as? UIImage else { return }
-    
-                            autoreleasepool {
-                                if let downsampledImage = image.downsample(to: .screenWidth),
-                                   let downsampleImageData = downsampledImage.pngData() {
-                                    DispatchQueue.main.async {
-                                        print("Downsampled image size: \\(downsampleImageData.count / 1024) KB")
-                                        self.selectedImage.append(downsampledImage)
-                                        self.selectedImageSubject.onNext(self.selectedImage)
-                                        self.selectedImageData.append(downsampleImageData)
-                                        self.selectedImageDataSubject.onNext(self.selectedImageData)
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        group.leave()
-                    }
-                }
-    
-                group.notify(queue: .main) {
-                    picker.dismiss(animated: true)
-                }
-            }
-        }
-    }
-    ```
+### **1. 문제 정의**
 
-### **5. 결론**
+- 상품 등록 및 게시글 작성에서 이미지 업로드 시, 고해상도 이미지를 그대로 로드하면 메모리 사용량이 급격히 증가
+- 또한 서버 업로드 시 파일 크기 제한(5MB)을 초과하는 경우가 많아, 통신이 실패하거나 지연되는 사례가 반복적으로 발생
+- 단순히 이미지 크기를 50% 축소하는 방식은 작은 이미지의 해상도가 불필요하게 저하
 
-- **메모리 최적화:**
-    - 다운샘플링과 `autoreleasepool`을 적절히 사용하여 메모리 사용량을 크게 줄임.
-- **업로드 최적화:**
-    - 다운샘플링된 이미지는 서버 업로드 시 5MB 제한을 넘지 않도록 최적화되었고, 필요 이상의 화질 저하를 방지함.
-- **최종 결과:**
-    - 앱의 메모리 사용량이 안정적으로 관리되며, 서버와의 통신 문제를 해결하여 안정적인 이미지 업로드 및 처리를 보장.
+### **2. 문제 해결**
 
-<h2 id="tableview-keyboard-conflict-resolution">테이블뷰와 키보드 충돌 해결: IQKeyboardManager 대안 구현</h2>
+- CGImageSourceCreateThumbnailAtIndex를 활용한 다운샘플링 기법을 도입하여 화면 크기에 최적화된 해상도로 변환
+- 고해상도 이미지의 크기를 줄여 메모리 사용량 절감 및 서버 업로드 시 최적화된 크기로 변환
+- DispatchGroup을 적용하여 여러 이미지를 비동기적으로 처리하여 UI 응답성 유지
+- autoreleasepool을 활용하여 이미지 로딩 중 불필요한 메모리를 빠르게 해제
 
-### **1. 문제 요약**
+### **3. 결과**
 
-- **이슈 제목:** IQKeyboardManager 사용 시 테이블뷰가 상단까지 스크롤되지 않는 문제
-- **발생 위치:** 게시글 화면, 채팅 화면
-- **관련 컴포넌트:** IQKeyboardManager, `UITableView`, 키보드 처리
+- 이미지 로드 시 메모리 사용량을 192.3MB → 83.8MB로 약 56% 절감
+- 다운샘플링 적용 후 이미지 용량이 평균 70~90% 감소, 서버 업로드 성공률 및 속도 크게 향상
+- 이미지 수와 해상도에 관계없이 안정적인 업로드 흐름 및 앱 반응성 확보
 
-### **2. 문제 상세**
+<h2 id="troubleshooting3">RxSwift Single & Moya 기반 제네릭 네트워크 구조 설계</h2>
 
-- **현상 설명:**
-    - IQKeyboardManager 오픈소스를 사용하여 키보드 활성화 시 자동으로 `UITextField`와 `UITableView`의 위치를 조정하였으나, 테이블뷰가 상단까지 스크롤되지 않는 문제가 발생. 이는 IQKeyboardManager가 키보드의 높이에 맞춰 테이블뷰의 `contentInset`과 `scrollIndicatorInsets`를 자동으로 조정하기 때문임.
+### **1. 문제 정의**
 
-### **3. 기존 코드 및 원인 분석**
+- 각 ViewModel에서 개별적으로 네트워크 요청을 처리하여 코드 중복 심화
+- URL 구성, 디코딩, 에러 처리 방식이 제각각이라 유지보수와 디버깅이 어려운 구조로 이어짐
 
-- **기존 코드:**
-    - IQKeyboardManager 사용
-- **원인 분석:**
-    - IQKeyboardManager는 키보드가 나타날 때 화면의 텍스트 필드 또는 텍스트 뷰가 가려지지 않도록 자동으로 화면을 조정해 주지만, 테이블뷰의 `contentInset`을 키보드 높이에 맞춰 자동으로 조정하면서 예상치 못한 스크롤 동작이 발생. 이로 인해 테이블뷰가 상단까지 스크롤되지 않음.
+### **2. 문제 해결**
 
-### **4. 해결 방법 및 수정된 코드**
+- NetworkManager를 싱글턴 패턴으로 설계해 네트워크 요청을 중앙 집중형으로 관리
+- RxSwift의 Single을 활용하여 성공(onSuccess)과 실패(onError)를 명확하게 분리
+  - 네트워크 요청이 단일 응답을 반환하며, onSuccess 또는 onError만 처리하면 되기 때문에 Single을 선택
+  - Completable은 반환 값이 필요 없는 경우에 사용하고, Observable은 다중 이벤트 처리에 유용하지만 API 통신의 경우 불필요한 복잡성을 초래할 수 있어 배제
+- Moya를 도입해 API 구성과 요청 흐름을 일관되게 관리
+- 공통 요청 로직을 제네릭으로 캡슐화하여 재사용성을 높임
 
-- **해결 방법:**
-    - **NotificationCenter를 활용한 수동 처리**
-        - IQKeyboardManager 대신 `NotificationCenter`를 통해 키보드가 나타나고 사라질 때 발생하는 노티피케이션을 수신하여, 직접 키보드 높이에 맞춰 테이블뷰 및 UI 요소의 위치를 수동으로 조정.
-    - **키보드 높이에 맞춰 UI 업데이트:**
-        - 키보드의 높이를 얻어와 `tableView` 및 `writeMessageView`의 위치를 수동으로 업데이트하여 UI가 적절히 표시되도록 처리.
-    - **애니메이션 적용:**
-        - 키보드가 나타나거나 사라질 때 UI가 자연스럽게 전환되도록 0.3초의 애니메이션을 적용하여 사용자 경험을 개선.
-- **수정된 코드:**
-    
-    ```swift
-    final class ChatRoomViewController: BaseViewController {
-    
-        // 관련 없는 코드는 생략
-    
-        override func bind() {
-            let input = ChatRoomViewModel.Input(
-                keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
-                keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
-            )
-    
-            let output = viewModel.transform(input: input)
-    
-            output.keyboardWillShow.bind(with: self) { owner, notification in
-                owner.keyboardWillShow(notification: notification)
-            }.disposed(by: disposeBag)
-    
-            output.keyboardWillHide.bind(with: self) { owner, notification in
-                owner.keyboardWillHide(notification: notification)
-            }.disposed(by: disposeBag)
-        }
-    }
-    
-    extension ChatRoomViewController {
-        private func keyboardWillShow(notification: Notification) {
-            guard let userInfo = notification.userInfo,
-                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-            let keyboardHeight = keyboardFrame.height
-    
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self = self else { return }
-                // 테이블뷰와 메시지 입력 뷰의 위치를 업데이트
-                self.chatRoomView.tableView.snp.updateConstraints { make in
-                    make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
-                }
-    
-                self.chatRoomView.writeMessageView.snp.updateConstraints { make in
-                    make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalToSuperview().inset(keyboardHeight) // 키보드 높이에 맞춰 메시지 입력 뷰 위치 조정
-                }
-                self.view.layoutIfNeeded()
-            }
-        }
-    
-        private func keyboardWillHide(notification: Notification) {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self = self else { return }
-                // 키보드가 사라질 때 기본 위치로 복구
-                self.chatRoomView.tableView.snp.updateConstraints { make in
-                    make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
-                }
-    
-                self.chatRoomView.writeMessageView.snp.updateConstraints { make in
-                    make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalToSuperview().inset(10) // 기본 여백으로 복구
-                }
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    ```
+### **3. 결과**
 
-### **5. 결론**
+- 중복 코드 감소로 전체 네트워크 코드의 간결성과 가독성 향상
+- 새로운 API 추가 시 최소한의 코드 수정만으로 대응 가능, 확장성 확보
+- 통일된 네트워크 처리 구조를 통해 디버깅 및 유지보수 효율 대폭 개선
 
-- **IQKeyboardManager 제거:**
-    - 오픈소스를 사용하지 않고 `NotificationCenter`를 활용하여 키보드가 나타나고 사라질 때 UI를 수동으로 조정함으로써 스크롤뷰 상단 문제를 해결.
-- **테이블뷰와 메시지 입력 뷰의 위치 수동 조정:**
-    - 키보드 높이에 맞춰 테이블뷰와 입력 뷰의 위치를 동적으로 변경하여, 예상치 못한 스크롤 이슈를 해결하고 안정적인 레이아웃을 유지.
-- **최종 결과:**
-    - 스크롤뷰가 정상적으로 상단까지 스크롤되며, 키보드가 화면에 나타날 때 UI가 정상적으로 조정됨.
+<h2 id="troubleshooting4">RxSwift zip 기반 동시 네트워크 요청과 UI 최적화</h2>
 
-<h2 id="socket-connection-and-memory-management">소켓 연결 안정성과 메모리 관리: 채팅 화면 최적화 사례</h2>
+### **1. 문제 정의**
 
-### **1. 문제 요약**
+- 프로필 화면에서는 사용자 정보, 상품 목록, 게시글 목록 등 여러 데이터를 서버에서 불러와야 하는데, 개별 요청을 순차적으로 처리하면서 응답 대기 시간이 길어지는 문제가 발생.
+- 또한 UI가 여러 번 갱신되면서 불필요한 리렌더링이 발생하여 화면이 깜빡이거나 끊기는 듯한 사용자 경험 저하로 이어짐
 
-- **이슈 제목:** 채팅 화면에서 소켓 연결 해제 문제로 다중 연결 발생
-- **발생 위치:** 채팅 화면에서 소켓 연결 및 해제 처리
-- **관련 컴포넌트:** 소켓 연결, `deinit`, 강한 참조 (`strong reference`)
+### **2. 문제 해결**
 
-### **2. 문제 상세**
+- RxSwift의 Observable.zip을 활용하여 여러 API 요청을 병렬로 처리
+- 모든 응답을 한 번에 모은 후 UI를 갱신하는 방식으로 전환
+   - zip은 모든 요청이 완료된 이후에만 결과를 방출하므로, 불필요한 중간 UI 갱신을 방지
+   - combineLatest는 하나의 요청만 완료돼도 UI가 갱신되므로 이번 케이스에 부적합
+- UI 갱신 타이밍을 단일 지점으로 통합하여 렌더링 효율화
 
-- **현상 설명:**
-    - 채팅 화면을 나갔다가 다시 들어오면 소켓 연결이 끊기지 않고 계속 유지되면서 중복 연결되는 문제가 발생. 이로 인해 한 번 보낸 메시지가 두 번, 세 번씩 전송되는 현상이 나타남.
-    - 채팅 화면이 닫힐 때 소켓 연결을 해제하기 위해 `deinit`에서 소켓 연결 해제를 호출했으나, 디버깅 결과 `deinit`이 호출되지 않음.
+### **3. 결과**
 
-### **3. 기존 코드 및 원인 분석**
-
-- **기존 코드:**
-    - IQKeyboardManager 사용
-    
-    ```swift
-    final class ChatRoomViewController: BaseViewController {
-    
-    		// 관련 없는 코드는 생략
-    
-        deinit {
-            SocketIOManager.shared.leaveConnection() // 소켓 연결 해제
-        }
-    }
-    
-    extension ChatRoomViewController {
-        private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> {
-            return RxTableViewSectionedReloadDataSource<ChatRoomSectionModel>(
-                configureCell: { dataSource, tableView, indexPath, item in // 강한 참조
-                    if indexPath.row == 0 {
-                        return self.configureHeaderCell(dataSource, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        return self.configureChatCell(dataSource, tableView: tableView, indexPath: indexPath, item: item)
-                    }
-                }
-            )
-        }
-    }
-    ```
-    
-- **원인 분석:**
-    - `deinit`에서 소켓 연결 해제를 호출했으나, 테이블뷰의 셀 구성 함수에서 강한 참조로 인해 `ChatRoomViewController`가 메모리에서 해제되지 않아 `deinit`이 호출되지 않음.
-    - IQKeyboardManager 사용할 경우, 텍스트필드가 활성화된 채로 화면을 나가면 해당 뷰컨트롤러가 계속 메모리에 남아있게 됨.
-
-### **4. 해결 방법 및 수정된 코드**
-
-- **해결 방법:**
-    - **약한 참조 적용:**
-        - 테이블뷰의 셀 구성 부분에서 `weak self`를 사용하여 강한 참조로 인한 메모리 누수를 방지하고, 뷰컨트롤러가 정상적으로 해제될 수 있도록 수정.
-    - **수동으로 키보드 활성화 및 해제 처리:**
-        - `NotificationCenter`를 통해 키보드 활성화 및 해제 시점에 UI 조정을 수동으로 처리.
-- **수정된 코드:**
-    
-    ```swift
-    final class ChatRoomViewController: BaseViewController {
-    
-    		// 관련 없는 코드는 생략
-    
-        deinit {
-            SocketIOManager.shared.leaveConnection() // 소켓 연결 해제
-        }
-    
-        override func bind() {
-            let input = ChatRoomViewModel.Input(
-                keyboardWillShow: NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification),
-                keyboardWillHide: NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification),
-            )
-    
-            let output = viewModel.transform(input: input)
-    
-            output.keyboardWillShow.bind(with: self) { owner, notification in
-                owner.keyboardWillShow(notification: notification)
-            }.disposed(by: disposeBag)
-    
-            output.keyboardWillHide.bind(with: self) { owner, notification in
-                owner.keyboardWillHide(notification: notification)
-            }.disposed(by: disposeBag)
-        }
-    }
-    
-    extension ChatRoomViewController {
-        private func keyboardWillShow(notification: Notification) {
-            guard let userInfo = notification.userInfo,
-                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-            let keyboardHeight = keyboardFrame.height
-    
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self = self else { return }
-                self.chatRoomView.tableView.snp.updateConstraints { make in
-                    make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
-                }
-    
-                self.chatRoomView.writeMessageView.snp.updateConstraints { make in
-                    make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalToSuperview().inset(keyboardHeight)
-                }
-                self.view.layoutIfNeeded()
-            }
-        }
-    
-        private func keyboardWillHide(notification: Notification) {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self = self else { return }
-                self.chatRoomView.tableView.snp.updateConstraints { make in
-                    make.top.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalTo(self.chatRoomView.writeMessageView.snp.top).offset(-10)
-                }
-    
-                self.chatRoomView.writeMessageView.snp.updateConstraints { make in
-                    make.horizontalEdges.equalTo(self.chatRoomView.safeAreaLayoutGuide)
-                    make.bottom.equalToSuperview().inset(10)
-                }
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    
-    extension ChatRoomViewController {
-        private func configureDataSource() -> RxTableViewSectionedReloadDataSource<ChatRoomSectionModel> {
-            return RxTableViewSectionedReloadDataSource<ChatRoomSectionModel>(
-                configureCell: { [weak self] dataSource, tableView, indexPath, item in
-                    guard let self = self else { return UITableViewCell() }
-                    if indexPath.row == 0 {
-                        return self.configureHeaderCell(dataSource, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        return self.configureChatCell(dataSource, tableView: tableView, indexPath: indexPath, item: item)
-                    }
-                }
-            )
-        }
-    }
-    ```
-
-### **5. 결론**
-
-- **강한 참조 해결:**
-    - `weak self`를 사용하여 강한 참조 문제를 해결하고, 메모리 누수를 방지하여 `deinit`이 정상적으로 호출되도록 수정.
-- **소켓 연결 해제 문제 해결:**
-    - `deinit`이 정상적으로 호출되면서 소켓 연결 해제가 제대로 수행되고, 채팅 화면을 나갔다가 다시 들어와도 중복 연결되지 않도록 문제 해결.
-- **IQKeyboardManager 제거 및 수동 UI 조정:**
-    - IQKeyboardManager 대신 NotificationCenter를 사용하여 키보드 관련 UI 조정을 수동으로 처리함으로써 메모리 누수를 방지.
+- 모든 데이터를 병렬로 요청함으로써 전체 응답 대기 시간을 단축
+- UI가 한 번만 갱신되도록 최적화되어 깜빡임 및 성능 저하 문제 해결
+- 사용자 경험이 보다 부드럽고 안정적으로 개선, 데이터가 일관되게 표시되는 화면 흐름 구현
 
 ---
 
