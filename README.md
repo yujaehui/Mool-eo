@@ -270,7 +270,7 @@ RxSwift를 활용하여 View와 ViewModel 간의 데이터 바인딩과 반응�
 - **Alamofire**: 네트워크 요청 관리
 - **Moya**: Alamofire 기반 네트워크 계층 추상화
 - **NetworkLoggerPlugin**: 네트워크 요청/응답 로깅
-- **AuthInterceptor**: 인증 요청 헤더 자동 추가
+- **RequestInterceptor**: 인증 요청 헤더 자동 추가
 - **IAMPort-iOS**: 결제 연동을 위한 라이브러리
 
 ### **데이터 관리**
